@@ -1,0 +1,19 @@
+.navbarContainer {
+  padding: 12px 24px;
+  background: #fff;
+}
+
+.category {
+  display: flex;
+  align-items: center;  
+  gap: 8px;
+}
+
+.icon {
+  font-size: 20px;
+}
+
+.text {
+  font-size: 14px;
+  line-height: 1;
+}

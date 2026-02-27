@@ -1,5 +1,6 @@
 import styles from './Header.module.css'
-import { FaSearch, FaShoppingCart, BsChatDots } from "react-icons/fa";
+import SearchBar from '../common/SearchBar';
+import { FaSearch, FaShoppingCart } from "react-icons/fa";
 
 function Header() {
     return (
@@ -13,14 +14,7 @@ function Header() {
 
             {/* CENTER */}
             <div className={styles.center}>
-                <div className={styles.searchBox}>
-                    <select className={styles.filter}>
-                        <option>All</option>
-                    </select>
-
-                    <input type="text" placeholder="Search" />
-                    <FaSearch className={styles.icon}/>
-                </div>
+                <SearchBar />
             </div>
 
             {/* RIGHT */}
