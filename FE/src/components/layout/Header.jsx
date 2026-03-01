@@ -1,14 +1,18 @@
-import styles from './Header.module.css'
+import { useLocation } from 'react-router-dom';
+import { FaShoppingCart } from 'react-icons/fa';
+import styles from './Header.module.css';
 import SearchBar from '../common/SearchBar';
-import { FaSearch, FaShoppingCart } from "react-icons/fa";
 
 function Header() {
+    // const location = useLocation();
+    // const searchParams = new URLSearchParams(location.search);
+    // const initialQuery = searchParams.get('q') || '';
+
     return (
         <header className={styles.headerContainer}>
-
             {/* LEFT */}
             <div className={styles.left}>
-                <img src="" alt="" className={styles.logo}/>
+                <img className={styles.logo} />
                 <h1 className={styles.logoText}>LOGO</h1>
             </div>
 
@@ -29,9 +33,8 @@ function Header() {
                     <span className={styles.badge}>99+</span>
                 </div>
             </div>
-
         </header>
-    )
+    );
 }
 
-export default Header
+export default Header;

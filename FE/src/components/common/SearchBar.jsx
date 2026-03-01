@@ -1,9 +1,27 @@
-import styles from "./SearchBar.module.css"
+import { useState } from "react";
+import styles from "./SearchBar.module.css";
 import { FaCaretDown, FaSearch } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
-function SearchBar() {
+export default function SearchBar({
+    placeholder = "Search product...",
+    categories = ["All"]
+}) {
+
+    const [input, setInput] = useState("");
+    const navigate = useNavigate();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        if (!input.trim()) return;
+
+        // điều hướng sang trang product list
+        navigate(`/products?q=${input}`);
+    };
+
     return (
-        <form className={styles.searchBar}>
+        <form className={styles.searchBar} onSubmit={handleSubmit}>
             
             <button type="button" className={styles.filter}>
                 <span>All</span>
@@ -12,18 +30,16 @@ function SearchBar() {
 
             <input 
                 type="text"
-                placeholder=""
-                className={styles.input} 
+                placeholder={placeholder}
+                className={styles.input}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
             />
             
-            <button 
-                type="submit"
-                className={styles.button}>
-                
+            <button type="submit" className={styles.button}>
                 <FaSearch />
             </button>
-        </form>
-    )
-}
 
-export default SearchBar
+        </form>
+    );
+}
