@@ -1,15 +1,19 @@
-import { Routes, Route } from "react-router-dom";
-import MainLayout from "./components/layout/Mainlayout"
-
+import { useState } from 'react'
+// import './App.css'
+import Header from './components/layout/Header'
+import Navbar from './components/layout/Navbar'
+import Footer from './components/layout/Footer'
+import HomePage from './pages/Home'
 
 function App() {
   return (
     <>
-    <Routes>
-      <Route element={<MainLayout />}>
-        <Route path="/" />
-      </Route>
-    </Routes>
+      <Header/>
+      <Navbar/>
+
+      <HomePage/>
+
+      <Footer/>
     </>
   )
 }
