@@ -1,20 +1,15 @@
-import { useState } from 'react'
-// import './App.css'
-import Header from './components/layout/Header'
-import Navbar from './components/layout/Navbar'
-import Footer from './components/layout/Footer'
-import HomePage from './pages/Home'
+import { BrowserRouter } from 'react-router-dom'
+import { ErrorProvider } from './context/ErrorContext'
+import { AuthProvider } from './context/AuthContext'
+import AppRoutes from './routes/AppRoutes'
 
 function App() {
   return (
-    <>
-      <Header/>
-      <Navbar/>
-
-      <HomePage/>
-
-      <Footer/>
-    </>
+    <ErrorProvider>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
+    </ErrorProvider>
   )
 }
 
