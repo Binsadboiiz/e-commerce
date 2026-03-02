@@ -39,6 +39,6 @@ export default function useProducts({ search, category }) {
     }, [search, category]   
     );
 
-    return ( products, loading, error );
+    return {products, loading, error};
 
 }

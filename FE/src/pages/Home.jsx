@@ -246,7 +246,7 @@ function HomePage() {
 
       {/* top search */}
         <section className={styles.topResearchSection}>
-            <div class={styles.topResearchContainer}>
+            <div className={styles.topResearchContainer}>
                 <h2 className={styles.sectionTitle}>Top Research</h2>
 
                 <div className={styles.topResearchList}>

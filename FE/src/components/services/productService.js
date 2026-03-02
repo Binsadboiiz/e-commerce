@@ -1,6 +1,6 @@
 //Service chỉ chịu trách nhiệm gọi API
 
-const BASE_URL = "api/products";
+const BASE_URL = "https://dummyjson.com/products";
 
 /**
  * Search products theo keyword và filter
@@ -10,18 +10,23 @@ const BASE_URL = "api/products";
  */
 
 export async function searchProducts({ search = "", category = "All" }) {
-    const query = new URLSearchParams({
-        q: search,
-        category
-    }).toString();
+    let url = "https://dummyjson.com/products";
 
-    const response = await fetch(`${BASE_URL}?${query}`);
-
-    if (!response.ok) {
-        throw new Error("Failed to fetch products");
+    if (search) {
+        url = `https://dummyjson.com/products/search?q=${search}`;
+    } else if (category !== "All") {
+        url = `https://dummyjson.com/products/category/${category}`;
     }
 
-    return response.json();
+    const response = await fetch(url);
+
+    if (!response.ok) {
+        throw new Error("failed to fetch products")
+    }
+
+    const data = await response.json()
+
+    return data.products;
 }
 
 /**
