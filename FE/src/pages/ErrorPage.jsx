@@ -10,7 +10,7 @@ const ErrorPage = () => {
 
     return (
     <div style={{ padding: 40 }}>
-      <h1>🚨 Something went wrong</h1>
+      <h1>Something went wrong</h1>
 
       <p><strong>Type:</strong> {error.type}</p>
       <p><strong>Status:</strong> {error.status}</p>

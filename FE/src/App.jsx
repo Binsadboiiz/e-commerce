@@ -1,4 +1,3 @@
-import { BrowserRouter } from 'react-router-dom'
 import { ErrorProvider } from './context/ErrorContext'
 import { AuthProvider } from './context/AuthContext'
 import AppRoutes from './routes/AppRoutes'
@@ -11,6 +10,7 @@ function App() {
       </AuthProvider>
     </ErrorProvider>
   )
+
 }
 
-export default App
+export default App;
