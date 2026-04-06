@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import ErrorPage from "../pages/ErrorPage";
+import ErrorPage from "../pages/error/ErrorPage";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import MainLayout from "../components/layout/MainLayout";

@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerApi } from "../../services/authService";
 import { ErrorContext } from "../../context/ErrorContext";
+import "./auth.css";
 
 const Register = () => {
     const [form, setForm] = useState(

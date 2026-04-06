@@ -3,6 +3,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { getProfileApi, loginApi } from "../../services/authService";
 import { ErrorContext } from "../../context/ErrorContext";
+import "./auth.css";
 
 const Login = () => {
     const [form, setForm] = useState({
@@ -46,12 +47,28 @@ const Login = () => {
     return (
         <div className="auth-container">
             <form onSubmit={handleSubmit} className="auth-form">
-                {error && <p className="error">{error}</p>}
-                <h2>Login</h2>
-                <input type="email" name="email" placeholder="Email.." value={form.email} onChange={handleChange} required />
-                <input type="password" name="password" placeholder="Password..." value={form.password} onChange={handleChange} required />
+                {error && <p>{setGlobalError(error)}</p>}
+                <div className="auth-page">
+                <div className="auth-card">
+                    <h2 className="auth-title">Login</h2>
 
-                <button type="submit">Login</button>
+                    <div className="auth-group">
+                    <label className="auth-label">Email</label>
+                    <input type="email" name="email" className="auth-input" placeholder="Enter email..." onChange={handleChange} />
+                    </div>
+
+                    <div className="auth-group">
+                    <label className="auth-label">Password</label>
+                    <input type="password" name="password" className="auth-input" placeholder="Enter password..." onChange={handleChange} />
+                    </div>
+
+                    <button className="auth-btn">Sign In</button>
+
+                    <div className="auth-footer">
+                    Don't have account? <span className="auth-link">Register</span>
+                    </div>
+                </div>
+                </div>
             </form>
         </div>
     )

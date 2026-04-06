@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "D:\\Information Technology\\Personal-Project\\e-commerce\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|d:\\information technology\\personal-project\\e-commerce\\be\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|solutionrelative:be\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|d:\\information technology\\personal-project\\e-commerce\\be\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|solutionrelative:be\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
@@ -39,6 +43,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\Program.cs",
+              "RelativeDocumentMoniker": "BE\\Program.cs",
+              "ToolTip": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\Program.cs",
+              "RelativeToolTip": "BE\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-03T02:51:27.308Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "ApplicationDbContext.cs",
               "DocumentMoniker": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\Data\\ApplicationDbContext.cs",
               "RelativeDocumentMoniker": "BE\\Data\\ApplicationDbContext.cs",

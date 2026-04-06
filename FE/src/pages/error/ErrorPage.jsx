@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { ErrorContext } from "../context/ErrorContext"
+import { ErrorContext } from "../../context/ErrorContext"
 import { useNavigate } from "react-router-dom";
 
 const ErrorPage = () => {
