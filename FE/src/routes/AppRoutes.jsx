@@ -4,7 +4,7 @@ import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import MainLayout from "../components/layout/MainLayout";
 import HomePage from "../pages/Home";
-import ProductList from "../pages/ProductList";
+import ProductList from "../features/product/pages/ProductList";
 
 const AppRoutes = () => {
   return (
@@ -14,7 +14,7 @@ const AppRoutes = () => {
       <Route element={<MainLayout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/home" element={<HomePage />} />
-        <Route path="/product" element={<ProductList />} />
+        <Route path="/products" element={<ProductList />} />
       </Route>
 
       {/* Route không dùng layout */}

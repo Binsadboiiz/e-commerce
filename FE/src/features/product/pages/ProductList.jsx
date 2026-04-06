@@ -1,8 +1,8 @@
 import styles from './ProductList.module.css'
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import useProducts from '../../hooks/useProducts';
-import ProductGird from '../../components/ProductGrid';
-import ProductSkeletion from '../../components/ProductSkeletion';
+import useProducts from '../../product/hooks/useProducts';
+import ProductGrid from '../../product/components/ProductGrid';
+import ProductSkeletion from '../../product/components/ProductSkeletion';
 
 export default function ProductList() {
 
