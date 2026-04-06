@@ -1,12 +1,13 @@
 import styles from './ProductCard.module.css'
 
 export default function ProductCard({ product, onBuy }) {
-    
+
     const {
         title,
-        thumbnail,
+        description,
         price,
         discountPercentage,
+        thumbnail,
         rating,
         stock
     } = product;
@@ -16,7 +17,8 @@ export default function ProductCard({ product, onBuy }) {
         : null;
 
     return (
-        <div className={styles.productCard}> 
+        
+        <div className={styles.productCard}>
             <div className={styles.img}>
                 <img src={thumbnail} alt={title} />
             </div>

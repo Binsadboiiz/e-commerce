@@ -1,0 +1,8 @@
+/* ProductList.module.css */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    /* 4 cột */
+    gap: 20px;
+    /* khoảng cách giữa các card */
+}

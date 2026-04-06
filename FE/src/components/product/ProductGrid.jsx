@@ -1,20 +1,12 @@
-import styles from './ProductGrid.module.css'
-import ProductCard from './ProductCard'
+import styles from './ProductGrid.module.css';
+import ProductCard from './ProductCard';
 
-export default function ProductGrid({ products, onBuy }) {
-    if (!products || products.length === 0) {
-        return <p>No products found</p>;
-    }
-
+export default function ProductGrid({ products }) {
     return (
         <div className={styles.grid}>
-            {products.map(product => (
-                <ProductCard
-                    key={product.id}
-                    product={product}
-                    onBuy={onBuy}
-                />
+            {products.map((p) => (
+                <ProductCard key={p.id} product={p} />
             ))}
         </div>
-    )
+    );
 }
