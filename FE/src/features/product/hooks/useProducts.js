@@ -9,10 +9,10 @@ import { searchProducts } from "../services/productService";
  */
 
 export default function useProducts({ search, category }) {
-    
+
     const [products, setProducts] = useState([])
     const [loading, setLoading] = useState(false)
-    const [error, setError] =  useState(null)
+    const [error, setError] = useState(null)
 
     useEffect(() => {
         async function fetchData() {
@@ -21,7 +21,7 @@ export default function useProducts({ search, category }) {
                 setError(null);
 
                 const data = await searchProducts({ search, category });
-                
+
                 //ẩn sp hết hàng ra khỏi product list
                 const visibleProducts = data.filter(
                     (product) => product.stock > 0
@@ -36,9 +36,9 @@ export default function useProducts({ search, category }) {
         }
 
         fetchData();
-    }, [search, category]   
+    }, [search, category]
     );
 
-    return {products, loading, error};
+    return { products, loading, error };
 
 }
