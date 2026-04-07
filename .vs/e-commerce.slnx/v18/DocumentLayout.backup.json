@@ -3,6 +3,50 @@
   "WorkspaceRootPath": "D:\\Information Technology\\Personal-Project\\e-commerce\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|d:\\information technology\\personal-project\\e-commerce\\be\\models\\entities\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|solutionrelative:be\\models\\entities\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|d:\\information technology\\personal-project\\e-commerce\\be\\models\\entities\\cartitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|solutionrelative:be\\models\\entities\\cartitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|d:\\information technology\\personal-project\\e-commerce\\be\\models\\entities\\cart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|solutionrelative:be\\models\\entities\\cart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|d:\\information technology\\personal-project\\e-commerce\\be\\models\\entities\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|solutionrelative:be\\models\\entities\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|d:\\information technology\\personal-project\\e-commerce\\be\\models\\entities\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|solutionrelative:be\\models\\entities\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|d:\\information technology\\personal-project\\e-commerce\\be\\models\\entities\\brand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|solutionrelative:be\\models\\entities\\brand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|d:\\information technology\\personal-project\\e-commerce\\be\\models\\entities\\shop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|solutionrelative:be\\models\\entities\\shop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|d:\\information technology\\personal-project\\e-commerce\\be\\models\\entities\\address.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|solutionrelative:be\\models\\entities\\address.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|d:\\information technology\\personal-project\\e-commerce\\be\\models\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|solutionrelative:be\\models\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|d:\\information technology\\personal-project\\e-commerce\\be\\models\\entities\\orderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|solutionrelative:be\\models\\entities\\orderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|d:\\information technology\\personal-project\\e-commerce\\be\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|solutionrelative:be\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|d:\\information technology\\personal-project\\e-commerce\\be\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DB6A4788-9AE9-B8B1-CF86-15FDCB6550FE}|BE\\BE.csproj|solutionrelative:be\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
@@ -14,7 +58,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Bookmark",
@@ -38,7 +82,150 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Product.cs",
+              "DocumentMoniker": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\Models\\Entities\\Product.cs",
+              "RelativeDocumentMoniker": "BE\\Models\\Entities\\Product.cs",
+              "ToolTip": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\Models\\Entities\\Product.cs",
+              "RelativeToolTip": "BE\\Models\\Entities\\Product.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAIwCMAAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-07T15:58:38.535Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Cart.cs",
+              "DocumentMoniker": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\Models\\Entities\\Cart.cs",
+              "RelativeDocumentMoniker": "BE\\Models\\Entities\\Cart.cs",
+              "ToolTip": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\Models\\Entities\\Cart.cs",
+              "RelativeToolTip": "BE\\Models\\Entities\\Cart.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-07T15:59:17.731Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "CartItem.cs",
+              "DocumentMoniker": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\Models\\Entities\\CartItem.cs",
+              "RelativeDocumentMoniker": "BE\\Models\\Entities\\CartItem.cs",
+              "ToolTip": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\Models\\Entities\\CartItem.cs",
+              "RelativeToolTip": "BE\\Models\\Entities\\CartItem.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-07T15:59:39.701Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Order.cs",
+              "DocumentMoniker": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\Models\\Entities\\Order.cs",
+              "RelativeDocumentMoniker": "BE\\Models\\Entities\\Order.cs",
+              "ToolTip": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\Models\\Entities\\Order.cs",
+              "RelativeToolTip": "BE\\Models\\Entities\\Order.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAgwAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-07T16:00:02.884Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Category.cs",
+              "DocumentMoniker": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\Models\\Entities\\Category.cs",
+              "RelativeDocumentMoniker": "BE\\Models\\Entities\\Category.cs",
+              "ToolTip": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\Models\\Entities\\Category.cs",
+              "RelativeToolTip": "BE\\Models\\Entities\\Category.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-07T15:58:00.13Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Brand.cs",
+              "DocumentMoniker": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\Models\\Entities\\Brand.cs",
+              "RelativeDocumentMoniker": "BE\\Models\\Entities\\Brand.cs",
+              "ToolTip": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\Models\\Entities\\Brand.cs",
+              "RelativeToolTip": "BE\\Models\\Entities\\Brand.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-07T15:56:41.025Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Shop.cs",
+              "DocumentMoniker": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\Models\\Entities\\Shop.cs",
+              "RelativeDocumentMoniker": "BE\\Models\\Entities\\Shop.cs",
+              "ToolTip": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\Models\\Entities\\Shop.cs",
+              "RelativeToolTip": "BE\\Models\\Entities\\Shop.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAAwBgAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-07T15:53:12.477Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Address.cs",
+              "DocumentMoniker": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\Models\\Entities\\Address.cs",
+              "RelativeDocumentMoniker": "BE\\Models\\Entities\\Address.cs",
+              "ToolTip": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\Models\\Entities\\Address.cs",
+              "RelativeToolTip": "BE\\Models\\Entities\\Address.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-07T15:45:31.866Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "User.cs",
+              "DocumentMoniker": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\Models\\Entities\\User.cs",
+              "RelativeDocumentMoniker": "BE\\Models\\Entities\\User.cs",
+              "ToolTip": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\Models\\Entities\\User.cs",
+              "RelativeToolTip": "BE\\Models\\Entities\\User.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAAwBcAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-07T15:40:48.471Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "OrderItem.cs",
+              "DocumentMoniker": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\Models\\Entities\\OrderItem.cs",
+              "RelativeDocumentMoniker": "BE\\Models\\Entities\\OrderItem.cs",
+              "ToolTip": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\Models\\Entities\\OrderItem.cs",
+              "RelativeToolTip": "BE\\Models\\Entities\\OrderItem.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-07T16:00:59.769Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\Program.cs",
+              "RelativeDocumentMoniker": "BE\\Program.cs",
+              "ToolTip": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\Program.cs",
+              "RelativeToolTip": "BE\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-03T02:51:27.308Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
               "Title": "ApplicationDbContext.cs",
               "DocumentMoniker": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\Data\\ApplicationDbContext.cs",
               "RelativeDocumentMoniker": "BE\\Data\\ApplicationDbContext.cs",
