@@ -14,28 +14,28 @@ export default function SearchBar({
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (!input.trim()) return;
+        const query = input.trim();
 
         // điều hướng sang trang product list
-        navigate(`/products?q=${input}`);
+        navigate(query ? `/products?q=${query}` : `/products`);
     };
 
     return (
         <form className={styles.searchBar} onSubmit={handleSubmit}>
-            
+
             <button type="button" className={styles.filter}>
                 <span>All</span>
-                <FaCaretDown/>
+                <FaCaretDown />
             </button>
 
-            <input 
+            <input
                 type="text"
                 placeholder={placeholder}
                 className={styles.input}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
             />
-            
+
             <button type="submit" className={styles.button}>
                 <FaSearch />
             </button>

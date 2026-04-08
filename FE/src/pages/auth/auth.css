@@ -1,9 +1,9 @@
-/* ===== RESET NHẸ ===== */
+/* ===== RESEt===== */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: "Poppins", system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
 }
 
 /* ===== BACKGROUND ===== */
@@ -19,9 +19,17 @@
 }
 
 @keyframes bgMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* ===== CARD ===== */
@@ -37,15 +45,22 @@
   border: 1px solid rgba(255, 255, 255, 0.18);
 
   box-shadow:
-    0 10px 30px rgba(0,0,0,0.4),
+    0 10px 30px rgba(0, 0, 0, 0.4),
     0 0 25px rgba(255, 80, 0, 0.25);
 
   animation: cardFloat 4s ease-in-out infinite;
 }
 
 @keyframes cardFloat {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
 }
 
 /* ===== TITLE ===== */
@@ -64,8 +79,13 @@
 }
 
 @keyframes titleFire {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  100% {
+    background-position: 100% 50%;
+  }
 }
 
 /* ===== INPUT GROUP ===== */
@@ -84,24 +104,24 @@
   width: 100%;
   padding: 12px 14px;
   border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   outline: none;
 
-  background: rgba(255,255,255,0.08);
+  background: rgba(255, 255, 255, 0.08);
   color: white;
 
   transition: all 0.25s ease;
 }
 
 .auth-input::placeholder {
-  color: rgba(255,255,255,0.5);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .auth-input:focus {
   border-color: #ff7300;
   box-shadow:
     0 0 8px #ff7300,
-    0 0 16px rgba(255,115,0,0.4);
+    0 0 16px rgba(255, 115, 0, 0.4);
 }
 
 /* ===== BUTTON ===== */
@@ -136,12 +156,10 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: linear-gradient(
-    120deg,
-    transparent,
-    rgba(255,255,255,0.6),
-    transparent
-  );
+  background: linear-gradient(120deg,
+      transparent,
+      rgba(255, 255, 255, 0.6),
+      transparent);
   transform: rotate(25deg);
   opacity: 0;
 }
@@ -151,9 +169,19 @@
 }
 
 @keyframes btnShine {
-  0% { left: -100%; opacity: 0; }
-  50% { opacity: 1; }
-  100% { left: 100%; opacity: 0; }
+  0% {
+    left: -100%;
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
 }
 
 /* ===== FOOTER LINK ===== */

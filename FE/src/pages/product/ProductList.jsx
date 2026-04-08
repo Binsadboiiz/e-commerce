@@ -1,8 +1,8 @@
 import styles from './ProductList.module.css'
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import useProducts from '../../product/hooks/useProducts';
-import ProductGrid from '../../product/components/ProductGrid';
-import ProductSkeleton from '../components/ProductSkeleton';
+import useProducts from '../../features/product/hooks/useProducts';
+import ProductGrid from '../../features/product/components/ProductGrid';
+import ProductSkeleton from '../../features/product/components/ProductSkeleton';
 
 export default function ProductList() {
 
@@ -16,11 +16,6 @@ export default function ProductList() {
     });
 
     const safeProducts = products || []
-    {
-        !loading && !error && safeProducts.length > 0 && (
-            <ProductGrid products={safeProducts} />
-        )
-    }
 
     return (
         <div className={styles.wrapper}>
@@ -29,13 +24,17 @@ export default function ProductList() {
 
             {error && <p className={styles.error}>Error: {error} </p>}
 
-            {!loading && !error && products.length > 0 && (
-                <ProductGrid products={products} />
-            )}
+            {
+                !loading && !error && safeProducts.length > 0 && (
+                    <ProductGrid products={safeProducts} />
+                )
+            }
 
             {!loading && !error && products.length === 0 && (
                 <p className={styles.empty}>No products found</p>
             )}
+
+
 
         </div>
     );

@@ -4,7 +4,7 @@ import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import MainLayout from "../components/layout/MainLayout";
 import HomePage from "../pages/home/Home";
-import ProductList from "../features/product/pages/ProductList";
+import ProductList from "../pages/product/ProductList";
 
 const AppRoutes = () => {
   return (

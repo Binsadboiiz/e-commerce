@@ -3,7 +3,7 @@ import Banner from '../../features/home/banner/Banner'
 import ListCategory from '../../features/home/category/ListCategory'
 import FlashSale from '../../features/home/flash-sale/FlashSale'
 import TopResearch from '../../features/home/top-research/TopResearch'
-import ProductList from '../../features/product/pages/ProductList'
+import ProductList from '../product/ProductList'
 
 export default function HomePage() {
 

@@ -13,7 +13,7 @@ function Header() {
             {/* LEFT */}
             <div className={styles.left}>
                 <Link to="/" className={styles.logo}>
-                    <img src="" alt="" />
+                    {/* <img src="" alt="" /> */}
                     <h1 className={styles.logoText}>LOGO</h1>
                 </Link>
 
@@ -21,7 +21,7 @@ function Header() {
 
             {/* CENTER */}
             <div className={styles.center}>
-                <SearchBar />
+                <SearchBar initialQuery={initialQuery} />
             </div>
 
             {/* RIGHT */}

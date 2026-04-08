@@ -20,7 +20,7 @@ export default function ProductCard({ product, onBuy }) {
 
         <div className={styles.productCard}>
             <div className={styles.img}>
-                <img src={thumbnail} alt={title} />
+                {thumbnail ? <img src={thumbnail} alt={title} /> : <div className={styles.img} />}
             </div>
 
             <div className={styles.name}>
