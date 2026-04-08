@@ -12,6 +12,10 @@
     gap: 8px;
 }
 
+.logo {
+    text-decoration: none;
+}
+
 .center {
     flex: 1;
     display: flex;
@@ -54,7 +58,7 @@
 }
 
 .searchBox input {
-    flex: 1;           
+    flex: 1;
     border: none;
     padding: 10px 12px;
     outline: none;

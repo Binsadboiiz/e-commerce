@@ -1,10 +1,10 @@
 import styles from './ProductCard.module.css'
+import { IoStar } from "react-icons/io5";
 
 export default function ProductCard({ product, onBuy }) {
 
     const {
         title,
-        description,
         price,
         discountPercentage,
         thumbnail,
@@ -17,7 +17,7 @@ export default function ProductCard({ product, onBuy }) {
         : null;
 
     return (
-        
+
         <div className={styles.productCard}>
             <div className={styles.img}>
                 <img src={thumbnail} alt={title} />
@@ -28,7 +28,7 @@ export default function ProductCard({ product, onBuy }) {
             </div>
 
             <span className={styles.rating}>
-                ⭐ {rating}
+                <IoStar />{rating}
             </span>
 
             <span className={styles.price}>

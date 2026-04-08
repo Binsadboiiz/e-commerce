@@ -2,7 +2,7 @@ import styles from './ProductList.module.css'
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import useProducts from '../../product/hooks/useProducts';
 import ProductGrid from '../../product/components/ProductGrid';
-import ProductSkeletion from '../../product/components/ProductSkeletion';
+import ProductSkeleton from '../components/ProductSkeleton';
 
 export default function ProductList() {
 
@@ -18,7 +18,7 @@ export default function ProductList() {
     return (
         <div className={styles.wrapper}>
 
-            {loading && <ProductSkeletion />}
+            {loading && <ProductSkeleton />}
 
             {error && <p className={styles.error}>Error: {error} </p>}
 

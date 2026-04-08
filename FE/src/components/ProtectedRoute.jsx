@@ -3,7 +3,7 @@ import { useAuth } from "../hooks/useAuth"
 import { useRole } from "../hooks/useRole";
 
 // Nhận vào children (nội dung trang cần bảo vệ) và allowedRoles (mảng các quyền được phép truy cập)
-const ProtectedRoute = ({ children, allowedRoles}) => {
+const ProtectedRoute = ({ children, allowedRoles }) => {
     const { loading } = useAuth(); // Kiểm tra xem ứng dụng đã lấy xong dữ liệu user chưa
     const { hasRole } = useRole(); // Lấy hàm kiểm tra quyền
 

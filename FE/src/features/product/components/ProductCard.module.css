@@ -61,6 +61,9 @@
     color: #f59e0b;
     /* vàng */
     margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
 /* price */
