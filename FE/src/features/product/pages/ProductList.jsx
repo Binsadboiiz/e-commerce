@@ -15,6 +15,13 @@ export default function ProductList() {
         category: "All"
     });
 
+    const safeProducts = products || []
+    {
+        !loading && !error && safeProducts.length > 0 && (
+            <ProductGrid products={safeProducts} />
+        )
+    }
+
     return (
         <div className={styles.wrapper}>
 
