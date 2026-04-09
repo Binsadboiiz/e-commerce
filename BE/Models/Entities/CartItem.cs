@@ -13,7 +13,6 @@ namespace BE.Models.Entities
         public long ProductId { get; set; }
 
         public int Quantity { get; set; }
-        public double Total { get; set; }
 
         // Navigation
         public Cart Cart { get; set; }

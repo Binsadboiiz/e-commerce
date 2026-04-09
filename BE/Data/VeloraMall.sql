@@ -108,7 +108,6 @@ CREATE TABLE Cart_Items (
     CartId BIGINT,
     Product_id BIGINT,
     Quantity BIGINT,
-    Total DOUBLE,
 
     FOREIGN KEY (CartId) REFERENCES Carts(CartId) ON DELETE CASCADE,
     FOREIGN KEY (Product_id) REFERENCES Products(ProductId)
