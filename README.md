@@ -112,8 +112,8 @@ This project helps developers understand how to build a structured full-stack e-
 ### 1. Clone Repository
 
 ```bash id="f13"
-git clone https://github.com/your-username/ecommerce-project.git
-cd ecommerce-project
+git clone https://github.com/Binsadboiiz/NexusSystem.git
+cd e-commerce
 ```
 
 ---
