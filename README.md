@@ -154,7 +154,7 @@ Check:
 ## Documentation and Contribution
 
 * Documentation is provided in README.md
-* API can be tested using Swagger
+* API tested using Swagger
 * Contributions via Pull Requests
 * Issues handled through GitHub Issues
 
