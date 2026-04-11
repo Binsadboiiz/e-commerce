@@ -11,7 +11,7 @@ The project follows a modular and scalable architecture inspired by MVC, separat
 ## Project Identification
 
 * **Project Name**: E-Commerce Web Application
-* **Project URL**: https://github.com/your-username/ecommerce-project
+* **Project URL**: https://github.com/Binsadboiiz/e-commerce.git)
 * **Author**: Nguyen Phu Cuong, Nguyen Duong Ngoc Han
 
 ---
