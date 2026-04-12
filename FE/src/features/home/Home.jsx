@@ -1,9 +1,9 @@
 import styles from './Home.module.css'
-import Banner from '../../features/home/banner/Banner'
-import ListCategory from '../../features/home/category/ListCategory'
-import FlashSale from '../../features/home/flash-sale/FlashSale'
-import TopResearch from '../../features/home/top-research/TopResearch'
-import ProductList from '../product/ProductList'
+import Banner from './banner/Banner'
+import ListCategory from './category/ListCategory'
+import FlashSale from './flash-sale/FlashSale'
+import TopResearch from './top-research/TopResearch'
+import ProductList from '../product/pages/ProductList'
 
 export default function HomePage() {
 

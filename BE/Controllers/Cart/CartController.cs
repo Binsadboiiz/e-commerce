@@ -1,7 +1,7 @@
 using BE.Services.Interface;
-using BE.Services.Implementation;
-using System.Security.Claims;
+using BE.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace BE.Controllers.Cart
 {
@@ -16,40 +16,74 @@ namespace BE.Controllers.Cart
             _cartService = cartService;
         }
 
+        /// <summary>
+        /// Get current user's cart (grouped by shop)
+        /// </summary>
         [HttpGet]
         public async Task<IActionResult> GetCart()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
+            var userId = GetUserId();
             var cart = await _cartService.GetCart(userId);
             return Ok(cart);
         }
 
+        /// <summary>
+        /// Add a product to cart
+        /// </summary>
         [HttpPost("add")]
-        public async Task<IActionResult> AddToCart(long productId, int quantity)
+        public async Task<IActionResult> AddToCart([FromBody] AddToCartRequest request)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            await _cartService.AddToCart(userId, productId, quantity);
-            return Ok();
+            var userId = GetUserId();
+            var cart = await _cartService.AddToCart(userId, request);
+            return Ok(cart);
         }
 
+        /// <summary>
+        /// Update item quantity in cart
+        /// </summary>
         [HttpPut("update")]
-        public async Task<IActionResult> Update(long productId, int quantity)
+        public async Task<IActionResult> Update([FromBody] UpdateCartRequest request)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            await _cartService.UpdateQuantity(userId, productId, quantity);
-            return Ok();
+            var userId = GetUserId();
+            var cart = await _cartService.UpdateQuantity(userId, request);
+            return Ok(cart);
         }
 
-        [HttpDelete("remove")]
-        public async Task<IActionResult> Remove(long productId)
+        /// <summary>
+        /// Remove a specific item from cart
+        /// </summary>
+        [HttpDelete("remove/{productId}")]
+        public async Task<IActionResult> Remove(long productId, [FromQuery] long? variantId)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = GetUserId();
+            await _cartService.RemoveItem(userId, productId, variantId);
+            return Ok(new { message = "Item removed." });
+        }
 
-            await _cartService.RemoveItem(userId, productId);
-            return Ok();
+        /// <summary>
+        /// Clear all items in cart
+        /// </summary>
+        [HttpDelete("clear")]
+        public async Task<IActionResult> Clear()
+        {
+            var userId = GetUserId();
+            await _cartService.ClearCart(userId);
+            return Ok(new { message = "Cart cleared." });
+        }
+
+        private string GetUserId()
+        {
+            // Try JWT claim first
+            var claimUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!string.IsNullOrEmpty(claimUserId))
+                return claimUserId;
+
+            // Fallback: read from custom header (for development/testing)
+            var headerUserId = Request.Headers["X-User-Id"].FirstOrDefault();
+            if (!string.IsNullOrEmpty(headerUserId))
+                return headerUserId;
+
+            throw new BE.Middlewares.AppException("User is not authenticated. Please log in.");
         }
     }
 }

@@ -10,6 +10,12 @@ BE/node_modules
 #.net
 **/bin/
 **/obj/
+**/appsettings.Development.json
+BE/bin/
+BE/obj/
+BE/Properties/launchSettings.json
+BE/appsettings.Development.json
+
 
 # testing
 /coverage

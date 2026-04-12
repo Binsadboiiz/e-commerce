@@ -2,12 +2,31 @@ import axios from "axios";
 import { getErrorHandle } from "../utils/ErrorHandle";
 
 const axiosClient = axios.create({
-    baseURL: "https://localhost:5000/api",
-    withCredentials: true
+    baseURL: "https://localhost:5269/api",
+    withCredentials: true,
+    headers: {
+        "Content-Type": "application/json",
+    }
 })
 
+// intercept request
+axiosClient.interceptors.request.use(
+    config => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    error => {
+        return Promise.reject(error);
+    }
+);
+
+// intercept response
+
 axiosClient.interceptors.response.use(
-    res => res,
+    res => res.data,
     error => {
         return Promise.reject(getErrorHandle(error));
     }

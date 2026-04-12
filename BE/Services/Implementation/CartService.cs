@@ -1,5 +1,7 @@
-﻿using BE.Data;
+using BE.Data;
+using BE.Models.DTOs;
 using BE.Models.Entities;
+using BE.Middlewares;
 using BE.Services.Interface;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,20 +15,148 @@ namespace BE.Services.Implementation
         {
             _context = context;
         }
-        // Get the cart for a user, if it doesn't exist, create a new one
-        public async Task<Cart> GetCart(string userId) 
+
+        // ── Get or create cart, return DTO grouped by shop ──
+        public async Task<CartResponse> GetCart(string userId)
+        {
+            var cart = await GetOrCreateCart(userId);
+
+            return MapToResponse(cart);
+        }
+
+        // ── Add product to cart ──
+        public async Task<CartResponse> AddToCart(string userId, AddToCartRequest request)
+        {
+            if (string.IsNullOrEmpty(userId))
+                throw new AppException("Invalid user!");
+
+            if (request.Quantity <= 0)
+                throw new AppException("Quantity must be greater than 0.");
+
+            var product = await _context.Products.FindAsync(request.ProductId);
+            if (product == null)
+                throw new AppException("Product does not exist.");
+
+            // Check stock (either variant stock or product stock)
+            if (request.VariantId.HasValue)
+            {
+                var variant = await _context.ProductVariants.FindAsync(request.VariantId.Value);
+                if (variant == null || variant.ProductId != request.ProductId)
+                    throw new AppException("Invalid variant.");
+                if (variant.Stock < request.Quantity)
+                    throw new AppException("Insufficient variant stock!");
+            }
+            else
+            {
+                if (product.Stock < request.Quantity)
+                    throw new AppException("Insufficient stock!");
+            }
+
+            var cart = await GetOrCreateCart(userId);
+
+            // Check if item already exists (same product + same variant)
+            var existingItem = cart.CartItems
+                .FirstOrDefault(ci => ci.ProductId == request.ProductId
+                                   && ci.VariantId == request.VariantId);
+
+            if (existingItem != null)
+            {
+                existingItem.Quantity += request.Quantity;
+            }
+            else
+            {
+                cart.CartItems.Add(new CartItem
+                {
+                    ProductId = request.ProductId,
+                    VariantId = request.VariantId,
+                    Quantity = request.Quantity
+                });
+            }
+
+            await _context.SaveChangesAsync();
+
+            // Re-fetch with includes to build response
+            cart = await GetOrCreateCart(userId);
+            return MapToResponse(cart);
+        }
+
+        // ── Update quantity ──
+        public async Task<CartResponse> UpdateQuantity(string userId, UpdateCartRequest request)
+        {
+            var cart = await GetOrCreateCart(userId);
+
+            var item = cart.CartItems
+                .FirstOrDefault(ci => ci.ProductId == request.ProductId
+                                   && ci.VariantId == request.VariantId);
+
+            if (item == null)
+                throw new AppException("Item not found in cart.");
+
+            if (request.Quantity <= 0)
+            {
+                _context.CartItems.Remove(item);
+            }
+            else
+            {
+                item.Quantity = request.Quantity;
+            }
+
+            await _context.SaveChangesAsync();
+
+            cart = await GetOrCreateCart(userId);
+            return MapToResponse(cart);
+        }
+
+        // ── Remove item ──
+        public async Task RemoveItem(string userId, long productId, long? variantId)
+        {
+            var cart = await GetOrCreateCart(userId);
+
+            var item = cart.CartItems
+                .FirstOrDefault(ci => ci.ProductId == productId
+                                   && ci.VariantId == variantId);
+
+            if (item != null)
+            {
+                _context.CartItems.Remove(item);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        // ── Clear cart ──
+        public async Task ClearCart(string userId)
+        {
+            var cart = await GetOrCreateCart(userId);
+
+            _context.CartItems.RemoveRange(cart.CartItems);
+            await _context.SaveChangesAsync();
+        }
+
+        // ═══════════════════════════════════════════════════════
+        // Private helpers
+        // ═══════════════════════════════════════════════════════
+
+        private async Task<Cart> GetOrCreateCart(string userId)
         {
             var cart = await _context.Carts
                 .Include(c => c.CartItems)
-                .ThenInclude(ci => ci.Product)
+                    .ThenInclude(ci => ci.Product)
+                        .ThenInclude(p => p.Shop)
+                .Include(c => c.CartItems)
+                    .ThenInclude(ci => ci.Variant)
                 .FirstOrDefaultAsync(c => c.UserId == userId);
 
-            if(cart == null)
+            if (cart == null)
             {
+                // Verify user exists before creating cart
+                var userExists = await _context.Users.AnyAsync(u => u.UserId == userId);
+                if (!userExists)
+                    throw new AppException($"User '{userId}' does not exist.");
+
                 cart = new Cart
                 {
                     UserId = userId,
-                    Create_At = DateTime.Now,
+                    Create_At = DateTime.UtcNow,
                     CartItems = new List<CartItem>()
                 };
 
@@ -36,66 +166,45 @@ namespace BE.Services.Implementation
 
             return cart;
         }
-        // Add a product to the cart, if it already exists, update the quantity
-        public async Task AddToCart(string userId, long productId, int quantity)
-        {
-            var cart = await GetCart(userId);
 
-            var existingItem = cart.CartItems
-                 .FirstOrDefault(c => c.ProductId == productId);
-            if(existingItem != null)
-            {
-                existingItem.Quantity += quantity;
-            } else
-            {
-                cart.CartItems.Add(new CartItem
+        private CartResponse MapToResponse(Cart cart)
+        {
+            var groups = cart.CartItems
+                .Where(ci => ci.Product != null && ci.Product.Shop != null)
+                .GroupBy(ci => ci.Product.Shop)
+                .Select(g => new CartShopGroup
                 {
-                    ProductId = productId,
-                    Quantity = quantity
-                });
-            }
-            await _context.SaveChangesAsync();
-        }
+                    ShopId = g.Key.ShopId,
+                    ShopName = g.Key.Name,
+                    ShopLogo = g.Key.Logo,
+                    Items = g.Select(ci =>
+                    {
+                        var effectivePrice = ci.Product.DiscountPrice ?? ci.Product.Price;
+                        return new CartItemResponse
+                        {
+                            CartItemId = ci.Id,
+                            ProductId = ci.ProductId,
+                            ProductName = ci.Product.Name,
+                            ProductImage = ci.Product.Image,
+                            Price = ci.Product.Price,
+                            DiscountPrice = ci.Product.DiscountPrice,
+                            Quantity = ci.Quantity,
+                            Stock = ci.Product.Stock,
+                            SubTotal = effectivePrice * ci.Quantity,
+                            VariantId = ci.VariantId,
+                            VariantName = ci.Variant?.VariantName,
+                            VariantValue = ci.Variant?.VariantValue
+                        };
+                    }).ToList()
+                }).ToList();
 
-        // update the quantity of a product in the cart, if quantity is 0, remove the item
-        public async Task UpdateQuantity(string userId, long productId, int quantity)
-        {
-            var cart = await GetCart(userId);
-
-            var item = cart.CartItems
-                .FirstOrDefault(i => i.ProductId == productId);
-
-            if (item == null) return;
-
-            if (quantity <= 0)
-                cart.CartItems.Remove(item);
-            else
-                item.Quantity = quantity;
-
-            await _context.SaveChangesAsync();
-        }
-
-        // Remove a product from the cart
-        public async Task RemoveItem(string userId, long productId)
-        {
-            var cart = await GetCart(userId);
-
-            var item = cart.CartItems
-                .FirstOrDefault(i => i.ProductId == productId);
-
-            if (item != null)
+            return new CartResponse
             {
-                cart.CartItems.Remove(item);
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        // Clear the cart
-        public async Task ClearCart(string userId)
-        {
-            var cart = await GetCart(userId);
-            cart.CartItems.Clear();
-            await _context.SaveChangesAsync();
+                CartId = cart.CartId,
+                TotalItems = cart.CartItems.Count,
+                TotalPrice = groups.SelectMany(g => g.Items).Sum(i => i.SubTotal),
+                ShopGroups = groups
+            };
         }
     }
 }

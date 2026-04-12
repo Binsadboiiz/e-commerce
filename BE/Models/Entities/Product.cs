@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BE.Models.Entities
@@ -34,5 +34,6 @@ namespace BE.Models.Entities
         public Category Category { get; set; }
         public Brand Brand { get; set; }
         public ICollection<CartItem> CartItems { get; set; }
+        public ICollection<ProductVariant> Variants { get; set; }
     }
 }

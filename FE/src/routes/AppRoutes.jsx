@@ -3,8 +3,9 @@ import ErrorPage from "../pages/error/ErrorPage";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import MainLayout from "../components/layout/MainLayout";
-import HomePage from "../pages/home/Home";
-import ProductList from "../pages/product/ProductList";
+import HomePage from "../features/home/Home";
+import ProductList from "../features/product/pages/ProductList";
+import CartPage from "../features/cart/pages/CartPage";
 
 const AppRoutes = () => {
   return (
@@ -15,6 +16,7 @@ const AppRoutes = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/products" element={<ProductList />} />
+        <Route path="/cart" element={<CartPage />} />
       </Route>
 
       {/* Route không dùng layout */}

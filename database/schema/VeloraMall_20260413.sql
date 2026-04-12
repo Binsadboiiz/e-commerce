@@ -1,3 +1,6 @@
+-- VeloraMall Database Schema v2
+-- Updated: 2026-04-13
+-- Changes: Added Product_variants table, updated Cart_Items with VariantId
 
 CREATE DATABASE IF NOT EXISTS VeloraMall;
 USE VeloraMall;
@@ -79,7 +82,7 @@ CREATE TABLE Products (
     Stock INT,
     CategoryId BIGINT,
     BrandId BIGINT,
-    Image LONGTEXT,
+    Image LONGTEXT,       -- URL to product image
     RatingAvg FLOAT DEFAULT 0,
     RatingCount BIGINT DEFAULT 0,
     Status ENUM('active','inactive'),
@@ -91,26 +94,42 @@ CREATE TABLE Products (
 );
 
 -- ========================
+-- PRODUCT VARIANTS (NEW)
+-- ========================
+CREATE TABLE Product_variants (
+    VariantId BIGINT AUTO_INCREMENT PRIMARY KEY,
+    ProductId BIGINT NOT NULL,
+    VariantName VARCHAR(100) NOT NULL,     -- e.g. 'Size', 'Color'
+    VariantValue VARCHAR(100) NOT NULL,    -- e.g. 'L', 'Black'
+    PriceAdjustment DOUBLE DEFAULT 0,     -- extra cost for this variant
+    Stock INT DEFAULT 0,
+
+    FOREIGN KEY (ProductId) REFERENCES Products(ProductId) ON DELETE CASCADE
+);
+
+-- ========================
 -- CARTS
 -- ========================
 CREATE TABLE Carts (
     CartId BIGINT AUTO_INCREMENT PRIMARY KEY,
-    UserId VARCHAR(50),
+    UserId VARCHAR(50) UNIQUE,            -- one cart per user
     Create_At DATE,
     FOREIGN KEY (UserId) REFERENCES Users(UserId)
 );
 
 -- ========================
--- CART ITEMS
+-- CART ITEMS (UPDATED)
 -- ========================
-CREATE TABLE Cart_Items (
+CREATE TABLE Cart_items (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     CartId BIGINT,
     Product_id BIGINT,
-    Quantity BIGINT,
+    VariantId BIGINT NULL,
+    Quantity INT DEFAULT 1,
 
     FOREIGN KEY (CartId) REFERENCES Carts(CartId) ON DELETE CASCADE,
-    FOREIGN KEY (Product_id) REFERENCES Products(ProductId)
+    FOREIGN KEY (Product_id) REFERENCES Products(ProductId),
+    FOREIGN KEY (VariantId) REFERENCES Product_variants(VariantId) ON DELETE SET NULL
 );
 
 -- ========================
@@ -133,20 +152,28 @@ CREATE TABLE Orders (
 -- ========================
 -- ORDER ITEMS
 -- ========================
-CREATE TABLE Order_Items (
+CREATE TABLE Order_items (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    OrderId BIGINT,
     ShopId BIGINT,
     ProductId BIGINT,
     ProductName VARCHAR(255),
     Price DOUBLE,
     Quantity INT,
 
+    FOREIGN KEY (OrderId) REFERENCES Orders(OrderId) ON DELETE CASCADE,
     FOREIGN KEY (ShopId) REFERENCES Shops(ShopId),
     FOREIGN KEY (ProductId) REFERENCES Products(ProductId)
 );
 
+-- ========================
+-- INDEXES
+-- ========================
 CREATE INDEX idx_user_email ON Users(Email);
 CREATE INDEX idx_product_shop ON Products(ShopId);
 CREATE INDEX idx_product_category ON Products(CategoryId);
 CREATE INDEX idx_cart_user ON Carts(UserId);
 CREATE INDEX idx_order_customer ON Orders(CustomerId);
+CREATE INDEX idx_variant_product ON Product_variants(ProductId);
+
+SET FOREIGN_KEY_CHECKS = 1;
