@@ -2,7 +2,7 @@ import axios from "axios";
 import { getErrorHandle } from "../utils/ErrorHandle";
 
 const axiosClient = axios.create({
-    baseURL: "https://localhost:5269/api",
+    baseURL: import.meta.env.VITE_API_BASE_URL || "https://localhost:5269/api",
     withCredentials: true,
     headers: {
         "Content-Type": "application/json",
