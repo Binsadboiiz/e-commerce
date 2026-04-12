@@ -7,6 +7,9 @@
 .pnp.js
 FE/node_modules
 BE/node_modules
+#.net
+**/bin/
+**/obj/
 
 # testing
 /coverage
