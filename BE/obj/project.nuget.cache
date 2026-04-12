@@ -1,17 +1,17 @@
 {
   "version": 2,
-  "dgSpecHash": "EFvwh9eiw8g=",
+  "dgSpecHash": "BdFtoPR95/M=",
   "success": true,
-  "projectFilePath": "D:\\Information Technology\\Personal-Project\\e-commerce\\BE\\BE.csproj",
+  "projectFilePath": "D:\\MyProject\\e-commerce\\BE\\BE.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\ngnph\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.14\\microsoft.aspnetcore.openapi.9.0.14.nupkg.sha512",
-    "C:\\Users\\ngnph\\.nuget\\packages\\microsoft.entityframeworkcore\\9.0.14\\microsoft.entityframeworkcore.9.0.14.nupkg.sha512",
-    "C:\\Users\\ngnph\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\9.0.14\\microsoft.entityframeworkcore.abstractions.9.0.14.nupkg.sha512",
-    "C:\\Users\\ngnph\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\9.0.14\\microsoft.entityframeworkcore.analyzers.9.0.14.nupkg.sha512",
-    "C:\\Users\\ngnph\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\9.0.14\\microsoft.entityframeworkcore.relational.9.0.14.nupkg.sha512",
-    "C:\\Users\\ngnph\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512",
-    "C:\\Users\\ngnph\\.nuget\\packages\\mysqlconnector\\2.5.0\\mysqlconnector.2.5.0.nupkg.sha512",
-    "C:\\Users\\ngnph\\.nuget\\packages\\pomelo.entityframeworkcore.mysql\\9.0.0\\pomelo.entityframeworkcore.mysql.9.0.0.nupkg.sha512"
+    "C:\\Users\\ADMIN\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.14\\microsoft.aspnetcore.openapi.9.0.14.nupkg.sha512",
+    "C:\\Users\\ADMIN\\.nuget\\packages\\microsoft.entityframeworkcore\\9.0.14\\microsoft.entityframeworkcore.9.0.14.nupkg.sha512",
+    "C:\\Users\\ADMIN\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\9.0.14\\microsoft.entityframeworkcore.abstractions.9.0.14.nupkg.sha512",
+    "C:\\Users\\ADMIN\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\9.0.14\\microsoft.entityframeworkcore.analyzers.9.0.14.nupkg.sha512",
+    "C:\\Users\\ADMIN\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\9.0.14\\microsoft.entityframeworkcore.relational.9.0.14.nupkg.sha512",
+    "C:\\Users\\ADMIN\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512",
+    "C:\\Users\\ADMIN\\.nuget\\packages\\mysqlconnector\\2.5.0\\mysqlconnector.2.5.0.nupkg.sha512",
+    "C:\\Users\\ADMIN\\.nuget\\packages\\pomelo.entityframeworkcore.mysql\\9.0.0\\pomelo.entityframeworkcore.mysql.9.0.0.nupkg.sha512"
   ],
   "logs": []
 }
