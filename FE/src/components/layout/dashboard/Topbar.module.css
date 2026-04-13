@@ -1,0 +1,169 @@
+:root {
+    --font-body-sm: 14px;
+    --font-body-md: 16px;
+
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+
+    --color-border: #e5e7eb;
+    --color-surface: #ffffff;
+    --color-surface-soft: #f9fafb;
+
+    --color-success-bg: #dcfce7;
+    --color-success-text: #15803d;
+    --color-success-border: #bbf7d0;
+}
+
+
+/* ============================= */
+/* layout */
+/* ============================= */
+.topbar {
+    height: 64px;
+    padding: 0 40px;
+
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface);
+}
+
+.inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+}
+
+
+/* ============================= */
+/* search */
+/* ============================= */
+.searchBar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    width: 420px;
+    height: 44px;
+
+    padding: 0 16px;
+
+    border-radius: 999px;
+    background: var(--color-surface-soft);
+    border: 1px solid var(--color-border);
+}
+
+.searchInput {
+    width: 100%;
+
+    border: none;
+    outline: none;
+    background: transparent;
+
+    font-size: var(--font-body-sm);
+    color: var(--text-primary);
+}
+
+.icon {
+    color: #9ca3af;
+}
+
+
+/* ============================= */
+/* actions */
+/* ============================= */
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.circleBtn {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+
+    color: var(--text-secondary);
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.circleBtn:hover {
+    background: #f3f4f6;
+    color: var(--text-primary);
+}
+
+.circleBtn svg {
+    stroke-width: 1.8;
+}
+
+
+/* ============================= */
+/* user */
+/* ============================= */
+.user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+}
+
+.userText {
+    font-size: var(--font-body-sm);
+    color: var(--text-secondary);
+}
+
+.userText strong {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+
+/* ============================= */
+/* role badge */
+/* ============================= */
+.badge {
+    font-size: var(--font-body-sm);
+    font-weight: 600;
+
+    padding: 4px 10px;
+    border-radius: 999px;
+
+    background: var(--color-success-bg);
+    color: var(--color-success-text);
+    border: 1px solid var(--color-success-border);
+}
+
+
+/* ============================= */
+/* avatar */
+/* ============================= */
+.avatar {
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    font-size: var(--font-body-sm);
+    font-weight: 600;
+
+    background: #e5e7eb;
+    color: #374151;
+}
