@@ -47,19 +47,21 @@ frontend/
 ### Backend (ASP.NET Web API)
 
 ```id="f12"
-backend/
-├── src/
-│   ├── Controllers/   # handle HTTP requests
-│   ├── Services/      # business logic
-│   ├── Repositories/  # data access layer
-│   ├── Models/        # entity models
-│   ├── DTOs/          # data transfer objects
-│   ├── Data/          # DbContext and database config
-│   ├── Middlewares/   # custom middleware
-│   └── Program.cs
+BE/
+├── Controllers/        # HTTP layer
+├── Services/           # business logic
+├── Repositories/       # data access
+├── Models/             # EF entities
+├── DTOs/               # request/response contracts
+├── Data/
+│   ├── AppDbContext.cs
+│   ├── Configurations/
+│   └── Migrations/
+├── Middlewares/
 │
+├── Program.cs
 ├── appsettings.json
-└── ecommerce.sln
+├── BE.http
 ```
 
 ---
