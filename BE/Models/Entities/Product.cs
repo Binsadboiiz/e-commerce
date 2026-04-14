@@ -10,29 +10,52 @@ namespace BE.Models.Entities
         public long ProductId { get; set; }
 
         public long ShopId { get; set; }
+
+        [Required]
+        [MaxLength(50)]
         public string RetailerId { get; set; }
 
+        [Required]
+        [MaxLength(255)]
         public string Name { get; set; }
-        public string Description { get; set; }
+
+        public string? Description { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
         public double Price { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
         public double? DiscountPrice { get; set; }
+
         public int Stock { get; set; }
 
         public long CategoryId { get; set; }
         public long BrandId { get; set; }
 
-        public string Image { get; set; }
+        public string? Image { get; set; }
 
-        public float RatingAvg { get; set; }
-        public long RatingCount { get; set; }
+        public float RatingAvg { get; set; } = 0;
+        public long RatingCount { get; set; } = 0;
 
-        public string Status { get; set; }
+        [Required]
+        [MaxLength(20)]
+        public string Status { get; set; } = "active";
+
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
         // Navigation
-        public Shop Shop { get; set; }
-        public User Retailer { get; set; }
-        public Category Category { get; set; }
-        public Brand Brand { get; set; }
+        [ForeignKey(nameof(ShopId))]
+        public Shop? Shop { get; set; }
+
+        [ForeignKey(nameof(RetailerId))]
+        public User? Retailer { get; set; }
+
+        [ForeignKey(nameof(CategoryId))]
+        public Category? Category { get; set; }
+
+        [ForeignKey(nameof(BrandId))]
+        public Brand? Brand { get; set; }
         public ICollection<CartItem> CartItems { get; set; }
         public ICollection<ProductVariant> Variants { get; set; }
     }
