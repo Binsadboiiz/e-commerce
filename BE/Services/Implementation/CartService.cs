@@ -179,7 +179,7 @@ namespace BE.Services.Implementation
                     ShopLogo = g.Key.Logo,
                     Items = g.Select(ci =>
                     {
-                        var effectivePrice = ci.Product.DiscountPrice ?? ci.Product.Price;
+                        decimal effectivePrice = ci.Product.DiscountPrice ?? ci.Product.Price;
                         return new CartItemResponse
                         {
                             CartItemId = ci.Id,

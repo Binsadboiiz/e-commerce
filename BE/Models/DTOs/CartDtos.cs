@@ -26,7 +26,7 @@ namespace BE.Models.DTOs
     {
         public long CartId { get; set; }
         public int TotalItems { get; set; }
-        public double TotalPrice { get; set; }
+        public decimal TotalPrice { get; set; }
         public List<CartShopGroup> ShopGroups { get; set; } = new();
     }
 
@@ -44,11 +44,11 @@ namespace BE.Models.DTOs
         public long ProductId { get; set; }
         public string ProductName { get; set; }
         public string ProductImage { get; set; }
-        public double Price { get; set; }
-        public double? DiscountPrice { get; set; }
+        public decimal Price { get; set; }
+        public decimal? DiscountPrice { get; set; }
         public int Quantity { get; set; }
         public int Stock { get; set; }
-        public double SubTotal { get; set; }
+        public decimal SubTotal { get; set; }
 
         // Variant info
         public long? VariantId { get; set; }
