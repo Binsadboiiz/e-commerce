@@ -1,45 +1,36 @@
-//Service chỉ chịu trách nhiệm gọi API
+const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/products`;
 
-const BASE_URL = "https://dummyjson.com/products";
+export const productsService = {
+    async searchProducts({ search = "", category = "All" }) {
+        const response = await fetch(BASE_URL);
 
-/**
- * Search products theo keyword và filter
- * @param {Object} params
- * @param {string} params.search - keyword search
- * @param {string} params.category - category filter
- */
+        if (!response.ok) {
+            throw new Error("failed to fetch products");
+        }
 
-export async function searchProducts({ search = "", category = "All" }) {
-    let url = "https://dummyjson.com/products";
+        const data = await response.json();
+        return data;
+    },
 
-    if (search) {
-        url = `https://dummyjson.com/products/search?q=${search}`;
-    } else if (category !== "All") {
-        url = `https://dummyjson.com/products/category/${category}`;
+    async getProducts() {
+        const response = await fetch(BASE_URL);
+
+        if (!response.ok) {
+            throw new Error("failed to fetch products")
+        }
+
+        const data = await response.json()
+
+        return data;
+    },
+
+    async getProductById(id) {
+        const response = await fetch(`${BASE_URL}/${id}`);
+
+        if (!response.ok) {
+            throw new Error("Product not found")
+        }
+
+        return response.json();
     }
-
-    const response = await fetch(url);
-
-    if (!response.ok) {
-        throw new Error("failed to fetch products")
-    }
-
-    const data = await response.json()
-
-    return data.products;
-}
-
-/**
- * Lấy chi tiết 1 product
- * outOfStock sẽ bị ẩn khi hiện kq
- */
-
-export async function getProductById(id) {
-    const response = await fetch(`${BASE_URL}/${id}`);
-    
-    if (!response.ok) {
-        throw new Error("Product not found")
-    }
-
-    return response.json();
 }

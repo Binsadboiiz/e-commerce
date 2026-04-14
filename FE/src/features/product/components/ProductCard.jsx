@@ -4,31 +4,30 @@ import { IoStar } from "react-icons/io5";
 export default function ProductCard({ product, onBuy }) {
 
     const {
-        title,
+        name,
+        image,
         price,
-        discountPercentage,
-        thumbnail,
-        rating,
+        discountPrice,
+        ratingAvg,
         stock
     } = product;
 
-    const discountPrice = discountPercentage
-        ? (price - (price * discountPercentage) / 100).toFixed(2)
-        : null;
-
     return (
-
         <div className={styles.productCard}>
+
             <div className={styles.img}>
-                {thumbnail ? <img src={thumbnail} alt={title} /> : <div className={styles.img} />}
+                {image
+                    ? <img src={image} alt={name} />
+                    : <div className={styles.img} />
+                }
             </div>
 
             <div className={styles.name}>
-                <h2>{title}</h2>
+                <h2>{name}</h2>
             </div>
 
             <span className={styles.rating}>
-                <IoStar />{rating}
+                <IoStar /> {ratingAvg}
             </span>
 
             <span className={styles.price}>
@@ -52,6 +51,7 @@ export default function ProductCard({ product, onBuy }) {
             >
                 {stock === 0 ? "Out of stock" : "Buy now"}
             </button>
+
         </div>
     )
 }
