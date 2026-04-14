@@ -22,10 +22,10 @@ namespace BE.Models.Entities
         public string? Description { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
-        public double Price { get; set; }
+        public decimal Price { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
-        public double? DiscountPrice { get; set; }
+        public decimal? DiscountPrice { get; set; }
 
         public int Stock { get; set; }
 

@@ -1,8 +1,10 @@
-using Microsoft.EntityFrameworkCore;
 using BE.Data;
 using BE.Middlewares;
-using BE.Services.Interface;
+using BE.Repositories.Implementations;
+using BE.Repositories.Interfaces;
 using BE.Services.Implementation;
+using BE.Services.Interface;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // ── DI Registration ──
 builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 // ── CORS ──
 builder.Services.AddCors(options =>

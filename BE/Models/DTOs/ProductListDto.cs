@@ -2,11 +2,12 @@
 {
     public class ProductListDto
     {
-        public long ProductId { get; set; }
+        public long Id { get; set; }
 
         public string Name { get; set; }
+
         public decimal Price { get; set; }
-        public decimal DiscountPrice { get; set; }
+        public decimal? DiscountPrice { get; set; }
 
         public int Stock { get; set; }
 
@@ -14,7 +15,7 @@
 
         public float RatingAvg { get; set; }
 
-        public string CategoryName { get; set; }
-        public string BrandName { get; set; }
+        public string? CategoryName { get; set; }
+        public string? BrandName { get; set; }
     }
 }
