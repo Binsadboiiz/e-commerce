@@ -21,7 +21,7 @@ The project follows a modular and scalable architecture inspired by MVC, separat
 ### Frontend (React)
 
 ```id="f11"
-frontend/
+FE/
 ├── public/
 │
 ├── src/
