@@ -11,7 +11,7 @@
 
         public int Stock { get; set; }
 
-        public string? Image { get; set; }
+        public string? ImageUrl { get; set; }
 
         public float RatingAvg { get; set; }
 

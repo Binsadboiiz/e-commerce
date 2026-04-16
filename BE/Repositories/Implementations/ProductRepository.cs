@@ -25,7 +25,7 @@ namespace BE.Repositories.Implementations
                     Price = p.Price,
                     DiscountPrice = p.DiscountPrice,
                     Stock = p.Stock,
-                    Image = p.Image,
+                    ImageUrl = p.Image,
                     RatingAvg = p.RatingAvg,
                     CategoryName = p.Name,
                     BrandName = p.Name
@@ -47,7 +47,7 @@ namespace BE.Repositories.Implementations
                     Price = p.Price,
                     DiscountPrice = p.DiscountPrice,
                     Stock = p.Stock,
-                    Image = p.Image,
+                    ImageUrl = p.Image,
                     RatingAvg = p.RatingAvg,
                     CategoryName = c.Type,
                     BrandName = b.Name
@@ -69,7 +69,7 @@ namespace BE.Repositories.Implementations
                     Price = p.Price,
                     DiscountPrice = p.DiscountPrice,
                     Stock = p.Stock,
-                    Image = p.Image,
+                    ImageUrl = p.Image,
                     RatingAvg = p.RatingAvg,
                     CategoryName = c.Type,
                     BrandName = b.Name

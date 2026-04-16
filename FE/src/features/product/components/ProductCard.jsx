@@ -3,9 +3,11 @@ import { IoStar } from "react-icons/io5";
 
 export default function ProductCard({ product, onBuy }) {
 
+    const BASE_URL = `${import.meta.env.VITE_API_BASE_URL_IMAGE}`;
+
     const {
         name,
-        image,
+        imageUrl,
         price,
         discountPrice,
         ratingAvg,
@@ -16,8 +18,8 @@ export default function ProductCard({ product, onBuy }) {
         <div className={styles.productCard}>
 
             <div className={styles.img}>
-                {image
-                    ? <img src={image} alt={name} />
+                {imageUrl
+                    ? <img src={imageUrl} alt={name} />
                     : <div className={styles.img} />
                 }
             </div>

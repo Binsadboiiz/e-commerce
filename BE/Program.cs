@@ -2,6 +2,7 @@ using BE.Data;
 using BE.Middlewares;
 using BE.Repositories.Implementations;
 using BE.Repositories.Interfaces;
+using BE.Services;
 using BE.Services.Implementation;
 using BE.Services.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 );
 
 // ── DI Registration ──
+builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
+
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -44,6 +47,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ExceptionMiddleware>();
+
+app.UseStaticFiles();
 
 // CORS must come before Authorization and Controllers
 app.UseCors("AllowFrontend");
