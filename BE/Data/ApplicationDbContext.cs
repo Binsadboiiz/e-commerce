@@ -18,6 +18,10 @@ namespace BE.Data
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Voucher> Vouchers { get; set; }
+        public DbSet<OrderVoucher> OrderVouchers { get; set; }
+        public DbSet<PaymentTransaction> PaymentTransactions { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -53,6 +57,63 @@ namespace BE.Data
                 .WithMany()
                 .HasForeignKey(ci => ci.VariantId)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            // Order -> Customer
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Customer)
+                .WithMany(u => u.Orders)
+                .HasForeignKey(o => o.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Order -> Address
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Address)
+                .WithMany()
+                .HasForeignKey(o => o.AddressId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Order -> Items
+            modelBuilder.Entity<Order>()
+                .HasMany(o => o.OrderItems)
+                .WithOne(oi => oi.Order)
+                .HasForeignKey(oi => oi.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(oi => oi.Product)
+                .WithMany()
+                .HasForeignKey(oi => oi.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(oi => oi.Shop)
+                .WithMany()
+                .HasForeignKey(oi => oi.ShopId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(oi => oi.Variant)
+                .WithMany()
+                .HasForeignKey(oi => oi.VariantId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // OrderVoucher (many-to-many kiểu manual)
+            modelBuilder.Entity<OrderVoucher>()
+                .HasOne(ov => ov.Order)
+                .WithMany(o => o.OrderVouchers)
+                .HasForeignKey(ov => ov.OrderId);
+
+            modelBuilder.Entity<OrderVoucher>()
+                .HasOne(ov => ov.Voucher)
+                .WithMany(v => v.OrderVouchers)
+                .HasForeignKey(ov => ov.VoucherId);
+
+            // PaymentTransaction (1-1)
+            modelBuilder.Entity<PaymentTransaction>()
+                .HasOne(p => p.Order)
+                .WithOne(o => o.PaymentTransaction)
+                .HasForeignKey<PaymentTransaction>(p => p.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -28,6 +28,21 @@ export const CartProvider = ({ children }) => {
         fetchCart();
     }, [user, fetchCart]);
 
+    useEffect(() => {
+        if (!cart?.shopGroups) {
+            setSelectedItems(new Set());
+            return;
+        }
+
+        const validIds = new Set(cart.shopGroups.flatMap(group => group.items.map(item => item.cartItemId)));
+
+        // Keep selection state in sync after checkout/removal refreshes the cart.
+        setSelectedItems(prev => {
+            const next = new Set([...prev].filter(id => validIds.has(id)));
+            return next.size === prev.size ? prev : next;
+        });
+    }, [cart]);
+
     // ── Add to cart ──
     const addToCart = async (productId, quantity = 1, variantId = null) => {
         try {

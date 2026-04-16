@@ -20,6 +20,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
 
 builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
