@@ -1,7 +1,10 @@
 import { FiTrash2 } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
 import { useCart } from '../hooks/useCart';
+import { ROUTES } from '../../../config/route.config';
 
 export default function CartFooter() {
+    const navigate = useNavigate();
     const {
         cart,
         selectedCount,
@@ -72,6 +75,7 @@ export default function CartFooter() {
 
                     {/* Checkout Button */}
                     <button
+                        onClick={() => navigate(ROUTES.CHECKOUT, { state: { mode: 'cart' } })}
                         disabled={selectedCount === 0}
                         className="px-10 py-3 bg-primary hover:bg-primary-dark text-white
                                    font-semibold rounded-lg shadow-card hover:shadow-hover

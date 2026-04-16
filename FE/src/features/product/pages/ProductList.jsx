@@ -3,8 +3,10 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import useProducts from '../hooks/useProducts';
 import ProductGrid from '../components/ProductGrid';
 import ProductSkeleton from '../components/ProductSkeleton';
+import { ROUTES } from '../../../config/route.config';
 
 export default function ProductList() {
+    const navigate = useNavigate();
 
     const [searchParams] = useSearchParams();
     const keyword = searchParams.get("q") || "";
@@ -16,6 +18,20 @@ export default function ProductList() {
 
     const safeProducts = Array.isArray(products) ? products : [];
 
+    const handleBuyNow = (product) => {
+        navigate(ROUTES.CHECKOUT, {
+            state: {
+                mode: 'buy-now',
+                buyNow: {
+                    productId: product.id,
+                    quantity: 1,
+                    paymentMethod: 'cod',
+                    voucherCodes: []
+                }
+            }
+        });
+    };
+
     return (
         <div className={styles.wrapper}>
 
@@ -24,7 +40,7 @@ export default function ProductList() {
             {error && <p className={styles.error}>Error: {error}</p>}
 
             {!loading && !error && safeProducts.length > 0 && (
-                <ProductGrid products={safeProducts} />
+                <ProductGrid products={safeProducts} onBuy={handleBuyNow} />
             )}
 
             {!loading && !error && safeProducts.length === 0 && (
