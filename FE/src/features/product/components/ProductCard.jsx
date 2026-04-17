@@ -1,9 +1,10 @@
+/** @summary Displays product info (image, pricing, rating) 
+ * and handles add-to-cart action. */
+
 import styles from './ProductCard.module.css'
-import { IoStar } from "react-icons/io5";
+import { IoStar, IoStarHalf, IoCartOutline } from "react-icons/io5";
 
 export default function ProductCard({ product, onBuy }) {
-
-    const BASE_URL = `${import.meta.env.VITE_API_BASE_URL_IMAGE}`;
 
     const {
         name,
@@ -11,48 +12,63 @@ export default function ProductCard({ product, onBuy }) {
         price,
         discountPrice,
         ratingAvg,
-        stock
+        stock,
+        reviewCount = "1k",
+        isTopSeller = true
     } = product;
+
+    const discountPercent = price && discountPrice
+        ? Math.round(((price - discountPrice) / price) * 100)
+        : 0;
 
     return (
         <div className={styles.productCard}>
 
-            <div className={styles.img}>
-                {imageUrl
-                    ? <img src={imageUrl} alt={name} />
-                    : <div className={styles.img} />
-                }
-            </div>
-
-            <div className={styles.name}>
-                <h2>{name}</h2>
-            </div>
-
-            <span className={styles.rating}>
-                <IoStar /> {ratingAvg}
-            </span>
-
-            <span className={styles.price}>
-                {discountPrice ? (
-                    <>
-                        <del>${price}</del> ${discountPrice}
-                    </>
+            <div className={styles.imageWrapper}>
+                {imageUrl ? (
+                    <img src={imageUrl} alt={name} className={styles.productImg} />
                 ) : (
-                    <>${price}</>
+                    <div className={styles.placeholderImg} />
                 )}
-            </span>
+            </div>
 
-            <span className={styles.sold}>
-                Stock: {stock}
-            </span>
+            <div className={styles.content}>
+                <div className={styles.headerRow}>
+                    {isTopSeller && <span className={styles.badge}>Top seller</span>}
+                    <h2 className={styles.name}>{name || "Product name"}</h2>
+                </div>
 
-            <button
-                className={styles.btnBuy}
-                disabled={stock === 0}
-                onClick={() => onBuy?.(product)}
-            >
-                {stock === 0 ? "Out of stock" : "Buy now"}
-            </button>
+                <div className={styles.priceRow}>
+                    <div className={styles.priceValue}>
+                        {discountPrice ? (
+                            <>
+                                <span className={styles.oldPrice}>${price.toFixed(2)}</span>
+                                <span className={styles.currentPrice}>${discountPrice.toFixed(2)}</span>
+                                <span className={styles.discountTag}>-{discountPercent}%</span>
+                            </>
+                        ) : (
+                            <span className={styles.currentPrice}>${price.toFixed(2)}</span>
+                        )}
+                    </div>
+
+                    <button className={styles.cartBtn} onClick={() => onBuy?.(product)}>
+                        <IoCartOutline />
+                    </button>
+                </div>
+
+                <div className={styles.ratingRow}>
+                    <div className={styles.stars}>
+                        <IoStar />
+                        <IoStar />
+                        <IoStar />
+                        <IoStar />
+                        <IoStarHalf />
+                    </div>
+                    <span className={styles.ratingText}>
+                        <strong>{ratingAvg}</strong> ({reviewCount} reviews)
+                    </span>
+                </div>
+            </div>
 
         </div>
     )
