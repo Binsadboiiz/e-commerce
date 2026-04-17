@@ -23,7 +23,6 @@
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
     <Folder Include="Models\ViewModels\" />
-    <Folder Include="wwwroot\images\products\" />
   </ItemGroup>
 
 </Project>

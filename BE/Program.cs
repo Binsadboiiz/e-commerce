@@ -49,8 +49,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseMiddleware<ExceptionMiddleware>();
 
-app.UseStaticFiles();
-
 // CORS must come before Authorization and Controllers
 app.UseCors("AllowFrontend");
 
