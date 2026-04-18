@@ -34,10 +34,6 @@
     transition: transform 0.3s ease;
 }
 
-.productCard:hover .productImg {
-    transform: scale(1.05);
-}
-
 .placeholderImg {
     width: 100%;
     height: 100%;

@@ -1,6 +1,6 @@
 ﻿using System;
 using BE.Data;
-using BE.Models.DTOs;
+using BE.Models.Entities;
 using BE.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,66 +15,29 @@ namespace BE.Repositories.Implementations
             _context = context;
         }
 
-        public async Task<List<ProductListDto>> GetAllAsync()
+        public async Task<List<Product>> GetAllAsync()
         {
             return await _context.Products
-                .Select(p => new ProductListDto
-                {
-                    Id = p.ProductId,
-                    Name = p.Name,
-                    Price = p.Price,
-                    DiscountPrice = p.DiscountPrice,
-                    Stock = p.Stock,
-                    ImageUrl = p.Image,
-                    RatingAvg = p.RatingAvg,
-                    CategoryName = p.Name,
-                    BrandName = p.Name
-                })
+                .Include(p => p.Category)
+                .Include(p => p.Brand)
                 .ToListAsync();
         }
 
-        public async Task<ProductListDto?> GetByIdAsync(long id)
+        public async Task<Product?> GetByIdAsync(long id)
         {
-            return await (
-                from p in _context.Products
-                join c in _context.Categories on p.CategoryId equals c.CategoryId
-                join b in _context.Brands on p.BrandId equals b.BrandId
-                where p.ProductId == id
-                select new ProductListDto
-                {
-                    Id = p.ProductId,
-                    Name = p.Name,
-                    Price = p.Price,
-                    DiscountPrice = p.DiscountPrice,
-                    Stock = p.Stock,
-                    ImageUrl = p.Image,
-                    RatingAvg = p.RatingAvg,
-                    CategoryName = c.Type,
-                    BrandName = b.Name
-                }
-            ).FirstOrDefaultAsync();
+            return await _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.Brand)
+                .FirstOrDefaultAsync(p => p.ProductId == id);
         }
 
-        public async Task<List<ProductListDto>> SearchAsync(string keyword)
+        public async Task<List<Product>> SearchAsync(string keyword)
         {
-            return await (
-                from p in _context.Products
-                join c in _context.Categories on p.CategoryId equals c.CategoryId
-                join b in _context.Brands on p.BrandId equals b.BrandId
-                where p.Name.Contains(keyword)
-                select new ProductListDto
-                {
-                    Id = p.ProductId,
-                    Name = p.Name,
-                    Price = p.Price,
-                    DiscountPrice = p.DiscountPrice,
-                    Stock = p.Stock,
-                    ImageUrl = p.Image,
-                    RatingAvg = p.RatingAvg,
-                    CategoryName = c.Type,
-                    BrandName = b.Name
-                }
-            ).ToListAsync();
+            return await _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.Brand)
+                .Where(p => p.Name.Contains(keyword))
+                .ToListAsync();
         }
     }
 }
