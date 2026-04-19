@@ -31,6 +31,7 @@ namespace BE.Models.Entities
         public long AddressId { get; set; }
 
         public DateTime Create_At { get; set; }
+        public DateTime? EstimatedDeliveryDate { get; set; }
 
         // Navigation
         public User Customer { get; set; }
@@ -40,5 +41,9 @@ namespace BE.Models.Entities
 
         // A COD order still creates a payment transaction record to track fulfillment.
         public PaymentTransaction PaymentTransaction { get; set; }
+
+        // Tracking & Shipping
+        public ICollection<OrderTracking> OrderTrackings { get; set; }
+        public ShippingDetail ShippingDetail { get; set; }
     }
 }

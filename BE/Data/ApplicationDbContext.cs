@@ -21,6 +21,8 @@ namespace BE.Data
         public DbSet<Voucher> Vouchers { get; set; }
         public DbSet<OrderVoucher> OrderVouchers { get; set; }
         public DbSet<PaymentTransaction> PaymentTransactions { get; set; }
+        public DbSet<OrderTracking>  OrderTrackings { get; set; }
+        public DbSet<ShippingDetail> ShippingDetails { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -113,6 +115,20 @@ namespace BE.Data
                 .HasOne(p => p.Order)
                 .WithOne(o => o.PaymentTransaction)
                 .HasForeignKey<PaymentTransaction>(p => p.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Order → OrderTrackings (one-to-many)
+            modelBuilder.Entity<Order>()
+                .HasMany(o => o.OrderTrackings)
+                .WithOne(t => t.Order)
+                .HasForeignKey(t => t.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Order → ShippingDetail (one-to-one)
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.ShippingDetail)
+                .WithOne(s => s.Order)
+                .HasForeignKey<ShippingDetail>(s => s.OrderId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

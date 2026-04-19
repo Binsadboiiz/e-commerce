@@ -294,6 +294,7 @@ namespace BE.Services.Implementation
         /// </summary>
         private async Task<Order> CreateOrderAsync(string userId, Address address, string paymentMethod, CheckoutPricingResult pricing)
         {
+            var createdAt = DateTime.UtcNow;
             var order = new Order
             {
                 CustomerId = userId,
@@ -305,9 +306,24 @@ namespace BE.Services.Implementation
                 ShippingFee = pricing.ShippingFee,
                 DiscountAmount = pricing.DiscountAmount,
                 FinalAmount = pricing.FinalAmount,
-                Create_At = DateTime.UtcNow,
+                Create_At = createdAt,
                 OrderItems = new List<OrderItem>(),
-                OrderVouchers = new List<OrderVoucher>()
+                OrderVouchers = new List<OrderVoucher>(),
+                OrderTrackings = new List<OrderTracking>
+                {
+                    new OrderTracking
+                    {
+                        Status = "pending",
+                        Description = "Your order has been placed successfully.",
+                        UpdatedBy = "system",
+                        CreatedAt = createdAt
+                    }
+                },
+                ShippingDetail = new ShippingDetail
+                {
+                    Status = "pending",
+                    UpdatedAt = createdAt
+                }
             };
 
             // Lưu danh sách sản phẩm trong đơn hàng
