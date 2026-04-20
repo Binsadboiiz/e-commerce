@@ -56,7 +56,9 @@ namespace BE.Models.Entities
 
         [ForeignKey(nameof(BrandId))]
         public Brand? Brand { get; set; }
+        
         public ICollection<CartItem> CartItems { get; set; }
         public ICollection<ProductVariant> Variants { get; set; }
+        public ICollection<ProductAttribute> ProductAttributes { get; set; } = new List<ProductAttribute>();
     }
 }

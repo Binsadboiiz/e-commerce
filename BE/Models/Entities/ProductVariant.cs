@@ -11,12 +11,14 @@ namespace BE.Models.Entities
 
         public long ProductId { get; set; }
 
-        public string VariantName { get; set; }   // e.g. "Size", "Color"
-        public string VariantValue { get; set; }   // e.g. "L", "Black"
-        public double? PriceAdjustment { get; set; } // additional price for this variant
+        public string VariantName { get; set; } 
+        public string VariantValue { get; set; } 
+        public double? PriceAdjustment { get; set; } 
         public int Stock { get; set; }
 
         // Navigation
+        [ForeignKey(nameof(ProductId))]
         public Product Product { get; set; }
+        public ICollection<VariantAttribute> VariantAttributes { get; set; } = new List<VariantAttribute>();
     }
 }

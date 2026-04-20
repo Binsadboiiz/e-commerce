@@ -10,7 +10,10 @@ namespace BE.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<ProductVariant> ProductVariants { get; set; }
+        public DbSet<AttributeType> AttributeTypes { get; set; }
+        public DbSet<AttributeValue> AttributeValues { get; set; }
+        public DbSet<ProductAttribute> ProductAttributes { get; set; }
+        public DbSet<VariantAttribute> VariantAttributes { get; set; }
         public DbSet<Shop> Shops { get; set; }
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Category> Categories { get; set; }
