@@ -11,6 +11,10 @@ namespace BE.Data
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductVariant> ProductVariants { get; set; }
+        public DbSet<AttributeType> AttributeTypes { get; set; }
+        public DbSet<AttributeValue> AttributeValues { get; set; }
+        public DbSet<ProductAttribute> ProductAttributes { get; set; }
+        public DbSet<VariantAttribute> VariantAttributes { get; set; }
         public DbSet<Shop> Shops { get; set; }
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -21,8 +25,6 @@ namespace BE.Data
         public DbSet<Voucher> Vouchers { get; set; }
         public DbSet<OrderVoucher> OrderVouchers { get; set; }
         public DbSet<PaymentTransaction> PaymentTransactions { get; set; }
-        public DbSet<OrderTracking>  OrderTrackings { get; set; }
-        public DbSet<ShippingDetail> ShippingDetails { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -115,20 +117,6 @@ namespace BE.Data
                 .HasOne(p => p.Order)
                 .WithOne(o => o.PaymentTransaction)
                 .HasForeignKey<PaymentTransaction>(p => p.OrderId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // Order → OrderTrackings (one-to-many)
-            modelBuilder.Entity<Order>()
-                .HasMany(o => o.OrderTrackings)
-                .WithOne(t => t.Order)
-                .HasForeignKey(t => t.OrderId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // Order → ShippingDetail (one-to-one)
-            modelBuilder.Entity<Order>()
-                .HasOne(o => o.ShippingDetail)
-                .WithOne(s => s.Order)
-                .HasForeignKey<ShippingDetail>(s => s.OrderId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
