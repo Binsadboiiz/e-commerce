@@ -1,0 +1,40 @@
+.panel {
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+}
+
+.panelTitle {
+    font-size: 16px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.kvRow {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.kvRow:last-child {
+    margin-bottom: 0;
+}
+
+.kvKey {
+    color: #64748b;
+}
+
+.kvValue {
+    color: #0f172a;
+    font-weight: 600;
+    text-align: right;
+}
+
+.itemRow {
+    border-top: 1px solid #edf1f5;
+    padding-top: 12px;
+    margin-top: 12px;
+}

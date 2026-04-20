@@ -10,6 +10,8 @@ import HomePage from '../features/home/Home'
 import ProductList from '../features/product/pages/ProductList'
 import CartPage from '../features/cart/pages/CartPage'
 import CheckoutPage from '../features/checkout/pages/CheckoutPage'
+import MyOrdersPage from '../features/order/pages/MyOrdersPage'
+import OrderTrackingPage from '../features/order/pages/OrderTrackingPage'
 import { ROUTES } from '../config/route.config'
 
 export default function PublicRoutes() {
@@ -19,6 +21,8 @@ export default function PublicRoutes() {
             <Route path={ROUTES.PRODUCTS} element={<ProductList />} />
             <Route path={ROUTES.CART} element={<CartPage />} />
             <Route path={ROUTES.CHECKOUT} element={<CheckoutPage />} />
+            <Route path={ROUTES.MY_ORDERS} element={<MyOrdersPage />} />
+            <Route path={ROUTES.ORDER_TRACKING} element={<OrderTrackingPage />} />
         </Route>
     )
 }

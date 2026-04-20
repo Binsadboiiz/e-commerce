@@ -179,7 +179,7 @@ export default function CheckoutPage() {
             }
 
             window.alert(`Order placed successfully. Order ID: ${response.orderId}`);
-            navigate(ROUTES.CART);
+            navigate(ROUTES.ORDER_TRACKING.replace(":orderId", String(response.orderId)));
         } catch (err) {
             setError(err.message || "Failed to place order.");
         } finally {
