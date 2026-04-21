@@ -24,6 +24,8 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderTrackingService, OrderTrackingService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICategoryRepository,  CategoryRepository>();
 
 // ── CORS ──
 builder.Services.AddCors(options =>
@@ -40,6 +42,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.WebHost.UseUrls("https://localhost:5269");
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 

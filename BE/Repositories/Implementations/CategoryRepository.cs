@@ -1,12 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using BE.Data;
+using BE.Models.Entities;
+using BE.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BE.Repositories.Implementations
 {
-    public class CategoryRepository : Controller
+    public class CategoryRepository : ICategoryRepository
     {
-        public IActionResult Index()
+        private readonly ApplicationDbContext _context;
+
+        public CategoryRepository(ApplicationDbContext context)
         {
-            return View();
+            _context = context;
+        }
+
+        public async Task<IEnumerable<Category>> GetAllAsync()
+        {
+            return await _context.Categories
+                .AsNoTracking()
+                .ToListAsync();
         }
     }
 }
