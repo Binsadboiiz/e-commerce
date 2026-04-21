@@ -17,13 +17,6 @@ namespace BE.Controllers.Product
             _productService = productService;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductListDto>>> GetAll()
-        {
-            var result = await _productService.GetAllAsync();
-            return Ok(result);
-        }
-
         [HttpGet("{id:long}")]
         public async Task<ActionResult<ProductListDto>> GetById(long id)
         {

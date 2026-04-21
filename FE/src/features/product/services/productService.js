@@ -1,49 +1,36 @@
+import { queryBuilder } from "@/features/product/utils/queryBuilder";
+
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 const PRODUCTS_URL = `${API_URL}/products`;
 const FILTER_URL = `${PRODUCTS_URL}/filter`;
 
 export const productsService = {
-    async searchProducts({ search = "", category = "All" }) {
-        const response = await fetch(FILTER_URL);
+    async searchProducts(params = {}) {
+        const qs = queryBuilder.toQueryString(params);
 
-        if (!response.ok) {
-            throw new Error("failed to fetch products");
-        }
+        const res = await fetch(`${FILTER_URL}?${qs}`);
 
-        const data = await response.json();
+        if (!res.ok) throw new Error("failed to fetch products");
+
+        const data = await res.json();
         return data;
     },
 
-    async getProducts() {
-        const response = await fetch(FILTER_URL);
+    async getProducts(params = {}) {
+        const qs = queryBuilder.toQueryString(params);
 
-        if (!response.ok) {
-            throw new Error("failed to fetch products")
-        }
+        const res = await fetch(`${FILTER_URL}?${qs}`);
 
-        const data = await response.json()
+        if (!res.ok) throw new Error("failed to fetch products");
+
+        const data = await res.json();
         return data;
     },
 
-    async filterProducts(params) {
+    async filterProducts(params = {}) {
+        const qs = queryBuilder.toQueryString(params);
 
-        const query = new URLSearchParams();
-
-        if (params.search) query.append("search", params.search);
-
-        params.categoryIds?.forEach(id =>
-            query.append("categoryIds", id)
-        );
-
-        params.attributeValueIds?.forEach(id =>
-            query.append("attributeValueIds", id)
-        );
-
-        if (params.minPrice) query.append("minPrice", params.minPrice);
-        if (params.maxPrice) query.append("maxPrice", params.maxPrice);
-
-        const queryString = query.toString();
-        const res = await fetch(`${FILTER_URL}${queryString ? `?${queryString}` : ""}`);
+        const res = await fetch(`${FILTER_URL}?${qs}`);
 
         if (!res.ok) throw new Error("failed to fetch products");
 
@@ -52,13 +39,11 @@ export const productsService = {
     },
 
     async getProductById(id) {
-        const response = await fetch(`${PRODUCTS_URL}/${id}`);
+        const res = await fetch(`${PRODUCTS_URL}/${id}`);
 
-        if (!response.ok) {
-            throw new Error("Product not found")
-        }
+        if (!res.ok) throw new Error("Product not found");
 
-        const data = await response.json()
+        const data = await res.json();
         return data;
     }
 }

@@ -4,11 +4,7 @@ namespace BE.Services.Interface
 {
     public interface IProductService
     {
-        Task<IEnumerable<ProductListDto>> GetAllAsync();
-        Task<ProductListDto?> GetByIdAsync(long id);
-        Task<IEnumerable<ProductListDto>> SearchAsync(string keyword);
-
         Task<(IEnumerable<ProductListDto> items, int total)> FilterAsync(ProductFilterDto filter);
-    
+        Task<ProductListDto?> GetByIdAsync(long id);
     }
 }

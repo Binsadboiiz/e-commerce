@@ -152,3 +152,28 @@ VALUES
 
 -- Sony Camera
 (15, 1);
+
+-- LOW RATING PRODUCTS (test filter)
+
+INSERT INTO Products (
+    ShopId,
+    RetailerId,
+    Name,
+    Description,
+    Price,
+    DiscountPrice,
+    Stock,
+    CategoryId,
+    BrandId,
+    Image,
+    RatingAvg,
+    RatingCount,
+    Status
+)
+VALUES
+(1, 'u1', 'Cheap Wired Earphones', 'Very basic sound quality', 10, 8, 100, 1, 5, 'https://via.placeholder.com/300', 1.8, 12, 'active'),
+(3, 'u3', 'Budget T-Shirt', 'Low quality fabric', 12, 9, 80, 2, 4, 'https://via.placeholder.com/300', 1.5, 25, 'active'),
+(2, 'u2', 'Old Android Phone', 'Outdated performance', 150, 120, 20, 1, 2, 'https://via.placeholder.com/300', 2.3, 40, 'active'),
+(4, 'u4', 'Fake Sneakers', 'Uncomfortable shoes', 40, 30, 60, 3, 3, 'https://via.placeholder.com/300', 2.7, 33, 'active'),
+(5, 'u5', 'Basic Smartwatch', 'Average features', 80, 65, 30, 1, 1, 'https://via.placeholder.com/300', 3.2, 70, 'active'),
+(3, 'u3', 'Regular Hoodie', 'Normal quality', 45, 35, 50, 2, 4, 'https://via.placeholder.com/300', 3.6, 55, 'active');

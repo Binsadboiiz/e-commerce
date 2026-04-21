@@ -13,7 +13,7 @@ namespace BE.Models.Entities
 
         public string VariantName { get; set; } 
         public string VariantValue { get; set; } 
-        public double? PriceAdjustment { get; set; } 
+        public decimal? PriceAdjustment { get; set; } 
         public int Stock { get; set; }
 
         // Navigation

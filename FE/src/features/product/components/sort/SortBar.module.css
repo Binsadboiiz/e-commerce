@@ -1,0 +1,48 @@
+.sortBar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: #fff;
+    border-radius: 10px;
+    border: 1px solid #eee;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.label {
+    font-size: 14px;
+    color: #666;
+    margin-right: 6px;
+    font-weight: 500;
+}
+
+/* button base */
+.sortBar button {
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid #e5e5e5;
+    background: #fafafa;
+    font-size: 13px;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* hover */
+.sortBar button:hover {
+    background: #f0f0f0;
+    border-color: #ccc;
+}
+
+/* active state */
+.active {
+    background: #111;
+    color: #fff;
+    border-color: #111;
+}
+
+/* optional: active hover giữ màu */
+.active:hover {
+    background: #000;
+}

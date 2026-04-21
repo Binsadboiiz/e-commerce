@@ -1,29 +1,44 @@
 .productCard {
-    width: 220px;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+
     background: #fff;
     border-radius: 10px;
     border: 1px solid rgba(0, 0, 0, 0.06);
+
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        border-color 0.2s ease;
+    opacity: 0;
+    transform: translateY(8px);
+    animation: fadeIn 0.25s ease forwards;
 }
 
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* hover */
 .productCard:hover {
     transform: translateY(-4px);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
     border-color: rgba(0, 0, 0, 0.08);
 }
 
-/* Image */
+/* IMAGE */
 .imageWrapper {
     width: 100%;
     aspect-ratio: 1 / 1;
     background-color: #f2f2f2;
+
     border-radius: 8px;
     overflow: hidden;
+
     margin-bottom: 8px;
 }
 
@@ -31,6 +46,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
     transition: transform 0.3s ease;
 }
 
@@ -40,12 +56,15 @@
     background: #e5e5e5;
 }
 
-/* Content */
+/* CONTENT */
 .content {
     padding: 6px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
-/* Header */
+/* HEADER */
 .headerRow {
     display: flex;
     align-items: flex-start;
@@ -53,19 +72,21 @@
     margin-bottom: 8px;
 }
 
-/* Badge */
+/* BADGE */
 .badge {
     background-color: #f84c4c;
     color: white;
     font-size: 10px;
     font-weight: 600;
+
     padding: 2px 8px;
     border-radius: 12px;
+
     white-space: nowrap;
-    margin-top: 2px;
+    flex-shrink: 0;
 }
 
-/* Name - luôn 3 dòng */
+/* NAME */
 .name {
     font-size: 13px;
     color: #1a1a1a;
@@ -75,18 +96,21 @@
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
-    overflow: hidden;
 
+    overflow: hidden;
     line-height: 1.4;
+
     min-height: calc(1.4em * 3);
 }
 
-/* Price */
+/* PRICE */
 .priceRow {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     margin-bottom: 8px;
+    min-height: 28px;
 }
 
 .priceValue {
@@ -94,6 +118,8 @@
     align-items: center;
     gap: 4px;
     flex-wrap: wrap;
+
+    min-height: 24px;
 }
 
 .oldPrice {
@@ -111,16 +137,19 @@
 .discountTag {
     background-color: #ffe4e6;
     color: #f84c4c;
+
     font-size: 10px;
     font-weight: 600;
+
     padding: 1px 4px;
     border-radius: 3px;
 }
 
-/* Button */
+/* CART BUTTON */
 .cartBtn {
     width: 34px;
     height: 34px;
+
     border-radius: 50%;
     background-color: #000;
     color: #fff;
@@ -147,11 +176,13 @@
     transform: scale(0.95);
 }
 
-/* Rating */
+/* RATING */
 .ratingRow {
     display: flex;
     align-items: center;
     gap: 4px;
+
+    min-height: 20px;
 }
 
 .stars {

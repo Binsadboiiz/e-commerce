@@ -1,0 +1,65 @@
+/* SECTION WRAPPER */
+.section {
+    margin-bottom: 16px;
+}
+
+/* LABEL */
+.label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+/* PRICE INPUT */
+.priceInput {
+    width: 100%;
+    padding: 6px 10px;
+    margin-bottom: 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+/* RATING OPTION */
+.option {
+    display: flex;
+    gap: 6px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* COLOR SWATCH */
+.colors {
+    display: flex;
+    gap: 8px;
+}
+
+.swatch {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 1px solid #ccc;
+}
+
+.active {
+    outline: 2px solid #333;
+}
+
+.ratingRow {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.starActive {
+    color: #f5a623;
+}
+
+.starInactive {
+    color: #ddd;
+}
+
+.ratingText {
+    margin-left: 6px;
+    font-size: 13px;
+}

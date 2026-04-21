@@ -4,21 +4,32 @@ import useProducts from '../hooks/useProducts';
 import ProductGrid from '../components/ProductGrid';
 import ProductSkeleton from '../components/ProductSkeleton';
 import SidebarFilter from '../components/filter/SidebarFilter';
+import SortBar from '../components/sort/SortBar';
+
 import { ROUTES } from '@/config/route.config';
 
 export default function ProductList() {
     const navigate = useNavigate();
 
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const params = {
         search: searchParams.get("q") || "",
+
         minPrice: searchParams.get("minPrice") ? Number(searchParams.get("minPrice")) : null,
         maxPrice: searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : null,
-        categoryIds: searchParams.getAll("categoryIds").map(Number).filter(Boolean)
+
+        categoryIds: searchParams.getAll("categoryIds").map(Number).filter(Boolean),
+
+        minRating: searchParams.get("minRating") ? Number(searchParams.get("minRating")) : null,
+
+        attributeValueIds: searchParams.getAll("attributeValueIds").map(Number).filter(Boolean),
+
+        sortBy: searchParams.get("sortBy") || null
+
     };
 
-    const { products, loading, error } = useProducts(params);;
+    const { products, loading, error } = useProducts(params);
 
     // TODO: move to product detail page
     // const handleBuyNow = (product) => {
@@ -41,6 +52,12 @@ export default function ProductList() {
             <SidebarFilter />
 
             <div className={styles.content}>
+
+                <SortBar
+                    searchParams={searchParams}
+                    setSearchParams={setSearchParams}
+                />
+
                 {loading && <ProductSkeleton />}
 
                 {error && <p className={styles.error}>Error: {error}</p>}

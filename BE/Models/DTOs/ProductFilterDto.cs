@@ -13,6 +13,8 @@
 
         public List<long>? AttributeValueIds { get; set; }
 
+        public float? MinRating { get; set; }
+
         public string? SortBy { get; set; }
 
         public int Page { get; set; } = 1;

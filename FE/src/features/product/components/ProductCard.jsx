@@ -13,7 +13,7 @@ export default function ProductCard({ product, onBuy }) {
         discountPrice,
         ratingAvg,
         stock,
-        reviewCount = "1k",
+        ratingCount,
         isTopSeller = true
     } = product;
 
@@ -65,7 +65,7 @@ export default function ProductCard({ product, onBuy }) {
                         <IoStarHalf />
                     </div>
                     <span className={styles.ratingText}>
-                        <strong>{ratingAvg}</strong> ({reviewCount} reviews)
+                        <strong>{ratingAvg}</strong> ({ratingCount} reviews)
                     </span>
                 </div>
             </div>
