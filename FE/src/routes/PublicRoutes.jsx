@@ -18,7 +18,7 @@ export default function PublicRoutes() {
         <>
             <Route element={<MainLayout />}>
                 <Route index element={<HomePage />} />
-                <Route path={ROUTES.PRODUCTS} element={<ProductList />} />
+                <Route path={ROUTES.PRODUCTS_LIST} element={<ProductList />} />
                 <Route path={ROUTES.CART} element={<CartPage />} />
                 <Route path={ROUTES.CHECKOUT} element={<CheckoutPage />} />
             </Route>
