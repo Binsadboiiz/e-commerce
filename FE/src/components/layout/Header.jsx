@@ -1,8 +1,8 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FiShoppingCart } from 'react-icons/fi';
 import styles from './Header.module.css';
-import SearchBar from '../../features/search/SearchBar';
-import { useCart } from '../../features/cart/hooks/useCart';
+import SearchBar from '@/features/product/components/search/SearchBar';
+import { useCart } from '@/features/cart/hooks/useCart';
 
 function Header() {
     const location = useLocation();
