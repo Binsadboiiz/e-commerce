@@ -1,0 +1,30 @@
+.sidebar {
+    width: 240px;
+    padding: 16px;
+    border-right: 1px solid #eee;
+    position: sticky;
+    top: 80px;
+    height: fit-content;
+}
+
+.title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.section {
+    margin-bottom: 20px;
+}
+
+.label {
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.option {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-size: 14px;
+}

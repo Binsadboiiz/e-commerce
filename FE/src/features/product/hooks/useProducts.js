@@ -8,30 +8,30 @@ import { productsService } from "../services/productService";
  * - filter business logic
  */
 
-export default function useProducts({ search, category }) {
+export default function useProducts(params) {
 
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [total, setTotal] = useState(0);
+
+    console.log("PARAMS:", params);
+    console.log("URL SEARCH:", window.location.search);
 
     useEffect(() => {
         async function fetchData() {
+            if (!params) return;
+
             try {
                 setLoading(true);
                 setError(null);
 
-                const data = await productsService.searchProducts({
-                    search,
-                    category
-                });
+                const res = await productsService.filterProducts(params);
 
-                const list = Array.isArray(data) ? data : [];
+                const items = Array.isArray(res) ? res : res?.items ?? [];
 
-                const visibleProducts = list.filter(
-                    (product) => product.stock > 0
-                );
-
-                setProducts(visibleProducts);
+                setProducts(items);
+                setTotal(res?.total ?? 0);
 
             } catch (err) {
                 setError(err.message);
@@ -41,7 +41,7 @@ export default function useProducts({ search, category }) {
         }
 
         fetchData();
-    }, [search, category]);
+    }, [JSON.stringify(params)]);
 
-    return { products, loading, error };
+    return { products, loading, error, total };
 }
