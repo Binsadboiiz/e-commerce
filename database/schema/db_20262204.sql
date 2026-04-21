@@ -1,2 +1,0 @@
-ALTER TABLE Product_variants
-MODIFY COLUMN PriceAdjustment DECIMAL(10,2) DEFAULT 0;
