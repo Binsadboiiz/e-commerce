@@ -4,10 +4,8 @@ namespace BE.Validators
 {
     public static class TrackingStatusTransitionValidator
     {
-        private static readonly Dictionary<
-            string,
-            List<string>> AllowedTransitions
-            = new()
+        private static readonly Dictionary<string, List<string>> 
+            AllowedTransitions = new()
         {
             {
                 TrackingStatus.Pending,

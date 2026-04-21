@@ -7,12 +7,10 @@
 import { Route } from 'react-router-dom'
 import DashboardLayout from '../components/layout/dashboard/DashboardLayout'
 
-import DashboardPage from '../features/dashboard/pages/DashboardPage'
 
 export default function DashboardRoutes() {
     return (
         <Route path="/dashboard" element={<DashboardLayout />}>
-            <Route index element={<DashboardPage />} />
         </Route>
     )
 }
