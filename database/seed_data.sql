@@ -77,3 +77,78 @@ VALUES
 (3, 'u3', 'Nike Backpack Elite', 'Urban travel backpack', 75, 65, 55, 4, 3, 'https://res.cloudinary.com/dof7bsp6z/image/upload/veloramall/products/g7tbpftadfaypvpty0vc', 4.4, 210, 'active'),
 (4, 'u4', 'Samsung Galaxy Buds 3', 'Wireless earbuds', 199, 159, 40, 1, 2, 'https://res.cloudinary.com/dof7bsp6z/image/upload/veloramall/products/loyqprophd8lme2e4kwm', 4.5, 210, 'active'),
 (5, 'u5', 'Sony Alpha A7 III', 'Full frame camera', 1999, 1899, 8, 1, 5, 'https://res.cloudinary.com/dof7bsp6z/image/upload/veloramall/products/kkhb5d6czjvqpl8gtaji', 4.9, 340, 'active');
+
+INSERT INTO Attributes (AttributeId, Name)
+VALUES
+(1, 'Color'),
+(2, 'Size'),
+(3, 'Material');
+
+INSERT INTO Attribute_values (ValueId, AttributeId, Value)
+VALUES
+-- Color
+(1, 1, 'Black'),
+(2, 1, 'White'),
+(3, 1, 'Red'),
+
+-- Size
+(4, 2, 'S'),
+(5, 2, 'M'),
+(6, 2, 'L'),
+
+-- Material
+(7, 3, 'Cotton'),
+(8, 3, 'Leather');
+
+INSERT INTO Product_attributes (ProductId, ValueId)
+VALUES
+
+-- MacBook (Black)
+(1, 1),
+
+-- Sony Headphone (Black)
+(2, 1),
+
+-- iPhone (Black)
+(3, 1),
+
+-- Samsung (Black)
+(4, 1),
+
+-- Nike AF1 (White, Size M)
+(5, 2),
+(5, 5),
+
+-- Adidas Hoodie (Black, Size L, Cotton)
+(6, 1),
+(6, 6),
+(6, 7),
+
+-- Nike Air Max (Red, Size M)
+(7, 3),
+(7, 5),
+
+-- Ultraboost (Black, Size L)
+(8, 1),
+(8, 6),
+
+-- Apple Watch (Black)
+(9, 1),
+
+-- Logitech Mouse (Black)
+(10, 1),
+
+-- Canon Camera
+(11, 1),
+
+-- iPad
+(12, 1),
+
+-- Backpack (Black)
+(13, 1),
+
+-- Galaxy Buds (Black)
+(14, 1),
+
+-- Sony Camera
+(15, 1);
