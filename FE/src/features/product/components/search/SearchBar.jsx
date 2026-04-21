@@ -2,6 +2,7 @@ import { useState } from "react";
 import styles from "./SearchBar.module.css";
 import { FaCaretDown, FaSearch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { ROUTES } from "@/config/route.config";
 
 export default function SearchBar({
     placeholder = "Search product...",
@@ -17,7 +18,11 @@ export default function SearchBar({
         const query = input.trim();
 
         // điều hướng sang trang product list
-        navigate(query ? `/products?q=${query}` : `/products`);
+        navigate(
+            query
+                ? `${ROUTES.PRODUCTS_LIST}?q=${encodeURIComponent(query)}`
+                : ROUTES.PRODUCTS_LIST
+        )
     };
 
     return (

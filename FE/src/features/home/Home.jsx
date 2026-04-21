@@ -3,7 +3,7 @@ import Banner from './banner/Banner'
 import ListCategory from './category/ListCategory'
 import FlashSale from './flash-sale/FlashSale'
 import TopResearch from './top-research/TopResearch'
-import ProductList from '../product/pages/ProductList'
+import RecommendedProducts from './RecommendedProducts'
 
 export default function HomePage() {
 
@@ -32,7 +32,7 @@ export default function HomePage() {
             <h2 className={styles.sectionTitle}>Products</h2>
           </div>
 
-          <ProductList />
+          <RecommendedProducts />
 
         </div>
       </section>

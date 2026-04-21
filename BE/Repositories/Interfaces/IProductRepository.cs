@@ -1,4 +1,5 @@
-﻿using BE.Models.Entities;
+﻿using BE.Models.DTOs;
+using BE.Models.Entities;
 
 namespace BE.Repositories.Interfaces
 {
@@ -7,5 +8,7 @@ namespace BE.Repositories.Interfaces
         Task<List<Product>> GetAllAsync();
         Task<Product?> GetByIdAsync(long id);
         Task<List<Product>> SearchAsync(string keyword);
+
+        Task<(List<Product> items, int total)> FilterAsync(ProductFilterDto filter);
     }
 }

@@ -22,5 +22,7 @@ namespace BE.Services.Interface
         Task DeleteProductAsync(
             long productId,
             string retailerUserId);
+
+        Task<(IEnumerable<ProductListDto> items, int total)> FilterAsync(ProductFilterDto filter);
     }
 }

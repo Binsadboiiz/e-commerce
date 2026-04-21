@@ -31,6 +31,18 @@ namespace BE.Controllers.Product
             return Ok(result);
         }
 
+        [HttpGet("filter")]
+        public async Task<IActionResult> Filter([FromQuery] ProductFilterDto filter)
+        {
+            var (items, total) = await _productService.FilterAsync(filter);
 
+            return Ok(new
+            {
+                items,
+                total,
+                page = filter.Page,
+                pageSize = filter.PageSize
+            });
+        }
     }
 }

@@ -1,7 +1,7 @@
 export const ROUTES = {
     // Public
     HOME: "/",
-    PRODUCTS: "/products",
+    PRODUCTS_LIST: "/products",
     CART: "/cart",
     CHECKOUT: "/checkout",
     MY_ORDERS: "/my-orders",

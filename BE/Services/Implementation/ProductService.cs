@@ -13,9 +13,12 @@ namespace BE.Services.Implementation
     public class ProductService : IProductService
     {
         private readonly IProductRepository _productRepository;
+
         private readonly ApplicationDbContext _context;
 
         public ProductService(IProductRepository productRepository, ApplicationDbContext context)
+    
+        public ProductService(IProductRepository productRepository)
         {
             _productRepository = productRepository;
             _context = context;
@@ -60,7 +63,6 @@ namespace BE.Services.Implementation
             };
         }
 
-        
         public async Task<ProductResponse> CreateProductAsync(
             string retailerUserId, 
             CreateProductRequest request)
@@ -173,6 +175,18 @@ namespace BE.Services.Implementation
             product.Status = ProductConstants.ProductStatusDeleted;
 
             await _context.SaveChangesAsync();
+        }
+
+
+        public async Task<(IEnumerable<ProductListDto> items, int total)> FilterAsync(ProductFilterDto filter)
+        {
+            var (products, total) = await _productRepository.FilterAsync(filter);
+
+            if (products == null) return (new List<ProductListDto>(), 0);
+
+            var result = products.Select(MapToDto);
+
+            return (result, total);
         }
     }
 }
