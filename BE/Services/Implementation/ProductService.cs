@@ -52,5 +52,16 @@ namespace BE.Services.Implementation
                 BrandName = p.Brand?.Name
             };
         }
+
+        public async Task<(IEnumerable<ProductListDto> items, int total)> FilterAsync(ProductFilterDto filter)
+        {
+            var (products, total) = await _productRepository.FilterAsync(filter);
+
+            if (products == null) return (new List<ProductListDto>(), 0);
+
+            var result = products.Select(MapToDto);
+
+            return (result, total);
+        }
     }
 }

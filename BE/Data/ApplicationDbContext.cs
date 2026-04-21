@@ -22,6 +22,7 @@ namespace BE.Data
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<OrderTracking> OrderTrackings { get; set; }
         public DbSet<Voucher> Vouchers { get; set; }
         public DbSet<OrderVoucher> OrderVouchers { get; set; }
         public DbSet<PaymentTransaction> PaymentTransactions { get; set; }
