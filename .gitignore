@@ -7,6 +7,8 @@
 .pnp.js
 FE/node_modules
 BE/node_modules
+.idea/
+*.iml
 #.net
 **/bin/
 **/obj/
