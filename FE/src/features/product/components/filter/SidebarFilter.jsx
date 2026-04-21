@@ -1,8 +1,24 @@
 import styles from "./SidebarFilter.module.css";
 import { useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { categoryService } from "../../services/categoryService";
 
 export default function SidebarFilter() {
     const [searchParams, setSearchParams] = useSearchParams();
+
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const data = await categoryService.getCategories();
+                setCategories(data);
+            } catch (error) {
+                console.error("Error fetching categories:", error);
+            }
+        };
+        fetchCategories();
+    }, []);
 
     const handlePriceChange = (type, value) => {
         const newParams = new URLSearchParams(searchParams);
@@ -31,6 +47,8 @@ export default function SidebarFilter() {
         setSearchParams(newParams);
     };
 
+    const selectedCategories = searchParams.getAll("categoryIds");
+
     return (
         <aside className={styles.sidebar}>
             <h3 className={styles.title}>Filter</h3>
@@ -38,13 +56,14 @@ export default function SidebarFilter() {
             {/* CATEGORY */}
             <div className={styles.section}>
                 <p className={styles.label}>Category</p>
-                {[1, 2, 3].map(id => (
-                    <label key={id} className={styles.option}>
+                {categories.map(category => (
+                    <label key={category.id} className={styles.option}>
                         <input
                             type="checkbox"
-                            onChange={() => handleCategoryToggle(id)}
+                            checked={selectedCategories.includes(category.id.toString())}
+                            onChange={() => handleCategoryToggle(category.id)}
                         />
-                        Category {id}
+                        {category.type}
                     </label>
                 ))}
             </div>
