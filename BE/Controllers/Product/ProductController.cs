@@ -1,4 +1,4 @@
-﻿using BE.Models.DTOs;
+using BE.Models.DTOs;
 using BE.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -34,8 +34,16 @@ namespace BE.Controllers.Product
                 items,
                 total,
                 page = filter.Page,
-                pageSize = filter.PageSize
+                pageSize = filter.PageSize,
+                totalPages = (int)Math.Ceiling(total / (double)filter.PageSize)
             });
+        }
+
+        [HttpGet("filter/meta")]
+        public async Task<IActionResult> GetMeta([FromQuery] ProductFilterDto filter)
+        {
+            var result = await _productService.GetFilterMetaAsync(filter);
+            return Ok(result);
         }
     }
 }

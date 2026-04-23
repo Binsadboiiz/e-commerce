@@ -1,9 +1,10 @@
 .grid {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 20px;
+    gap: 16px;
 
     align-items: stretch;
+    padding: 8px 0 24px;
 }
 
 @media (max-width: 1400px) {

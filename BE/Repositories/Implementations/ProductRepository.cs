@@ -24,5 +24,11 @@ namespace BE.Repositories.Implementations
                 .AsNoTracking()
                 .Where(p => p.Status == "active");
         }
+
+        public async Task<Product?> GetByIdAsync(long id)
+        {
+            return await Query()
+                .FirstOrDefaultAsync(p => p.ProductId == id);
+        }
     }
 }

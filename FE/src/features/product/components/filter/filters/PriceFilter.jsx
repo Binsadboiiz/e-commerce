@@ -15,22 +15,26 @@ export default function PriceFilter({ searchParams, setSearchParams }) {
     }
 
     return (
-        <div>
-            <p className={styles.label}>Price</p>
-            <input
-                type="number"
-                placeholder="Min"
-                onChange={(e) =>
-                    handlePriceChange("minPrice", e.target.value)
-                }
-            />
-            <input
-                type="number"
-                placeholder="Max"
-                onChange={(e) =>
-                    handlePriceChange("maxPrice", e.target.value)
-                }
-            />
+        <div className={styles.section}>
+            <span className={styles.label}>Price</span>
+
+            <div className={styles.priceInputsContainer}>
+                <input
+                    type="number"
+                    placeholder="$ Min"
+                    className={styles.priceInput}
+                    value={searchParams.get("minPrice") || ""}
+                    onChange={(e) => handlePriceChange("minPrice", e.target.value)}
+                />
+                <span className={styles.priceSeparator}>-</span>
+                <input
+                    type="number"
+                    placeholder="$ Max"
+                    className={styles.priceInput}
+                    value={searchParams.get("maxPrice") || ""}
+                    onChange={(e) => handlePriceChange("maxPrice", e.target.value)}
+                />
+            </div>
         </div>
     );
 }

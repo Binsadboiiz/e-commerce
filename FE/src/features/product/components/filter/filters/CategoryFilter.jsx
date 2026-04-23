@@ -1,6 +1,7 @@
 import styles from "./filters.module.css";
 import { useState, useEffect } from "react";
-import { categoryService } from "@/features/product/services/categoryService";
+import { productsService } from "@/features/product/services/productService";
+import { parseQuery } from "../utils/parseQuery";
 
 export default function CategoryFilter({ searchParams, setSearchParams }) {
 
@@ -9,14 +10,18 @@ export default function CategoryFilter({ searchParams, setSearchParams }) {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const data = await categoryService.getCategories();
-                setCategories(data);
+                const params = parseQuery(searchParams);
+
+                const meta = await productsService.getFilterMeta(params);
+
+                setCategories(meta.categories || []);
             } catch (error) {
                 console.error("Error fetching categories:", error);
             }
         };
+
         fetchCategories();
-    }, []);
+    }, [searchParams]);
 
     const selectedCategories = searchParams.getAll("categoryIds").map(String);
 
@@ -37,6 +42,8 @@ export default function CategoryFilter({ searchParams, setSearchParams }) {
         setSearchParams(newParams);
     };
 
+    if (!categories.length) return null;
+
     return (
         <div className={styles.section}>
             <p className={styles.label}>Category</p>
@@ -51,7 +58,7 @@ export default function CategoryFilter({ searchParams, setSearchParams }) {
                             checked={selectedCategories.includes(idStr)}
                             onChange={() => handleCategoryToggle(category.id)}
                         />
-                        {category.type}
+                        {category.name} ({category.count})
                     </label>
                 );
             })}

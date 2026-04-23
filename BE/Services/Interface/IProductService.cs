@@ -1,12 +1,12 @@
-﻿using BE.Models.DTOs;
+using BE.Models.DTOs;
 
 namespace BE.Services.Interface
 {
     public interface IProductService
     {
         Task<ProductListDto?> GetByIdAsync(long id);
-        // CRUD product
 
+        // CRUD product
         Task<ProductResponse> CreateProductAsync(
             string retailerUserId,
             CreateProductRequest request);
@@ -20,7 +20,10 @@ namespace BE.Services.Interface
             long productId,
             string retailerUserId);
 
+
         Task<(IEnumerable<ProductListDto> items, int total)> FilterAsync(ProductFilterDto filter);
+
+        Task<ProductFilterMetaDto> GetFilterMetaAsync(ProductFilterDto filter);
 
     }
 }

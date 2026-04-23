@@ -5,6 +5,7 @@ import ProductGrid from '../components/ProductGrid';
 import ProductSkeleton from '../components/ProductSkeleton';
 import SidebarFilter from '../components/filter/SidebarFilter';
 import SortBar from '../components/sort/SortBar';
+import Pagination from '../components/pagination/Pagination';
 
 import { ROUTES } from '@/config/route.config';
 
@@ -12,6 +13,9 @@ export default function ProductList() {
     const navigate = useNavigate();
 
     const [searchParams, setSearchParams] = useSearchParams();
+
+    const page = Number(searchParams.get("page") || 1);
+    const pageSize = Number(searchParams.get("pageSize") || 20);
 
     const params = {
         search: searchParams.get("q") || "",
@@ -25,11 +29,13 @@ export default function ProductList() {
 
         attributeValueIds: searchParams.getAll("attributeValueIds").map(Number).filter(Boolean),
 
-        sortBy: searchParams.get("sortBy") || null
+        sortBy: searchParams.get("sortBy") || null,
 
+        page: page,
+        pageSize: pageSize
     };
 
-    const { products, loading, error } = useProducts(params);
+    const { products, loading, error, meta, pagination } = useProducts(params);
 
     // TODO: move to product detail page
     // const handleBuyNow = (product) => {
@@ -44,12 +50,13 @@ export default function ProductList() {
     //             }
     //         }
     //     });
-    // };
 
     return (
         <div className={styles.container}>
 
-            <SidebarFilter />
+            <div className={styles.sidebar}>
+                <SidebarFilter filterMeta={meta} />
+            </div>
 
             <div className={styles.content}>
 
@@ -63,9 +70,15 @@ export default function ProductList() {
                 {error && <p className={styles.error}>Error: {error}</p>}
 
                 {!loading && !error && products.length > 0 && (
-                    <ProductGrid products={products}
-                    // onBuy={handleBuyNow} 
-                    />
+                    <>
+                        <ProductGrid products={products} />
+
+                        <Pagination
+                            page={page}
+                            pageSize={pageSize}
+                            total={pagination.total}
+                        />
+                    </>
                 )}
 
                 {!loading && !error && products.length === 0 && (
@@ -75,4 +88,5 @@ export default function ProductList() {
 
         </div>
     );
+
 }

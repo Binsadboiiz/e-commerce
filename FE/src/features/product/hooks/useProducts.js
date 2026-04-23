@@ -1,37 +1,42 @@
 import { useEffect, useState } from "react";
 import { productsService } from "../services/productService";
 
-/**
- * Custom hook quản lý:
- * - loading
- * - error
- * - filter business logic
- */
-
 export default function useProducts(params) {
 
     const [products, setProducts] = useState([]);
+    const [meta, setMeta] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [total, setTotal] = useState(0);
 
-    console.log("PARAMS:", params);
-    console.log("URL SEARCH:", window.location.search);
+    const [pagination, setPagination] = useState({
+        page: 1,
+        pageSize: 20,
+        total: 0,
+        totalPages: 0
+    });
 
     useEffect(() => {
-        async function fetchData() {
-            if (!params) return;
 
+        async function fetchData() {
             try {
                 setLoading(true);
                 setError(null);
 
-                const res = await productsService.filterProducts(params);
+                const [productRes, metaRes] = await Promise.all([
+                    productsService.getProducts(params),
+                    productsService.getFilterMeta(params)
+                ]);
 
-                const items = Array.isArray(res) ? res : res?.items ?? [];
+                setProducts(productRes.items || []);
+                setMeta(metaRes);
 
-                setProducts(items);
-                setTotal(res?.total ?? 0);
+                setPagination({
+                    page: productRes.page,
+                    pageSize: productRes.pageSize,
+                    total: productRes.total,
+                    totalPages: productRes.totalPages
+                });
 
             } catch (err) {
                 setError(err.message);
@@ -41,7 +46,8 @@ export default function useProducts(params) {
         }
 
         fetchData();
+
     }, [JSON.stringify(params)]);
 
-    return { products, loading, error, total };
+    return { products, meta, loading, error, total, pagination };
 }

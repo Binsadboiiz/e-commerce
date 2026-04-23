@@ -10,13 +10,51 @@
     margin-bottom: 8px;
 }
 
-/* PRICE INPUT */
+
+
+/* --- PRICE FILTER SPECIFICS --- */
+.priceInputsContainer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
 .priceInput {
     width: 100%;
-    padding: 6px 10px;
-    margin-bottom: 8px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+    min-width: 0;
+    /* Prevents input from breaking flex layout on narrow screens */
+    padding: 8px 12px;
+    border: 1px solid #eaeaea;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #111;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.priceInput:focus {
+    border-color: #111;
+}
+
+.priceInput::placeholder {
+    color: #999;
+}
+
+.priceSeparator {
+    color: #999;
+    font-weight: 400;
+}
+
+/* Hide native number spinner arrows for a cleaner UI */
+.priceInput::-webkit-outer-spin-button,
+.priceInput::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.priceInput[type=number] {
+    -moz-appearance: textfield;
+    /* Firefox */
 }
 
 /* RATING OPTION */
@@ -62,4 +100,30 @@
 .ratingText {
     margin-left: 6px;
     font-size: 13px;
+}
+
+.colorList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.colorItem {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #ddd;
+    transition: all 0.2s ease;
+}
+
+/* hover */
+.colorItem:hover {
+    transform: scale(1.1);
+}
+
+/* selected */
+.active {
+    border: 2px solid #000;
+    box-shadow: 0 0 0 2px #000 inset;
 }
