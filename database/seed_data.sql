@@ -284,3 +284,33 @@ UPDATE Products SET Slug = 'ipad-pro-m2' WHERE ProductId = 12;
 UPDATE Products SET Slug = 'nike-backpack-elite' WHERE ProductId = 13;
 UPDATE Products SET Slug = 'samsung-galaxy-buds-3' WHERE ProductId = 14;
 UPDATE Products SET Slug = 'sony-alpha-a7-iii' WHERE ProductId = 15;
+
+INSERT INTO User_addresses (
+    UserId,
+    FullName,
+    PhoneNumber,
+    City,
+    StreetName,
+    HouseNo,
+    isDefault
+)
+VALUES
+('u1', 'John Miller', 9011111111, 'New York', '5th Avenue', '101', 1),
+('u2', 'Emma Watson', 9022222222, 'Los Angeles', 'Sunset Blvd', '202', 1),
+('u3', 'Liam Smith', 9033333333, 'Chicago', 'Michigan Ave', '303', 1),
+('u4', 'Sophia Brown', 9044444444, 'San Francisco', 'Market Street', '404', 1),
+('u5', 'Noah Johnson', 9055555555, 'Seattle', 'Pine Street', '505', 1);
+
+INSERT INTO Shop_addresses (
+    ShopId,
+    City,
+    StreetName,
+    HouseNo,
+    IsDefault
+)
+VALUES
+(1, 'New York', '5th Avenue', '101', 1),
+(2, 'Los Angeles', 'Sunset Blvd', '202', 1),
+(3, 'Chicago', 'Michigan Ave', '303', 1),
+(4, 'San Francisco', 'Market Street', '404', 1),
+(5, 'Seattle', 'Pine Street', '505', 1);
