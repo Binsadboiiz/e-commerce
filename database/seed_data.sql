@@ -268,3 +268,19 @@ VALUES
 -- Sony Alpha A7 III (15)
 (15, 'Bundle', 'Body Only', 0, 4),
 (15, 'Bundle', 'With Lens Kit', 300, 4);
+
+UPDATE Products SET Slug = 'macbook-air-m3' WHERE ProductId = 1;
+UPDATE Products SET Slug = 'sony-wh-1000xm5' WHERE ProductId = 2;
+UPDATE Products SET Slug = 'iphone-15-pro-max' WHERE ProductId = 3;
+UPDATE Products SET Slug = 'samsung-galaxy-s24-ultra' WHERE ProductId = 4;
+UPDATE Products SET Slug = 'nike-air-force-1-white' WHERE ProductId = 5;
+UPDATE Products SET Slug = 'adidas-hoodie-black' WHERE ProductId = 6;
+UPDATE Products SET Slug = 'nike-air-max-270' WHERE ProductId = 7;
+UPDATE Products SET Slug = 'adidas-ultraboost-23' WHERE ProductId = 8;
+UPDATE Products SET Slug = 'apple-watch-series-9' WHERE ProductId = 9;
+UPDATE Products SET Slug = 'logitech-mx-master-3s' WHERE ProductId = 10;
+UPDATE Products SET Slug = 'canon-eos-r10-camera' WHERE ProductId = 11;
+UPDATE Products SET Slug = 'ipad-pro-m2' WHERE ProductId = 12;
+UPDATE Products SET Slug = 'nike-backpack-elite' WHERE ProductId = 13;
+UPDATE Products SET Slug = 'samsung-galaxy-buds-3' WHERE ProductId = 14;
+UPDATE Products SET Slug = 'sony-alpha-a7-iii' WHERE ProductId = 15;

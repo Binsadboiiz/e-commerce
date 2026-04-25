@@ -1,0 +1,2 @@
+ALTER TABLE Products 
+ADD Slug VARCHAR(255) UNIQUE;
