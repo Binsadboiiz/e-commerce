@@ -27,7 +27,7 @@ export default function ProductCard({ product, onBuy }) {
 
     const handleGoDetail = () => {
         console.log("CLICK PRODUCT:", product);
-        navigate(ROUTES.PRODUCT_DETAIL, { slug: product.slug });
+        navigate(ROUTES.PRODUCT_DETAIL.replace(":slug", product.slug));
     };
     return (
         <div className={styles.productCard} onClick={handleGoDetail}>
