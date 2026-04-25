@@ -23,5 +23,7 @@ namespace BE.Models.Entities
         // Navigation
         public User Owner { get; set; }
         public ICollection<Product> Products { get; set; }
+
+        public ICollection<ShopAddresses> Addresses { get; set; }
     }
 }

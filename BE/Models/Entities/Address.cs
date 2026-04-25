@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BE.Models.Entities
 {
-    [Table("Addresses")]
-    public class Address
+    [Table("User_addresses")]
+    public class UserAddresses
     {
         [Key]
         public long Id { get; set; }

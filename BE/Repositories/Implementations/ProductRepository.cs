@@ -35,15 +35,8 @@ namespace BE.Repositories.Implementations
         public async Task<Product?> GetBySlugAsync(string slug)
         {
             return await _context.Products
-                .Include(p => p.Shop)
-                .Include(p => p.Images)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.Slug == slug);
-        }
-
-        public async Task<bool> ExistsSlugAsync(string slug)
-        {
-            return await _context.Products
-                .AnyAsync(p => p.Slug == slug);
         }
     }
 }
