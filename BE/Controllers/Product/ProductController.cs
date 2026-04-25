@@ -1,4 +1,6 @@
 using BE.Models.DTOs;
+using BE.Models.DTOs.Products.ProductDetail;
+using BE.Models.DTOs.Products.ProductFilter;
 using BE.Services.Interface.Product;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +23,7 @@ namespace BE.Controllers.Product
             _productQueryService = productQueryService;
         }
 
-        [HttpGet("{id:long}")]
+        [HttpGet("by-id/{id:long}")]
         public async Task<ActionResult<ProductListDto>> GetById(long id)
         {
             var result = await _productQueryService.GetByIdAsync(id);
@@ -48,6 +50,17 @@ namespace BE.Controllers.Product
         {
             var result = await _productQueryService.GetFilterMetaAsync(filter);
             return Ok(result);
+        }
+
+        [HttpGet("{slug}")]
+        public async Task<IActionResult> GetBySlug(string slug)
+        {
+            var product = await _productQueryService.GetProductDetailBySlugAsync(slug);
+
+            if (product == null)
+                return NotFound();
+
+            return Ok(product);
         }
     }
 }

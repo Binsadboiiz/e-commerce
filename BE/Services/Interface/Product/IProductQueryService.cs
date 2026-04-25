@@ -1,4 +1,6 @@
 ﻿using BE.Models.DTOs;
+using BE.Models.DTOs.Products.ProductDetail;
+using BE.Models.DTOs.Products.ProductFilter;
 
 namespace BE.Services.Interface.Product
 {
@@ -13,6 +15,9 @@ namespace BE.Services.Interface.Product
         Task<(IEnumerable<ProductListDto> items, int total)> FilterAsync(ProductFilterDto filter);
 
         Task<ProductFilterMetaDto> GetFilterMetaAsync(ProductFilterDto filter);
+
+        //Product Detail
+        Task<ProductDetailDto?> GetProductDetailBySlugAsync(string slug);
 
     }
 }

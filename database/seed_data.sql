@@ -149,3 +149,122 @@ VALUES
 
 -- Sony Camera (Black)
 (15, 1);
+
+
+INSERT INTO Product_images (ProductId, ImageUrl, IsPrimary, SortOrder)
+VALUES
+
+-- MacBook Air M3 (1)
+(1, 'https://res.cloudinary.com/dof7bsp6z/image/upload/veloramall/products/cl3ih9extg2iylcc2h7n', 1, 0),
+(1, 'https://res.cloudinary.com/dof7bsp6z/image/upload/veloramall/products/macbook_air_1', 0, 1),
+(1, 'https://res.cloudinary.com/dof7bsp6z/image/upload/veloramall/products/macbook_air_2', 0, 2),
+
+-- Sony Headphones (2)
+(2, 'https://res.cloudinary.com/dof7bsp6z/image/upload/veloramall/products/ymgyiarww7ocyuwfduux', 1, 0),
+(2, 'https://res.cloudinary.com/dof7bsp6z/image/upload/veloramall/products/sony_headphone_1', 0, 1),
+
+-- iPhone 15 (3)
+(3, 'https://res.cloudinary.com/dof7bsp6z/image/upload/veloramall/products/erni4vvbvtvykn0xyz8n', 1, 0),
+(3, 'https://res.cloudinary.com/dof7bsp6z/image/upload/veloramall/products/iphone_1', 0, 1),
+(3, 'https://res.cloudinary.com/dof7bsp6z/image/upload/veloramall/products/iphone_2', 0, 2),
+
+-- Samsung S24 (4)
+(4, 'https://res.cloudinary.com/dof7bsp6z/image/upload/veloramall/products/kgjgj5xzjty0i5bwn82b', 1, 0),
+(4, 'https://res.cloudinary.com/dof7bsp6z/image/upload/veloramall/products/samsung_1', 0, 1),
+
+-- Nike AF1 (5)
+(5, 'https://res.cloudinary.com/dof7bsp6z/image/upload/veloramall/products/sfcorksochwnrn4xsvck', 1, 0),
+(5, 'https://res.cloudinary.com/dof7bsp6z/image/upload/veloramall/products/nike_af1_1', 0, 1),
+
+-- Adidas Hoodie (6)
+(6, 'https://res.cloudinary.com/dof7bsp6z/image/upload/veloramall/products/sokv1ydau59mv4xxha3l', 1, 0),
+(6, 'https://res.cloudinary.com/dof7bsp6z/image/upload/veloramall/products/adidas_hoodie_1', 0, 1),
+
+-- Nike Air Max (7)
+(7, 'https://res.cloudinary.com/dof7bsp6z/image/upload/veloramall/products/mnkl1z9o7wxztxinexpq', 1, 0),
+
+-- Ultraboost (8)
+(8, 'https://res.cloudinary.com/dof7bsp6z/image/upload/veloramall/products/n5rr6po3epyoza9qbcy7', 1, 0),
+
+-- Apple Watch (9)
+(9, 'https://res.cloudinary.com/dof7bsp6z/image/upload/veloramall/products/tslxaa8n9suwzl1pmhhv', 1, 0),
+
+-- Logitech Mouse (10)
+(10, 'https://res.cloudinary.com/dof7bsp6z/image/upload/veloramall/products/eszg0kh343l1rx9oyrvl', 1, 0),
+
+-- Canon Camera (11)
+(11, 'https://res.cloudinary.com/dof7bsp6z/image/upload/veloramall/products/mbttw4lpkmbv09aauzle', 1, 0),
+
+-- iPad Pro (12)
+(12, 'https://res.cloudinary.com/dof7bsp6z/image/upload/veloramall/products/pcrrtboejjfe5xygbcpi', 1, 0),
+
+-- Backpack (13)
+(13, 'https://res.cloudinary.com/dof7bsp6z/image/upload/veloramall/products/g7tbpftadfaypvpty0vc', 1, 0),
+
+-- Galaxy Buds (14)
+(14, 'https://res.cloudinary.com/dof7bsp6z/image/upload/veloramall/products/loyqprophd8lme2e4kwm', 1, 0),
+
+-- Sony A7 III (15)
+(15, 'https://res.cloudinary.com/dof7bsp6z/image/upload/veloramall/products/kkhb5d6czjvqpl8gtaji', 1, 0);
+
+
+INSERT INTO product_variants (ProductId, VariantName, VariantValue, PriceAdjustment, Stock)
+VALUES
+
+-- MacBook Air M3 (1)
+(1, 'Storage', '256GB', 0, 5),
+(1, 'Storage', '512GB', 200, 5),
+
+-- Sony WH-1000XM5 (2)
+(2, 'Color', 'Black', 0, 15),
+(2, 'Color', 'Silver', 0, 10),
+
+-- iPhone 15 Pro Max (3)
+(3, 'Color', 'Black Titanium', 0, 8),
+(3, 'Color', 'Natural Titanium', 0, 7),
+
+-- Samsung S24 Ultra (4)
+(4, 'Color', 'Black', 0, 10),
+(4, 'Color', 'Gray', 0, 10),
+
+-- Nike Air Force 1 (5)
+(5, 'Size', '40', 0, 20),
+(5, 'Size', '41', 0, 20),
+(5, 'Size', '42', 0, 20),
+
+-- Adidas Hoodie (6)
+(6, 'Size', 'M', 0, 15),
+(6, 'Size', 'L', 0, 15),
+
+-- Nike Air Max 270 (7)
+(7, 'Size', '40', 0, 10),
+(7, 'Size', '41', 0, 10),
+
+-- Ultraboost 23 (8)
+(8, 'Size', '40', 0, 10),
+(8, 'Size', '42', 0, 15),
+
+-- Apple Watch Series 9 (9)
+(9, 'Size', '41mm', 0, 10),
+(9, 'Size', '45mm', 50, 8),
+
+-- Logitech MX Master 3S (10)
+(10, 'Color', 'Black', 0, 30),
+
+-- Canon EOS R10 (11)
+(11, 'Bundle', 'Body Only', 0, 5),
+(11, 'Bundle', 'With Lens', 200, 5),
+
+-- iPad Pro M2 (12)
+(12, 'Storage', '128GB', 0, 6),
+(12, 'Storage', '256GB', 150, 6),
+
+-- Nike Backpack Elite (13)
+(13, 'Color', 'Black', 0, 25),
+
+-- Samsung Galaxy Buds 3 (14)
+(14, 'Color', 'White', 0, 20),
+
+-- Sony Alpha A7 III (15)
+(15, 'Bundle', 'Body Only', 0, 4),
+(15, 'Bundle', 'With Lens Kit', 300, 4);

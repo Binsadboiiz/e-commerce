@@ -1,10 +1,11 @@
 using BE.Constants;
 using BE.Data;
-using BE.Repositories.Interfaces;
 using BE.Models.DTOs;
 using BE.Models.Entities;
-using Microsoft.EntityFrameworkCore;
+using BE.Repositories.Interfaces;
 using BE.Services.Interface.Product;
+using BE.Utils;
+using Microsoft.EntityFrameworkCore;
 
 namespace BE.Services.Implementation
 {
@@ -56,9 +57,13 @@ namespace BE.Services.Implementation
                 if (shop == null)
                     throw new Exception("Shop not found");
 
+                var baseSlug = SlugHelper.GenerateSlug(request.Name);
+                var slug = await GenerateUniqueSlugAsync(baseSlug);
+
                 var product = new Product
                 {
                     Name = request.Name,
+                    Slug = slug,
                     Description = request.Description,
                     ShopId = shop.ShopId,
                     CategoryId = request.CategoryId,
@@ -130,6 +135,13 @@ namespace BE.Services.Implementation
             if (product.Shop.OwnerId != retailerUserId)
                 throw new UnauthorizedAccessException();
 
+            if (!string.IsNullOrWhiteSpace(request.Name)
+                && request.Name != product.Name)
+            {
+                var baseSlug = SlugHelper.GenerateSlug(request.Name);
+                product.Slug = await GenerateUniqueSlugAsync(baseSlug);
+            }
+
             product.Name = request.Name;
             product.Description = request.Description;
             product.Status = request.Status;
@@ -166,6 +178,20 @@ namespace BE.Services.Implementation
             product.Status = ProductConstants.ProductStatusDeleted;
 
             await _context.SaveChangesAsync();
+        }
+
+        private async Task<string> GenerateUniqueSlugAsync(string baseSlug)
+        {
+            var slug = baseSlug;
+            var index = 1;
+
+            while (await _context.Products.AnyAsync(p => p.Slug == slug))
+            {
+                slug = $"{baseSlug}-{index}";
+                index++;
+            }
+
+            return slug;
         }
 
     }

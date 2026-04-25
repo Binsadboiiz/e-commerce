@@ -21,6 +21,7 @@ namespace BE.Repositories.Implementations
                 .Include(p => p.Brand)
                 .Include(p => p.ProductAttributes)
                 .Include(p => p.Variants)
+                .Include(p => p.Images)
                 .AsNoTracking()
                 .Where(p => p.Status == "active");
         }
@@ -29,6 +30,20 @@ namespace BE.Repositories.Implementations
         {
             return await Query()
                 .FirstOrDefaultAsync(p => p.ProductId == id);
+        }
+
+        public async Task<Product?> GetBySlugAsync(string slug)
+        {
+            return await _context.Products
+                .Include(p => p.Shop)
+                .Include(p => p.Images)
+                .FirstOrDefaultAsync(p => p.Slug == slug);
+        }
+
+        public async Task<bool> ExistsSlugAsync(string slug)
+        {
+            return await _context.Products
+                .AnyAsync(p => p.Slug == slug);
         }
     }
 }

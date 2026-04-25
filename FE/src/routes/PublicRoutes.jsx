@@ -10,6 +10,7 @@ import { ROUTES } from '@/config/route.config'
 import MainLayout from '@/components/layout/MainLayout'
 import HomePage from '@/features/home/Home'
 import ProductList from '@/features/product/pages/ProductList'
+import ProductDetailPage from '@/features/product/pages/ProductDetailPage'
 import CartPage from '@/features/cart/pages/CartPage'
 import CheckoutPage from '@/features/checkout/pages/CheckoutPage'
 import MyOrdersPage from '@/features/order/pages/MyOrdersPage'
@@ -20,6 +21,7 @@ export default function PublicRoutes() {
         <Route element={<MainLayout />}>
             <Route index element={<HomePage />} />
             <Route path={ROUTES.PRODUCTS_LIST} element={<ProductList />} />
+            <Route path={ROUTES.PRODUCT_DETAIL} element={<ProductDetailPage />} />
             <Route path={ROUTES.CART} element={<CartPage />} />
             <Route path={ROUTES.CHECKOUT} element={<CheckoutPage />} />
             <Route path={ROUTES.MY_ORDERS} element={<MyOrdersPage />} />

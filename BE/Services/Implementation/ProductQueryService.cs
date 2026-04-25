@@ -1,5 +1,7 @@
 ﻿using BE.Data;
 using BE.Models.DTOs;
+using BE.Models.DTOs.Products.ProductDetail;
+using BE.Models.DTOs.Products.ProductFilter;
 using BE.Repositories.Interfaces;
 using BE.Services.Interface.Product;
 using Microsoft.EntityFrameworkCore;
@@ -7,38 +9,31 @@ using Microsoft.EntityFrameworkCore;
 namespace BE.Services.Implementation
 {
     /// <summary>
-    /// Handles product read/query operations (query side).
-    ///
-    /// Responsibilities:
-    /// - Product listing queries
-    /// - Filtering and pagination
-    /// - Product detail projections
-    /// - Filter metadata aggregation
-    ///
-    /// READ-ONLY service.
+    /// Query side of Product (CQRS Read Model)
+    /// - Read-only optimized queries
+    /// - Filtering / pagination / sorting
+    /// - Product detail projection
+    /// - Filter metadata (faceted search)
     /// </summary>
-    
     public class ProductQueryService : IProductQueryService
     {
         private readonly IProductRepository _productRepository;
         private readonly ApplicationDbContext _context;
 
-        public ProductQueryService (IProductRepository productRepository, ApplicationDbContext context)
+        public ProductQueryService(
+            IProductRepository productRepository,
+            ApplicationDbContext context)
         {
             _productRepository = productRepository;
             _context = context;
         }
 
-        /// <summary>
-        /// Retrieves a single product projection
-        /// optimized for read scenarios.
-        ///
-        /// Returns product list/detail DTO model
-        /// </summary>
-        
+        // ===================== BASIC =====================
+
         public async Task<ProductListDto?> GetByIdAsync(long id)
         {
             var product = await _productRepository.Query()
+                .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.ProductId == id);
 
             if (product == null) return null;
@@ -46,6 +41,7 @@ namespace BE.Services.Implementation
             return new ProductListDto
             {
                 Id = product.ProductId,
+                Slug = product.Slug,
                 Name = product.Name,
                 Price = product.Price,
                 DiscountPrice = product.DiscountPrice,
@@ -54,22 +50,11 @@ namespace BE.Services.Implementation
                 ImageUrl = product.Image,
                 RatingAvg = product.RatingAvg,
                 RatingCount = product.RatingCount,
-                CategoryName = product.Category?.Type,
-                BrandName = product.Brand?.Name
+                CategoryName = product.Category != null ? product.Category.Type : null,
+                BrandName = product.Brand != null ? product.Brand.Name : null
             };
         }
 
-        /// <summary>
-        /// Applies dynamic product filtering,
-        /// sorting and pagination.
-        ///
-        /// Supports:
-        /// - Search
-        /// - Category/brand filtering
-        /// - Attribute filtering
-        /// - Price/rating filtering
-        /// - Sorted paged results
-        /// </summary>
         public async Task<(IEnumerable<ProductListDto> items, int total)> FilterAsync(ProductFilterDto filter)
         {
             var query = _productRepository.Query();
@@ -142,6 +127,7 @@ namespace BE.Services.Implementation
                 {
                     Id = x.Product.ProductId,
                     Name = x.Product.Name,
+                    Slug = x.Product.Slug,
                     Price = x.Product.Price,
                     DiscountPrice = x.Product.DiscountPrice,
                     FinalPrice = x.FinalPrice,
@@ -157,10 +143,6 @@ namespace BE.Services.Implementation
             return (items, total);
         }
 
-        /// <summary>
-        /// Returns aggregated filter metadata for frontend faceted search,
-        /// including current filter options and future extensible facets.
-        /// </summary>
         public async Task<ProductFilterMetaDto> GetFilterMetaAsync(ProductFilterDto filter)
         {
             var query = _productRepository.Query();
@@ -236,6 +218,47 @@ namespace BE.Services.Implementation
                 Sizes = allAttributes.Where(a => a.AttributeTypeName == "Size").Select(a => a.Option).ToList(),
                 Materials = allAttributes.Where(a => a.AttributeTypeName == "Material").Select(a => a.Option).ToList()
             };
+        }
+
+        // ===================== DETAIL BY SLUG =====================
+
+        public async Task<ProductDetailDto?> GetProductDetailBySlugAsync(string slug)
+        {
+            return await _context.Products
+                .AsNoTracking()
+                .Where(p => p.Slug == slug)
+                .Select(p => new ProductDetailDto
+                {
+                    ProductId = p.ProductId,
+                    Name = p.Name,
+                    Slug = p.Slug,
+                    Description = p.Description,
+                    Price = p.Price,
+                    DiscountPrice = p.DiscountPrice,
+                    RatingAvg = p.RatingAvg,
+                    RatingCount = p.RatingCount,
+                    BrandName = p.Brand != null ? p.Brand.Name : null,
+                    CategoryName = p.Category != null ? p.Category.Type : null,
+
+                    Images = p.Images.Select(i => new ProductImageDto
+                    {
+                        ImageId = i.ImageId,
+                        ImageUrl = i.ImageUrl,
+                        IsPrimary = i.IsPrimary,
+                        SortOrder = i.SortOrder
+                    }).ToList(),
+
+                    Variants = p.Variants.Select(v => new ProductVariantDto
+                    {
+                        VariantId = v.VariantId,
+                        VariantName = v.VariantName,
+                        VariantValue = v.VariantValue,
+                        PriceAdjustment = v.PriceAdjustment ?? 0,
+                        FinalPrice = (p.DiscountPrice ?? p.Price) + (v.PriceAdjustment ?? 0),
+                        Stock = v.Stock
+                    }).ToList()
+                })
+                .FirstOrDefaultAsync();
         }
     }
 }

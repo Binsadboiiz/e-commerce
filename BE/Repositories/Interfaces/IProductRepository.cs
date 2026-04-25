@@ -7,5 +7,9 @@ namespace BE.Repositories.Interfaces
         IQueryable<Product> Query();
 
         Task<Product?> GetByIdAsync(long id);
+
+        Task<Product?> GetBySlugAsync(string slug);
+
+
     }
 }

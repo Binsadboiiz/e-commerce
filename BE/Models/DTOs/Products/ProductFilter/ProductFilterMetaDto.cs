@@ -1,4 +1,4 @@
-namespace BE.Models.DTOs
+namespace BE.Models.DTOs.Products.ProductFilter
 {
     public class ProductFilterMetaDto
     {

@@ -65,6 +65,11 @@ namespace BE.Data
                 .HasForeignKey(ci => ci.VariantId)
                 .OnDelete(DeleteBehavior.SetNull);
 
+            modelBuilder.Entity<Product>()
+                .HasMany(p => p.Images)
+                .WithOne(i => i.Product)
+                .HasForeignKey(i => i.ProductId);
+
             // Order -> Customer
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.Customer)

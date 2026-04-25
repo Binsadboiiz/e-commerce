@@ -41,6 +41,8 @@ namespace BE.Models.Entities
         [MaxLength(20)]
         public string Status { get; set; } = "active";
 
+        public string Slug { get; set; }
+
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
@@ -60,5 +62,6 @@ namespace BE.Models.Entities
         public ICollection<CartItem> CartItems { get; set; }
         public ICollection<ProductVariant> Variants { get; set; }
         public ICollection<ProductAttribute> ProductAttributes { get; set; } = new List<ProductAttribute>();
+        public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
     }
 }

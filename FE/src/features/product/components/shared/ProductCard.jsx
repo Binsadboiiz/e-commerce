@@ -2,9 +2,13 @@
  * and handles add-to-cart action. */
 
 import styles from './ProductCard.module.css'
+import { useNavigate } from "react-router-dom";
 import { IoStar, IoStarHalf, IoCartOutline } from "react-icons/io5";
+import { ROUTES } from "@/config/route.config";
 
 export default function ProductCard({ product, onBuy }) {
+
+    const navigate = useNavigate();
 
     const {
         name,
@@ -21,8 +25,12 @@ export default function ProductCard({ product, onBuy }) {
         ? Math.round(((price - discountPrice) / price) * 100)
         : 0;
 
+    const handleGoDetail = () => {
+        console.log("CLICK PRODUCT:", product);
+        navigate(ROUTES.PRODUCT_DETAIL, { slug: product.slug });
+    };
     return (
-        <div className={styles.productCard}>
+        <div className={styles.productCard} onClick={handleGoDetail}>
 
             <div className={styles.imageWrapper}>
                 {imageUrl ? (
@@ -51,7 +59,10 @@ export default function ProductCard({ product, onBuy }) {
                         )}
                     </div>
 
-                    <button className={styles.cartBtn} onClick={() => onBuy?.(product)}>
+                    <button className={styles.cartBtn} onClick={(e) => {
+                        e.stopPropagation();
+                        onBuy?.(product);
+                    }}>
                         <IoCartOutline />
                     </button>
                 </div>
