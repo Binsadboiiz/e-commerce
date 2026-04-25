@@ -1,11 +1,14 @@
 using BE.Models.DTOs;
 
-namespace BE.Services.Interface
+namespace BE.Services.Interface.Product
 {
+
+    /// <summary>
+    /// Defines product management operations and write-side workflows.
+    /// </summary>
+    /// 
     public interface IProductService
     {
-        Task<ProductListDto?> GetByIdAsync(long id);
-
         // CRUD product
         Task<ProductResponse> CreateProductAsync(
             string retailerUserId,
@@ -19,11 +22,5 @@ namespace BE.Services.Interface
         Task DeleteProductAsync(
             long productId,
             string retailerUserId);
-
-
-        Task<(IEnumerable<ProductListDto> items, int total)> FilterAsync(ProductFilterDto filter);
-
-        Task<ProductFilterMetaDto> GetFilterMetaAsync(ProductFilterDto filter);
-
     }
 }

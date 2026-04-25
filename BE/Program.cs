@@ -1,34 +1,19 @@
 using BE.Data;
 using BE.Middlewares;
-using BE.Repositories.Implementations;
-using BE.Repositories.Interfaces;
-using BE.Services;
-using BE.Services.Implementation;
-using BE.Services.Interface;
-using BE.Services.Interface.Product;
+using BE.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ── Database ──
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
-    )
-);
+// DI configuration: Extensions/DependencyInjection/
 
-// ── DI Registration ──
-builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
+// ── Infrastructure ──
+builder.Services.AddInfrastructure(builder.Configuration);
 
-builder.Services.AddScoped<ICartService, CartService>();
-builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<IOrderTrackingService, OrderTrackingService>();
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<ICategoryRepository,  CategoryRepository>();
+// ── Feature Modules ──
+builder.Services.AddProductModule();
+builder.Services.AddOrderModule();
+builder.Services.AddCartModule();
 
 // ── CORS ──
 builder.Services.AddCors(options =>
@@ -45,7 +30,6 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.WebHost.UseUrls("https://localhost:5269");
-builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 

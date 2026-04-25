@@ -5,29 +5,33 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BE.Controllers.Product
 {
+    /// <summary>
+    /// Exposes read-only product catalog endpoints.
+    /// </summary>
+   
     [ApiController]
     [Route("api/products")]
     [AllowAnonymous]
     public class ProductController : ControllerBase
     {
-        private readonly IProductService _productService;
-        
-        public ProductController(IProductService productService)
+        private readonly IProductQueryService _productQueryService;
+
+        public ProductController(IProductQueryService productQueryService)
         {
-            _productService = productService;
+            _productQueryService = productQueryService;
         }
 
         [HttpGet("{id:long}")]
         public async Task<ActionResult<ProductListDto>> GetById(long id)
         {
-            var result = await _productService.GetByIdAsync(id);
+            var result = await _productQueryService.GetByIdAsync(id);
             return Ok(result);
         }
 
         [HttpGet("filter")]
         public async Task<IActionResult> Filter([FromQuery] ProductFilterDto filter)
         {
-            var (items, total) = await _productService.FilterAsync(filter);
+            var (items, total) = await _productQueryService.FilterAsync(filter);
 
             return Ok(new
             {
@@ -42,7 +46,7 @@ namespace BE.Controllers.Product
         [HttpGet("filter/meta")]
         public async Task<IActionResult> GetMeta([FromQuery] ProductFilterDto filter)
         {
-            var result = await _productService.GetFilterMetaAsync(filter);
+            var result = await _productQueryService.GetFilterMetaAsync(filter);
             return Ok(result);
         }
     }

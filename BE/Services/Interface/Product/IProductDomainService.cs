@@ -1,6 +1,11 @@
-﻿namespace BE.Services.Interface
+﻿namespace BE.Services.Interface.Product
 {
-    public class IProductDomainService
+    /// <summary>
+    /// Defines product domain rules for pricing, inventory and variants.
+    /// </summary>
+    
+    public interface IProductDomainService
     {
+
     }
 }
