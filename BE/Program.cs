@@ -5,6 +5,7 @@ using BE.Repositories.Interfaces;
 using BE.Services;
 using BE.Services.Implementation;
 using BE.Services.Interface;
+using BE.Services.Interface.Product;
 using Microsoft.EntityFrameworkCore;
 
 

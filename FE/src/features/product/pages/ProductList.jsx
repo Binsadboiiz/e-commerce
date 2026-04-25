@@ -1,11 +1,11 @@
 import styles from './ProductList.module.css'
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import useProducts from '../hooks/useProducts';
-import ProductGrid from '../components/ProductGrid';
-import ProductSkeleton from '../components/ProductSkeleton';
-import SidebarFilter from '../components/filter/SidebarFilter';
-import SortBar from '../components/sort/SortBar';
-import Pagination from '../components/pagination/Pagination';
+import ProductGrid from '../components/shared/ProductGrid';
+import ProductSkeleton from '../components/shared/ProductSkeleton';
+import SidebarFilter from '../components/list/filter/SidebarFilter';
+import SortBar from '../components/list/sort/SortBar';
+import Pagination from '../components/list/pagination/Pagination';
 
 import { ROUTES } from '@/config/route.config';
 

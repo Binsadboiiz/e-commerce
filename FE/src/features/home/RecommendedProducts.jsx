@@ -1,5 +1,5 @@
 import useProducts from '@/features/product/hooks/useProducts';
-import ProductGrid from '@/features/product/components/ProductGrid';
+import ProductGrid from '@/features/product/components/shared/ProductGrid';
 
 export default function RecommendedProducts() {
     const { products, loading } = useProducts({

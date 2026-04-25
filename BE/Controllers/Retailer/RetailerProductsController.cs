@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using BE.Models.DTOs;
-using BE.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 using BE.Validators;
+using BE.Services.Interface.Product;
 
 namespace BE.Controllers.Retailer
 {

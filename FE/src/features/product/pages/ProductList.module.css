@@ -10,14 +10,11 @@
 
 /* SIDEBAR (KHÔNG STICKY, KHÔNG SCROLL THEO PAGE) */
 .sidebar {
-    width: 260px;
+    width: 280px;
     flex-shrink: 0;
-    background: #fff;
-    border-radius: 12px;
+    background-color: white;
     padding: 12px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-
-    /* 👇 quan trọng: giữ sidebar độc lập */
     align-self: flex-start;
 }
 
