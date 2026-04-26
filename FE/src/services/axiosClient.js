@@ -1,5 +1,4 @@
 import axios from "axios";
-import { getErrorHandle } from "../utils/ErrorHandle";
 
 const axiosClient = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL || "https://localhost:5269/api",
@@ -28,7 +27,7 @@ axiosClient.interceptors.request.use(
 axiosClient.interceptors.response.use(
     res => res.data,
     error => {
-        return Promise.reject(getErrorHandle(error));
+        return Promise.reject(error);
     }
 )
 

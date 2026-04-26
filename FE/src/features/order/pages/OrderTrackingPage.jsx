@@ -34,14 +34,14 @@ export default function OrderTrackingPage() {
                         onClick={() => navigate(-1)}
                         className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
                     >
-                        Quay lại
+                        Back
                     </button>
                     <button
                         type="button"
                         onClick={refreshTracking}
                         className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
                     >
-                        Làm mới tracking
+                        Refresh Tracking
                     </button>
                 </div>
 
@@ -51,7 +51,7 @@ export default function OrderTrackingPage() {
                     <div className={styles.stateCard}>
                         <p className="mb-3 text-sm">{error}</p>
                         <Link to={ROUTES.MY_ORDERS} className="inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white">
-                            Quay lại danh sách đơn hàng
+                            Back to Order List
                         </Link>
                     </div>
                 )}
@@ -59,7 +59,7 @@ export default function OrderTrackingPage() {
                 {!loading && !error && tracking && (
                     <>
                         <header className={styles.hero}>
-                            <p className={styles.heroLabel}>Theo dõi đơn hàng</p>
+                            <p className={styles.heroLabel}>Order Tracking</p>
                             <h1 className={styles.heroId}>#{tracking.orderId}</h1>
                             <div className="mt-2">
                                 <OrderStatusBadge
@@ -68,13 +68,13 @@ export default function OrderTrackingPage() {
                                 />
                             </div>
                             <p className={styles.heroMeta}>
-                                Đặt lúc: {formatDateTime(tracking.orderDate)} - Dự kiến giao: {formatDateTime(tracking.estimatedDeliveryDate)}
+                                Placed at: {formatDateTime(tracking.orderDate)} - Expected delivery: {formatDateTime(tracking.estimatedDeliveryDate)}
                             </p>
                         </header>
 
                         <div className={styles.contentGrid}>
                             <section className={`${styles.panel} p-5`}>
-                                <h2 className={styles.panelTitle}>Lịch sử trạng thái</h2>
+                                <h2 className={styles.panelTitle}>Status History</h2>
                                 <TrackingTimeline timeline={timeline} />
                             </section>
 

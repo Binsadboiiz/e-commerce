@@ -22,15 +22,15 @@ export default function MyOrdersPage() {
             <div className={styles.container}>
                 <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
                     <div>
-                        <h1 className={styles.heading}>Đơn hàng của tôi</h1>
-                        <p className={styles.subheading}>Theo dõi trạng thái và lịch sử mua hàng của bạn.</p>
+                        <h1 className={styles.heading}>My Orders</h1>
+                        <p className={styles.subheading}>Track your order status and purchase history.</p>
                     </div>
                     <button
                         type="button"
                         onClick={refreshOrders}
                         className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
                     >
-                        Làm mới
+                        Refresh
                     </button>
                 </header>
 
@@ -40,16 +40,16 @@ export default function MyOrdersPage() {
                     <div className={styles.stateCard}>
                         <p className="mb-3 text-sm">{error}</p>
                         <Link to={ROUTES.LOGIN} className="inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white">
-                            Đăng nhập lại
+                            Log in again
                         </Link>
                     </div>
                 )}
 
                 {!loading && !error && orders.length === 0 && (
                     <div className={styles.stateCard}>
-                        <p>Bạn chưa có đơn hàng nào.</p>
+                        <p>You have no orders yet.</p>
                         <Link to={ROUTES.PRODUCTS} className="mt-3 inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white">
-                            Mua sắm ngay
+                            Shop now
                         </Link>
                     </div>
                 )}

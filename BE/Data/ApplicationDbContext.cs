@@ -8,7 +8,7 @@ namespace BE.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Address> Addresses { get; set; }
+        public DbSet<UserAddresses> UserAddressesEnumerable { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductVariant> ProductVariants { get; set; }
         public DbSet<AttributeType> AttributeTypes { get; set; }
@@ -34,7 +34,7 @@ namespace BE.Data
         {
             // User -> Addresses (one-to-many)
             modelBuilder.Entity<User>()
-                .HasMany(u => u.Addresses)
+                .HasMany(u => u.UserAddressesCollection)
                 .WithOne(a => a.User)
                 .HasForeignKey(a => a.UserId);
 
@@ -79,7 +79,7 @@ namespace BE.Data
 
             // Order -> Address
             modelBuilder.Entity<Order>()
-                .HasOne(o => o.Address)
+                .HasOne(o => o.UserAddresses)
                 .WithMany()
                 .HasForeignKey(o => o.AddressId)
                 .OnDelete(DeleteBehavior.Restrict);

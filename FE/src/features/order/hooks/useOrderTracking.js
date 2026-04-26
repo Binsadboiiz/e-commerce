@@ -12,14 +12,14 @@ export default function useOrderTracking(orderId) {
         if (!userId) {
             setTracking(null);
             setLoading(false);
-            setError("Không tìm thấy thông tin người dùng. Vui lòng đăng nhập lại.");
+            setError("User information not found. Please log in again.");
             return;
         }
 
         if (!orderId) {
             setTracking(null);
             setLoading(false);
-            setError("OrderId không hợp lệ.");
+            setError("Invalid OrderId.");
             return;
         }
 
@@ -31,7 +31,7 @@ export default function useOrderTracking(orderId) {
             setTracking(response ?? null);
         } catch (err) {
             setTracking(null);
-            setError(err.message || "Không thể tải chi tiết theo dõi đơn hàng.");
+            setError(err.message || "Could not load order tracking details.");
         } finally {
             setLoading(false);
         }

@@ -12,7 +12,7 @@ export default function useMyOrders() {
         if (!userId) {
             setOrders([]);
             setLoading(false);
-            setError("Không tìm thấy thông tin người dùng. Vui lòng đăng nhập lại.");
+            setError("User information not found. Please log in again.");
             return;
         }
 
@@ -24,7 +24,7 @@ export default function useMyOrders() {
             setOrders(Array.isArray(response) ? response : []);
         } catch (err) {
             setOrders([]);
-            setError(err.message || "Không thể tải danh sách đơn hàng.");
+            setError(err.message || "Could not load order list.");
         } finally {
             setLoading(false);
         }

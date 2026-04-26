@@ -35,7 +35,7 @@ namespace BE.Models.Entities
 
         // Navigation
         public User Customer { get; set; }
-        public Address Address { get; set; }
+        public UserAddresses UserAddresses { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; }
         public ICollection<OrderVoucher> OrderVouchers { get; set; }
 

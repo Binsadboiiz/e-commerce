@@ -69,6 +69,7 @@ namespace BE.Services.Implementation
                     CategoryId = request.CategoryId,
                     BrandId = request.BrandId,
                     Status = ProductConstants.ProductStatusActive,
+                    Image = request.ImageUrl,
                     CreatedAt = DateTime.UtcNow,
                 };
 
@@ -145,6 +146,11 @@ namespace BE.Services.Implementation
             product.Name = request.Name;
             product.Description = request.Description;
             product.Status = request.Status;
+            
+            if (request.ImageUrl != null)
+            {
+                product.Image = request.ImageUrl;
+            }
 
             await _context.SaveChangesAsync();
             return new ProductResponse
@@ -192,6 +198,107 @@ namespace BE.Services.Implementation
             }
 
             return slug;
+        }
+
+        /// <summary>
+        /// Lấy toàn bộ sản phẩm của retailer (bao gồm deleted).
+        /// Hỗ trợ search theo tên, filter theo status, sort theo nhiều tiêu chí, pagination.
+        /// </summary>
+        public async Task<(IEnumerable<ProductListDto> items, int total)> GetProductsByRetailerAsync(
+            string retailerUserId,
+            int page,
+            int pageSize,
+            string? search,
+            string? status,
+            string? sortBy)
+        {
+            // Tìm shop của retailer
+            var shop = await _context.Shops
+                .AsNoTracking()
+                .FirstOrDefaultAsync(s => s.OwnerId == retailerUserId);
+
+            if (shop == null)
+                return (Enumerable.Empty<ProductListDto>(), 0);
+
+            // Query toàn bộ products (bao gồm deleted vì soft delete)
+            var query = _context.Products
+                .AsNoTracking()
+                .Include(p => p.Category)
+                .Include(p => p.Brand)
+                .Include(p => p.Variants)
+                .Include(p => p.Images)
+                .Where(p => p.ShopId == shop.ShopId);
+
+            // SEARCH theo tên
+            if (!string.IsNullOrWhiteSpace(search))
+                query = query.Where(p => p.Name.Contains(search));
+
+            // FILTER theo status (nếu không truyền thì lấy tất cả)
+            if (!string.IsNullOrWhiteSpace(status) && status.ToLower() != "all")
+                query = query.Where(p => p.Status == status.ToLower());
+
+            // PROJECT — tính SoldCount từ Inventory
+            var projected = query.Select(p => new
+            {
+                Product = p,
+                SoldCount = _context.Inventories
+                    .Where(inv => p.Variants.Select(v => v.VariantId)
+                        .Contains(inv.ProductVariantId))
+                    .Sum(inv => inv.SoldStock),
+                FinalPrice = p.Variants.Any()
+                    ? p.Variants.Min(v =>
+                        (p.DiscountPrice ?? p.Price) + (v.PriceAdjustment ?? 0))
+                    : (p.DiscountPrice ?? p.Price)
+            });
+
+            // SORT
+            projected = sortBy?.ToLower() switch
+            {
+                "price_asc" => projected.OrderBy(x => x.FinalPrice),
+                "price_desc" => projected.OrderByDescending(x => x.FinalPrice),
+                "sold" => projected.OrderByDescending(x => x.SoldCount),
+                "stock_asc" => projected.OrderBy(x => x.Product.Stock),
+                "stock_desc" => projected.OrderByDescending(x => x.Product.Stock),
+                "oldest" => projected.OrderBy(x => x.Product.CreatedAt),
+                "name_asc" => projected.OrderBy(x => x.Product.Name),
+                "name_desc" => projected.OrderByDescending(x => x.Product.Name),
+                _ => projected.OrderByDescending(x => x.Product.CreatedAt) // mặc định: mới nhất
+            };
+
+            // Pagination
+            page = page <= 0 ? 1 : page;
+            pageSize = pageSize <= 0 ? 20 : pageSize;
+            pageSize = Math.Min(pageSize, 100);
+
+            var total = await projected.CountAsync();
+
+            var items = await projected
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(x => new ProductListDto
+                {
+                    Id = x.Product.ProductId,
+                    Name = x.Product.Name,
+                    Slug = x.Product.Slug,
+                    Price = x.Product.Price,
+                    DiscountPrice = x.Product.DiscountPrice,
+                    FinalPrice = x.FinalPrice,
+                    Stock = x.Product.Stock,
+                    ImageUrl = x.Product.Images
+                        .Where(i => i.IsPrimary)
+                        .Select(i => i.ImageUrl)
+                        .FirstOrDefault() ?? x.Product.Image,
+                    RatingAvg = x.Product.RatingAvg,
+                    RatingCount = x.Product.RatingCount,
+                    CategoryName = x.Product.Category != null ? x.Product.Category.Type : null,
+                    BrandName = x.Product.Brand != null ? x.Product.Brand.Name : null,
+                    Status = x.Product.Status,
+                    CreatedAt = x.Product.CreatedAt,
+                    SoldCount = x.SoldCount
+                })
+                .ToListAsync();
+
+            return (items, total);
         }
 
     }

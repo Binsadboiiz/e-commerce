@@ -1,0 +1,247 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.modalContent {
+    background: #ffffff;
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    border-radius: 16px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modalHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.modalTitle {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+}
+
+.closeBtn {
+    background: transparent;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.closeBtn:hover {
+    background: #f3f4f6;
+    color: #111827;
+}
+
+.modalBody {
+    padding: 24px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.formGroup label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.inputField, .selectField, .textareaField {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #111827;
+    background: #ffffff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.inputField:focus, .selectField:focus, .textareaField:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.textareaField {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.imagePreviewContainer {
+    margin-top: 12px;
+    width: 100%;
+    height: 200px;
+    border: 2px dashed #d1d5db;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #f9fafb;
+    overflow: hidden;
+    position: relative;
+}
+
+.imagePreview {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #e5e7eb;
+}
+
+.noImageText {
+    color: #9ca3af;
+    font-size: 13px;
+    margin-top: 8px;
+    font-weight: 500;
+}
+
+.variantSection {
+    background: #f9fafb;
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+}
+
+.variantTitle {
+    font-size: 15px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 12px 0;
+}
+
+.variantRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.modalFooter {
+    padding: 16px 24px;
+    border-top: 1px solid #f3f4f6;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    background: #f9fafb;
+}
+
+.cancelBtn, .submitBtn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cancelBtn {
+    background: #ffffff;
+    color: #374151;
+    border: 1px solid #d1d5db;
+}
+
+.cancelBtn:hover {
+    background: #f3f4f6;
+    border-color: #9ca3af;
+}
+
+.submitBtn {
+    background: #111827;
+    color: #ffffff;
+}
+
+.submitBtn:hover {
+    background: #1f2937;
+    transform: translateY(-1px);
+}
+
+.submitBtn:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Delete Modal Specific */
+.deleteIconWrapper {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #fef2f2;
+    color: #ef4444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+}
+
+.deleteText {
+    text-align: center;
+    color: #4b5563;
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.deleteBtn {
+    background: #ef4444;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.deleteBtn:hover {
+    background: #dc2626;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}

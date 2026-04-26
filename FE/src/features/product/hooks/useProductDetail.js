@@ -9,7 +9,7 @@ export default function useProductDetail(slug) {
     useEffect(() => {
         if (!slug) return;
 
-        setLoading(true);
+        setLoading(loading => loading || true);
 
         productsService.getProductDetail(slug)
             .then((res) => {

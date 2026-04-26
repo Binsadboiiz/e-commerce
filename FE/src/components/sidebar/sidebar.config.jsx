@@ -16,7 +16,7 @@ import {
     LogOut
 } from "lucide-react";
 
-/* primary navigation */
+/* primary navigation (admin) */
 export const PRIMARY_NAV = [
     {
         key: "dashboard",
@@ -73,6 +73,34 @@ export const PRIMARY_NAV = [
     },
     {
         key: "analytics",
+        label: "Analytics",
+        icon: <BarChart3 size={18} />,
+        path: "#",
+    },
+];
+
+/* retailer navigation */
+export const RETAILER_NAV = [
+    {
+        key: "retailer-dashboard",
+        label: "Dashboard",
+        icon: <LayoutDashboard size={18} />,
+        path: "/retailer/dashboard",
+    },
+    {
+        key: "retailer-products",
+        label: "Products",
+        icon: <Package size={18} />,
+        path: "/retailer/products",
+    },
+    {
+        key: "retailer-orders",
+        label: "Orders",
+        icon: <ShoppingCart size={18} />,
+        path: "#",
+    },
+    {
+        key: "retailer-analytics",
         label: "Analytics",
         icon: <BarChart3 size={18} />,
         path: "#",

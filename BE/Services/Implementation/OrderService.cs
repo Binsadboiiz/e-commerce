@@ -27,7 +27,7 @@ namespace BE.Services.Implementation
         /// </summary>
         public async Task<List<CheckoutAddressDto>> GetUserAddressesAsync(string userId)
         {
-            return await _context.Addresses
+            return await _context.UserAddressesEnumerable
                 .Where(address => address.UserId == userId)
                 .OrderByDescending(address => address.IsDefault)
                 .ThenBy(address => address.Id)
@@ -124,9 +124,9 @@ namespace BE.Services.Implementation
 
         // --- Helper Methods ---
 
-        private async Task<Address> GetUserAddressAsync(string userId, long addressId)
+        private async Task<UserAddresses> GetUserAddressAsync(string userId, long addressId)
         {
-            var address = await _context.Addresses.FirstOrDefaultAsync(a => a.Id == addressId && a.UserId == userId);
+            var address = await _context.UserAddressesEnumerable.FirstOrDefaultAsync(a => a.Id == addressId && a.UserId == userId);
             if (address == null)
             {
                 throw new AppException("Address does not belong to the current user.", 404);
@@ -264,7 +264,7 @@ namespace BE.Services.Implementation
             };
         }
 
-        private CheckoutPreviewResponse BuildPreviewResponse(string checkoutType, string paymentMethod, Address address, CheckoutPricingResult pricing)
+        private CheckoutPreviewResponse BuildPreviewResponse(string checkoutType, string paymentMethod, UserAddresses address, CheckoutPricingResult pricing)
         {
             return new CheckoutPreviewResponse
             {
@@ -292,7 +292,7 @@ namespace BE.Services.Implementation
         /// <summary>
         /// Khởi tạo và lưu đơn hàng vào Database cùng các thông tin liên quan (Item, Voucher, Transaction).
         /// </summary>
-        private async Task<Order> CreateOrderAsync(string userId, Address address, string paymentMethod, CheckoutPricingResult pricing)
+        private async Task<Order> CreateOrderAsync(string userId, UserAddresses address, string paymentMethod, CheckoutPricingResult pricing)
         {
             var createdAt = DateTime.UtcNow;
             var order = new Order

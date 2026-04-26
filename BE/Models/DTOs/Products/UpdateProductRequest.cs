@@ -1,4 +1,4 @@
-﻿namespace BE.Models.DTOs
+namespace BE.Models.DTOs
 {
     public class UpdateProductRequest
     {
@@ -6,6 +6,7 @@
         public string Description { get; set; }
         public long CategoryId { get; set; }
         public long BrandId { get; set; }
+        public string? ImageUrl { get; set; }
         public string Status { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-export const currency = new Intl.NumberFormat("vi-VN", {
+export const currency = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "VND",
     maximumFractionDigits: 0
@@ -14,7 +14,7 @@ export function formatDateTime(value) {
         return "--";
     }
 
-    return new Intl.DateTimeFormat("vi-VN", {
+    return new Intl.DateTimeFormat("en-US", {
         day: "2-digit",
         month: "2-digit",
         year: "numeric",
@@ -29,15 +29,15 @@ export function statusToLabel(status) {
     }
 
     const map = {
-        pending: "Chờ xác nhận",
-        confirmed: "Đã xác nhận",
-        preparing: "Đang chuẩn bị",
-        shipped: "Đã gửi hàng",
-        in_transit: "Đang vận chuyển",
-        out_for_delivery: "Đang giao",
-        delivered: "Đã giao",
-        delivery_failed: "Giao thất bại",
-        cancelled: "Đã hủy"
+        pending: "Pending Confirmation",
+        confirmed: "Confirmed",
+        preparing: "Preparing",
+        shipped: "Shipped",
+        in_transit: "In Transit",
+        out_for_delivery: "Out for Delivery",
+        delivered: "Delivered",
+        delivery_failed: "Delivery Failed",
+        cancelled: "Cancelled"
     };
 
     return map[status] ?? status;

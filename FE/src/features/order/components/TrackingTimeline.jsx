@@ -5,7 +5,7 @@ export default function TrackingTimeline({ timeline = [] }) {
     if (!timeline.length) {
         return (
             <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500">
-                Chưa có dữ liệu tracking cho đơn hàng này.
+                No tracking data available for this order.
             </div>
         );
     }
@@ -27,7 +27,7 @@ export default function TrackingTimeline({ timeline = [] }) {
                             {event.statusLabel || statusToLabel(event.status)}
                         </p>
                         {event.description && <p className={styles.description}>{event.description}</p>}
-                        {event.location && <p className={styles.location}>Vị trí: {event.location}</p>}
+                        {event.location && <p className={styles.location}>Location: {event.location}</p>}
                     </div>
                 );
             })}

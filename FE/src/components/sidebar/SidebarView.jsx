@@ -2,10 +2,11 @@
  * <summary>
  * Sidebar presentational component.
  * Renders UI only — no state logic.
+ * Now accepts navItems prop for role-based rendering.
  * </summary>
  */
 
-import { PRIMARY_NAV, UTILITY_NAV } from "./sidebar.config.jsx";
+import { UTILITY_NAV } from "./sidebar.config.jsx";
 import SidebarItem from "./SidebarItem";
 import SidebarSection from "./SidebarSection";
 import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
@@ -13,7 +14,7 @@ import styles from "./sidebar.module.css";
 
 const ICON_SIZE = 18;
 
-export default function SidebarView({ isCollapsed, activeItem, openSections,
+export default function SidebarView({ navItems, isCollapsed, activeItem, openSections,
     onItemClick, onToggle, onToggleSection, }) {
 
     return (
@@ -40,9 +41,9 @@ export default function SidebarView({ isCollapsed, activeItem, openSections,
                 </button>
             </div>
 
-            {/* primary nav */}
+            {/* primary nav — role-based via navItems prop */}
             <nav className={styles.navPrimary}>
-                {PRIMARY_NAV.map((item) =>
+                {navItems.map((item) =>
                     item.children ? (
                         <SidebarSection
                             key={item.key}

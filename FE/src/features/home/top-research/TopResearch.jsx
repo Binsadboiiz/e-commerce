@@ -5,37 +5,37 @@ export default function TopResearch() {
     const topResearchMock = [
         {
             id: 1,
-            name: 'Quần Ống Rộng Nữ',
+            name: 'Women Wide Leg Pants',
             monthlySales: '110k+',
             image: '/img/pants.jpg'
         },
         {
             id: 2,
-            name: 'Kẹp Tóc Càng Cua Đơn Giản Cho Nữ',
+            name: 'Simple Claw Hair Clip for Women',
             monthlySales: '53k+',
             image: '/img/hairclip.jpg'
         },
         {
             id: 3,
-            name: 'Găng Tay Chơi Game Chống Mồ Hôi',
+            name: 'Anti-Sweat Gaming Gloves',
             monthlySales: '50k+',
             image: '/img/glove.jpg'
         },
         {
             id: 4,
-            name: 'Dép Đi Trong Nhà',
+            name: 'Indoor Slippers',
             monthlySales: '57k+',
             image: '/img/slipper.jpg'
         },
         {
             id: 5,
-            name: 'Bộ Chăn Ga Gối Cotton',
+            name: 'Cotton Bedding Set',
             monthlySales: '59k+',
             image: '/img/bedding.jpg'
         },
         {
             id: 6,
-            name: 'Ô Dù',
+            name: 'Umbrella',
             monthlySales: '49k+',
             image: '/img/umbrella.jpg'
         }

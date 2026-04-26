@@ -12,10 +12,10 @@ export default function EmptyCart() {
 
             {/* Text */}
             <h2 className="text-xl font-semibold text-text-primary mb-2">
-                Giỏ hàng của bạn còn trống
+                Your shopping cart is empty
             </h2>
             <p className="text-text-secondary text-sm mb-8 text-center max-w-sm">
-                Hãy khám phá thêm các sản phẩm và thêm vào giỏ hàng nhé!
+                Go discover more products and add them to your cart!
             </p>
 
             {/* CTA */}
@@ -25,7 +25,7 @@ export default function EmptyCart() {
                            shadow-card hover:shadow-hover transition-all duration-200
                            transform hover:-translate-y-0.5 active:translate-y-0"
             >
-                Mua Sắm Ngay
+                Shop Now
             </Link>
         </div>
     );

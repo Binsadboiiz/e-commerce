@@ -2,13 +2,16 @@ import { ErrorProvider } from './context/ErrorContext'
 import { AuthProvider } from './context/AuthContext'
 import { CartProvider } from './features/cart/context/CartContext'
 import AppRoutes from './routes/AppRoutes'
+import GlobalErrorHandler from './components/GlobalErrorHandler'
 
 function App() {
   return (
     <ErrorProvider>
       <AuthProvider>
         <CartProvider>
-          <AppRoutes />
+          <GlobalErrorHandler>
+            <AppRoutes />
+          </GlobalErrorHandler>
         </CartProvider>
       </AuthProvider>
     </ErrorProvider>

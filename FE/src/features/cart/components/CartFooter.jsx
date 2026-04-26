@@ -44,7 +44,7 @@ export default function CartFooter() {
                             </div>
                         </div>
                         <span className="text-sm text-text-primary">
-                            Chọn Tất Cả ({totalItems})
+                            Select All ({totalItems})
                         </span>
                     </label>
 
@@ -56,7 +56,7 @@ export default function CartFooter() {
                                        hover:text-danger transition-colors"
                         >
                             <FiTrash2 size={14} />
-                            Xóa
+                            Delete
                         </button>
                     )}
                 </div>
@@ -66,7 +66,7 @@ export default function CartFooter() {
                     {/* Total Price */}
                     <div className="text-right">
                         <div className="text-sm text-text-secondary">
-                            Tổng thanh toán ({selectedCount} Sản phẩm):
+                            Total amount ({selectedCount} items):
                         </div>
                         <div className="text-xl font-bold text-text-price">
                             ₫{total.toLocaleString()}
@@ -85,7 +85,7 @@ export default function CartFooter() {
                                    disabled:hover:translate-y-0 disabled:hover:shadow-card
                                    text-sm uppercase tracking-wide"
                     >
-                        Mua Hàng
+                        Checkout
                     </button>
                 </div>
             </div>

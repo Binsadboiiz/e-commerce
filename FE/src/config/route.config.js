@@ -18,4 +18,8 @@ export const ROUTES = {
     DASH_PRODUCTS: "/dashboard/products",
     DASH_ORDERS: "/dashboard/orders",
     DASH_SETTINGS: "/dashboard/settings",
+
+    // Retailer
+    RETAILER_DASHBOARD: "/retailer/dashboard",
+    RETAILER_PRODUCTS: "/retailer/products",
 };

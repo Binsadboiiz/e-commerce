@@ -1,4 +1,4 @@
-ALTER TABLE Products 
+ ALTER TABLE Products 
 ADD Slug VARCHAR(255) UNIQUE;
 
 CREATE TABLE Shop_addresses (

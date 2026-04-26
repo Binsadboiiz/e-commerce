@@ -20,7 +20,7 @@ namespace BE.Models.Entities
         public bool Is_active { get; set; } = true;
 
         // Navigation
-        public ICollection<Address> Addresses { get; set; }
+        public ICollection<UserAddresses> UserAddressesCollection { get; set; }
         public Cart Cart { get; set; }
         public ICollection<Order> Orders { get; set; }
         public ICollection<Shop> Shops { get; set; }

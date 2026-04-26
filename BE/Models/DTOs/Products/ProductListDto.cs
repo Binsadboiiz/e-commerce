@@ -1,4 +1,4 @@
-﻿namespace BE.Models.DTOs
+namespace BE.Models.DTOs
 {
     public class ProductListDto
     {
@@ -23,5 +23,10 @@
 
         public string? CategoryName { get; set; }
         public string? BrandName { get; set; }
+
+        // Retailer-specific fields
+        public string? Status { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public int SoldCount { get; set; }
     }
 }
