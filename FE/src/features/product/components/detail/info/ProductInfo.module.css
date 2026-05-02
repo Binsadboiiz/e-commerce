@@ -1,0 +1,64 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.name {
+    font-size: 32px;
+    font-weight: 700;
+    color: #000000;
+    line-height: 1.2;
+    order: 1;
+}
+
+/* --- RATING SECTION --- */
+.rating {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #000000;
+    order: 2;
+}
+
+.rating svg {
+    color: #FFC107;
+    font-size: 18px;
+    margin-right: 2px;
+    margin-top: -2px;
+}
+
+.rating span:last-child {
+    color: #666666;
+    font-weight: 400;
+    margin-left: 4px;
+}
+
+
+/* --- PRICE SECTION --- */
+.price {
+    order: 3;
+    margin-top: 8px;
+}
+
+.price>div {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.finalPrice {
+    font-size: 32px;
+    font-weight: 700;
+    color: #000000;
+}
+
+.originalPrice {
+    font-size: 22px;
+    font-weight: 500;
+    color: #D1D5DB;
+    text-decoration: line-through;
+}

@@ -67,6 +67,7 @@ export default function ProductCard({ product, onBuy }) {
                     </button>
                 </div>
 
+                {/* TODO: handle rating avg + count */}
                 <div className={styles.ratingRow}>
                     <div className={styles.stars}>
                         <IoStar />

@@ -1,0 +1,169 @@
+.container {
+    display: flex;
+    gap: 40px;
+    padding: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: system-ui, sans-serif;
+}
+
+/* LEFT */
+.left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.mainImage {
+    width: 100%;
+    max-width: 520px;
+    height: 520px;
+    object-fit: cover;
+    border-radius: 16px;
+    border: 1px solid #eee;
+}
+
+.placeholder {
+    width: 100%;
+    max-width: 520px;
+    height: 520px;
+    background: #eee;
+    border-radius: 16px;
+}
+
+.thumbRow {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.thumb {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 10px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: 0.2s;
+    border: 2px solid transparent;
+}
+
+.thumb:hover {
+    opacity: 1;
+}
+
+.activeThumb {
+    opacity: 1;
+    border: 2px solid #111;
+}
+
+/* RIGHT */
+.right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.title {
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.price {
+    font-size: 22px;
+    font-weight: 700;
+    color: #e53935;
+}
+
+/* ACTIONS */
+.actions {
+    display: flex;
+    gap: 12px;
+}
+
+.addCartBtn {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #111;
+    background: white;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.addCartBtn:hover {
+    background: #111;
+    color: white;
+}
+
+.buyBtn {
+    flex: 1;
+    padding: 12px;
+    background: #111;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* SELLER */
+.sellerBox {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    border: 1px solid #eee;
+    border-radius: 14px;
+    background: #fafafa;
+}
+
+.sellerAvatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.sellerInfo {
+    flex: 1;
+}
+
+.sellerName {
+    font-weight: 600;
+}
+
+.sellerMeta {
+    font-size: 12px;
+    color: #777;
+}
+
+.chatBtn {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+/* META */
+.meta {
+    font-size: 14px;
+    color: #555;
+}
+
+/* STATES */
+.loading,
+.notFound {
+    padding: 40px;
+    text-align: center;
+}

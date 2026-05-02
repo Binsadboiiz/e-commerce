@@ -1,0 +1,98 @@
+.wrapper {
+    position: relative;
+    width: 100%;
+}
+
+/* ================= CONTAINER ================= */
+.container {
+    display: flex;
+    overflow-x: auto;
+
+    /* SNAP CỨNG */
+    scroll-snap-type: x mandatory;
+    scroll-snap-stop: always;
+
+    /* QUAN TRỌNG: tránh smooth mặc định */
+    scroll-behavior: auto;
+
+    width: 100%;
+    height: 400px;
+
+    cursor: grab;
+}
+
+.container:active {
+    cursor: grabbing;
+}
+
+/* ẨN SCROLLBAR */
+.container::-webkit-scrollbar {
+    display: none;
+}
+
+/* ================= SLIDE ================= */
+.slide {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* SNAP từng ảnh */
+    scroll-snap-align: center;
+}
+
+/* ================= IMAGE ================= */
+.image {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    /* NGĂN drag ghost image */
+    user-select: none;
+    pointer-events: none;
+}
+
+/* ================= NAV BUTTON ================= */
+.btnPrev,
+.btnNext {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 40px;
+    height: 40px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: rgba(0, 0, 0, 0.45);
+    color: #fff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+    z-index: 2;
+}
+
+/* hover effect */
+.btnPrev:hover,
+.btnNext:hover {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+/* vị trí */
+.btnPrev {
+    left: 12px;
+}
+
+.btnNext {
+    right: 12px;
+}   

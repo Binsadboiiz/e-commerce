@@ -1,6 +1,12 @@
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import styles from "./ProductDetailPage.module.css";
+import { useParams, useNavigate } from "react-router-dom";
 import useProductDetail from "../hooks/useProductDetail";
+
+import ProductGallery from "../components/detail/gallery/ProductGallery";
+import ProductInfo from "../components/detail/info/ProductInfo";
+import ProductActions from "../components/detail/actions/ProductActions";
+import ProductDetailSkeleton from "../components/detail/ProductDetailSkeleton";
+
 import { ROUTES } from "@/config/route.config";
 
 export default function ProductDetail() {
@@ -11,14 +17,10 @@ export default function ProductDetail() {
 
     const { product, loading } = useProductDetail(slug);
 
-    if (loading) return <div>Loading...</div>;
-    if (!product) return <div>Not found</div>;
+    if (loading) return <ProductDetailSkeleton />;
+    if (!product) return <div className={styles.notFound}>Not found</div>;
 
     const images = product?.images || [];
-
-    const coverImage =
-        images.find(i => i.isPrimary)?.imageUrl ||
-        images[0]?.imageUrl;
 
     const handleBuyNow = () => {
         navigate(ROUTES.CHECKOUT, {
@@ -34,38 +36,32 @@ export default function ProductDetail() {
         });
     };
 
+    const handleAddToCart = () => {
+        console.log("ADD TO CART:", product);
+        // TODO: dispatch cart action
+    };
+
     return (
-        <div>
-            <h1>{product.name}</h1>
+        <div className={styles.container}>
 
-            {coverImage ? (
-                <img
-                    src={coverImage}
-                    alt={product.name}
-                    style={{ width: 300, objectFit: "cover" }}
+            {/* LEFT - IMAGE */}
+            <div className={styles.left}>
+                <ProductGallery images={product.images || []} />
+            </div>
+
+            {/* RIGHT - INFO */}
+            <div className={styles.right}>
+
+                <ProductInfo product={product} />
+
+                {/* ACTIONS */}
+                <ProductActions
+                    product={product}
+                    onBuyNow={handleBuyNow}
+                    onAddToCart={handleAddToCart}
                 />
-            ) : (
-                <div style={{ width: 300, height: 300, background: "#eee" }} />
-            )}
-
-            <div>
-                Price: {product.discountPrice ?? product.price}
             </div>
 
-            <button onClick={handleBuyNow}>Buy Now</button>
-
-            <div>Brand: {product.brandName}</div>
-            <div>Category: {product.categoryName}</div>
-
-            <div>
-                {images.map(img => (
-                    <img
-                        key={img.imageId}
-                        src={img.imageUrl}
-                        style={{ width: 80, marginRight: 8 }}
-                    />
-                ))}
-            </div>
         </div>
     );
 }
