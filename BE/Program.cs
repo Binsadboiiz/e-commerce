@@ -2,6 +2,8 @@ using BE.Data;
 using BE.Middlewares;
 using BE.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.InteropServices;
+using BE.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,10 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddProductModule();
 builder.Services.AddOrderModule();
 builder.Services.AddCartModule();
+builder.Services.AddAuthModule();
+
+// ── JWT Authentication ──
+builder.Services.AddJwtAuthentication(builder.Configuration);
 
 // ── CORS ──
 builder.Services.AddCors(options =>
