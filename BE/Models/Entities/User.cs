@@ -11,9 +11,7 @@ namespace BE.Models.Entities
 
         public string Email { get; set; }
         public string FullName { get; set; }
-        public string Password { get; set; }
         public string Phone { get; set; }
-        public string Role { get; set; }
         public string Avatar { get; set; }
 
         [Column("IsActive")]
