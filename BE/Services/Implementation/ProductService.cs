@@ -81,7 +81,7 @@ namespace BE.Services.Implementation
                     var variant = new ProductVariant
                     {
                         ProductId = product.ProductId,
-                        PriceAdjustment = variantRequest.Price,
+                        Price = variantRequest.Price,
                     };
 
                     _context.ProductVariants.Add(variant);
@@ -241,13 +241,19 @@ namespace BE.Services.Implementation
             var projected = query.Select(p => new
             {
                 Product = p,
+
+                AvailableStock = p.Variants
+                    .Sum(v => v.Inventory != null
+                        ? v.Inventory.AvailableStock - v.Inventory.ReservedStock : 0),
+
                 SoldCount = _context.Inventories
                     .Where(inv => p.Variants.Select(v => v.VariantId)
                         .Contains(inv.ProductVariantId))
                     .Sum(inv => inv.SoldStock),
+
                 FinalPrice = p.Variants.Any()
                     ? p.Variants.Min(v =>
-                        (p.DiscountPrice ?? p.Price) + (v.PriceAdjustment ?? 0))
+                        (p.DiscountPrice ?? p.Price) + (v.Price ?? 0))
                     : (p.DiscountPrice ?? p.Price)
             });
 
@@ -257,8 +263,8 @@ namespace BE.Services.Implementation
                 "price_asc" => projected.OrderBy(x => x.FinalPrice),
                 "price_desc" => projected.OrderByDescending(x => x.FinalPrice),
                 "sold" => projected.OrderByDescending(x => x.SoldCount),
-                "stock_asc" => projected.OrderBy(x => x.Product.Stock),
-                "stock_desc" => projected.OrderByDescending(x => x.Product.Stock),
+                "stock_asc" => projected.OrderBy(x => x.AvailableStock),
+                "stock_desc" => projected.OrderByDescending(x => x.AvailableStock),
                 "oldest" => projected.OrderBy(x => x.Product.CreatedAt),
                 "name_asc" => projected.OrderBy(x => x.Product.Name),
                 "name_desc" => projected.OrderByDescending(x => x.Product.Name),
@@ -277,13 +283,14 @@ namespace BE.Services.Implementation
                 .Take(pageSize)
                 .Select(x => new ProductListDto
                 {
+
                     Id = x.Product.ProductId,
                     Name = x.Product.Name,
                     Slug = x.Product.Slug,
                     Price = x.Product.Price,
                     DiscountPrice = x.Product.DiscountPrice,
                     FinalPrice = x.FinalPrice,
-                    Stock = x.Product.Stock,
+                    AvailableStock = x.AvailableStock,
                     ImageUrl = x.Product.Images
                         .Where(i => i.IsPrimary)
                         .Select(i => i.ImageUrl)

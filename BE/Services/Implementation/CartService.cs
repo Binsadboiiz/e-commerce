@@ -38,19 +38,28 @@ namespace BE.Services.Implementation
                 throw new AppException("Product does not exist.");
 
             // Check stock (either variant stock or product stock)
-            if (request.VariantId.HasValue)
-            {
-                var variant = await _context.ProductVariants.FindAsync(request.VariantId.Value);
-                if (variant == null || variant.ProductId != request.ProductId)
-                    throw new AppException("Invalid variant.");
-                if (variant.Stock < request.Quantity)
-                    throw new AppException("Insufficient variant stock!");
-            }
-            else
-            {
-                if (product.Stock < request.Quantity)
-                    throw new AppException("Insufficient stock!");
-            }
+            if (!request.VariantId.HasValue)
+                throw new AppException("Variant is required.");
+
+            var variant = await _context.ProductVariants
+                .FirstOrDefaultAsync(v =>
+                    v.VariantId == request.VariantId.Value &&
+                    v.ProductId == request.ProductId);
+
+            if (variant == null)
+                throw new AppException("Invalid variant.");
+
+            var inventory = await _context.Inventories
+                .FirstOrDefaultAsync(i => i.ProductVariantId == variant.VariantId);
+
+            if (inventory == null)
+                throw new AppException("Inventory not found.");
+
+            var available = inventory.AvailableStock - inventory.ReservedStock;
+
+            if (available < request.Quantity)
+                throw new AppException("Insufficient stock.");
+
 
             var cart = await GetOrCreateCart(userId);
 
@@ -180,6 +189,12 @@ namespace BE.Services.Implementation
                     Items = g.Select(ci =>
                     {
                         decimal effectivePrice = ci.Product.DiscountPrice ?? ci.Product.Price;
+
+                        var availableStock = ci.Variant?.Inventory != null
+                            ? ci.Variant.Inventory.AvailableStock
+                            - ci.Variant.Inventory.ReservedStock 
+                            : 0;
+
                         return new CartItemResponse
                         {
                             CartItemId = ci.Id,
@@ -189,11 +204,9 @@ namespace BE.Services.Implementation
                             Price = ci.Product.Price,
                             DiscountPrice = ci.Product.DiscountPrice,
                             Quantity = ci.Quantity,
-                            Stock = ci.Product.Stock,
+                            Stock = availableStock,
                             SubTotal = effectivePrice * ci.Quantity,
-                            VariantId = ci.VariantId,
-                            VariantName = ci.Variant?.VariantName,
-                            VariantValue = ci.Variant?.VariantValue
+                            VariantId = ci.VariantId
                         };
                     }).ToList()
                 }).ToList();

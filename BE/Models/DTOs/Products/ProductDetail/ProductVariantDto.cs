@@ -1,17 +1,13 @@
-﻿namespace BE.Models.DTOs.Products.ProductDetail
+﻿namespace BE.Models.DTOs.Products
 {
     public class ProductVariantDto
     {
         public long VariantId { get; set; }
 
-        public string VariantName { get; set; } = string.Empty;
+        public decimal Price { get; set; }
 
-        public string VariantValue { get; set; } = string.Empty;
+        public int AvailableStock { get; set; }
 
-        public decimal PriceAdjustment { get; set; }
-
-        public decimal FinalPrice { get; set; }
-
-        public int Stock { get; set; }
+        public List<VariantAttributeDto> Attributes { get; set; } = new();
     }
 }

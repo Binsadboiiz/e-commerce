@@ -24,6 +24,8 @@ namespace BE.Models.DTOs
         public string? CategoryName { get; set; }
         public string? BrandName { get; set; }
 
+        public int AvailableStock { get; set; }
+
         // Retailer-specific fields
         public string? Status { get; set; }
         public DateTime? CreatedAt { get; set; }

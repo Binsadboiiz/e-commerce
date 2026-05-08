@@ -1,7 +1,9 @@
 ﻿using BE.Data;
 using BE.Models.DTOs;
+using BE.Models.DTOs.Products;
 using BE.Models.DTOs.Products.ProductDetail;
 using BE.Models.DTOs.Products.ProductFilter;
+using BE.Models.Entities;
 using BE.Repositories.Interfaces;
 using BE.Services.Interface.Product;
 using Microsoft.EntityFrameworkCore;
@@ -46,7 +48,10 @@ namespace BE.Services.Implementation
                 Price = product.Price,
                 DiscountPrice = product.DiscountPrice,
                 FinalPrice = product.DiscountPrice ?? product.Price,
-                Stock = product.Stock,
+                AvailableStock = product.Variants
+                    .Sum(v => v.Inventory != null
+                        ? v.Inventory.AvailableStock - v.Inventory.ReservedStock
+                        : 0),
                 ImageUrl = product.Image,
                 RatingAvg = product.RatingAvg,
                 RatingCount = product.RatingCount,
@@ -96,9 +101,14 @@ namespace BE.Services.Implementation
             var projected = query.Select(p => new
             {
                 Product = p,
+
+                AvailableStock = p.Variants
+                    .Sum(v => v.Inventory != null
+                        ? v.Inventory.AvailableStock - v.Inventory.ReservedStock
+                        : 0),
+
                 FinalPrice = p.Variants.Any()
-                    ? p.Variants.Min(v =>
-                        (p.DiscountPrice ?? p.Price) + (v.PriceAdjustment ?? 0))
+                    ? p.Variants.Min(v => v.Price ?? p.Price)
                     : (p.DiscountPrice ?? p.Price)
             });
 
@@ -131,7 +141,7 @@ namespace BE.Services.Implementation
                     Price = x.Product.Price,
                     DiscountPrice = x.Product.DiscountPrice,
                     FinalPrice = x.FinalPrice,
-                    Stock = x.Product.Stock,
+                    AvailableStock = x.AvailableStock,
                     ImageUrl = x.Product.Image,
                     RatingAvg = x.Product.RatingAvg,
                     RatingCount = x.Product.RatingCount,
@@ -224,7 +234,7 @@ namespace BE.Services.Implementation
 
         public async Task<ProductDetailDto?> GetProductDetailBySlugAsync(string slug)
         {
-            return await _context.Products
+            var product = await _context.Products
                 .AsNoTracking()
                 .Where(p => p.Slug == slug)
                 .Select(p => new ProductDetailDto
@@ -239,26 +249,54 @@ namespace BE.Services.Implementation
                     RatingCount = p.RatingCount,
                     BrandName = p.Brand != null ? p.Brand.Name : null,
                     CategoryName = p.Category != null ? p.Category.Type : null,
+                    HasVariants = p.Variants.Any(),
 
                     Images = p.Images.Select(i => new ProductImageDto
                     {
                         ImageId = i.ImageId,
                         ImageUrl = i.ImageUrl,
                         IsPrimary = i.IsPrimary,
-                        SortOrder = i.SortOrder
+                        SortOrder = i.SortOrder,
+                        VariantId = i.VariantId
                     }).ToList(),
+
+
 
                     Variants = p.Variants.Select(v => new ProductVariantDto
                     {
                         VariantId = v.VariantId,
-                        VariantName = v.VariantName,
-                        VariantValue = v.VariantValue,
-                        PriceAdjustment = v.PriceAdjustment ?? 0,
-                        FinalPrice = (p.DiscountPrice ?? p.Price) + (v.PriceAdjustment ?? 0),
-                        Stock = v.Stock
+
+                        Price = v.Price ?? (p.DiscountPrice ?? p.Price),
+
+                        AvailableStock = v.Inventory != null
+                            ? v.Inventory.AvailableStock - v.Inventory.ReservedStock
+                            : 0,
+
+                        Attributes = v.VariantAttributes.Select(va => new VariantAttributeDto
+                        {
+                            AttributeId = va.AttributeValue.AttributeId,
+                            AttributeName = va.AttributeValue.AttributeType.Name,
+                            ValueId = va.ValueId,
+                            Value = va.AttributeValue.Value,
+                        }).ToList(),
                     }).ToList()
+
                 })
                 .FirstOrDefaultAsync();
+
+            if (product == null) return null;
+
+            product.VariantMap = product.Variants.ToDictionary(
+                variant =>
+                    string.Join("-",
+                        variant.Attributes
+                            .OrderBy(a => a.AttributeId)
+                            .Select(a => a.ValueId)
+                            ),
+                variant => variant.VariantId
+             );
+
+            return product;
         }
     }
 }

@@ -22,8 +22,13 @@ namespace BE.Models.Entities
 
         public DateTime CreatedAt { get; set; }
 
+        public long? VariantId { get; set; }
+
         // Navigation
         [ForeignKey(nameof(ProductId))]
         public Product Product { get; set; } = null!;
+
+        [ForeignKey(nameof(VariantId))]
+        public ProductVariant? Variant { get; set; }
     }
 }

@@ -27,8 +27,6 @@ namespace BE.Models.Entities
         [Column(TypeName = "decimal(18,2)")]
         public decimal? DiscountPrice { get; set; }
 
-        public int Stock { get; set; }
-
         public long CategoryId { get; set; }
         public long BrandId { get; set; }
 

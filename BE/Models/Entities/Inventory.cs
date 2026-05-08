@@ -1,8 +1,11 @@
-﻿namespace BE.Models.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace BE.Models.Entities
 {
+    [Table("Inventories")]
     public class Inventory
     {
-        public long Id { get; set; }
+        public long InventoryId { get; set; }
 
         public long ProductVariantId { get; set; }
 

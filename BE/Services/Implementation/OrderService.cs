@@ -185,11 +185,10 @@ namespace BE.Services.Implementation
                     .FirstOrDefaultAsync(v => v.VariantId == request.VariantId.Value && v.ProductId == request.ProductId);
 
                 if (variant == null) throw new AppException("Variant does not exist.", 404);
-                if (variant.Stock < request.Quantity) throw new AppException("Insufficient variant stock.");
-            }
-            else if (product.Stock < request.Quantity)
-            {
-                throw new AppException("Insufficient product stock.");
+                if (variant.Inventory == null || variant.Inventory.AvailableStock < request.Quantity)
+                {
+                    throw new AppException("Insufficient variant stock.");
+                }
             }
 
             return BuildSourceItem(product, variant, request.Quantity, null);
@@ -216,8 +215,6 @@ namespace BE.Services.Implementation
                 VariantId = variant?.VariantId,
                 ProductName = product.Name,
                 ProductImage = product.Image,
-                VariantName = variant?.VariantName,
-                VariantValue = variant?.VariantValue,
                 UnitPrice = unitPrice,
                 Quantity = quantity,
                 LineTotal = unitPrice * quantity
@@ -443,9 +440,10 @@ namespace BE.Services.Implementation
         /// </summary>
         private decimal GetUnitPrice(Product product, ProductVariant? variant)
         {
-            var basePrice = product.DiscountPrice ?? product.Price;
-            var priceAdjustment = variant?.PriceAdjustment != null ? (decimal)variant.PriceAdjustment.Value : 0m;
-            return basePrice + priceAdjustment;
+            var productPrice = product.DiscountPrice ?? product.Price;
+            var finalPrice = variant?.Price ?? productPrice;
+
+            return finalPrice;
         }
 
         /// <summary>
@@ -455,13 +453,17 @@ namespace BE.Services.Implementation
         {
             if (variant != null)
             {
-                if (variant.Stock < quantity)
-                    throw new AppException($"Variant '{variant.VariantValue}' does not have enough stock.");
+                var inventory = variant.Inventory;
+
+                if (inventory == null)
+                    throw new AppException("Inventory not found");
+
+                var available = inventory.AvailableStock - inventory.ReservedStock;
+
+                if (available < quantity)
+                    throw new AppException(("Insufficient variant stock."));
                 return;
             }
-
-            if (product.Stock < quantity)
-                throw new AppException($"Product '{product.Name}' does not have enough stock.");
         }
 
         private void ValidatePaymentMethod(string paymentMethod)

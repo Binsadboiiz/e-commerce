@@ -20,9 +20,14 @@ namespace BE.Models.DTOs.Products.ProductDetail
         public string? BrandName { get; set; }
         public string? CategoryName { get; set; }
 
+        public bool HasVariants { get; set; }
+
+
         [ForeignKey("ProductId")]
         public List<ProductImageDto> Images { get; set; } = [];
     
         public List<ProductVariantDto> Variants { get; set; } = [];
+
+        public Dictionary<string, long> VariantMap { get; set; } = new();
     }
 }

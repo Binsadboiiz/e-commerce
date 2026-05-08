@@ -16,9 +16,11 @@ namespace BE.Models.Entities
         public long ValueId { get; set; }
 
         [ForeignKey(nameof(VariantId))]
-        public ProductVariant ProductVariant { get; set; }
+        public ProductVariant ProductVariant { get; set; } = null!;
 
         [ForeignKey(nameof(ValueId))]
-        public AttributeValue AttributeValue { get; set; }
+        public AttributeValue AttributeValue { get; set; } = null!;
+
+
     }
 }

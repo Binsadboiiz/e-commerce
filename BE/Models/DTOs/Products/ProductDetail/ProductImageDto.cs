@@ -4,6 +4,8 @@
     {
         public long ImageId { get; set; }
 
+        public long? VariantId { get; set; }
+
         public string ImageUrl { get; set; } = string.Empty;
 
         public int SortOrder { get; set; }
