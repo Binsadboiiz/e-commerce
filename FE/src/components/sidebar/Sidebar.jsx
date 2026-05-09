@@ -9,7 +9,7 @@
 import { useState, useEffect, useContext, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { PRIMARY_NAV, RETAILER_NAV, UTILITY_NAV } from "./sidebar.config.jsx";
-import { AuthContext } from "@/context/AuthContext";
+import { AuthContext } from "../../features/auth/context/AuthContext.jsx";
 import SidebarView from "./SidebarView";
 
 export default function Sidebar() {

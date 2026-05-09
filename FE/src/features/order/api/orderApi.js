@@ -1,4 +1,4 @@
-import axiosClient from "../../../services/axiosClient";
+import axiosClient from "../../auth/api/axiosClient";
 
 const orderApi = {
     getOrders(userId) {

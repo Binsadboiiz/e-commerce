@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useAuth } from "../../../hooks/useAuth";
+import { useAuth } from "../../auth/hooks/useAuth";
 
 function decodeJwtPayload(token) {
     if (!token) {

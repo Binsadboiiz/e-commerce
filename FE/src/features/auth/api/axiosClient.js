@@ -6,18 +6,14 @@ const axiosClient = axios.create({
     headers: {
         "Content-Type": "application/json",
     }
-})
+});
 
 // intercept request
 axiosClient.interceptors.request.use(
-    config => {
-        const token = localStorage.getItem("token");
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
+    (config) => {
         return config;
     },
-    error => {
+    (error) => {
         return Promise.reject(error);
     }
 );
@@ -25,10 +21,14 @@ axiosClient.interceptors.request.use(
 // intercept response
 
 axiosClient.interceptors.response.use(
-    res => res.data,
-    error => {
+    (response) => response.data,
+
+    async (error) => {
+        if(error.response?.status === 401) {
+            window.location.href = "/login";
+        }
         return Promise.reject(error);
     }
-)
+);
 
 export default axiosClient;

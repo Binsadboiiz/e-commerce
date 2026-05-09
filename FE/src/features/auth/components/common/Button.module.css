@@ -1,0 +1,90 @@
+/* ===== Auth Button ===== */
+/* Solid black → white invert on hover, press animation */
+
+@keyframes buttonReveal {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.button {
+  width: 100%;
+  height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #111111;
+  color: #ffffff;
+  border: 1.5px solid #111111;
+  border-radius: 2px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition:
+    background-color 0.35s ease,
+    color 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.15s ease;
+  animation: buttonReveal 0.5s ease-out 0.5s both;
+}
+
+/* sweep effect via pseudo-element */
+.button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: #ffffff;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 0;
+}
+
+.button span,
+.button > * {
+  position: relative;
+  z-index: 1;
+}
+
+.button:hover {
+  color: #111111;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.button:hover::before {
+  transform: scaleX(1);
+}
+
+.button:active {
+  transform: scale(0.985);
+  box-shadow: none;
+}
+
+/* disabled state */
+.button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.button:disabled::before {
+  display: none;
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .button {
+    height: 48px;
+    font-size: 11px;
+  }
+}

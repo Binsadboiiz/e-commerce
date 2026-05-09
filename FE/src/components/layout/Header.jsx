@@ -29,8 +29,8 @@ function Header() {
             {/* RIGHT */}
             <div className={styles.right}>
                 <ul className={styles.menu}>
-                    <li>Sign up</li>
-                    <li>Login</li>
+                    <li><Link to="/register" className={styles.menuLink}>Sign up</Link></li>
+                    <li><Link to="/login" className={styles.menuLink}>Login</Link></li>
                 </ul>
 
                 <div

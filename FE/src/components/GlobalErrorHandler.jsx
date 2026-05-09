@@ -1,9 +1,9 @@
 import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { ErrorContext } from "@/context/ErrorContext";
-import axiosClient from "@/services/axiosClient";
-import { getErrorHandle } from "@/utils/ErrorHandle";
-import { ROUTES } from "@/config/route.config";
+import { ErrorContext } from "../context/ErrorContext";
+import axiosClient from "../features/auth/api/axiosClient";
+import { getErrorHandle } from "../utils/ErrorHandle";
+import { ROUTES } from "../config/route.config";
 
 export default function GlobalErrorHandler({ children }) {
     const { setGlobalError } = useContext(ErrorContext);

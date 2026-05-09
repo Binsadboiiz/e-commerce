@@ -58,10 +58,12 @@ namespace BE.Services.Implementation
                     Role = RoleConstants.Customer
                 };
 
-                await _repository.CreateAccountAsync(account);
                 await _repository.CreateUserAsync(user);
+                await _repository.CreateAccountAsync(account);
 
                 await _repository.SaveChangeAsync();
+
+                await tx.CommitAsync();
 
                 string token = _jwtHelper.GenerateToken(user.UserId, account.Email, account.Role);
 
@@ -73,9 +75,7 @@ namespace BE.Services.Implementation
                     UserId = user.UserId
                 };
 
-                await tx.CommitAsync();
-
-            } catch(AppException ex)
+            } catch(Exception ex)
             {
                 await tx.RollbackAsync();
                 throw new AppException(ex.Message, ex.StatusCode);
