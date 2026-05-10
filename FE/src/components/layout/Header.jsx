@@ -1,12 +1,14 @@
 import { useContext, useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation, Route } from 'react-router-dom';
 import { FiShoppingCart, FiUser, FiLogOut } from 'react-icons/fi';
 import styles from './Header.module.css';
 import SearchBar from '@/features/product/components/list/search/SearchBar';
 import { useCart } from '@/features/cart/hooks/useCart';
 import { AuthContext } from '@/features/auth/context/AuthContext';
 import { logoutApi } from '@/features/auth/api/authService';
- 
+import { ROUTES } from '../../config/route.config.js';
+import { notify } from '../../utils/Notify.js';
+
 function Header() {
     const location = useLocation();
     const navigate = useNavigate();
@@ -19,10 +21,12 @@ function Header() {
     const handleLogout = async () => {
         try {
             await logoutApi();
+            notify.success('Logout successfully');
             setUser(null);
-            navigate('/login');
+            navigate(ROUTES.HOME);
         } catch (error) {
-            console.error("Logout failed:", error);
+            notify.error("Logout failed");
+            console.log(error.response.data.message);
         }
     };
  
@@ -30,7 +34,7 @@ function Header() {
         <header className={styles.headerContainer}>
             {/* LEFT */}
             <div className={styles.left}>
-                <Link to="/" className={styles.logo}>
+                <Link to={ROUTES.HOME} className={styles.logo}>
                     <h1 className={styles.logoText}>LOGO</h1>
                 </Link>
             </div>
@@ -48,12 +52,12 @@ function Header() {
                             className={styles.userInfo} 
                             onClick={() => setShowDropdown(!showDropdown)}
                         >
+                            <span className={styles.userName}>{user.fullName}</span>
                             <img 
                                 src={user.avatar || 'https://via.placeholder.com/35'} 
                                 alt={user.fullName} 
                                 className={styles.avatar} 
                             />
-                            <span className={styles.userName}>{user.fullName}</span>
                         </div>
                         
                         {showDropdown && (
@@ -67,14 +71,14 @@ function Header() {
                     </div>
                 ) : (
                     <ul className={styles.menu}>
-                        <li><Link to="/register" className={styles.menuLink}>Sign up</Link></li>
-                        <li><Link to="/login" className={styles.menuLink}>Login</Link></li>
+                        <li><Link to={ROUTES.REGISTER} className={styles.menuLink}>Sign up</Link></li>
+                        <li><Link to={ROUTES.LOGIN} className={styles.menuLink}>Login</Link></li>
                     </ul>
                 )}
  
                 <div
                     className={styles.cart}
-                    onClick={() => navigate('/cart')}
+                    onClick={() => navigate(ROUTES.CART)}
                     role="button"
                     aria-label="Shopping cart"
                 >

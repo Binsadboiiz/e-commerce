@@ -5,6 +5,8 @@ import Button from "../common/Button";
 import { loginApi } from "../../api/authService";
 import { useAuth } from "../../hooks/useAuth";
 import styles from "./LoginForm.module.css";
+import { notify } from '../../../../utils/Notify.js';
+import { ROUTES } from "../../../../config/route.config.js";
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -20,8 +22,10 @@ export default function LoginForm() {
       setLoading(true);
       const res = await loginApi(form);
       setUser(res.data);
-      navigate("/");
+      notify.success("Login Successfully");
+      navigate(ROUTES.HOME);
     } catch (err) {
+      notify.error("Login failed");
       console.log(err.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
@@ -34,7 +38,7 @@ export default function LoginForm() {
         <h2 className={styles.title}>Login</h2>
         <div className={styles.subtitle}>
           New here?{" "}
-          <Link to="/register" className={styles.link}>
+          <Link to={ROUTES.REGISTER} className={styles.link}>
             Create an account
           </Link>
         </div>
@@ -64,7 +68,7 @@ export default function LoginForm() {
             <span>{loading ? "Verifying..." : "Sign In →"}</span>
           </Button>
         </div>
-        <Link to="/" className={styles.backToHomeLink}>Back to Home</Link>
+        <Link to={ROUTES.HOME} className={styles.backToHomeLink}>Back to Home</Link>
       </form>
     </div>
   );
