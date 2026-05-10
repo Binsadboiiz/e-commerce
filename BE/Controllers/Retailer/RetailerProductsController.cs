@@ -35,14 +35,16 @@ namespace BE.Controllers.Retailer
             var (items, total) = await _productService
                 .GetProductsByRetailerAsync(userId, page, pageSize, search, status, sortBy);
 
-            return Ok(new
+            var data = new
             {
                 items,
                 total,
                 page,
                 pageSize,
                 totalPages = (int)Math.Ceiling((double)total / pageSize)
-            });
+            };
+
+            return Ok(ApiResponse<object>.SuccessResponse(data));
         }
         
         [HttpPost("")]
@@ -55,17 +57,14 @@ namespace BE.Controllers.Retailer
 
             if (errors.Any())
             {
-                return BadRequest(new
-                {
-                    Errors = errors
-                });
+                return BadRequest(ApiResponse<object>.FailureResponse("Validation failed."));
             }
             string userId = UserClaimsHelper.GetUserId(User);
 
             var result = await _productService
                 .CreateProductAsync(userId, request);
 
-            return Ok(result);
+            return Ok(ApiResponse<ProductResponse>.SuccessResponse(result, "Product created successfully."));
         }
         
         [HttpPut("update/{productId}")]
@@ -81,7 +80,7 @@ namespace BE.Controllers.Retailer
                     userId,
                     request);
 
-            return Ok(result);
+            return Ok(ApiResponse<ProductResponse>.SuccessResponse(result, "Product updated successfully."));
         }
         
         [HttpDelete("remove/{productId}")]
@@ -94,7 +93,7 @@ namespace BE.Controllers.Retailer
                 productId,
                 userId);
 
-            return NoContent();
+            return Ok(ApiResponse.SuccessResponse("Product deleted successfully."));
         }
     }
 }

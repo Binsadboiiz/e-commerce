@@ -23,7 +23,7 @@ namespace BE.Controllers.Checkout
         {
             var userId = UserClaimsHelper.GetUserId(User);
             var response = await _orderService.GetUserAddressesAsync(userId);
-            return Ok(response);
+            return Ok(ApiResponse<IEnumerable<CheckoutAddressDto>>.SuccessResponse(response));
         }
 
         [HttpPost("preview")]
@@ -31,7 +31,7 @@ namespace BE.Controllers.Checkout
         {
             var userId = UserClaimsHelper.GetUserId(User);
             var response = await _orderService.PreviewCartCheckoutAsync(userId, request);
-            return Ok(response);
+            return Ok(ApiResponse<CheckoutPreviewResponse>.SuccessResponse(response));
         }
 
         [HttpPost("place-order")]
@@ -39,7 +39,7 @@ namespace BE.Controllers.Checkout
         {
             var userId = UserClaimsHelper.GetUserId(User);
             var response = await _orderService.PlaceCartOrderAsync(userId, request);
-            return Ok(response);
+            return Ok(ApiResponse<PlaceOrderResponse>.SuccessResponse(response, "Order placed successfully."));
         }
 
         [HttpPost("buy-now/preview")]
@@ -47,7 +47,7 @@ namespace BE.Controllers.Checkout
         {
             var userId = UserClaimsHelper.GetUserId(User);
             var response = await _orderService.PreviewBuyNowAsync(userId, request);
-            return Ok(response);
+            return Ok(ApiResponse<CheckoutPreviewResponse>.SuccessResponse(response));
         }
 
         [HttpPost("buy-now/place-order")]
@@ -55,13 +55,13 @@ namespace BE.Controllers.Checkout
         {
             var userId = UserClaimsHelper.GetUserId(User);
             var response = await _orderService.PlaceBuyNowOrderAsync(userId, request);
-            return Ok(response);
+            return Ok(ApiResponse<PlaceOrderResponse>.SuccessResponse(response, "Order placed successfully."));
         }
 
         [HttpGet("payment-methods")]
         public IActionResult GetPaymentMethods()
         {
-            return Ok(new[]
+            var methods = new[]
             {
                 new
                 {
@@ -81,7 +81,8 @@ namespace BE.Controllers.Checkout
                     label = "Google Pay",
                     isEnabled = false
                 }
-            });
+            };
+            return Ok(ApiResponse<object>.SuccessResponse(methods));
         }
     }
 }

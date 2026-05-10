@@ -1,4 +1,4 @@
-﻿using BE.Models.DTOs;
+using BE.Models.DTOs;
 using BE.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +22,7 @@ namespace BE.Controllers.Category
         public async Task<IActionResult> GetCategories()
         {
             var result = await _categoryService.GetAllAsync();
-            return Ok(result);
+            return Ok(ApiResponse<IEnumerable<CategoryDto>>.SuccessResponse(result));
         }
     }
 }

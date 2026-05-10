@@ -19,7 +19,7 @@ namespace BE.Controllers.Order
         public async Task<IActionResult> GetUserOrders(string userId)
         {
             var data = await _service.GetUserOrderAsync(userId);
-            return Ok(data);
+            return Ok(ApiResponse<IEnumerable<MyOrderDto>>.SuccessResponse(data));
         }
         
         //Get order tracking
@@ -27,7 +27,7 @@ namespace BE.Controllers.Order
         public async Task<IActionResult> GetTracking(long orderId, string userId)
         {
             var data = await _service.GetOrderTrackingAsync(orderId, userId);
-            return Ok(data);
+            return Ok(ApiResponse<OrderTrackingResponse>.SuccessResponse(data));
         }
         
         //Update Status
@@ -35,7 +35,7 @@ namespace BE.Controllers.Order
         public async Task<IActionResult> UpdateStatus(long orderId, UpdateTrackingStatusRequest request)
         {
             await _service.UpdateOrderStatusAsync(orderId, request);
-            return Ok(new { message = "success" });
+            return Ok(ApiResponse.SuccessResponse("Status updated successfully."));
         }
     }
 }

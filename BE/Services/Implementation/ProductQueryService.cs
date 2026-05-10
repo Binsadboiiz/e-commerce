@@ -108,7 +108,7 @@ namespace BE.Services.Implementation
                         : 0),
 
                 FinalPrice = p.Variants.Any()
-                    ? p.Variants.Min(v => v.Price ?? p.Price)
+                    ? p.Variants.Min(v => v.PriceAdjustment ?? p.Price)
                     : (p.DiscountPrice ?? p.Price)
             });
 
@@ -266,7 +266,7 @@ namespace BE.Services.Implementation
                     {
                         VariantId = v.VariantId,
 
-                        Price = v.Price ?? (p.DiscountPrice ?? p.Price),
+                        Price = v.PriceAdjustment ?? (p.DiscountPrice ?? p.Price),
 
                         AvailableStock = v.Inventory != null
                             ? v.Inventory.AvailableStock - v.Inventory.ReservedStock

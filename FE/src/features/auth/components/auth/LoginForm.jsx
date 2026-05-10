@@ -19,10 +19,10 @@ export default function LoginForm() {
     try {
       setLoading(true);
       const res = await loginApi(form);
-      setUser(res);
+      setUser(res.data);
       navigate("/");
     } catch (err) {
-      alert(err.response?.data?.message || "Login failed");
+      console.log(err.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
     }

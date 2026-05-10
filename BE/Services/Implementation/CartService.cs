@@ -153,6 +153,12 @@ namespace BE.Services.Implementation
                         .ThenInclude(p => p.Shop)
                 .Include(c => c.CartItems)
                     .ThenInclude(ci => ci.Variant)
+                        .ThenInclude(v => v.Inventory)
+                .Include(c => c.CartItems)
+                    .ThenInclude(ci => ci.Variant)
+                        .ThenInclude(v => v.VariantAttributes)
+                            .ThenInclude(va => va.AttributeValue)
+                                .ThenInclude(av => av.AttributeType)
                 .FirstOrDefaultAsync(c => c.UserId == userId);
 
             if (cart == null)
@@ -188,12 +194,24 @@ namespace BE.Services.Implementation
                     ShopLogo = g.Key.Logo,
                     Items = g.Select(ci =>
                     {
-                        decimal effectivePrice = ci.Product.DiscountPrice ?? ci.Product.Price;
+                        // Use variant price if available, otherwise fallback to product price
+                        decimal basePrice = ci.Variant?.PriceAdjustment ?? ci.Product.Price;
+                        decimal? discountPrice = ci.Product.DiscountPrice;
+                        decimal effectivePrice = discountPrice ?? basePrice;
 
                         var availableStock = ci.Variant?.Inventory != null
-                            ? ci.Variant.Inventory.AvailableStock
-                            - ci.Variant.Inventory.ReservedStock 
+                            ? ci.Variant.Inventory.AvailableStock - ci.Variant.Inventory.ReservedStock 
                             : 0;
+
+                        // Build variant name and value (e.g., "Color: Red, Size: XL")
+                        var variantName = string.Empty;
+                        var variantValue = string.Empty;
+
+                        if (ci.Variant?.VariantAttributes != null && ci.Variant.VariantAttributes.Any())
+                        {
+                            variantName = string.Join(", ", ci.Variant.VariantAttributes.Select(va => va.AttributeValue.AttributeType.Name));
+                            variantValue = string.Join(", ", ci.Variant.VariantAttributes.Select(va => va.AttributeValue.Value));
+                        }
 
                         return new CartItemResponse
                         {
@@ -201,12 +219,14 @@ namespace BE.Services.Implementation
                             ProductId = ci.ProductId,
                             ProductName = ci.Product.Name,
                             ProductImage = ci.Product.Image,
-                            Price = ci.Product.Price,
-                            DiscountPrice = ci.Product.DiscountPrice,
+                            Price = basePrice,
+                            DiscountPrice = discountPrice,
                             Quantity = ci.Quantity,
                             Stock = availableStock,
                             SubTotal = effectivePrice * ci.Quantity,
-                            VariantId = ci.VariantId
+                            VariantId = ci.VariantId,
+                            VariantName = variantName,
+                            VariantValue = variantValue
                         };
                     }).ToList()
                 }).ToList();

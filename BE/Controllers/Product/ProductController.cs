@@ -27,7 +27,7 @@ namespace BE.Controllers.Product
         public async Task<ActionResult<ProductListDto>> GetById(long id)
         {
             var result = await _productQueryService.GetByIdAsync(id);
-            return Ok(result);
+            return Ok(ApiResponse<ProductListDto>.SuccessResponse(result));
         }
 
         [HttpGet("filter")]
@@ -35,21 +35,23 @@ namespace BE.Controllers.Product
         {
             var (items, total) = await _productQueryService.FilterAsync(filter);
 
-            return Ok(new
+            var data = new
             {
                 items,
                 total,
                 page = filter.Page,
                 pageSize = filter.PageSize,
                 totalPages = (int)Math.Ceiling(total / (double)filter.PageSize)
-            });
+            };
+
+            return Ok(ApiResponse<object>.SuccessResponse(data));
         }
 
         [HttpGet("filter/meta")]
         public async Task<IActionResult> GetMeta([FromQuery] ProductFilterDto filter)
         {
             var result = await _productQueryService.GetFilterMetaAsync(filter);
-            return Ok(result);
+            return Ok(ApiResponse<ProductFilterMetaDto>.SuccessResponse(result));
         }
 
         [HttpGet("{slug}")]
@@ -58,9 +60,9 @@ namespace BE.Controllers.Product
             var product = await _productQueryService.GetProductDetailBySlugAsync(slug);
 
             if (product == null)
-                return NotFound();
+                return NotFound(ApiResponse.FailureResponse("Product not found."));
 
-            return Ok(product);
+            return Ok(ApiResponse<ProductDetailDto>.SuccessResponse(product));
         }
     }
 }

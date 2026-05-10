@@ -1,4 +1,5 @@
 using BE.Models.DTOs.Auth;
+using BE.Models.DTOs;
 using BE.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,12 +18,11 @@ namespace BE.Controllers.Auth
         }
 
         [HttpGet("profile")]
-        public IActionResult Profile()
+        public async Task<IActionResult> Profile()
         {
-            return Ok(new
-            {
-                message = "profile api working"
-            });
+            var userId = Helpers.UserClaimsHelper.GetUserId(User);
+            var result = await _service.GetProfileAsync(userId);
+            return Ok(ApiResponse<UserDto>.SuccessResponse(result));
         }
 
         [HttpPost("register")]
@@ -32,7 +32,7 @@ namespace BE.Controllers.Auth
 
             SetCookie(result.AccessToken);
 
-            return Ok(result);
+            return Ok(ApiResponse<AuthResponse>.SuccessResponse(result, "Register Successfully!"));
         }
 
         [HttpPost("login")]
@@ -41,7 +41,7 @@ namespace BE.Controllers.Auth
             var result = await _service.LoginAsync(request);
 
             SetCookie(result.AccessToken);
-            return Ok(result);
+            return Ok(ApiResponse<AuthResponse>.SuccessResponse(result, "Login Successfully!"));
         }
 
         [HttpPost("logout")]
@@ -49,10 +49,7 @@ namespace BE.Controllers.Auth
         {
             Response.Cookies.Delete("accessToken");
 
-            return Ok(new
-            {
-                message = "Logout success"
-            });
+            return Ok(ApiResponse.SuccessResponse("Logout success"));
         }
 
         private void SetCookie(string token)

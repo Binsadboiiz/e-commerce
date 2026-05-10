@@ -19,10 +19,10 @@ export default function RegisterForm() {
     try {
       setLoading(true);
       const res = await registerApi(form);
-      setUser(res);
+      setUser(res.data);
       navigate("/");
     } catch (err) {
-      alert(err.response?.data?.message || "Register failed");
+      console.log(err.response?.data?.message || "Register failed");
     } finally {
       setLoading(false);
     }
