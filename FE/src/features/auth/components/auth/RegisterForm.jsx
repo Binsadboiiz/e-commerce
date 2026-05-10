@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import AuthInput from "./AuthInput";
-import Button from "../common/Button";
-import { useAuth } from "../../hooks/useAuth";
+import { Link, useNavigate } from "react-router-dom";
 import { registerApi } from "../../api/authService";
+import { useAuth } from "../../hooks/useAuth";
+import Button from "../common/Button";
+import AuthInput from "./AuthInput";
 import styles from "./RegisterForm.module.css";
+import { ROUTES } from "../../../../config/route.config.js";
+import { notify } from '../../../../utils/Notify.js';
 
 export default function RegisterForm() {
   const navigate = useNavigate();
@@ -20,8 +22,10 @@ export default function RegisterForm() {
       setLoading(true);
       const res = await registerApi(form);
       setUser(res.data);
-      navigate("/");
+      notify.success("Register Successfully");
+      navigate(ROUTES.HOME);
     } catch (err) {
+      notify.error("Register Failed!");
       console.log(err.response?.data?.message || "Register failed");
     } finally {
       setLoading(false);
@@ -34,7 +38,7 @@ export default function RegisterForm() {
         <h2 className={styles.title}>Register</h2>
         <div className={styles.subtitle}>
           Already a member?{" "}
-          <Link to="/login" className={styles.link}>
+          <Link to={ROUTES.LOGIN} className={styles.link}>
             Login here
           </Link>
         </div>
@@ -73,7 +77,7 @@ export default function RegisterForm() {
             <span>{loading ? "Processing..." : "Create Account →"}</span>
           </Button>
         </div>
-        <Link to="/" className={styles.backToHomeLink}>Back to Home</Link>
+        <Link to={ROUTES.HOME} className={styles.backToHomeLink}>Back to Home</Link>
       </form>
     </div>
   );
