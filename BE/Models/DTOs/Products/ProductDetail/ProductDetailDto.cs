@@ -29,5 +29,7 @@ namespace BE.Models.DTOs.Products.ProductDetail
         public List<ProductVariantDto> Variants { get; set; } = [];
 
         public Dictionary<string, long> VariantMap { get; set; } = new();
+
+        public List<ProductAttributeGroupDto> Attributes { get; set; } = [];
     }
 }

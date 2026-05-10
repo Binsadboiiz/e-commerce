@@ -260,7 +260,30 @@ namespace BE.Services.Implementation
                         VariantId = i.VariantId
                     }).ToList(),
 
+                    Attributes = p.Variants
+                        .SelectMany(v => v.VariantAttributes)
+                        .GroupBy(va => new
+                        {
+                            va.AttributeValue.AttributeId,
+                            va.AttributeValue.AttributeType.Name
+                        })
+                        .Select(g => new ProductAttributeGroupDto
+                        {
+                            AttributeId = g.Key.AttributeId,
+                            AttributeName = g.Key.Name,
 
+                            AttributeValues = g 
+                                .GroupBy(x => new
+                                {
+                                    x.ValueId,
+                                    x.AttributeValue.Value
+                                })
+                                .Select(x => new ProductAttributeValueDto
+                                {
+                                    ValueId = x.Key.ValueId,
+                                    Value = x.Key.Value
+                                }).ToList(),
+                        }).ToList(),
 
                     Variants = p.Variants.Select(v => new ProductVariantDto
                     {
@@ -271,6 +294,9 @@ namespace BE.Services.Implementation
                         AvailableStock = v.Inventory != null
                             ? v.Inventory.AvailableStock - v.Inventory.ReservedStock
                             : 0,
+
+                        IsAvailable = v.Inventory != null
+                            && (v.Inventory.AvailableStock - v.Inventory.ReservedStock) > 0,
 
                         Attributes = v.VariantAttributes.Select(va => new VariantAttributeDto
                         {
@@ -283,6 +309,8 @@ namespace BE.Services.Implementation
 
                 })
                 .FirstOrDefaultAsync();
+
+
 
             if (product == null) return null;
 
