@@ -1,4 +1,4 @@
-﻿using BE.Models.DTOs.Auth;
+using BE.Models.DTOs.Auth;
 
 namespace BE.Services.Interface
 {
@@ -6,5 +6,6 @@ namespace BE.Services.Interface
     {
         Task<AuthResponse> RegisterAsync(RegisterRequest request);
         Task<AuthResponse> LoginAsync(LoginRequest request);
+        Task<UserDto> GetProfileAsync(string userId);
     }
 }

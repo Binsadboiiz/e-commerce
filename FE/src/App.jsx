@@ -1,5 +1,5 @@
 import { ErrorProvider } from './context/ErrorContext'
-import { AuthProvider } from './context/AuthContext'
+import { AuthProvider } from './features/auth/context/AuthContext'
 import { CartProvider } from './features/cart/context/CartContext'
 import AppRoutes from './routes/AppRoutes'
 import GlobalErrorHandler from './components/GlobalErrorHandler'

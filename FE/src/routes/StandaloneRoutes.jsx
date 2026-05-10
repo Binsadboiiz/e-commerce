@@ -8,14 +8,15 @@ import { Route } from 'react-router-dom'
 import { ROUTES } from '../config/route.config'
 
 import ErrorPage from '../pages/error/ErrorPage'
-import Login from '../pages/auth/Login'
-import Register from '../pages/auth/Register'
+import RegisterPage from '../features/auth/pages/RegisterPage'
+import LoginPage from '../features/auth/pages/LoginPage'
+
 
 export default function StandaloneRoutes() {
     return (
         <>
-            <Route path={ROUTES.LOGIN} element={<Login />} />
-            <Route path={ROUTES.REGISTER} element={<Register />} />
+            <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+            <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
             <Route path={ROUTES.ERROR} element={<ErrorPage />} />
             <Route path="*" element={<ErrorPage />} />
         </>

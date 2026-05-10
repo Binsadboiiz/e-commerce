@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { getProfileApi } from "../services/authService";
+import { getProfileApi } from "../api/authService";
 
 // Khởi tạo Context để chia sẻ dữ liệu xác thực
 export const AuthContext = createContext();

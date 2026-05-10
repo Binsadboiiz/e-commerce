@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth"
-import { useRole } from "../hooks/useRole";
+import { useAuth } from "../features/auth/hooks/useAuth"
+import { useRole } from "../features/auth/hooks/useRole";
 
 // Nhận vào children (nội dung trang cần bảo vệ) và allowedRoles (mảng các quyền được phép truy cập)
 const ProtectedRoute = ({ children, allowedRoles }) => {

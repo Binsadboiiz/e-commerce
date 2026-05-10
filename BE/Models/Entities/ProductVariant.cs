@@ -11,8 +11,9 @@ namespace BE.Models.Entities
 
         public long ProductId { get; set; }
 
-        public string? SKU { get; set; }
-        public decimal? Price { get; set; } 
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal? PriceAdjustment { get; set; } 
 
         // Navigation
         [ForeignKey(nameof(ProductId))]

@@ -441,7 +441,7 @@ namespace BE.Services.Implementation
         private decimal GetUnitPrice(Product product, ProductVariant? variant)
         {
             var productPrice = product.DiscountPrice ?? product.Price;
-            var finalPrice = variant?.Price ?? productPrice;
+            var finalPrice = variant?.PriceAdjustment ?? productPrice;
 
             return finalPrice;
         }

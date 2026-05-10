@@ -25,9 +25,9 @@ namespace BE.Controllers.Cart
         {
             var userId = UserClaimsHelper.GetUserId(User);
             var cart = await _cartService.GetCart(userId);
-            return Ok(cart);
+            return Ok(ApiResponse<CartResponse>.SuccessResponse(cart));
         }
-
+ 
         /// <summary>
         /// Add a product to cart
         /// </summary>
@@ -36,9 +36,9 @@ namespace BE.Controllers.Cart
         {
             var userId = UserClaimsHelper.GetUserId(User);
             var cart = await _cartService.AddToCart(userId, request);
-            return Ok(cart);
+            return Ok(ApiResponse<CartResponse>.SuccessResponse(cart, "Product added to cart."));
         }
-
+ 
         /// <summary>
         /// Update item quantity in cart
         /// </summary>
@@ -47,9 +47,9 @@ namespace BE.Controllers.Cart
         {
             var userId = UserClaimsHelper.GetUserId(User);
             var cart = await _cartService.UpdateQuantity(userId, request);
-            return Ok(cart);
+            return Ok(ApiResponse<CartResponse>.SuccessResponse(cart, "Quantity updated."));
         }
-
+ 
         /// <summary>
         /// Remove a specific item from cart
         /// </summary>
@@ -58,9 +58,9 @@ namespace BE.Controllers.Cart
         {
             var userId = UserClaimsHelper.GetUserId(User);
             await _cartService.RemoveItem(userId, productId, variantId);
-            return Ok(new { message = "Item removed." });
+            return Ok(ApiResponse.SuccessResponse("Item removed."));
         }
-
+ 
         /// <summary>
         /// Clear all items in cart
         /// </summary>
@@ -69,7 +69,7 @@ namespace BE.Controllers.Cart
         {
             var userId = UserClaimsHelper.GetUserId(User);
             await _cartService.ClearCart(userId);
-            return Ok(new { message = "Cart cleared." });
+            return Ok(ApiResponse.SuccessResponse("Cart cleared."));
         }
     }
 }
