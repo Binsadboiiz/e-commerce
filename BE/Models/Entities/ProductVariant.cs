@@ -13,7 +13,7 @@ namespace BE.Models.Entities
 
 
         [Column(TypeName = "decimal(18,2)")]
-        public decimal? PriceAdjustment { get; set; } 
+        public decimal? Price { get; set; } 
 
         // Navigation
         [ForeignKey(nameof(ProductId))]

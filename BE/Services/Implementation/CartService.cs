@@ -195,7 +195,7 @@ namespace BE.Services.Implementation
                     Items = g.Select(ci =>
                     {
                         // Use variant price if available, otherwise fallback to product price
-                        decimal basePrice = ci.Variant?.PriceAdjustment ?? ci.Product.Price;
+                        decimal basePrice = ci.Variant?.Price ?? ci.Product.Price;
                         decimal? discountPrice = ci.Product.DiscountPrice;
                         decimal effectivePrice = discountPrice ?? basePrice;
 

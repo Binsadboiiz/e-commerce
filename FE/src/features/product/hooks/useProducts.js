@@ -28,7 +28,7 @@ export default function useProducts(params) {
                     productsService.getFilterMeta(params)
                 ]);
 
-                setProducts(productRes.items || []);
+                setProducts(productRes.data.items || []);
                 setMeta(metaRes);
 
                 setPagination({

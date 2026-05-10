@@ -81,7 +81,7 @@ namespace BE.Services.Implementation
                     var variant = new ProductVariant
                     {
                         ProductId = product.ProductId,
-                        PriceAdjustment = variantRequest.Price,
+                        Price = variantRequest.Price,
                     };
 
                     _context.ProductVariants.Add(variant);
@@ -253,7 +253,7 @@ namespace BE.Services.Implementation
 
                 FinalPrice = p.Variants.Any()
                     ? p.Variants.Min(v =>
-                        (p.DiscountPrice ?? p.Price) + (v.PriceAdjustment ?? 0))
+                        (p.DiscountPrice ?? p.Price) + (v.Price ?? 0))
                     : (p.DiscountPrice ?? p.Price)
             });
 
