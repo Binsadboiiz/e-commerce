@@ -8,6 +8,12 @@
 
         public int AvailableStock { get; set; }
 
+        public string SKU { get; set; }
+
+        public bool IsAvailable { get; set; }
+
+        public List<long> ImageIds { get; set; }
+
         public List<VariantAttributeDto> Attributes { get; set; } = new();
     }
 }
