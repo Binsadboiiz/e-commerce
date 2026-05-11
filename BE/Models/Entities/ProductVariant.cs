@@ -12,6 +12,11 @@ namespace BE.Models.Entities
         public long ProductId { get; set; }
 
 
+        public int? Stock { get; set; }
+
+        [MaxLength(100)]
+        public string? SKU { get; set; }
+
         [Column(TypeName = "decimal(18,2)")]
         public decimal? Price { get; set; } 
 

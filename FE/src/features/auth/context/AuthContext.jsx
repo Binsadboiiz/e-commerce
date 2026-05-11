@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { getProfileApi } from "../api/authService";
+import { ROLES } from "../../../constants/roles";
 
 // Khởi tạo Context để chia sẻ dữ liệu xác thực
 export const AuthContext = createContext();
@@ -27,7 +28,7 @@ export const AuthProvider = ({children}) => {
 
     // Cung cấp state user, hàm thay đổi state (setUser), và trạng thái loading cho các component con
     return(
-        <AuthContext.Provider value={{user, setUser, loading}}>
+        <AuthContext.Provider value={{ user, setUser, loading, isAuthenticated: !!user }}>
             {children}
         </AuthContext.Provider>
     )

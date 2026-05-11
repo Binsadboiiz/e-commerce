@@ -66,6 +66,7 @@ namespace BE.Services.Implementation
                     Slug = slug,
                     Description = request.Description,
                     ShopId = shop.ShopId,
+                    RetailerId = retailerUserId,
                     CategoryId = request.CategoryId,
                     BrandId = request.BrandId,
                     Status = ProductConstants.ProductStatusActive,
@@ -76,17 +77,24 @@ namespace BE.Services.Implementation
                 _context.Products.Add(product);
                 await _context.SaveChangesAsync();
 
+                int totalStock = 0;
+
                 foreach (var variantRequest in request.Variants)
                 {
+                    if (variantRequest.InitialStock < 0)
+                        throw new Exception("Initial stock must be >= 0.");
+
                     var variant = new ProductVariant
                     {
                         ProductId = product.ProductId,
                         Price = variantRequest.Price,
+                        Stock = variantRequest.InitialStock
                     };
 
                     _context.ProductVariants.Add(variant);
                     await _context.SaveChangesAsync();
 
+                    // Create Inventory record for each variant
                     var inventory = new Inventory
                     {
                         ProductVariantId = variant.VariantId,
@@ -97,6 +105,14 @@ namespace BE.Services.Implementation
                         UpdatedAt = DateTime.UtcNow
                     };
                     _context.Inventories.Add(inventory);
+
+                    totalStock += variantRequest.InitialStock;
+                }
+
+                // Auto set OUT_OF_STOCK if total stock = 0
+                if (totalStock == 0)
+                {
+                    product.Status = ProductConstants.ProductStatusOutOfStock;
                 }
 
                 await _context.SaveChangesAsync();
@@ -226,6 +242,7 @@ namespace BE.Services.Implementation
                 .Include(p => p.Category)
                 .Include(p => p.Brand)
                 .Include(p => p.Variants)
+                    .ThenInclude(v => v.Inventory)
                 .Include(p => p.Images)
                 .Where(p => p.ShopId == shop.ShopId);
 
@@ -237,19 +254,18 @@ namespace BE.Services.Implementation
             if (!string.IsNullOrWhiteSpace(status) && status.ToLower() != "all")
                 query = query.Where(p => p.Status == status.ToLower());
 
-            // PROJECT — tính SoldCount từ Inventory
+            // PROJECT — tính stock/sold từ Inventory
             var projected = query.Select(p => new
             {
                 Product = p,
 
                 AvailableStock = p.Variants
                     .Sum(v => v.Inventory != null
-                        ? v.Inventory.AvailableStock - v.Inventory.ReservedStock : 0),
+                        ? v.Inventory.AvailableStock - v.Inventory.ReservedStock
+                        : 0),
 
-                SoldCount = _context.Inventories
-                    .Where(inv => p.Variants.Select(v => v.VariantId)
-                        .Contains(inv.ProductVariantId))
-                    .Sum(inv => inv.SoldStock),
+                SoldCount = p.Variants
+                    .Sum(v => v.Inventory != null ? v.Inventory.SoldStock : 0),
 
                 FinalPrice = p.Variants.Any()
                     ? p.Variants.Min(v =>

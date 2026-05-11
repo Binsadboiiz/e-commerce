@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { retailerProductApi } from "../api/retailerProductApi";
+import { notify } from "../../../utils/Notify";
 
 /**
  * Hook quản lý state danh sách sản phẩm của retailer.
@@ -37,6 +38,7 @@ export default function useRetailerProducts(params = {}) {
                 || err?.data?.message
                 || (typeof err === "string" ? err : "An error occurred while loading products");
             setError(message);
+            notify.error(message);
             setProducts([]);
         } finally {
             setLoading(false);

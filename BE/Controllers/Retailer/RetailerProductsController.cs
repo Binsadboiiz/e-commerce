@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using BE.Validators;
 using BE.Helpers;
 using BE.Services.Interface.Product;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BE.Controllers.Retailer
 {
+    [Authorize(Roles = "Retailer")]
     [ApiController]
     [Route("api/retailer/products")]
     public class RetailerProductsController : ControllerBase

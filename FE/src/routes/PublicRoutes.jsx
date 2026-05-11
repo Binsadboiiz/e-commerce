@@ -15,6 +15,8 @@ import CartPage from '@/features/cart/pages/CartPage'
 import CheckoutPage from '@/features/checkout/pages/CheckoutPage'
 import MyOrdersPage from '@/features/order/pages/MyOrdersPage'
 import OrderTrackingPage from '@/features/order/pages/OrderTrackingPage'
+import ProtectedRoute from '../components/ProtectedRoute'
+import { ROLES } from '../constants/roles'
 
 export default function PublicRoutes() {
     return (
@@ -22,10 +24,26 @@ export default function PublicRoutes() {
             <Route index element={<HomePage />} />
             <Route path={ROUTES.PRODUCTS_LIST} element={<ProductList />} />
             <Route path={ROUTES.PRODUCT_DETAIL} element={<ProductDetailPage />} />
-            <Route path={ROUTES.CART} element={<CartPage />} />
-            <Route path={ROUTES.CHECKOUT} element={<CheckoutPage />} />
-            <Route path={ROUTES.MY_ORDERS} element={<MyOrdersPage />} />
-            <Route path={ROUTES.ORDER_TRACKING} element={<OrderTrackingPage />} />
+            
+            <Route path={ROUTES.CART} 
+                element={ <ProtectedRoute allowedRoles={[ROLES.CUSTOMER]}>
+                    <CartPage />
+            </ProtectedRoute>} />
+
+            <Route path={ROUTES.CHECKOUT} 
+                element={ <ProtectedRoute allowedRoles={[ROLES.CUSTOMER]}>
+                    <CheckoutPage />
+                </ProtectedRoute>} />
+
+            <Route path={ROUTES.MY_ORDERS} 
+                element={ <ProtectedRoute allowedRoles={[ROLES.CUSTOMER]}>
+                <MyOrdersPage />
+            </ProtectedRoute>} />
+
+            <Route path={ROUTES.ORDER_TRACKING} 
+                element={ <ProtectedRoute allowedRoles={[ROLES.CUSTOMER]}>
+                <OrderTrackingPage />
+            </ProtectedRoute>} />
         </Route>
     )
 }
