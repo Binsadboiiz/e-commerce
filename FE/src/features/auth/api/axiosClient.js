@@ -1,5 +1,6 @@
 import axios from "axios";
 import { notify } from "../../../utils/Notify";
+import { ROUTES } from "../../../config/route.config";
 
 const axiosClient = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL || "https://localhost:5269/api",
@@ -50,8 +51,9 @@ axiosClient.interceptors.response.use(
             }
             return Promise.reject(error);
         }
+        const publicRoutes = [ ROUTES.HOME, ROUTES.LOGIN, ROUTES.REGISTER];
 
-        if(error.response?.status === 401) {
+        if(error.response?.status === 401 && !publicRoutes.includes(window.location.pathname)) {
             notify.warning("The login session has expired.");
             setTimeout(() => {
                 window.location.href = "/login";

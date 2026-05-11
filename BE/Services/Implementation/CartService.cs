@@ -1,3 +1,4 @@
+using BE.Constants;
 using BE.Data;
 using BE.Models.DTOs;
 using BE.Models.Entities;
@@ -37,11 +38,16 @@ namespace BE.Services.Implementation
             if (product == null)
                 throw new AppException("Product does not exist.");
 
-            // Check stock (either variant stock or product stock)
+            // Không cho thêm vào giỏ nếu sản phẩm đã hết hàng
+            if (product.Status == ProductConstants.ProductStatusOutOfStock)
+                throw new AppException("This product is out of stock.");
+
+            // Check stock (variant is required)
             if (!request.VariantId.HasValue)
                 throw new AppException("Variant is required.");
 
             var variant = await _context.ProductVariants
+                .Include(v => v.Inventory)
                 .FirstOrDefaultAsync(v =>
                     v.VariantId == request.VariantId.Value &&
                     v.ProductId == request.ProductId);
@@ -49,16 +55,14 @@ namespace BE.Services.Implementation
             if (variant == null)
                 throw new AppException("Invalid variant.");
 
-            var inventory = await _context.Inventories
-                .FirstOrDefaultAsync(i => i.ProductVariantId == variant.VariantId);
+            // Check stock từ Inventory (nguồn truth duy nhất)
+            if (variant.Inventory == null)
+                throw new AppException("Inventory not found for this variant.");
 
-            if (inventory == null)
-                throw new AppException("Inventory not found.");
-
-            var available = inventory.AvailableStock - inventory.ReservedStock;
+            var available = variant.Inventory.AvailableStock - variant.Inventory.ReservedStock;
 
             if (available < request.Quantity)
-                throw new AppException("Insufficient stock.");
+                throw new AppException($"Insufficient stock. Available: {available}");
 
 
             var cart = await GetOrCreateCart(userId);
@@ -70,7 +74,12 @@ namespace BE.Services.Implementation
 
             if (existingItem != null)
             {
-                existingItem.Quantity += request.Quantity;
+                // Kiểm tra tổng số lượng sau khi cộng thêm
+                var newTotal = existingItem.Quantity + request.Quantity;
+                if (newTotal > available)
+                    throw new AppException($"Cannot add more. Available: {available}, Current in cart: {existingItem.Quantity}");
+
+                existingItem.Quantity = newTotal;
             }
             else
             {
@@ -107,6 +116,14 @@ namespace BE.Services.Implementation
             }
             else
             {
+                // Check stock khi tăng số lượng
+                if (item.Variant?.Inventory != null)
+                {
+                    var available = item.Variant.Inventory.AvailableStock - item.Variant.Inventory.ReservedStock;
+                    if (request.Quantity > available)
+                        throw new AppException($"Insufficient stock. Available: {available}");
+                }
+
                 item.Quantity = request.Quantity;
             }
 
@@ -194,13 +211,13 @@ namespace BE.Services.Implementation
                     ShopLogo = g.Key.Logo,
                     Items = g.Select(ci =>
                     {
-                        // Use variant price if available, otherwise fallback to product price
-                        decimal basePrice = ci.Variant?.PriceAdjustment ?? ci.Product.Price;
+                        decimal basePrice = ci.Variant?.Price ?? ci.Product.Price;
                         decimal? discountPrice = ci.Product.DiscountPrice;
                         decimal effectivePrice = discountPrice ?? basePrice;
 
+                        // Stock từ Inventory
                         var availableStock = ci.Variant?.Inventory != null
-                            ? ci.Variant.Inventory.AvailableStock - ci.Variant.Inventory.ReservedStock 
+                            ? ci.Variant.Inventory.AvailableStock - ci.Variant.Inventory.ReservedStock
                             : 0;
 
                         // Build variant name and value (e.g., "Color: Red, Size: XL")

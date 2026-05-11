@@ -2,6 +2,7 @@ using BE.Models.DTOs.Auth;
 using BE.Models.DTOs;
 using BE.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace BE.Controllers.Auth
@@ -17,6 +18,7 @@ namespace BE.Controllers.Auth
             _service = service;
         }
 
+        [Authorize]
         [HttpGet("profile")]
         public async Task<IActionResult> Profile()
         {

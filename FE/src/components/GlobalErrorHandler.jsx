@@ -21,7 +21,7 @@ export default function GlobalErrorHandler({ children }) {
                 setGlobalError(formattedError);
                 
                 // Tạm thời TẮT redirect 
-                // navigate(ROUTES.ERROR || "/error");
+                navigate(ROUTES.ERROR || "/error");
                 
                 // Vẫn reject để hook (nếu cần) có thể catch
                 return Promise.reject(formattedError);

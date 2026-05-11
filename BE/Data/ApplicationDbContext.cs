@@ -141,6 +141,12 @@ namespace BE.Data
             modelBuilder.Entity<ShippingDetail>()
                 .HasIndex(s => s.OrderId)
                 .IsUnique();
+
+            // ProductVariant -> Inventory (one-to-one)
+            modelBuilder.Entity<ProductVariant>()
+                .HasOne(v => v.Inventory)
+                .WithOne(i => i.ProductVariant)
+                .HasForeignKey<Inventory>(i => i.ProductVariantId);
         }
     }
 }
