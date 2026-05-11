@@ -211,6 +211,8 @@ namespace BE.Services.Implementation
                     ShopLogo = g.Key.Logo,
                     Items = g.Select(ci =>
                     {
+
+                        // Use variant price if available, otherwise fallback to product price
                         decimal basePrice = ci.Variant?.Price ?? ci.Product.Price;
                         decimal? discountPrice = ci.Product.DiscountPrice;
                         decimal effectivePrice = discountPrice ?? basePrice;

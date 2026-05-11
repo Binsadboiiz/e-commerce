@@ -6,6 +6,7 @@ import ProductGallery from "../components/detail/gallery/ProductGallery";
 import ProductInfo from "../components/detail/info/ProductInfo";
 import ProductActions from "../components/detail/actions/ProductActions";
 import ProductDetailSkeleton from "../components/detail/ProductDetailSkeleton";
+import VariantSelector from "../components/detail/variant/VariantSelector";
 
 import { ROUTES } from "@/config/route.config";
 
@@ -15,7 +16,12 @@ export default function ProductDetail() {
 
     const { slug } = useParams();
 
-    const { product, loading } = useProductDetail(slug);
+    const {
+        product,
+        loading,
+        selectedAttributes,
+        handleSelectAttribute
+    } = useProductDetail(slug);
 
     if (loading) return <ProductDetailSkeleton />;
     if (!product) return <div className={styles.notFound}>Not found</div>;
@@ -27,7 +33,7 @@ export default function ProductDetail() {
             state: {
                 mode: "buy-now",
                 buyNow: {
-                    productId: product.id,
+                    productId: product.productId,
                     quantity: 1,
                     paymentMethod: "cod",
                     voucherCodes: []
@@ -53,6 +59,12 @@ export default function ProductDetail() {
             <div className={styles.right}>
 
                 <ProductInfo product={product} />
+
+                <VariantSelector
+                    attributes={product.attributes}
+                    selectedAttributes={selectedAttributes}
+                    onSelect={handleSelectAttribute}
+                />
 
                 {/* ACTIONS */}
                 <ProductActions

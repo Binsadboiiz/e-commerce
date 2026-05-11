@@ -54,8 +54,12 @@ export const productsService = {
     async getProductDetail(slug) {
         const res = await fetch(`${PRODUCTS_URL}/${slug}`);
 
-        if (!res.ok) throw new Error("Failed to fetch product detail");
+        if (!res.ok) {
+            throw new Error("Failed to fetch product detail");
+        }
 
-        return res.json();
+        const json = await res.json();
+
+        return json.data;
     }
 };
