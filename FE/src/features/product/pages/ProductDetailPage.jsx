@@ -1,5 +1,8 @@
 import styles from "./ProductDetailPage.module.css";
+
 import { useParams, useNavigate } from "react-router-dom";
+import { useState, useMemo, useEffect } from "react";
+
 import useProductDetail from "../hooks/useProductDetail";
 
 import ProductGallery from "../components/detail/gallery/ProductGallery";
@@ -16,25 +19,78 @@ export default function ProductDetail() {
 
     const { slug } = useParams();
 
-    const {
-        product,
-        loading,
-        selectedAttributes,
-        handleSelectAttribute
-    } = useProductDetail(slug);
+    const { product, loading, selectedAttributes, handleSelectAttribute } = useProductDetail(slug);
+
+    const [quantity, setQuantity] = useState(1);
+    const [selectedImage, setSelectedImage] = useState(null);
+
+    //set default image
+    useEffect(() => {
+        if (!product?.images?.length) return;
+
+        const primaryImage = product.images.find((x) => x.isPrimary) || product.images[0];
+
+        setSelectedImage(primaryImage.imageUrl);
+    }, [product]);
+
+    //set variant image map
+    const variantImageMap = useMemo(() => {
+        const map = {};
+
+        product?.images?.forEach((img) => {
+            if (img.variantId) {
+                map[img.variantId] = img.imageUrl;
+            }
+        });
+
+        return map;
+    }, [product]);
+
+    //selected variant
+    const selectedVariant = useMemo(() => {
+        if (!product?.variantMap) return null;
+
+        const values = Object.values(selectedAttributes);
+
+        if (!values.length) return null;
+
+        const key = values
+            .sort((a, b) => a - b)
+            .join("-");
+
+        const variantId = product.variantMap[key];
+
+        if (!variantId) return null;
+
+        return product.variants.find(
+            (variant) => variant.variantId === variantId
+        );
+
+    }, [selectedAttributes, product]);
+
+    //effect change image when variant change
+    useEffect(() => {
+        if (!selectedVariant) return;
+
+        const variantImage = variantImageMap[selectedVariant.variantId];
+
+        if (variantImage) {
+            setSelectedImage(variantImage);
+        }
+    }, [selectedVariant, variantImageMap]);
 
     if (loading) return <ProductDetailSkeleton />;
     if (!product) return <div className={styles.notFound}>Not found</div>;
 
-    const images = product?.images || [];
-
+    //buy now
     const handleBuyNow = () => {
         navigate(ROUTES.CHECKOUT, {
             state: {
                 mode: "buy-now",
                 buyNow: {
                     productId: product.productId,
-                    quantity: 1,
+                    variantId: selectedVariant?.variantId || null,
+                    quantity,
                     paymentMethod: "cod",
                     voucherCodes: []
                 }
@@ -42,9 +98,18 @@ export default function ProductDetail() {
         });
     };
 
+    //add to cart
     const handleAddToCart = () => {
-        console.log("ADD TO CART:", product);
-        // TODO: dispatch cart action
+        navigate(ROUTES.CART, {
+            state: {
+                mode: "add-to-cart",
+                addToCart: {
+                    productId: product.productId,
+                    variantId: selectedVariant?.variantId || null,
+                    quantity
+                }
+            }
+        });
     };
 
     return (
@@ -52,7 +117,10 @@ export default function ProductDetail() {
 
             {/* LEFT - IMAGE */}
             <div className={styles.left}>
-                <ProductGallery images={product.images || []} />
+                <ProductGallery images={product.images || []}
+                    selectedImage={selectedImage}
+                    onSelectImage={setSelectedImage}
+                />
             </div>
 
             {/* RIGHT - INFO */}
@@ -69,6 +137,9 @@ export default function ProductDetail() {
                 {/* ACTIONS */}
                 <ProductActions
                     product={product}
+                    selectedVariant={selectedVariant}
+                    quantity={quantity}
+                    setQuantity={setQuantity}
                     onBuyNow={handleBuyNow}
                     onAddToCart={handleAddToCart}
                 />
