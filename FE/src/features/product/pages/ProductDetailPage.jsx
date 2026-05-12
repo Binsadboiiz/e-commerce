@@ -10,6 +10,8 @@ import ProductInfo from "../components/detail/info/ProductInfo";
 import ProductActions from "../components/detail/actions/ProductActions";
 import ProductDetailSkeleton from "../components/detail/ProductDetailSkeleton";
 import VariantSelector from "../components/detail/variant/VariantSelector";
+import ProductShippingInfo from "../components/detail/shipping/ProductShippingInfo";
+import ProductShare from "../components/detail/share/ProductShare";
 
 import { ROUTES } from "@/config/route.config";
 
@@ -128,6 +130,8 @@ export default function ProductDetail() {
 
                 <ProductInfo product={product} />
 
+                <ProductShippingInfo />
+
                 <VariantSelector
                     attributes={product.attributes}
                     selectedAttributes={selectedAttributes}
@@ -143,6 +147,9 @@ export default function ProductDetail() {
                     onBuyNow={handleBuyNow}
                     onAddToCart={handleAddToCart}
                 />
+
+                <ProductShare />
+
             </div>
 
         </div>

@@ -1,0 +1,30 @@
+.wrapper {
+    margin-top: 24px;
+
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+
+    padding: 20px 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.item {
+    display: flex;
+    gap: 20px;
+}
+
+.label {
+    width: 160px;
+
+    color: #888;
+    font-size: 14px;
+}
+
+.content {
+    color: #222;
+    font-size: 14px;
+    font-weight: 500;
+}
