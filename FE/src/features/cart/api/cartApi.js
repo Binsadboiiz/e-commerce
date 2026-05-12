@@ -2,7 +2,10 @@ import axiosClient from "../../auth/api/axiosClient"
 
 const cartApi = {
     getCart() {
-        return axiosClient.get("/cart");
+        return axiosClient.get("/cart", {
+            skipAuthError: true,
+            skipErrorToast: true
+        });
     },
     add(productId, quantity, variantId = null) {
         return axiosClient.post("/cart/add", { productId, quantity, variantId });

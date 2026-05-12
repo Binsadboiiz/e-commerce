@@ -3,6 +3,8 @@ using BE.Models.DTOs;
 using BE.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using System.Reflection.Metadata;
+using System.Security;
 
 
 namespace BE.Controllers.Auth
@@ -18,10 +20,15 @@ namespace BE.Controllers.Auth
             _service = service;
         }
 
-        [Authorize]
         [HttpGet("profile")]
         public async Task<IActionResult> Profile()
         {
+            if(!User.Identity.IsAuthenticated)
+            {
+                return Ok(ApiResponse<UserDto>.SuccessResponse(
+                    null, "Guest user"
+                ));
+            }
             var userId = Helpers.UserClaimsHelper.GetUserId(User);
             var result = await _service.GetProfileAsync(userId);
             return Ok(ApiResponse<UserDto>.SuccessResponse(result));
@@ -62,8 +69,15 @@ namespace BE.Controllers.Auth
                 new CookieOptions
                 {
                     HttpOnly = true,
+
+                    // === Https ===
                     Secure = true,
                     SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None,
+
+                    // === Development  Env ===
+                    // Secure = false,
+                    // SameSite = SameSiteMode.Lax,
+
                     Expires = DateTime.UtcNow.AddDays(7)
                 }
             );

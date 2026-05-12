@@ -2,12 +2,13 @@ import { useContext, useState } from 'react';
 import { Link, useNavigate, useLocation, Route } from 'react-router-dom';
 import { FiShoppingCart, FiUser, FiLogOut } from 'react-icons/fi';
 import styles from './Header.module.css';
-import SearchBar from '@/features/product/components/list/search/SearchBar';
-import { useCart } from '@/features/cart/hooks/useCart';
-import { AuthContext } from '@/features/auth/context/AuthContext';
-import { logoutApi } from '@/features/auth/api/authService';
+import SearchBar from '../../features/product/components/list/search/SearchBar';
+import { useCart } from '../../features/cart/hooks/useCart';
+import { AuthContext } from '../../features/auth/context/AuthContext';
+import { logoutApi } from '../../features/auth/api/authService';
 import { ROUTES } from '../../config/route.config.js';
 import { notify } from '../../utils/Notify.js';
+import CartContext from '../../features/cart/context/CartContext.jsx';
 
 function Header() {
     const location = useLocation();
@@ -17,16 +18,23 @@ function Header() {
     const { cartCount } = useCart();
     const { user, setUser } = useContext(AuthContext);
     const [showDropdown, setShowDropdown] = useState(false);
+    const { cart, setCart } = useContext(CartContext)
  
     const handleLogout = async () => {
         try {
             await logoutApi();
             notify.success('Logout successfully');
             setUser(null);
+            setCart(null);
             navigate(ROUTES.HOME);
         } catch (error) {
-            notify.error("Logout failed");
-            console.log(error.response.data.message);
+            console.log(error);
+
+        const message =
+            error.response?.data?.message ||
+            "Logout failed";
+
+        notify.error(message);
         }
     };
  

@@ -1,6 +1,7 @@
 import { createContext, useState, useCallback, useEffect } from "react";
 import cartApi from "../api/cartApi";
 import { useAuth } from "../../auth/hooks/useAuth";
+import { notify } from "../../../utils/Notify";
 
 const CartContext = createContext();
 
@@ -8,7 +9,7 @@ export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState(null);
     const [loading, setLoading] = useState(false);
     const [selectedItems, setSelectedItems] = useState(new Set()); // Set of cartItemIds
-    const { user } = useAuth();
+    const { user, loading: authLoading, isAuthenticated } = useAuth();
 
     // ── Fetch cart from server ──
     const fetchCart = useCallback(async () => {
@@ -17,16 +18,27 @@ export const CartProvider = ({ children }) => {
             const data = await cartApi.getCart();
             setCart(data);
         } catch (err) {
+            if(err.response?.status === 401 || err.response?.status === 403) {
+                setCart(null);
+                return;
+            }
+            notify.error("Failed to fetch cart");
             console.error("Failed to fetch cart:", err);
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [isAuthenticated]);
 
     // Auto-fetch when user is available
     useEffect(() => {
+        if(authLoading) return;
+
+        if(!isAuthenticated) {
+            setCart(null);
+            return;
+        }
         fetchCart();
-    }, [user, fetchCart]);
+    }, [authLoading, isAuthenticated, fetchCart]);
 
     useEffect(() => {
         if (!cart?.shopGroups) {
@@ -170,6 +182,7 @@ export const CartProvider = ({ children }) => {
             cartCount,
             selectedItems,
             selectedCount,
+            setCart,
             selectedTotal,
             fetchCart,
             addToCart,

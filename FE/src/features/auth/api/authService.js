@@ -14,5 +14,7 @@ export const logoutApi = () => {
 };
 
 export const getProfileApi = () => {
-    return axiosClient.get("/auth/profile");
+    return axiosClient.get("/auth/profile", {
+        skipAuthError: true
+    });
 };

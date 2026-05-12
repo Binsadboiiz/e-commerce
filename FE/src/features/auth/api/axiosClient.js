@@ -31,6 +31,7 @@ axiosClient.interceptors.request.use(
 
 // intercept response
 let isShowingServerError = false;
+let isRedirectingAuth = false;
 
 axiosClient.interceptors.response.use(
     (response) => response.data,
@@ -52,19 +53,43 @@ axiosClient.interceptors.response.use(
             return Promise.reject(error);
         }
         const publicRoutes = [ ROUTES.HOME, ROUTES.LOGIN, ROUTES.REGISTER];
+        
+        const status = error.response.status;
 
-        if(error.response?.status === 401 && !publicRoutes.includes(window.location.pathname)) {
-            notify.warning("The login session has expired.");
-            setTimeout(() => {
-                window.location.href = "/login";
-            }, 2000);
+        // Custom config flags
+        const skipAuthError = error.config?.skipAuthError;
+        const skipErrorToast = error.config?.skipErrorToast;
+
+        if(status === 401) {
+            if(skipAuthError) {
+                return Promise.reject(error);
+            }
+            if(!isRedirectingAuth && !publicRoutes.includes(window.location.pathname)) {
+                isRedirectingAuth = true;
+                notify.warning("The login session has expired");
+                setTimeout(() => {
+                    window.location.href = ROUTES.LOGIN;
+                    isRedirectingAuth = false;
+                }, 3000);
+            }
+            return Promise.reject(error);
         }
 
-        else if(error.response?.status === 403)
-            notify.error("You do not have access.");
+        if(status === 403) {
+            if(!skipErrorToast) {
+                notify.error("You do not have access!");
+            }
+            return Promise.reject(error);
+        }
 
-        else if(error.response?.status >= 500)
-            notify.error("The server is experiencing issues.");
+        if (status >= 500) {
+
+            if (!skipErrorToast) {
+                notify.error("The server is experiencing issues.");
+            }
+
+            return Promise.reject(error);
+        }
         else {
             const message = error.response.data?.message || "An Error occured";
 

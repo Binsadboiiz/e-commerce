@@ -28,7 +28,7 @@ export const AuthProvider = ({children}) => {
 
     // Cung cấp state user, hàm thay đổi state (setUser), và trạng thái loading cho các component con
     return(
-        <AuthContext.Provider value={{ user, setUser, loading, isAuthenticated: !!user }}>
+        <AuthContext.Provider value={{ user, setUser, loading, fetchUser, isAuthenticated: !!user }}>
             {children}
         </AuthContext.Provider>
     )
