@@ -12,6 +12,7 @@ export const ROUTES = {
     LOGIN: "/login",
     REGISTER: "/register",
     ERROR: "/error",
+    PROFILE: "/profile",
 
     // Dashboard
     DASHBOARD: "/dashboard",

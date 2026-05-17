@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { Profiler, useContext, useState } from 'react';
 import { Link, useNavigate, useLocation, Route } from 'react-router-dom';
 import { FiShoppingCart, FiUser, FiLogOut } from 'react-icons/fi';
 import styles from './Header.module.css';
@@ -70,8 +70,12 @@ function Header() {
                         
                         {showDropdown && (
                             <div className={styles.dropdown}>
+                                <Link to={ROUTES.PROFILE} className={styles.profile} >
+                                    <FiUser size={16} style={{marginRight: "8px"}}/>
+                                    <span> Profile</span>
+                                </Link>
                                 <button onClick={handleLogout} className={styles.logoutBtn}>
-                                    <FiLogOut size={16} />
+                                    <FiLogOut size={16} style={{marginRight: "8px"}}/>
                                     <span>Logout</span>
                                 </button>
                             </div>

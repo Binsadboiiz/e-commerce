@@ -15,6 +15,7 @@ import CartPage from '@/features/cart/pages/CartPage'
 import CheckoutPage from '@/features/checkout/pages/CheckoutPage'
 import MyOrdersPage from '@/features/order/pages/MyOrdersPage'
 import OrderTrackingPage from '@/features/order/pages/OrderTrackingPage'
+import ProfilePage from '@/features/auth/pages/ProfilePage'
 import ProtectedRoute from '../components/ProtectedRoute'
 import { ROLES } from '../constants/roles'
 
@@ -43,6 +44,11 @@ export default function PublicRoutes() {
             <Route path={ROUTES.ORDER_TRACKING} 
                 element={ <ProtectedRoute allowedRoles={[ROLES.CUSTOMER]}>
                 <OrderTrackingPage />
+            </ProtectedRoute>} />
+            
+            <Route path={ROUTES.PROFILE} 
+                element={ <ProtectedRoute allowedRoles={[ROLES.CUSTOMER, ROLES.ADMIN, ROLES.RETAILER]}>
+                <ProfilePage />
             </ProtectedRoute>} />
         </Route>
     )
