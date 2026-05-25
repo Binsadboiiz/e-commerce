@@ -26,7 +26,7 @@ export default function PublicRoutes() {
             <Route path={ROUTES.PRODUCTS_LIST} element={<ProductList />} />
             <Route path={ROUTES.PRODUCT_DETAIL} element={<ProductDetailPage />} />
             
-            <Route path={ROUTES.CART} 
+            {/* <Route path={ROUTES.CART} 
                 element={ <ProtectedRoute allowedRoles={[ROLES.CUSTOMER]}>
                     <CartPage />
             </ProtectedRoute>} />
@@ -49,7 +49,13 @@ export default function PublicRoutes() {
             <Route path={ROUTES.PROFILE} 
                 element={ <ProtectedRoute allowedRoles={[ROLES.CUSTOMER, ROLES.ADMIN, ROLES.RETAILER]}>
                 <ProfilePage />
-            </ProtectedRoute>} />
+            </ProtectedRoute>} /> */}
+            
+            <Route path={ROUTES.CART} element={<CartPage />} />
+            <Route path={ROUTES.CHECKOUT} element={<CheckoutPage />} />
+            <Route path={ROUTES.MY_ORDER} element={<MyOrdersPage />} />
+            <Route path={ROUTES.ORDER_TRACKING} element={<OrderTrackingPage />} />
+            <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
         </Route>
     )
 }
