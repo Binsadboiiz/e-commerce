@@ -45,6 +45,10 @@ function Header() {
                 <Link to={ROUTES.HOME} className={styles.logo}>
                     <h1 className={styles.logoText}>LOGO</h1>
                 </Link>
+                <nav className={styles.nav}>
+                    <Link to={ROUTES.HOME} className={`${styles.navLink} ${location.pathname === ROUTES.HOME ? styles.activeLink : ''}`}>Home</Link>
+                    <Link to={ROUTES.PRODUCTS_LIST} className={`${styles.navLink} ${location.pathname.startsWith('/products') ? styles.activeLink : ''}`}>Products</Link>
+                </nav>
             </div>
  
             {/* CENTER */}

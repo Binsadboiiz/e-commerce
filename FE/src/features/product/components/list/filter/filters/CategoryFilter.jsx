@@ -14,7 +14,7 @@ export default function CategoryFilter({ searchParams, setSearchParams }) {
 
                 const meta = await productsService.getFilterMeta(params);
 
-                setCategories(meta.categories || []);
+                setCategories(meta.data?.categories || []);
             } catch (error) {
                 console.error("Error fetching categories:", error);
             }

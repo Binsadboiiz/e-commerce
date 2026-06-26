@@ -12,7 +12,7 @@ export default function ColorFilter({ data = [], searchParams, setSearchParams }
             try {
                 const params = parseQuery(searchParams);
                 const meta = await productsService.getFilterMeta(params);
-                setColors(meta.colors || []);
+                setColors(meta.data?.colors || []);
             } catch (error) {
                 console.error("Error fetching colors:", error);
             }

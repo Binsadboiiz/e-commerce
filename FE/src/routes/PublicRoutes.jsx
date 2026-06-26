@@ -53,7 +53,7 @@ export default function PublicRoutes() {
             
             <Route path={ROUTES.CART} element={<CartPage />} />
             <Route path={ROUTES.CHECKOUT} element={<CheckoutPage />} />
-            <Route path={ROUTES.MY_ORDER} element={<MyOrdersPage />} />
+            <Route path={ROUTES.MY_ORDERS} element={<MyOrdersPage />} />
             <Route path={ROUTES.ORDER_TRACKING} element={<OrderTrackingPage />} />
             <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
         </Route>

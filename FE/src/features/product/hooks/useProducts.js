@@ -28,14 +28,14 @@ export default function useProducts(params) {
                     productsService.getFilterMeta(params)
                 ]);
 
-                setProducts(productRes.data.items || []);
-                setMeta(metaRes);
+                setProducts(productRes.data?.items || []);
+                setMeta(metaRes.data || null);
 
                 setPagination({
-                    page: productRes.page,
-                    pageSize: productRes.pageSize,
-                    total: productRes.total,
-                    totalPages: productRes.totalPages
+                    page: productRes.data?.page || 1,
+                    pageSize: productRes.data?.pageSize || 20,
+                    total: productRes.data?.total || 0,
+                    totalPages: productRes.data?.totalPages || 0
                 });
 
             } catch (err) {

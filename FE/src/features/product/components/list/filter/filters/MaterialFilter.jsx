@@ -12,7 +12,7 @@ export default function MaterialFilter({ data = [], searchParams, setSearchParam
             try {
                 const params = parseQuery(searchParams);
                 const meta = await productsService.getFilterMeta(params);
-                setMaterials(meta.materials || []);
+                setMaterials(meta.data?.materials || []);
             } catch (error) {
                 console.error("Error fetching materials:", error);
             }

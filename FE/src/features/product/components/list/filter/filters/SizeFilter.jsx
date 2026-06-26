@@ -12,7 +12,7 @@ export default function SizeFilter({ data = [], searchParams, setSearchParams })
             try {
                 const params = parseQuery(searchParams);
                 const meta = await productsService.getFilterMeta(params);
-                setSizes(meta.sizes || []);
+                setSizes(meta.data?.sizes || []);
             } catch (error) {
                 console.error("Error fetching sizes:", error);
             }

@@ -1,6 +1,6 @@
-import { queryBuilder } from "@/features/product/utils/queryBuilder";
+import { queryBuilder } from "../utils/queryBuilder";
 
-const API_URL = import.meta.env.VITE_API_BASE_URL;
+const API_URL = import.meta.env.VITE_API_BASE_URL || "https://localhost:5269/api";
 
 const PRODUCTS_URL = `${API_URL}/products`;
 const FILTER_URL = `${PRODUCTS_URL}/filter`;
