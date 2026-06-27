@@ -18,7 +18,7 @@ export const productsService = {
     * Gets a product by its ID
     */ 
     getProductById(id) {
-        return axiosClient.get(`${PRODUCT_URL}/${id}`);
+        return axiosClient.get(`${PRODUCT_URL}/by-id/${id}`);
     },
 
     getFilterMeta(params = {}) {

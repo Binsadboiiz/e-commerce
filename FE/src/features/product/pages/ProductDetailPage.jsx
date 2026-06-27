@@ -21,7 +21,7 @@ export default function ProductDetail() {
 
     const { slug } = useParams();
 
-    const { product, loading, selectedAttributes, handleSelectAttribute } = useProductDetail(slug);
+    const { product, loading, selectedAttributes, handleSelectAttribute, selectedVariant } = useProductDetail(slug);
 
     const [quantity, setQuantity] = useState(1);
     const [selectedImage, setSelectedImage] = useState(null);
@@ -48,31 +48,16 @@ export default function ProductDetail() {
         return map;
     }, [product]);
 
-    //selected variant
-    const selectedVariant = useMemo(() => {
-        if (!product?.variantMap) return null;
-
-        const values = Object.values(selectedAttributes);
-
-        if (!values.length) return null;
-
-        const key = values
-            .sort((a, b) => a - b)
-            .join("-");
-
-        const variantId = product.variantMap[key];
-
-        if (!variantId) return null;
-
-        return product.variants.find(
-            (variant) => variant.variantId === variantId
-        );
-
-    }, [selectedAttributes, product]);
-
     //effect change image when variant change
     useEffect(() => {
         if (!selectedVariant) return;
+
+        setQuantity((prev) => 
+            Math.min(
+                prev,
+                Math.max(selectedVariant.availableStock, 1)
+            )
+        );
 
         const variantImage = variantImageMap[selectedVariant.variantId];
 
@@ -128,7 +113,7 @@ export default function ProductDetail() {
             {/* RIGHT - INFO */}
             <div className={styles.right}>
 
-                <ProductInfo product={product} />
+                <ProductInfo product={product} selectedVariant={selectedVariant}/>
 
                 <ProductShippingInfo />
 

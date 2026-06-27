@@ -17,8 +17,6 @@ export default function useProductDetail(slug) {
         productsService.getProductDetail(slug)
             .then((productData) => {
 
-                console.log("PRODUCT DETAIL RESPONSE:", productData);
-
                 setProduct(productData);
 
                 // DEFAULT IMAGE
@@ -41,7 +39,7 @@ export default function useProductDetail(slug) {
                 }
             })
             .catch((err) => {
-                console.error("GET PRODUCT DETAIL ERROR:", err);
+                
                 setProduct(null);
             })
             .finally(() => {

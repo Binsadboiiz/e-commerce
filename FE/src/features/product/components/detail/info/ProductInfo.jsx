@@ -2,7 +2,7 @@ import { IoStar } from 'react-icons/io5';
 import styles from './ProductInfo.module.css'
 import formatPrice from '@/features/product/utils/formatPrice';
 
-export default function ProductInfo({ product }) {
+export default function ProductInfo({ product, selectedVariant  }) {
     if (!product) return null;
 
     const {
@@ -15,7 +15,8 @@ export default function ProductInfo({ product }) {
         categoryName
     } = product;
 
-    const finalPrice = discountPrice ?? price;
+    const finalPrice = selectedVariant?.price ??
+                        discountPrice ?? price;
 
     return (
         <div className={styles.wrapper}>
