@@ -1,65 +1,38 @@
-import { queryBuilder } from "../utils/queryBuilder";
+import { queryBuilder } from "../utils/queryBuilder.js";
+import axiosClient from "../../auth/api/axiosClient.js";
 
-const API_URL = import.meta.env.VITE_API_BASE_URL || "https://localhost:5269/api";
-
-const PRODUCTS_URL = `${API_URL}/products`;
-const FILTER_URL = `${PRODUCTS_URL}/filter`;
-const FILTER_META_URL = `${PRODUCTS_URL}/filter/meta`;
+const PRODUCT_URL = "/products";
 
 export const productsService = {
-    /**
-     * MAIN: filter + pagination + sort + search
-     */
-    async getProducts(params = {}) {
-        const qs = queryBuilder.toQueryString(params);
-
-        const res = await fetch(`${FILTER_URL}?${qs}`);
-
-        if (!res.ok) throw new Error("Failed to fetch products");
-
-        return res.json();
+    /*
+    * Filters products based on the provided filter object and returns the filtered products.
+    */
+    getProducts(params = {}) {
+        return axiosClient.get(`${PRODUCT_URL}/filter`, {
+            params,
+            paramsSerializer: (params) => queryBuilder.toQueryString(params),
+        });
     },
 
-    /**
-     * SINGLE PRODUCT
-     */
-    async getProductById(id) {
-        const res = await fetch(`${PRODUCTS_URL}/${id}`);
-
-        if (!res.ok) throw new Error("Product not found");
-
-        return res.json();
+    /*
+    * Gets a product by its ID
+    */ 
+    getProductById(id) {
+        return axiosClient.get(`${PRODUCT_URL}/${id}`);
     },
 
-    /**
-     * FILTER META (categories, brands, attributes)
-     */
-    async getFilterMeta(params = {}) {
-        const qs = queryBuilder.toQueryString(params);
-
-        const url = qs
-            ? `${FILTER_META_URL}?${qs}`
-            : FILTER_META_URL;
-
-        const res = await fetch(url);
-
-        if (!res.ok) throw new Error("Failed to fetch filter meta");
-
-        return res.json();
+    getFilterMeta(params = {}) {
+        return axiosClient.get(`${PRODUCT_URL}/filter/meta`, {
+            params,
+            paramsSerializer: (params) => queryBuilder.toQueryString(params),
+        });
     },
 
-    /**
-     * PRODUCT DETAIL
-     */
+    /*
+    * Gets product detail by its slug
+    */
     async getProductDetail(slug) {
-        const res = await fetch(`${PRODUCTS_URL}/${slug}`);
-
-        if (!res.ok) {
-            throw new Error("Failed to fetch product detail");
-        }
-
-        const json = await res.json();
-
-        return json.data;
+        const res = await axiosClient.get(`${PRODUCT_URL}/${slug}`);
+        return res.data;
     }
 };
