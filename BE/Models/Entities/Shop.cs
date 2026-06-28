@@ -14,7 +14,7 @@ namespace BE.Models.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         public string Status { get; set; }
-        public string Logo { get; set; }
+        public string? Logo { get; set; }
         public bool IsActive { get; set; }
 
         public DateTime Create_At { get; set; }
@@ -25,5 +25,7 @@ namespace BE.Models.Entities
         public ICollection<Product> Products { get; set; }
 
         public ICollection<ShopAddresses> Addresses { get; set; }
+
+        public ICollection<ReviewReply> ReviewReplies { get; set; } = new List<ReviewReply>();
     }
 }

@@ -3,6 +3,8 @@ export const ROUTES = {
     HOME: "/",
     PRODUCTS_LIST: "/products",
     PRODUCT_DETAIL: "/products/:slug",
+    SHOP: "/shops/:id",
+    
     CART: "/cart",
     CHECKOUT: "/checkout",
     MY_ORDERS: "/my-orders",

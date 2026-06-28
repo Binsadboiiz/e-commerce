@@ -1,0 +1,154 @@
+.wrapper {
+  background-color: #ffffff;
+  border-radius: 24px;
+  padding: 24px 32px;
+  display: flex;
+  align-items: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+  max-width: 1200px;
+  width: 100%;
+  margin: 20px auto;
+  box-sizing: border-box;
+}
+
+/* --- KHỐI BÊN TRÁI --- */
+.shopMeta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-right: 32px;
+  border-right: 1px solid #e5e7eb;
+  flex-shrink: 0; /* Giữ nguyên cấu trúc, không cho bóp méo bên trái */
+}
+
+.avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: #f3f4f6;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.status {
+  font-size: 13px;
+  color: #16a34a;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+}
+
+.dotOnline {
+  width: 6px;
+  height: 6px;
+  background-color: #16a34a;
+  border-radius: 50%;
+}
+
+.dotOffline {
+  width: 6px;
+  height: 6px;
+  background-color: #9ca3af;
+  border-radius: 50%;
+}
+
+.viewShopBtn {
+  background: #ffffff;
+  border: 1px solid #111827;
+  color: #111827;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  transition: all 0.2s ease;
+}
+
+.viewShopBtn:hover {
+  background-color: #f9fafb;
+}
+
+/* --- KHỐI GIỮA (STATS) --- */
+.statsContainer {
+  flex: 1;
+  display: flex;
+  justify-content: space-around; /* Chia đều khoảng cách 3 cột */
+  padding: 0 40px;
+  gap: 20px;
+}
+
+.statsColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.label {
+  color: #6b7280;
+  width: 110px; /* Cố định độ rộng nhãn chữ để giá trị số luôn thẳng hàng dọc */
+  flex-shrink: 0;
+}
+
+.value {
+  color: #4b5563; 
+  font-weight: 500;
+}
+
+/* --- KHỐI PHẢI (CHAT BUTTON) --- */
+.actionContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.chatBtn {
+  background-color: #ffffff;
+  border: 1px solid #111827;
+  color: #111827;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.chatBtn:hover {
+  background-color: #f9fafb;
+}
+
+.icon {
+  display: inline-block;
+  vertical-align: middle;
+}

@@ -1,6 +1,12 @@
-import styles from './TopResearch.module.css'
+import styles from './TopResearch.module.css';
+import TopResearchSkeleton from './TopResearchSkeleton';
 
-export default function TopResearch() {
+/**
+ * @param {boolean} [loading=false] - Truyền vào khi section kết nối API thực
+ */
+export default function TopResearch({ loading = false }) {
+
+    if (loading) return <TopResearchSkeleton count={6} />;
 
     const topResearchMock = [
         {

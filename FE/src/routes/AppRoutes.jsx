@@ -9,13 +9,18 @@ import PublicRoutes from './PublicRoutes'
 import DashboardRoutes from './DashboardRoutes'
 import StandaloneRoutes from './StandaloneRoutes'
 import RetailerRoute from './RetailerRoute'
+import ScrollToTop from '@/components/ScrollToTop'
+
 export default function AppRouter() {
   return (
-    <Routes>
-      {PublicRoutes()}
-      {DashboardRoutes()}
-      {StandaloneRoutes()}
-      {RetailerRoute()}
-    </Routes>
+    <>
+      <ScrollToTop />
+      <Routes>
+        {PublicRoutes()}
+        {DashboardRoutes()}
+        {StandaloneRoutes()}
+        {RetailerRoute()}
+      </Routes>
+    </>
   )
 }

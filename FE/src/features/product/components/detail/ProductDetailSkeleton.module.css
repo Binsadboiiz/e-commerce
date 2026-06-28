@@ -1,0 +1,175 @@
+/* ================================================
+   ProductDetailSkeleton
+   Khớp với layout 2 cột của ProductDetailPage:
+   - Left  : ảnh chính + hàng thumbnails
+   - Right : title / price / rating / qty / button
+   ================================================ */
+
+/* Shimmer */
+@keyframes shimmer {
+    0%   { background-position: -400px 0; }
+    100% { background-position:  400px 0; }
+}
+
+/* Wrapper 2 cột – khớp ProductDetailPage.module.css */
+.container {
+    max-width: 1200px;
+    margin: 32px auto;
+    padding: 0 20px;
+
+    display: grid;
+    grid-template-columns: 500px minmax(0, 1fr);
+    gap: 48px;
+    align-items: start;
+}
+
+/* ---- LEFT COLUMN ---- */
+.left {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: sticky;
+    top: 20px;
+}
+
+.mainImage {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 12px;
+}
+
+.thumbRow {
+    display: flex;
+    gap: 10px;
+}
+
+.thumb {
+    width: 72px;
+    height: 72px;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+/* ---- RIGHT COLUMN ---- */
+.right {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-top: 4px;
+}
+
+.title {
+    height: 28px;
+    width: 85%;
+    border-radius: 6px;
+}
+
+.titleShort {
+    height: 20px;
+    width: 55%;
+    border-radius: 6px;
+}
+
+.price {
+    height: 36px;
+    width: 45%;
+    border-radius: 6px;
+}
+
+.rating {
+    height: 16px;
+    width: 40%;
+    border-radius: 6px;
+}
+
+.divider {
+    height: 1px;
+    background: #ebebeb;
+    border-radius: 0;
+    animation: none;
+}
+
+/* Variant row (màu, size...) */
+.variantLabel {
+    height: 14px;
+    width: 30%;
+    border-radius: 4px;
+}
+
+.variantRow {
+    display: flex;
+    gap: 8px;
+}
+
+.variantChip {
+    width: 52px;
+    height: 32px;
+    border-radius: 6px;
+}
+
+/* Quantity + button */
+.qtyRow {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.qtyBox {
+    width: 100px;
+    height: 36px;
+    border-radius: 8px;
+}
+
+.btnPrimary {
+    flex: 1;
+    height: 44px;
+    border-radius: 8px;
+}
+
+.btnSecondary {
+    flex: 1;
+    height: 44px;
+    border-radius: 8px;
+}
+
+/* ---- Shimmer áp dụng cho tất cả blocks ---- */
+.mainImage,
+.thumb,
+.title,
+.titleShort,
+.price,
+.rating,
+.variantLabel,
+.variantChip,
+.qtyBox,
+.btnPrimary,
+.btnSecondary {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e4e4e4 37%, #f0f0f0 63%);
+    background-size: 800px 100%;
+    animation: shimmer 1.4s ease infinite;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 1024px) {
+    .container {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+    .left {
+        position: static;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 16px;
+        gap: 24px;
+    }
+    .thumb {
+        width: 60px;
+        height: 60px;
+    }
+    .title {
+        height: 22px;
+    }
+}

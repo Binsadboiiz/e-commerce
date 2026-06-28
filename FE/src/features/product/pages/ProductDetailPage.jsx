@@ -12,34 +12,41 @@ import ProductDetailSkeleton from "../components/detail/ProductDetailSkeleton";
 import VariantSelector from "../components/detail/variant/VariantSelector";
 import ProductShippingInfo from "../components/detail/shipping/ProductShippingInfo";
 import ProductShare from "../components/detail/share/ProductShare";
+import ShopInfo from "../components/detail/shop/ShopInfo";
+import ProductReviews from "../components/detail/reviews/ProductReviews";
 
 import { ROUTES } from "@/config/route.config";
 
 export default function ProductDetail() {
 
     const navigate = useNavigate();
-
     const { slug } = useParams();
 
-    const { product, loading, selectedAttributes, handleSelectAttribute, selectedVariant } = useProductDetail(slug);
+    const {
+        product,
+        loading,
+        selectedAttributes,
+        handleSelectAttribute,
+        selectedVariant
+    } = useProductDetail(slug);
 
     const [quantity, setQuantity] = useState(1);
     const [selectedImage, setSelectedImage] = useState(null);
 
-    //set default image
     useEffect(() => {
         if (!product?.images?.length) return;
 
-        const primaryImage = product.images.find((x) => x.isPrimary) || product.images[0];
+        const primary =
+            product.images.find(i => i.isPrimary) ??
+            product.images[0];
 
-        setSelectedImage(primaryImage.imageUrl);
+        setSelectedImage(primary.imageUrl);
     }, [product]);
 
-    //set variant image map
     const variantImageMap = useMemo(() => {
         const map = {};
 
-        product?.images?.forEach((img) => {
+        product?.images?.forEach(img => {
             if (img.variantId) {
                 map[img.variantId] = img.imageUrl;
             }
@@ -48,35 +55,38 @@ export default function ProductDetail() {
         return map;
     }, [product]);
 
-    //effect change image when variant change
     useEffect(() => {
         if (!selectedVariant) return;
 
-        setQuantity((prev) => 
+        setQuantity(prev =>
             Math.min(
                 prev,
                 Math.max(selectedVariant.availableStock, 1)
             )
         );
 
-        const variantImage = variantImageMap[selectedVariant.variantId];
+        const variantImage =
+            variantImageMap[selectedVariant.variantId];
 
         if (variantImage) {
             setSelectedImage(variantImage);
         }
+
     }, [selectedVariant, variantImageMap]);
 
-    if (loading) return <ProductDetailSkeleton />;
-    if (!product) return <div className={styles.notFound}>Not found</div>;
+    if (loading)
+        return <ProductDetailSkeleton />;
 
-    //buy now
+    if (!product)
+        return <div className={styles.notFound}>Product not found.</div>;
+
     const handleBuyNow = () => {
         navigate(ROUTES.CHECKOUT, {
             state: {
                 mode: "buy-now",
                 buyNow: {
                     productId: product.productId,
-                    variantId: selectedVariant?.variantId || null,
+                    variantId: selectedVariant?.variantId ?? null,
                     quantity,
                     paymentMethod: "cod",
                     voucherCodes: []
@@ -85,14 +95,13 @@ export default function ProductDetail() {
         });
     };
 
-    //add to cart
     const handleAddToCart = () => {
         navigate(ROUTES.CART, {
             state: {
                 mode: "add-to-cart",
                 addToCart: {
                     productId: product.productId,
-                    variantId: selectedVariant?.variantId || null,
+                    variantId: selectedVariant?.variantId ?? null,
                     quantity
                 }
             }
@@ -100,42 +109,55 @@ export default function ProductDetail() {
     };
 
     return (
-        <div className={styles.container}>
+        <div className={styles.page}>
 
-            {/* LEFT - IMAGE */}
-            <div className={styles.left}>
-                <ProductGallery images={product.images || []}
-                    selectedImage={selectedImage}
-                    onSelectImage={setSelectedImage}
-                />
+            <div className={styles.container}>
+
+                <div className={styles.left}>
+                    <ProductGallery
+                        images={product.images ?? []}
+                        selectedImage={selectedImage}
+                        onSelectImage={setSelectedImage}
+                    />
+                </div>
+
+                <div className={styles.right}>
+
+                    <ProductInfo
+                        product={product}
+                        selectedVariant={selectedVariant}
+                    />
+
+                    <ProductShippingInfo />
+
+                    <VariantSelector
+                        attributes={product.attributes}
+                        selectedAttributes={selectedAttributes}
+                        onSelect={handleSelectAttribute}
+                    />
+
+                    <ProductActions
+                        product={product}
+                        selectedVariant={selectedVariant}
+                        quantity={quantity}
+                        setQuantity={setQuantity}
+                        onBuyNow={handleBuyNow}
+                        onAddToCart={handleAddToCart}
+                    />
+
+                    <ProductShare />
+
+                </div>
+
             </div>
 
-            {/* RIGHT - INFO */}
-            <div className={styles.right}>
+            <section className={styles.shopSection}>
+                <ShopInfo shop={product.shop} />
+            </section>
 
-                <ProductInfo product={product} selectedVariant={selectedVariant}/>
-
-                <ProductShippingInfo />
-
-                <VariantSelector
-                    attributes={product.attributes}
-                    selectedAttributes={selectedAttributes}
-                    onSelect={handleSelectAttribute}
-                />
-
-                {/* ACTIONS */}
-                <ProductActions
-                    product={product}
-                    selectedVariant={selectedVariant}
-                    quantity={quantity}
-                    setQuantity={setQuantity}
-                    onBuyNow={handleBuyNow}
-                    onAddToCart={handleAddToCart}
-                />
-
-                <ProductShare />
-
-            </div>
+            <section className={styles.reviewSection}>
+                <ProductReviews productId={product.productId} />
+            </section>
 
         </div>
     );

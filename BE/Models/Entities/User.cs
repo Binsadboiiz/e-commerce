@@ -22,5 +22,7 @@ namespace BE.Models.Entities
         public Cart Cart { get; set; }
         public ICollection<Order> Orders { get; set; }
         public ICollection<Shop> Shops { get; set; }
+
+        public ICollection<Review> Reviews { get; set; }= new List<Review>();
     }
 }

@@ -77,7 +77,7 @@ export default function ProductList() {
 
                 {/* LOADING */}
                 {loading && (
-                    <ProductSkeleton />
+                    <ProductSkeleton count={pageSize} />
                 )}
 
                 {/* ERROR */}

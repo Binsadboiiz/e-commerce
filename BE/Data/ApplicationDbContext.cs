@@ -29,6 +29,9 @@ namespace BE.Data
         public DbSet<PaymentTransaction> PaymentTransactions { get; set; }
         public DbSet<Inventory>  Inventories { get; set; }
         public DbSet<Account> Accounts { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+        public DbSet<ReviewImage> ReviewImages { get; set; }
+        public DbSet<ReviewReply> ReviewReplies { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -147,6 +150,30 @@ namespace BE.Data
                 .HasOne(v => v.Inventory)
                 .WithOne(i => i.ProductVariant)
                 .HasForeignKey<Inventory>(i => i.ProductVariantId);
+
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.Product)
+                .WithMany(p => p.Reviews)
+                .HasForeignKey(r => r.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.User)
+                .WithMany(u => u.Reviews)
+                .HasForeignKey(r => r.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Review>()
+                .HasMany(r => r.Images)
+                .WithOne(i => i.Review)
+                .HasForeignKey(i => i.ReviewId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ReviewReply>()
+    .HasOne(rp => rp.Shop)
+    .WithMany(s => s.ReviewReplies)
+    .HasForeignKey(rp => rp.ShopId)
+    .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

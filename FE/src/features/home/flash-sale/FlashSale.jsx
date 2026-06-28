@@ -1,6 +1,12 @@
-import styles from './FlashSale.module.css'
+import styles from './FlashSale.module.css';
+import FlashSaleSkeleton from './FlashSaleSkeleton';
 
-export default function FlashSale() {
+/**
+ * @param {boolean} [loading=false] - Truyền vào khi section kết nối API thực
+ */
+export default function FlashSale({ loading = false }) {
+
+    if (loading) return <FlashSaleSkeleton count={8} />;
 
     const flashSaleMock = [
         { id: 1, soldPercent: 80 },

@@ -1,3 +1,28 @@
+/* Grid skeleton – khớp với layout của ProductGrid */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 16px;
+    padding: 8px 0 24px;
+}
+
+@media (max-width: 1400px) {
+    .grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (max-width: 1100px) {
+    .grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 768px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+    .grid { grid-template-columns: 1fr; }
+}
+
+/* Card */
 .card {
     width: 100%;
     background: #fff;
@@ -6,58 +31,43 @@
     overflow: hidden;
 }
 
-/* shimmer base */
+/* Shimmer – định nghĩa cục bộ để tránh phụ thuộc vào global */
 @keyframes shimmer {
-    0% {
-        background-position: -200px 0;
-    }
+    0%   { background-position: -400px 0; }
+    100% { background-position:  400px 0; }
+}
 
-    100% {
-        background-position: 200px 0;
-    }
+.image,
+.lineLong,
+.lineShort,
+.lineMedium,
+.linePrice,
+.circle {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e4e4e4 37%, #f0f0f0 63%);
+    background-size: 800px 100%;
+    animation: shimmer 1.4s ease infinite;
+    border-radius: 6px;
 }
 
 .image {
     width: 100%;
     aspect-ratio: 1 / 1;
-    background: linear-gradient(90deg,
-            #f2f2f2 25%,
-            #e6e6e6 37%,
-            #f2f2f2 63%);
-    background-size: 400% 100%;
-    animation: shimmer 1.2s ease infinite;
+    border-radius: 0;
 }
 
 .content {
     padding: 10px;
 }
 
-.lineLong,
-.lineShort,
-.lineMedium,
-.linePrice {
-    height: 10px;
-    border-radius: 6px;
+.lineLong  { width: 90%; height: 10px; margin-bottom: 8px; }
+.lineMedium{ width: 70%; height: 10px; margin-bottom: 8px; }
+.lineShort { width: 50%; height: 10px; margin-bottom: 8px; }
+
+.priceRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 8px;
-
-    background: linear-gradient(90deg,
-            #f2f2f2 25%,
-            #e6e6e6 37%,
-            #f2f2f2 63%);
-    background-size: 400% 100%;
-    animation: shimmer 1.2s ease infinite;
-}
-
-.lineLong {
-    width: 90%;
-}
-
-.lineMedium {
-    width: 70%;
-}
-
-.lineShort {
-    width: 50%;
 }
 
 .linePrice {
@@ -65,21 +75,9 @@
     height: 14px;
 }
 
-.priceRow {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
 .circle {
     width: 28px;
     height: 28px;
     border-radius: 50%;
-
-    background: linear-gradient(90deg,
-            #f2f2f2 25%,
-            #e6e6e6 37%,
-            #f2f2f2 63%);
-    background-size: 400% 100%;
-    animation: shimmer 1.2s ease infinite;
+    flex-shrink: 0;
 }

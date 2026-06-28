@@ -1,0 +1,13 @@
+.sort {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.sort select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: white;
+    font-size: 14px;
+    cursor: pointer;
+}

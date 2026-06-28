@@ -1,6 +1,12 @@
-import styles from './ListCategory.module.css'
+import styles from './ListCategory.module.css';
+import ListCategorySkeleton from './ListCategorySkeleton';
 
-export default function ListCategory() {
+/**
+ * @param {boolean} [loading=false] - Truyền vào khi section kết nối API thực
+ */
+export default function ListCategory({ loading = false }) {
+
+    if (loading) return <ListCategorySkeleton count={6} />;
     const categoryMock = [
         { id: 1, name: 'Phone' },
         { id: 2, name: 'Laptop' },

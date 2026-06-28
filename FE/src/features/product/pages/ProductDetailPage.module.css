@@ -1,35 +1,58 @@
-.container {
-    display: flex;
-    gap: 40px;
-    padding: 32px;
+.page {
     max-width: 1200px;
     margin: 0 auto;
-    font-family: system-ui, sans-serif;
+    padding: 32px 20px 60px;
 }
 
-/* LEFT */
+.container {
+    display: grid;
+    grid-template-columns: 500px minmax(0, 1fr);
+    gap: 48px;
+    align-items: start;
+}
+
 .left {
-    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 16px;
+
+    position: sticky;
+    top: 20px;
 }
+
+.right {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.shopSection {
+    margin-top: 36px;
+}
+
+.loading,
+.notFound {
+    padding: 80px;
+    text-align: center;
+    font-size: 18px;
+}
+
+/* ---------- Gallery ---------- */
 
 .mainImage {
     width: 100%;
-    max-width: 520px;
-    height: 520px;
+    aspect-ratio: 1;
     object-fit: cover;
-    border-radius: 16px;
-    border: 1px solid #eee;
+
+    border-radius: 12px;
+    border: 1px solid #ececec;
 }
 
 .placeholder {
     width: 100%;
-    max-width: 520px;
-    height: 520px;
-    background: #eee;
-    border-radius: 16px;
+    aspect-ratio: 1;
+    border-radius: 12px;
+    background: #f4f4f4;
 }
 
 .thumbRow {
@@ -39,131 +62,63 @@
 }
 
 .thumb {
-    width: 70px;
-    height: 70px;
+    width: 72px;
+    height: 72px;
+
     object-fit: cover;
-    border-radius: 10px;
-    cursor: pointer;
-    opacity: 0.6;
-    transition: 0.2s;
+
+    border-radius: 8px;
     border: 2px solid transparent;
+
+    cursor: pointer;
+    transition: all .2s ease;
 }
 
 .thumb:hover {
-    opacity: 1;
+    opacity: .85;
 }
 
 .activeThumb {
-    opacity: 1;
-    border: 2px solid #111;
+    border-color: #111;
 }
 
-/* RIGHT */
-.right {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
+/* ---------- Responsive ---------- */
+
+@media (max-width:1024px) {
+
+    .container {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .left {
+        position: static;
+    }
+
 }
 
-.title {
-    font-size: 26px;
-    font-weight: 700;
+@media (max-width:768px) {
+
+    .page {
+        padding: 20px 16px 40px;
+    }
+
+    .container {
+        gap: 24px;
+    }
+
+    .thumb {
+        width: 60px;
+        height: 60px;
+    }
+
 }
 
-.price {
-    font-size: 22px;
-    font-weight: 700;
-    color: #e53935;
-}
+@media (max-width:480px) {
 
-/* ACTIONS */
-.actions {
-    display: flex;
-    gap: 12px;
-}
+    .thumb {
+        width: 54px;
+        height: 54px;
+    }
 
-.addCartBtn {
-    flex: 1;
-    padding: 12px;
-    border: 1px solid #111;
-    background: white;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-}
-
-.addCartBtn:hover {
-    background: #111;
-    color: white;
-}
-
-.buyBtn {
-    flex: 1;
-    padding: 12px;
-    background: #111;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 600;
-}
-
-/* SELLER */
-.sellerBox {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px;
-    border: 1px solid #eee;
-    border-radius: 14px;
-    background: #fafafa;
-}
-
-.sellerAvatar {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.sellerInfo {
-    flex: 1;
-}
-
-.sellerName {
-    font-weight: 600;
-}
-
-.sellerMeta {
-    font-size: 12px;
-    color: #777;
-}
-
-.chatBtn {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    background: white;
-    border-radius: 10px;
-    cursor: pointer;
-    display: flex;
-    gap: 6px;
-    align-items: center;
-}
-
-/* META */
-.meta {
-    font-size: 14px;
-    color: #555;
-}
-
-/* STATES */
-.loading,
-.notFound {
-    padding: 40px;
-    text-align: center;
 }

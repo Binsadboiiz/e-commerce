@@ -236,6 +236,7 @@ namespace BE.Services.Implementation
         {
             var product = await _context.Products
                 .AsNoTracking()
+                .Include(p => p.Shop)
                 .Where(p => p.Slug == slug)
                 .Select(p => new ProductDetailDto
                 {
@@ -295,6 +296,12 @@ namespace BE.Services.Implementation
                             ? v.Inventory.AvailableStock - v.Inventory.ReservedStock
                             : 0,
 
+                        SKU = v.SKU ?? string.Empty,
+
+                        ImageIds = v.Images
+                            .Select(i => i.ImageId)
+                            .ToList(),
+
                         IsAvailable = v.Inventory != null
                             && (v.Inventory.AvailableStock - v.Inventory.ReservedStock) > 0,
 
@@ -305,7 +312,23 @@ namespace BE.Services.Implementation
                             ValueId = va.ValueId,
                             Value = va.AttributeValue.Value,
                         }).ToList(),
-                    }).ToList()
+                    }).ToList(),
+
+                    Shop = p.Shop == null ? null : new ShopInfoDto
+                    {
+                        ShopId = p.Shop.ShopId,
+                        ShopName = p.Shop.Name,
+                        ShopAvatar = p.Shop.Logo,
+                        Status = p.Shop.Status,
+                        IsOnline = p.Shop.IsActive,
+                        JoinedAt = p.Shop.Create_At,
+                        Rating = p.Shop.Products.Any() ? (float)p.Shop.Products.Average(x => x.RatingAvg)
+                                           : 0f,
+                        ProductCount = p.Shop.Products.Count(),
+                        Followers = 0,
+                        ResponseRate = 0,
+                        ResponseTime = "--"
+                    }
 
                 })
                 .FirstOrDefaultAsync();

@@ -6,6 +6,8 @@ namespace BE.Models.DTOs.Products.ProductDetail
     {
         public long ProductId { get; set; }
 
+        public ShopInfoDto? Shop { get; set; }
+
         public string Name { get; set; } = string.Empty;
 
         public string? Slug { get; set; }
