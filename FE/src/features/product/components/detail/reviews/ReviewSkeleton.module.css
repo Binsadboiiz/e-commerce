@@ -1,7 +1,79 @@
-.skeleton {
+/* Shimmer animation */
+@keyframes shimmer {
+    0%   { background-position: -500px 0; }
+    100% { background-position:  500px 0; }
+}
+
+/* Shared shimmer style — applied to all shimmer blocks */
+.avatar,
+.name,
+.stars,
+.line,
+.lineShort {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 37%, #f0f0f0 63%);
+    background-size: 800px 100%;
+    animation: shimmer 1.5s ease infinite;
+    border-radius: 6px;
+}
+
+/* Wrapper — vertical stack of shimmer cards */
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Individual shimmer card */
+.card {
     padding: 20px;
-    border: 1px solid #eee;
-    border-radius: 10px;
-    background: #fafafa;
-    color: #999;
+    border: 1px solid #f3f4f6;
+    border-radius: 12px;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* Card header row */
+.header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Avatar circle */
+.avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* Text block in header */
+.headerText {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+
+.name {
+    height: 14px;
+    width: 120px;
+}
+
+.stars {
+    height: 12px;
+    width: 80px;
+}
+
+/* Content lines */
+.line {
+    height: 13px;
+    width: 100%;
+}
+
+.lineShort {
+    height: 13px;
+    width: 65%;
 }

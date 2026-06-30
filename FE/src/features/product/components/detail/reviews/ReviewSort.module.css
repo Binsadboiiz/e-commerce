@@ -1,13 +1,27 @@
+/* ================================================================
+   Review sort controls — right-aligned dropdown
+   ================================================================ */
 .sort {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
 }
 
+/* Sort dropdown */
 .sort select {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    background: white;
-    font-size: 14px;
+    padding: 8px 14px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #374151;
+    font-size: 13px;
+    font-weight: 500;
     cursor: pointer;
+    outline: none;
+    transition: border-color 0.18s ease;
+}
+
+.sort select:hover,
+.sort select:focus {
+    border-color: #9ca3af;
 }

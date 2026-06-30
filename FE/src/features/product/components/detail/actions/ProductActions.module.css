@@ -1,31 +1,43 @@
+/* ================================================================
+   Actions wrapper — quantity stepper + action buttons in a row
+   ================================================================ */
 .actions {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
     width: 100%;
-    margin-top: 24px;
-    font-family: 'Inter', sans-serif;
 }
 
+/* ================================================================
+   Quantity stepper — pill-shaped control
+   ================================================================ */
 .quantity {
     display: flex;
     align-items: center;
-    border: 1px solid #d1d5db;
+    border: 1.5px solid #e5e7eb;
     border-radius: 999px;
     overflow: hidden;
     height: 48px;
     flex-shrink: 0;
+    background: #ffffff;
+    transition: border-color 0.2s ease;
 }
 
+.quantity:focus-within {
+    border-color: #9ca3af;
+}
+
+/* Stepper buttons */
 .quantity button {
-    width: 48px;
+    width: 44px;
     height: 48px;
     border: none;
-    background: #ffffff;
-    font-size: 20px;
-    font-weight: 500;
+    background: transparent;
+    font-size: 18px;
+    font-weight: 400;
+    color: #374151;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: background 0.15s ease;
 }
 
 .quantity button:hover:not(:disabled) {
@@ -34,22 +46,24 @@
 
 .quantity button:disabled {
     cursor: not-allowed;
-    opacity: 0.45;
+    opacity: 0.35;
 }
 
+/* Quantity display input */
 .quantity input {
-    width: 56px;
+    width: 48px;
     height: 48px;
     border: none;
     outline: none;
     text-align: center;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
-    background: #ffffff;
+    background: transparent;
     color: #111827;
     pointer-events: none;
 }
 
+/* Hide number input spinners */
 .quantity input::-webkit-outer-spin-button,
 .quantity input::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -61,55 +75,100 @@
     -moz-appearance: textfield;
 }
 
-.addCartBtn:disabled,
-.buyBtn:disabled {
-    cursor: not-allowed;
-    opacity: 0.6;
-}
-
-.addCartBtn:disabled:hover {
-    background-color: #ffffff;
-}
-
-.buyBtn:disabled:hover {
-    background-color: #000000;
-}
-
+/* ================================================================
+   Shared button styles — Add to Cart + Buy Now
+   ================================================================ */
 .addCartBtn,
 .buyBtn {
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 8px;
+
     height: 48px;
     flex: 1;
+    min-width: 0;
+
     border-radius: 999px;
-    font-size: 16px;
-    font-weight: 500;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.1s ease;
 }
 
+.addCartBtn:active:not(:disabled),
+.buyBtn:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+/* ================================================================
+   Add to Cart — outlined button
+   ================================================================ */
 .addCartBtn {
-    background-color: #ffffff;
-    color: #000000;
-    border: 1.5px solid #000000;
+    background: #ffffff;
+    color: #111827;
+    border: 1.5px solid #111827;
 }
 
-.addCartBtn:hover {
-    background-color: #f9fafb;
+.addCartBtn:hover:not(:disabled) {
+    background: #f9fafb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Cart icon sizing */
 .addCartBtn svg {
-    font-size: 20px;
-    margin-right: 8px;
+    font-size: 19px;
+    flex-shrink: 0;
 }
 
+/* ================================================================
+   Buy Now — solid primary button
+   ================================================================ */
 .buyBtn {
-    background-color: #000000;
+    background: #111827;
     color: #ffffff;
-    border: 1.5px solid #000000;
+    border: 1.5px solid #111827;
 }
 
-.buyBtn:hover {
-    background-color: #333333;
+.buyBtn:hover:not(:disabled) {
+    background: #1f2937;
+    box-shadow: 0 4px 16px rgba(17, 24, 39, 0.28);
+}
+
+/* ================================================================
+   Disabled state — both buttons
+   ================================================================ */
+.addCartBtn:disabled,
+.buyBtn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    box-shadow: none;
+}
+
+/* ================================================================
+   Responsive — Mobile (< 480px)
+   Wrap stepper above buttons
+   ================================================================ */
+@media (max-width: 480px) {
+
+    .actions {
+        flex-wrap: wrap;
+    }
+
+    .quantity {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .addCartBtn,
+    .buyBtn {
+        flex: 1;
+    }
+
 }

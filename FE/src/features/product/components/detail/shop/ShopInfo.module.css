@@ -1,154 +1,234 @@
+/* ================================================================
+   Shop info card — padding provided by parent .section shell
+   ================================================================ */
 .wrapper {
-  background-color: #ffffff;
-  border-radius: 24px;
-  padding: 24px 32px;
-  display: flex;
-  align-items: center;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
-  max-width: 1200px;
-  width: 100%;
-  margin: 20px auto;
-  box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: var(--pd-section-padding, 32px);
+    flex-wrap: wrap;
 }
 
-/* --- KHỐI BÊN TRÁI --- */
+/* ================================================================
+   Left block — avatar + name + status + view button
+   ================================================================ */
 .shopMeta {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding-right: 32px;
-  border-right: 1px solid #e5e7eb;
-  flex-shrink: 0; /* Giữ nguyên cấu trúc, không cho bóp méo bên trái */
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-right: 32px;
+    border-right: 1px solid #f1f1f1;
+    flex-shrink: 0;
 }
 
+/* Shop avatar */
 .avatar {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  object-fit: cover;
-  background-color: #f3f4f6;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #f3f4f6;
+    border: 2px solid #f1f1f1;
+    flex-shrink: 0;
 }
 
 .info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
 }
 
+/* Shop name */
 .name {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: #111827;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
 }
 
+/* Online / offline status row */
 .status {
-  font-size: 13px;
-  color: #16a34a;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
 }
 
-.dotOnline {
-  width: 6px;
-  height: 6px;
-  background-color: #16a34a;
-  border-radius: 50%;
+/* Online status dot + text — green */
+.online {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    background: #16a34a;
+    border-radius: 50%;
+    flex-shrink: 0;
 }
 
-.dotOffline {
-  width: 6px;
-  height: 6px;
-  background-color: #9ca3af;
-  border-radius: 50%;
+/* Offline status dot + text — gray */
+.offline {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    background: #d1d5db;
+    border-radius: 50%;
+    flex-shrink: 0;
 }
 
-.viewShopBtn {
-  background: #ffffff;
-  border: 1px solid #111827;
-  color: #111827;
-  padding: 5px 12px;
-  font-size: 12px;
-  font-weight: 500;
-  border-radius: 4px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 4px;
-  transition: all 0.2s ease;
+/* View shop link */
+.viewBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 2px;
+
+    padding: 5px 12px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 6px;
+
+    font-size: 12px;
+    font-weight: 500;
+    color: #374151;
+    background: #ffffff;
+
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+        border-color 0.18s ease,
+        color 0.18s ease,
+        background 0.18s ease;
 }
 
-.viewShopBtn:hover {
-  background-color: #f9fafb;
+.viewBtn:hover {
+    border-color: #111827;
+    color: #111827;
+    background: #f9fafb;
 }
 
-/* --- KHỐI GIỮA (STATS) --- */
+/* ================================================================
+   Center block — stats grid
+   ================================================================ */
 .statsContainer {
-  flex: 1;
-  display: flex;
-  justify-content: space-around; /* Chia đều khoảng cách 3 cột */
-  padding: 0 40px;
-  gap: 20px;
+    flex: 1;
+    display: flex;
+    justify-content: space-around;
+    padding: 0 32px;
+    gap: 16px;
+    flex-wrap: wrap;
 }
 
 .statsColumn {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
 }
 
+/* Stat row — label + value inline */
 .item {
-  display: flex;
-  align-items: center;
-  font-size: 13px;
-  white-space: nowrap;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 13px;
+    white-space: nowrap;
 }
 
+/* Stat label */
 .label {
-  color: #6b7280;
-  width: 110px; /* Cố định độ rộng nhãn chữ để giá trị số luôn thẳng hàng dọc */
-  flex-shrink: 0;
+    color: #9ca3af;
+    min-width: 96px;
+    flex-shrink: 0;
 }
 
+/* Stat value */
 .value {
-  color: #4b5563; 
-  font-weight: 500;
+    color: #111827;
+    font-weight: 600;
 }
 
-/* --- KHỐI PHẢI (CHAT BUTTON) --- */
+/* ================================================================
+   Right block — chat button
+   ================================================================ */
 .actionContainer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
 }
 
+/* Chat now button */
 .chatBtn {
-  background-color: #ffffff;
-  border: 1px solid #111827;
-  color: #111827;
-  padding: 8px 20px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  white-space: nowrap;
-  transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 10px 22px;
+    border: 1.5px solid #111827;
+    border-radius: 999px;
+
+    background: #ffffff;
+    color: #111827;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+        background 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.1s ease;
 }
 
 .chatBtn:hover {
-  background-color: #f9fafb;
+    background: #111827;
+    color: #ffffff;
+    box-shadow: 0 4px 16px rgba(17, 24, 39, 0.2);
 }
 
-.icon {
-  display: inline-block;
-  vertical-align: middle;
+.chatBtn:active {
+    transform: scale(0.97);
+}
+
+/* ================================================================
+   Responsive — Tablet (< 900px)
+   ================================================================ */
+@media (max-width: 900px) {
+
+    .wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 24px;
+    }
+
+    .shopMeta {
+        border-right: none;
+        border-bottom: 1px solid #f1f1f1;
+        padding-right: 0;
+        padding-bottom: 20px;
+        width: 100%;
+    }
+
+    .statsContainer {
+        padding: 0;
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .actionContainer {
+        width: 100%;
+    }
+
+    .chatBtn {
+        width: 100%;
+        justify-content: center;
+    }
+
+}
+
+/* SVG icon within buttons — replaces former inline styles */
+.svgIcon {
+    display: inline-block;
+    vertical-align: middle;
+    fill: currentColor;
+    flex-shrink: 0;
+    margin-right: 4px;
 }

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import styles from "./ShopInfo.module.css";
 import { ROUTES } from "@/config/route.config";
+import { IoHomeOutline, IoChatbubbleEllipsesOutline } from "react-icons/io5";
 
 const DEFAULT_SHOP_AVATAR =
     "https://placehold.co/80x80/F3F4F6/6B7280?text=Shop";
@@ -54,9 +55,7 @@ export default function ShopInfo({ shop }) {
                         to={ROUTES.SHOP.replace(":id", shop.shopId)}
                         className={styles.viewBtn}
                     >
-                        <svg viewBox="0 0 24 24" width="14" height="14" style={{ marginRight: '4px', fill: 'currentColor', verticalAlign: 'middle' }}>
-                            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                        </svg>
+                        <IoHomeOutline className={styles.svgIcon} />
                         View Shop
                     </Link>
                 </div>
@@ -106,10 +105,7 @@ export default function ShopInfo({ shop }) {
             {/* Phía ngoài cùng */}
             <div className={styles.actionContainer}>
                 <button className={styles.chatBtn}>
-                    {/* Btn chat */}
-                    <svg viewBox="0 0 24 24" width="14" height="14" style={{ marginRight: '6px', fill: 'currentColor', verticalAlign: 'middle' }}>
-                        <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
-                    </svg>
+                    <IoChatbubbleEllipsesOutline className={styles.svgIcon} />
                     Chat now
                 </button>
             </div>

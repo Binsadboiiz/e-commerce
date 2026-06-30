@@ -1,6 +1,6 @@
 ﻿using BE.Models.DTOs.Reviews;
 
-namespace BE.Services.Interface.Review
+namespace BE.Services.Interface
 {
     public interface IReviewQueryService
     {

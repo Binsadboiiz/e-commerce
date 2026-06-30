@@ -36,21 +36,22 @@ export default function ProductShare() {
 
                 <div className={styles.icons}>
 
-                    <button className={styles.iconBtn}>
+                    <button className={styles.iconBtn} aria-label="Share on Facebook">
                         <FaFacebookF />
                     </button>
 
-                    <button className={styles.iconBtn}>
+                    <button className={styles.iconBtn} aria-label="Share on Twitter">
                         <FaTwitter />
                     </button>
 
-                    <button className={styles.iconBtn}>
+                    <button className={styles.iconBtn} aria-label="Share on Pinterest">
                         <FaPinterestP />
                     </button>
 
                     <button
                         className={styles.iconBtn}
                         onClick={handleCopyLink}
+                        aria-label="Copy link"
                     >
                         <FaLink />
                     </button>

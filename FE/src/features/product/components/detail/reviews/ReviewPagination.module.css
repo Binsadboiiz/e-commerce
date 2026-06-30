@@ -1,30 +1,90 @@
+/* ================================================================
+   Review pagination — centered row of page buttons
+   ================================================================ */
 .pagination {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 12px;
-    margin-top: 20px;
+    gap: 6px;
+    padding-top: 8px;
+    flex-wrap: wrap;
 }
 
-.pagination button {
-    padding: 6px 12px;
-    border: 1px solid #ddd;
-    background: white;
-    border-radius: 6px;
+/* Page number button */
+.page {
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
+
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #374151;
+
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
-    transition: 0.2s;
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease;
 }
 
-.pagination button:hover {
-    background: #f5f5f5;
+.page:hover:not(:disabled) {
+    background: #f9fafb;
+    border-color: #9ca3af;
 }
 
-.pagination button:disabled {
-    opacity: 0.5;
+/* Active / current page */
+.active {
+    background: #111827;
+    border-color: #111827;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.active:hover {
+    background: #1f2937;
+    border-color: #1f2937;
+}
+
+/* Prev / Next arrow buttons */
+.arrow {
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
+
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #374151;
+
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease;
+}
+
+.arrow:hover:not(:disabled) {
+    background: #f9fafb;
+    border-color: #9ca3af;
+}
+
+.arrow:disabled {
+    opacity: 0.35;
     cursor: not-allowed;
 }
 
-.pagination span {
+/* Ellipsis separator */
+.ellipsis {
     font-size: 14px;
-    color: #555;
+    color: #9ca3af;
+    padding: 0 4px;
+    display: inline-flex;
+    align-items: center;
+    height: 36px;
 }

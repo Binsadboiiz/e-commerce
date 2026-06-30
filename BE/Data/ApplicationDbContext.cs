@@ -170,10 +170,10 @@ namespace BE.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ReviewReply>()
-    .HasOne(rp => rp.Shop)
-    .WithMany(s => s.ReviewReplies)
-    .HasForeignKey(rp => rp.ShopId)
-    .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(rp => rp.Shop)
+                .WithMany(s => s.ReviewReplies)
+                .HasForeignKey(rp => rp.ShopId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

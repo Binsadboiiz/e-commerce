@@ -59,8 +59,6 @@ export default function useProductDetail(slug) {
 
     const selectedVariant = useMemo(() => {
 
-        console.log("PAGE PRODUCT:", product);
-
         if (!product) return null;
 
         const variantId = product.variantMap?.[variantKey];

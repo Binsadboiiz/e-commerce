@@ -133,12 +133,20 @@ export default function MainImageSlider({ images, activeImageIndex, onChangeImag
                 ))}
             </div>
 
-            {/* NAVIGATION */}
-            <button className={styles.btnPrev} onClick={handlePrevImage}>
+            {/* Navigation arrows */}
+            <button
+                className={styles.btnPrev}
+                onClick={handlePrevImage}
+                aria-label="Previous image"
+            >
                 <FaCaretLeft />
             </button>
 
-            <button className={styles.btnNext} onClick={handleNextImage}>
+            <button
+                className={styles.btnNext}
+                onClick={handleNextImage}
+                aria-label="Next image"
+            >
                 <FaCaretRight />
             </button>
 

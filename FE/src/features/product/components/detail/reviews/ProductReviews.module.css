@@ -1,20 +1,59 @@
+/* ================================================================
+   Reviews section card — padding from parent .section shell
+   ================================================================ */
 .container {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-}
-
-.header {
-    display: grid;
-    grid-template-columns: 280px 1fr;
     gap: 24px;
-    align-items: center;
-    padding: 16px 0;
-    border-bottom: 1px solid #eee;
+    padding: var(--pd-section-padding, 32px);
 }
 
+/* ================================================================
+   Section heading — "Customer Reviews (42)"
+   ================================================================ */
+.heading {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #111827;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+/* Muted count in parentheses */
+.count {
+    font-size: 15px;
+    font-weight: 500;
+    color: #9ca3af;
+}
+
+/* ================================================================
+   Rating header — summary + progress bars side by side
+   ================================================================ */
+.ratingHeader {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 32px;
+    align-items: center;
+}
+
+/* ================================================================
+   Responsive — Mobile (< 768px)
+   ================================================================ */
 @media (max-width: 768px) {
-    .header {
+
+    .ratingHeader {
         grid-template-columns: 1fr;
+        gap: 20px;
     }
+
+    .container {
+        gap: 20px;
+    }
+
 }

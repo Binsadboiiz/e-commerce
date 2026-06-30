@@ -1,15 +1,15 @@
-import styles from "./ProductReviews.module.css";
+import styles from './ProductReviews.module.css';
 
-import RatingSummary from "./RatingSummary";
-import RatingProgress from "./RatingProgress";
-import ReviewSort from "./ReviewSort";
-import ReviewList from "./ReviewList";
-import ReviewPagination from "./ReviewPagination";
-import ReviewSkeleton from "./ReviewSkeleton";
+import RatingSummary from './RatingSummary';
+import RatingProgress from './RatingProgress';
+import ReviewSort from './ReviewSort';
+import ReviewList from './ReviewList';
+import ReviewPagination from './ReviewPagination';
+import ReviewSkeleton from './ReviewSkeleton';
 
-import useProductReviews from "../../../hooks/useProductReviews";
+import useProductReviews from '../../../hooks/useProductReviews';
 
-export default function ProductReviews({ productId }) {
+export default function ProductReviews({ productId, shopName }) {
 
     const {
         data,
@@ -17,7 +17,7 @@ export default function ProductReviews({ productId }) {
         page,
         setPage,
         sortBy,
-        setSortBy
+        setSortBy,
     } = useProductReviews(productId);
 
     if (loading && !data) return <ReviewSkeleton />;
@@ -26,15 +26,25 @@ export default function ProductReviews({ productId }) {
     return (
         <div className={styles.container}>
 
-            <div className={styles.header}>
+            {/* Section heading with review count */}
+            <h2 className={styles.heading}>
+                Customer Reviews
+                <span className={styles.count}>({data.totalReviews})</span>
+            </h2>
+
+            {/* Rating overview: big score + star distribution */}
+            <div className={styles.ratingHeader}>
                 <RatingSummary data={data} />
                 <RatingProgress data={data.ratingSummary} />
             </div>
 
+            {/* Sort control */}
             <ReviewSort value={sortBy} onChange={setSortBy} />
 
-            <ReviewList reviews={data.reviews} />
+            {/* Review cards */}
+            <ReviewList reviews={data.reviews} shopName={shopName} />
 
+            {/* Pagination */}
             <ReviewPagination
                 page={page}
                 totalPages={data.totalPages}

@@ -2,7 +2,6 @@
 using BE.Repositories.Interfaces;
 using BE.Services.Implementation.Review;
 using BE.Services.Interface;
-using BE.Services.Interface.Review;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BE.Extensions.DependencyInjection

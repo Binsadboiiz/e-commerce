@@ -1,64 +1,194 @@
+/* ================================================================
+   Product Info wrapper
+   ================================================================ */
 .wrapper {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-.name {
-    font-size: 32px;
-    font-weight: 700;
-    color: #000000;
-    line-height: 1.2;
-    order: 1;
-}
-
-/* --- RATING SECTION --- */
-.rating {
+/* ================================================================
+   Meta — brand / category line above product name
+   ================================================================ */
+.meta {
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #000000;
-    order: 2;
+    flex-wrap: wrap;
 }
 
-.rating svg {
-    color: #FFC107;
-    font-size: 18px;
-    margin-right: 2px;
-    margin-top: -2px;
+.category {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--pd-color-text-muted, #6b7280);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
 }
 
-.rating span:last-child {
-    color: #666666;
-    font-weight: 400;
-    margin-left: 4px;
+.metaDot {
+    font-size: 12px;
+    color: #d1d5db;
 }
 
-
-/* --- PRICE SECTION --- */
-.price {
-    order: 3;
-    margin-top: 8px;
+.brand {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--pd-color-text-muted, #6b7280);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
 }
 
-.price>div {
+/* ================================================================
+   Product name — h1 for SEO
+   ================================================================ */
+.name {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: #111827;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+}
+
+/* ================================================================
+   Rating row
+   ================================================================ */
+.rating {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 5px;
 }
 
+.starIcon {
+    color: #f59e0b;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.ratingValue {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.ratingCount {
+    font-size: 13px;
+    color: #9ca3af;
+}
+
+/* ================================================================
+   Price block — final price, original, discount badge, stock
+   ================================================================ */
+.priceBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px 0;
+    border-top: 1px solid #f1f1f1;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+/* Row: prices + badge inline */
+.priceRow {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Final displayed price */
 .finalPrice {
-    font-size: 32px;
+    font-size: 30px;
     font-weight: 700;
-    color: #000000;
+    color: #111827;
+    line-height: 1;
 }
 
+/* Sale price = accent red */
+.salePrice {
+    color: var(--pd-color-accent, #e11d48);
+}
+
+/* Original price struck through */
 .originalPrice {
-    font-size: 22px;
-    font-weight: 500;
-    color: #D1D5DB;
+    font-size: 17px;
+    font-weight: 400;
+    color: #d1d5db;
     text-decoration: line-through;
+}
+
+/* Discount percentage pill */
+.discountBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 8px;
+    background: #fef2f2;
+    color: var(--pd-color-accent, #e11d48);
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 6px;
+    letter-spacing: 0.02em;
+}
+
+/* ================================================================
+   Stock status indicators
+   ================================================================ */
+.stockIn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #16a34a;
+}
+
+.stockIn::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    background: #16a34a;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.stockLow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #d97706;
+}
+
+.stockLow::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    background: #d97706;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.stockOut {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #9ca3af;
+}
+
+/* ================================================================
+   Responsive — Mobile (< 768px)
+   ================================================================ */
+@media (max-width: 768px) {
+
+    .name {
+        font-size: 20px;
+    }
+
+    .finalPrice {
+        font-size: 26px;
+    }
+
 }

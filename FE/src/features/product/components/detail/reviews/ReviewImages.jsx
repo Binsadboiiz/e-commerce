@@ -1,4 +1,4 @@
-import styles from "./ReviewImages.module.css";
+import styles from './ReviewImages.module.css';
 
 export default function ReviewImages({ images }) {
 
@@ -10,6 +10,8 @@ export default function ReviewImages({ images }) {
                 <img
                     key={img.reviewImageId}
                     src={img.imageUrl}
+                    alt={`Review photo ${img.reviewImageId}`}
+                    className={styles.thumb}
                 />
             ))}
         </div>

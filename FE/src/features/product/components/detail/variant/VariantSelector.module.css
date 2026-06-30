@@ -1,44 +1,69 @@
+/* ================================================================
+   Variant selector wrapper — stacks attribute groups vertically
+   ================================================================ */
 .wrapper {
     display: flex;
     flex-direction: column;
-    gap: 24px;
-    font-family: 'Inter', sans-serif;
+    gap: 20px;
 }
 
+/* ================================================================
+   Attribute title label
+   ================================================================ */
 .title {
-    margin-bottom: 12px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #374151;
+    margin-bottom: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7280;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
 }
 
+/* ================================================================
+   Options row — wrapping flex layout
+   ================================================================ */
 .options {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
 }
 
+/* ================================================================
+   Option button — base state
+   ================================================================ */
 .button {
-    padding: 8px 16px;
+    padding: 8px 18px;
     border-radius: 8px;
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition:
+        border-color 0.18s ease,
+        background 0.18s ease,
+        box-shadow 0.18s ease,
+        color 0.18s ease;
 }
 
+/* ================================================================
+   Selected option — solid dark fill
+   ================================================================ */
 .selected {
-    background-color: #000000;
+    background: #111827;
     color: #ffffff;
-    border: 1px solid #000000;
+    border: 1.5px solid #111827;
+    box-shadow: 0 2px 8px rgba(17, 24, 39, 0.2);
 }
 
+/* ================================================================
+   Unselected option — outlined, hover border darkens
+   ================================================================ */
 .unselected {
-    background-color: #ffffff;
-    color: #000000;
-    border: 1px solid #d1d5db;
+    background: #ffffff;
+    color: #374151;
+    border: 1.5px solid #e5e7eb;
 }
 
 .unselected:hover {
-    border-color: #000000;
+    border-color: #374151;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }

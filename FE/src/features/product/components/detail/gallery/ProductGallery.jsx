@@ -22,9 +22,7 @@ export default function ProductGallery({ images = [], selectedImage, onSelectIma
             <MainImageSlider
                 images={images}
                 activeImageIndex={activeImageIndex >= 0 ? activeImageIndex : 0}
-                onChangeImage={(index) => onSelectImage(images[index].imageUrl)
-
-                }
+                onChangeImageIndex={(index) => onSelectImage(images[index].imageUrl)}
             />
             <ThumbnailSlider
                 images={images}

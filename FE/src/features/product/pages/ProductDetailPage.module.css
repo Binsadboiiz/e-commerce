@@ -1,124 +1,184 @@
-.page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 32px 20px 60px;
+/* ================================================================
+   Design Tokens
+   Centralized custom properties — inherited by child components.
+   ================================================================ */
+:root {
+    --pd-header-h: 0px;
+    --pd-nav-h: 56px;
+    --pd-sticky-offset: calc(var(--pd-header-h) + var(--pd-nav-h) + 16px);
+
+    --pd-max-w: 1280px;
+    --pd-page-px: 24px;
+
+    --pd-gap-overview: 48px;
+    --pd-col-gallery: minmax(0, 520px);
+
+    --pd-section-radius: 16px;
+    --pd-section-bg: #ffffff;
+    --pd-section-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.05),
+        0 4px 16px rgba(0, 0, 0, 0.04);
+    --pd-section-padding: 32px;
+
+    --pd-color-accent: #e11d48;
+    --pd-color-border: #ebebeb;
+    --pd-color-bg-page: #f7f8fa;
+    --pd-color-text-primary: #111827;
+    --pd-color-text-muted: #6b7280;
 }
 
-.container {
+/* ================================================================
+   Page wrapper
+   ================================================================ */
+.page {
+    position: relative;
+    max-width: var(--pd-max-w);
+    margin: 0 auto;
+    padding: 32px var(--pd-page-px) 80px;
+    background: var(--pd-color-bg-page);
+    min-height: 100vh;
+}
+
+/* Sentinel element at the very top of the page */
+.sentinel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 1px;
+    width: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ================================================================
+   Layout — Overview (Gallery + Info)
+   ================================================================ */
+
+/* Two-column grid: fixed gallery column + flexible info column */
+.overview {
     display: grid;
-    grid-template-columns: 500px minmax(0, 1fr);
-    gap: 48px;
+    grid-template-columns: var(--pd-col-gallery) minmax(0, 1fr);
+    gap: var(--pd-gap-overview);
     align-items: start;
 }
 
-.left {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-
+/* Gallery column — sticky so it stays visible while scrolling info */
+.galleryCol {
     position: sticky;
-    top: 20px;
-}
-
-.right {
+    top: calc(var(--pd-header-h) + 16px);
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 12px;
 }
 
-.shopSection {
-    margin-top: 36px;
-}
-
-.loading,
-.notFound {
-    padding: 80px;
-    text-align: center;
-    font-size: 18px;
-}
-
-/* ---------- Gallery ---------- */
-
-.mainImage {
-    width: 100%;
-    aspect-ratio: 1;
-    object-fit: cover;
-
-    border-radius: 12px;
-    border: 1px solid #ececec;
-}
-
-.placeholder {
-    width: 100%;
-    aspect-ratio: 1;
-    border-radius: 12px;
-    background: #f4f4f4;
-}
-
-.thumbRow {
+/* Product info column — stacks sections vertically */
+.infoCol {
     display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 24px;
+    padding-top: 4px;
 }
 
-.thumb {
-    width: 72px;
-    height: 72px;
+/* ================================================================
+   Content Sections (Description / Shop / Reviews)
+   ================================================================ */
 
-    object-fit: cover;
+/* Each section is a card with elevation and whitespace */
+.section {
+    margin-top: 32px;
 
-    border-radius: 8px;
-    border: 2px solid transparent;
+    /* Offset for sticky header + sticky nav when scroll-jumping */
+    scroll-margin-top: var(--pd-sticky-offset);
 
-    cursor: pointer;
-    transition: all .2s ease;
+    background: var(--pd-section-bg);
+    border-radius: var(--pd-section-radius);
+    box-shadow: var(--pd-section-shadow);
+    overflow: hidden;
 }
 
-.thumb:hover {
-    opacity: .85;
+/* ================================================================
+   Not-found state
+   ================================================================ */
+.notFound {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 80px 24px;
+    text-align: center;
+    font-size: 16px;
+    color: var(--pd-color-text-muted, #6b7280);
 }
 
-.activeThumb {
-    border-color: #111;
+.notFoundIcon {
+    font-size: 48px;
+    line-height: 1;
 }
 
-/* ---------- Responsive ---------- */
+.notFoundLink {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 24px;
+    background: #111827;
+    color: #ffffff;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s ease;
+}
 
-@media (max-width:1024px) {
+.notFoundLink:hover {
+    background: #1f2937;
+}
 
-    .container {
-        grid-template-columns: 1fr;
-        gap: 32px;
+/* ================================================================
+   Responsive — Tablet (768px – 1199px)
+   ================================================================ */
+@media (max-width: 1199px) {
+
+    :root {
+        --pd-col-gallery: minmax(0, 420px);
+        --pd-gap-overview: 32px;
     }
 
-    .left {
+}
+
+/* ================================================================
+   Responsive — Collapse to single column (< 900px)
+   ================================================================ */
+@media (max-width: 900px) {
+
+    .overview {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .galleryCol {
         position: static;
     }
 
 }
 
-@media (max-width:768px) {
+/* ================================================================
+   Responsive — Mobile (< 768px)
+   ================================================================ */
+@media (max-width: 768px) {
+
+    :root {
+        --pd-page-px: 16px;
+        --pd-section-padding: 20px;
+        --pd-section-radius: 12px;
+    }
 
     .page {
-        padding: 20px 16px 40px;
+        padding: 16px var(--pd-page-px) 64px;
     }
 
-    .container {
-        gap: 24px;
-    }
-
-    .thumb {
-        width: 60px;
-        height: 60px;
-    }
-
-}
-
-@media (max-width:480px) {
-
-    .thumb {
-        width: 54px;
-        height: 54px;
+    .section {
+        margin-top: 20px;
+        scroll-margin-top: calc(var(--pd-header-h) + 60px);
     }
 
 }

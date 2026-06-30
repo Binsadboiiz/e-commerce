@@ -1,18 +1,74 @@
+/* ================================================================
+   Thumbnail strip — horizontal scrolling row
+   ================================================================ */
 .row {
     display: flex;
     gap: 8px;
     overflow-x: auto;
+
+    /* Hide scrollbar */
+    scrollbar-width: none;
+    padding-bottom: 2px;
 }
 
+.row::-webkit-scrollbar {
+    display: none;
+}
+
+/* ================================================================
+   Thumbnail image
+   ================================================================ */
 .thumb {
-    width: 60px;
-    height: 60px;
+    width: 72px;
+    height: 72px;
+    flex-shrink: 0;
+
     object-fit: cover;
-    cursor: pointer;
+
+    border-radius: 10px;
     border: 2px solid transparent;
-    border-radius: 6px;
+
+    cursor: pointer;
+    opacity: 0.72;
+
+    transition:
+        border-color 0.18s ease,
+        opacity 0.18s ease,
+        transform 0.18s ease;
 }
 
+.thumb:hover {
+    opacity: 1;
+    transform: translateY(-1px);
+}
+
+/* ================================================================
+   Active thumbnail — highlighted ring
+   ================================================================ */
 .active {
-    border-color: #000;
+    border-color: #111827;
+    opacity: 1;
+    transform: translateY(-1px);
+}
+
+/* ================================================================
+   Responsive — Mobile (< 768px)
+   ================================================================ */
+@media (max-width: 768px) {
+
+    .thumb {
+        width: 60px;
+        height: 60px;
+        border-radius: 8px;
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .thumb {
+        width: 52px;
+        height: 52px;
+    }
+
 }

@@ -1,7 +1,7 @@
 ﻿using BE.Data;
 using BE.Models.DTOs.Reviews;
 using BE.Repositories.Interfaces;
-using BE.Services.Interface.Review;
+using BE.Services.Interface;
 using Microsoft.EntityFrameworkCore;
 
 namespace BE.Services.Implementation.Review
