@@ -16,7 +16,7 @@ export const CartProvider = ({ children }) => {
         setLoading(true);
         try {
             const data = await cartApi.getCart();
-            setCart(data);
+            setCart(data?.data);
         } catch (err) {
             if(err.response?.status === 401 || err.response?.status === 403) {
                 setCart(null);
@@ -59,8 +59,8 @@ export const CartProvider = ({ children }) => {
     const addToCart = async (productId, quantity = 1, variantId = null) => {
         try {
             const data = await cartApi.add(productId, quantity, variantId);
-            setCart(data);
-            return data;
+            setCart(data?.data);
+            return data?.data;
         } catch (err) {
             console.error("Failed to add to cart:", err);
             throw err;
@@ -71,8 +71,8 @@ export const CartProvider = ({ children }) => {
     const updateQuantity = async (productId, quantity, variantId = null) => {
         try {
             const data = await cartApi.update(productId, quantity, variantId);
-            setCart(data);
-            return data;
+            setCart(data?.data);
+            return data?.data;
         } catch (err) {
             console.error("Failed to update quantity:", err);
             throw err;

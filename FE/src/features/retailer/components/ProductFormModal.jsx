@@ -125,7 +125,7 @@ export default function ProductFormModal({ isOpen, onClose, onSubmit, initialDat
                                 <h3 className={styles.variantTitle}>Sales Information</h3>
                                 <div className={styles.variantRow}>
                                     <div className={styles.formGroup}>
-                                        <label>Selling Price (VND) *</label>
+                                        <label>Selling Price (USD) *</label>
                                         <input
                                             required
                                             type="number"

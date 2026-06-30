@@ -6,10 +6,9 @@ import { useCart } from "../../cart/hooks/useCart";
 import { ROUTES } from "../../../config/route.config";
 import "./CheckoutPage.css";
 
-const currency = new Intl.NumberFormat("vi-VN", {
+const currency = new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "VND",
-    maximumFractionDigits: 0
+    currency: "USD"
 });
 
 export default function CheckoutPage() {
@@ -57,10 +56,11 @@ export default function CheckoutPage() {
                     return;
                 }
 
-                setAddresses(addressData);
-                setPaymentMethods(paymentData);
+                const addressList = addressData?.data || [];
+                setAddresses(addressList);
+                setPaymentMethods(paymentData?.data || []);
 
-                const defaultAddress = addressData.find(address => address.isDefault) ?? addressData[0] ?? null;
+                const defaultAddress = addressList.find(address => address.isDefault) ?? addressList[0] ?? null;
                 if (defaultAddress) {
                     setSelectedAddressId(defaultAddress.id);
                 }
@@ -128,7 +128,7 @@ export default function CheckoutPage() {
                     : await checkoutApi.previewCart(payload);
 
                 if (!ignore) {
-                    setPreview(response);
+                    setPreview(response?.data ?? null);
                 }
             } catch (err) {
                 if (!ignore) {
@@ -173,13 +173,14 @@ export default function CheckoutPage() {
             const response = checkoutMode === "buy-now"
                 ? await checkoutApi.placeBuyNowOrder(payload)
                 : await checkoutApi.placeCartOrder(payload);
+            const orderResult = response?.data;
 
             if (checkoutMode === "cart") {
                 await fetchCart();
             }
 
-            window.alert(`Order placed successfully. Order ID: ${response.orderId}`);
-            navigate(ROUTES.ORDER_TRACKING.replace(":orderId", String(response.orderId)));
+            window.alert(`Order placed successfully. Order ID: ${orderResult?.orderId}`);
+            navigate(ROUTES.ORDER_TRACKING.replace(":orderId", String(orderResult?.orderId)));
         } catch (err) {
             setError(err.message || "Failed to place order.");
         } finally {

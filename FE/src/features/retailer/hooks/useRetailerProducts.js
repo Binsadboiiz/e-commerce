@@ -24,13 +24,14 @@ export default function useRetailerProducts(params = {}) {
             setError(null);
 
             const res = await retailerProductApi.getMyProducts(params);
+            const data = res?.data;
 
-            setProducts(res.items || []);
+            setProducts(data?.items || []);
             setPagination({
-                page: res.page || params.page || 1,
-                pageSize: res.pageSize || params.pageSize || 20,
-                total: res.total || 0,
-                totalPages: res.totalPages || 0,
+                page: data?.page || params.page || 1,
+                pageSize: data?.pageSize || params.pageSize || 20,
+                total: data?.total || 0,
+                totalPages: data?.totalPages || 0,
             });
         } catch (err) {
             // err có thể là object từ ErrorHandle hoặc Error object

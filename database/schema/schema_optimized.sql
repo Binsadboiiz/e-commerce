@@ -447,6 +447,68 @@ CREATE TABLE Accounts (
 CREATE INDEX idx_accounts_email ON Accounts(Email);
 CREATE INDEX idx_accounts_role ON Accounts(Role);
 
+
+-- =========================================================================
+-- 25. REVIEWS
+-- =========================================================================
+CREATE TABLE Reviews (
+    ReviewId BIGINT AUTO_INCREMENT PRIMARY KEY,
+
+    ProductId BIGINT NOT NULL,
+    UserId VARCHAR(50) NOT NULL,
+    OrderItemId BIGINT NULL,
+
+    Rating TINYINT NOT NULL CHECK (Rating BETWEEN 1 AND 5),
+
+    Content TEXT NOT NULL,
+
+    IsHidden TINYINT DEFAULT 0,
+
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (ProductId) REFERENCES Products(ProductId) ON DELETE CASCADE,
+    FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_reviews_product ON Reviews(ProductId);
+CREATE INDEX idx_reviews_user ON Reviews(UserId);
+CREATE INDEX idx_reviews_rating ON Reviews(ProductId, Rating);
+CREATE INDEX idx_reviews_created ON Reviews(ProductId, CreatedAt);
+
+
+-- =========================================================================
+-- 26. REVIEW IMAGES
+-- =========================================================================
+CREATE TABLE Review_Images (
+    ReviewImageId BIGINT AUTO_INCREMENT PRIMARY KEY,
+
+    ReviewId BIGINT NOT NULL,
+    ImageUrl LONGTEXT NOT NULL,
+    SortOrder INT DEFAULT 0,
+
+    FOREIGN KEY (ReviewId) REFERENCES Reviews(ReviewId) ON DELETE CASCADE
+);
+
+
+-- =========================================================================
+-- 27. REVIEW REPLIES
+-- =========================================================================
+CREATE TABLE Review_Replies (
+    ReplyId BIGINT AUTO_INCREMENT PRIMARY KEY,
+
+    ReviewId BIGINT NOT NULL UNIQUE,
+    ShopId BIGINT NOT NULL,
+
+    Content TEXT NOT NULL,
+
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (ReviewId) REFERENCES Reviews(ReviewId) ON DELETE CASCADE,
+    FOREIGN KEY (ShopId) REFERENCES Shops(ShopId) ON DELETE CASCADE
+);
+
+
 -- =========================================================================
 -- SEED DATA (MOCK DATA FOR TESTING)
 -- =========================================================================
@@ -455,6 +517,9 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 -- Clean existing data to ensure seed scripts can be run multiple times
 TRUNCATE TABLE Accounts;
+TRUNCATE TABLE Review_Replies;
+TRUNCATE TABLE Review_Images;
+TRUNCATE TABLE Reviews;
 TRUNCATE TABLE Inventories;
 TRUNCATE TABLE Variant_attributes;
 TRUNCATE TABLE Product_attributes;
@@ -786,16 +851,33 @@ INSERT INTO Inventories (ProductVariantId, AvailableStock, ReservedStock, SoldSt
 
 -- 24. Accounts
 INSERT INTO Accounts (UserId, Username, Email, PasswordHash, Role, IsVerified, IsActive) VALUES
-('usr_admin', 'admin', 'admin@veloramall.com', '$2a$10$abcdefghijklmnopqrstuvwx_ADMIN_HASH_PLACEHOLDER', 'ADMIN', 1, 1),
-('usr_seller_1', 'apple_store', 'apple_store@veloramall.com', '$2a$10$abcdefghijklmnopqrstuvwx_SELLER_HASH_PLACEHOLDER', 'SELLER', 1, 1),
-('usr_seller_2', 'coolmate_vietnam', 'coolmate@veloramall.com', '$2a$10$abcdefghijklmnopqrstuvwx_SELLER_HASH_PLACEHOLDER', 'SELLER', 1, 1),
-('usr_seller_3', 'sony_vietnam', 'sony_center@veloramall.com', '$2a$10$abcdefghijklmnopqrstuvwx_SELLER_HASH_PLACEHOLDER', 'SELLER', 1, 1),
-('usr_cust_1', 'nguyenvana', 'nguyen.van.a@gmail.com', '$2a$10$abcdefghijklmnopqrstuvwx_CUSTOMER_HASH_PLACEHOLDER', 'CUSTOMER', 1, 1),
-('usr_cust_2', 'tranthib', 'tran.thi.b@gmail.com', '$2a$10$abcdefghijklmnopqrstuvwx_CUSTOMER_HASH_PLACEHOLDER', 'CUSTOMER', 1, 1),
-('usr_cust_3', 'levanc', 'le.van.c@gmail.com', '$2a$10$abcdefghijklmnopqrstuvwx_CUSTOMER_HASH_PLACEHOLDER', 'CUSTOMER', 1, 1),
-('usr_cust_4', 'phamthid', 'pham.thi.d@gmail.com', '$2a$10$abcdefghijklmnopqrstuvwx_CUSTOMER_HASH_PLACEHOLDER', 'CUSTOMER', 0, 1),
-('usr_cust_5', 'hoangvane', 'hoang.van.e@gmail.com', '$2a$10$abcdefghijklmnopqrstuvwx_CUSTOMER_HASH_PLACEHOLDER', 'CUSTOMER', 1, 1),
-('usr_cust_6', 'buithif', 'bui.thi.f@gmail.com', '$2a$10$abcdefghijklmnopqrstuvwx_CUSTOMER_HASH_PLACEHOLDER', 'CUSTOMER', 1, 0);
+('usr_admin', 'admin', 'admin@veloramall.com', '$2a$11$JAvuAp12LrDzREffqucEnuDAwnWbhH/G1dleDd5Dx2s8UF3WV9blK', 'ADMIN', 1, 1),
+('usr_seller_1', 'apple_store', 'apple_store@veloramall.com', '$2a$11$JAvuAp12LrDzREffqucEnuDAwnWbhH/G1dleDd5Dx2s8UF3WV9blK', 'SELLER', 1, 1),
+('usr_seller_2', 'coolmate_vietnam', 'coolmate@veloramall.com', '$2a$11$JAvuAp12LrDzREffqucEnuDAwnWbhH/G1dleDd5Dx2s8UF3WV9blK', 'SELLER', 1, 1),
+('usr_seller_3', 'sony_vietnam', 'sony_center@veloramall.com', '$2a$11$JAvuAp12LrDzREffqucEnuDAwnWbhH/G1dleDd5Dx2s8UF3WV9blK', 'SELLER', 1, 1),
+('usr_cust_1', 'nguyenvana', 'nguyen.van.a@gmail.com', '$2a$11$JAvuAp12LrDzREffqucEnuDAwnWbhH/G1dleDd5Dx2s8UF3WV9blK', 'CUSTOMER', 1, 1),
+('usr_cust_2', 'tranthib', 'tran.thi.b@gmail.com', '$2a$11$JAvuAp12LrDzREffqucEnuDAwnWbhH/G1dleDd5Dx2s8UF3WV9blK', 'CUSTOMER', 1, 1),
+('usr_cust_3', 'levanc', 'le.van.c@gmail.com', '$2a$11$JAvuAp12LrDzREffqucEnuDAwnWbhH/G1dleDd5Dx2s8UF3WV9blK', 'CUSTOMER', 1, 1),
+('usr_cust_4', 'phamthid', 'pham.thi.d@gmail.com', '$2a$11$JAvuAp12LrDzREffqucEnuDAwnWbhH/G1dleDd5Dx2s8UF3WV9blK', 'CUSTOMER', 0, 1),
+('usr_cust_5', 'hoangvane', 'hoang.van.e@gmail.com', '$2a$11$JAvuAp12LrDzREffqucEnuDAwnWbhH/G1dleDd5Dx2s8UF3WV9blK', 'CUSTOMER', 1, 1),
+('usr_cust_6', 'buithif', 'bui.thi.f@gmail.com', '$2a$11$JAvuAp12LrDzREffqucEnuDAwnWbhH/G1dleDd5Dx2s8UF3WV9blK', 'CUSTOMER', 1, 0);
+
+-- 25. Reviews
+INSERT INTO Reviews (ReviewId, ProductId, UserId, OrderItemId, Rating, Content, IsHidden, CreatedAt) VALUES
+(1, 1, 'usr_cust_1', 1, 5, 'Sản phẩm tuyệt vời! Camera chụp ảnh siêu đẹp, pin dùng cả ngày không hết.', 0, '2026-06-15 08:30:00'),
+(2, 4, 'usr_cust_2', 2, 4, 'Áo mặc mát, co giãn tốt, phù hợp chạy bộ. Tuy nhiên màu đen hơi nhanh bạc.', 0, '2026-06-27 10:15:00'),
+(3, 7, 'usr_cust_3', 4, 5, 'Chống ồn đỉnh cao, đeo cả ngày không bị đau tai. Rất đáng đồng tiền bát gạo!', 0, '2026-06-29 19:45:00'),
+(4, 10, 'usr_cust_4', 5, 3, 'Màn hình đẹp nhưng máy hơi nặng và to, cầm lâu mỏi tay.', 0, '2026-06-25 14:00:00');
+
+-- 26. Review Images
+INSERT INTO Review_Images (ReviewImageId, ReviewId, ImageUrl, SortOrder) VALUES
+(1, 1, 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=500', 0),
+(2, 2, 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500', 0);
+
+-- 27. Review Replies
+INSERT INTO Review_Replies (ReplyId, ReviewId, ShopId, Content, CreatedAt) VALUES
+(1, 1, 1, 'Cảm ơn quý khách đã tin tưởng ủng hộ Apple Premium Store! Rất hân hạnh được phục vụ quý khách lần sau.', '2026-06-15 10:00:00'),
+(2, 2, 2, 'Dạ Coolmate xin ghi nhận phản hồi của mình về chất liệu màu sắc để tiếp tục tối ưu sản phẩm tốt hơn ạ.', '2026-06-27 11:30:00');
 
 SET FOREIGN_KEY_CHECKS = 1;
 

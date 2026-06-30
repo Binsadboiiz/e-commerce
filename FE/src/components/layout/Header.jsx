@@ -74,6 +74,10 @@ function Header() {
                         
                         {showDropdown && (
                             <div className={styles.dropdown}>
+                                <Link to={ROUTES.MY_ORDERS} className={styles.profile} >
+                                    <FiUser size={16} style={{marginRight: "8px"}}/>
+                                    <span> My Orders</span>
+                                </Link>
                                 <Link to={ROUTES.PROFILE} className={styles.profile} >
                                     <FiUser size={16} style={{marginRight: "8px"}}/>
                                     <span> Profile</span>

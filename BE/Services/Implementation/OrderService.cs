@@ -37,7 +37,7 @@ namespace BE.Services.Implementation
                 {
                     Id = address.Id,
                     FullName = address.FullName,
-                    PhoneNumber = address.PhoneNumber,
+                    PhoneNumber = address.PhoneNumber.ToString(),
                     City = address.City,
                     StreetName = address.StreetName,
                     HouseNo = address.HouseNo,
@@ -396,7 +396,7 @@ namespace BE.Services.Implementation
                 {
                     Id = address.Id,
                     FullName = address.FullName,
-                    PhoneNumber = address.PhoneNumber,
+                    PhoneNumber = address.PhoneNumber.ToString(),
                     City = address.City,
                     StreetName = address.StreetName,
                     HouseNo = address.HouseNo,

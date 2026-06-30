@@ -1,9 +1,9 @@
 .page {
     min-height: calc(100vh - 120px);
     background:
-        radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.08) 0, transparent 30%),
-        radial-gradient(circle at 100% 100%, rgba(59, 130, 246, 0.08) 0, transparent 28%),
-        #f8fafc;
+        radial-gradient(circle at 0% 0%, rgba(238, 77, 45, 0.08) 0, transparent 30%),
+        radial-gradient(circle at 100% 100%, rgba(238, 77, 45, 0.04) 0, transparent 28%),
+        var(--color-bg-page);
 }
 
 .container {
@@ -14,14 +14,14 @@
 
 .hero {
     border-radius: 18px;
-    background: linear-gradient(120deg, #0f172a, #1e293b);
-    color: #f8fafc;
+    background: linear-gradient(120deg, var(--color-primary), var(--color-primary-dark));
+    color: #ffffff;
     padding: 22px;
-    box-shadow: 0 16px 35px rgba(15, 23, 42, 0.25);
+    box-shadow: 0 16px 30px rgba(238, 77, 45, 0.15);
 }
 
 .heroLabel {
-    color: #cbd5e1;
+    color: rgba(255, 255, 255, 0.8);
     font-size: 13px;
 }
 
@@ -33,7 +33,7 @@
 
 .heroMeta {
     margin-top: 10px;
-    color: #e2e8f0;
+    color: rgba(255, 255, 255, 0.9);
     font-size: 14px;
 }
 
@@ -59,7 +59,7 @@
 .panelTitle {
     font-size: 16px;
     font-weight: 700;
-    color: #0f172a;
+    color: var(--color-text-primary);
     margin-bottom: 14px;
 }
 

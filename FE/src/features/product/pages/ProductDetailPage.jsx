@@ -21,6 +21,8 @@ import Breadcrumb from "../components/detail/breadcrumb/Breadcrumb";
 import RelatedProducts from "../components/detail/related/RelatedProducts";
 
 import { ROUTES } from "@/config/route.config";
+import { useCart } from "@/features/cart/hooks/useCart";
+import { notify } from "@/utils/Notify";
 
 // Navigation sections — defined outside to avoid recreation on re-render
 const PRODUCT_SECTIONS = [
@@ -32,6 +34,7 @@ const PRODUCT_SECTIONS = [
 export default function ProductDetail() {
 
     const navigate = useNavigate();
+    const { addToCart } = useCart();
     const { slug } = useParams();
 
     const {
@@ -156,17 +159,14 @@ export default function ProductDetail() {
         });
     };
 
-    const handleAddToCart = () => {
-        navigate(ROUTES.CART, {
-            state: {
-                mode: "add-to-cart",
-                addToCart: {
-                    productId: product.productId,
-                    variantId: selectedVariant?.variantId ?? null,
-                    quantity,
-                },
-            },
-        });
+    const handleAddToCart = async () => {
+        try {
+            await addToCart(product.productId, quantity, selectedVariant?.variantId ?? null);
+            notify.success("Product added to cart successfully!");
+            navigate(ROUTES.CART);
+        } catch (err) {
+            console.error("Failed to add product to cart:", err);
+        }
     };
 
     return (

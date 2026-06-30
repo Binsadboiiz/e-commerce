@@ -21,7 +21,7 @@ export default function useMyOrders() {
 
         try {
             const response = await orderApi.getOrders(userId);
-            setOrders(Array.isArray(response) ? response : []);
+            setOrders(Array.isArray(response?.data) ? response.data : []);
         } catch (err) {
             setOrders([]);
             setError(err.message || "Could not load order list.");

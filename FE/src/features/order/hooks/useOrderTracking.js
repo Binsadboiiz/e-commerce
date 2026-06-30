@@ -28,7 +28,7 @@ export default function useOrderTracking(orderId) {
 
         try {
             const response = await orderApi.getOrderTracking(orderId, userId);
-            setTracking(response ?? null);
+            setTracking(response?.data ?? null);
         } catch (err) {
             setTracking(null);
             setError(err.message || "Could not load order tracking details.");

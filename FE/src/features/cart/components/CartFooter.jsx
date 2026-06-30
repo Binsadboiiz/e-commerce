@@ -69,7 +69,7 @@ export default function CartFooter() {
                             Total amount ({selectedCount} items):
                         </div>
                         <div className="text-xl font-bold text-text-price">
-                            ₫{total.toLocaleString()}
+                            ${total.toFixed(2)}
                         </div>
                     </div>
 

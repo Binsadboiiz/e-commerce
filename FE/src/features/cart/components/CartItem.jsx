@@ -73,15 +73,15 @@ export default function CartItem({ item }) {
                 {hasDiscount ? (
                     <div className="space-y-0.5">
                         <span className="text-xs text-text-secondary line-through block">
-                            ₫{item.price.toLocaleString()}
+                            ${item.price.toFixed(2)}
                         </span>
                         <span className="text-sm font-medium text-text-price">
-                            ₫{item.discountPrice.toLocaleString()}
+                            ${item.discountPrice.toFixed(2)}
                         </span>
                     </div>
                 ) : (
                     <span className="text-sm text-text-primary">
-                        ₫{item.price.toLocaleString()}
+                        ${item.price.toFixed(2)}
                     </span>
                 )}
             </div>
@@ -98,7 +98,7 @@ export default function CartItem({ item }) {
             {/* Subtotal */}
             <div className="w-28 text-right flex-shrink-0">
                 <span className="text-sm font-semibold text-text-price">
-                    ₫{item.subTotal.toLocaleString()}
+                    ${item.subTotal.toFixed(2)}
                 </span>
             </div>
 

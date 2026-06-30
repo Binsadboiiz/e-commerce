@@ -38,14 +38,14 @@
 }
 
 .dotCompleted {
-    border-color: #1d4ed8;
-    background-color: #1d4ed8;
+    border-color: var(--color-primary);
+    background-color: var(--color-primary);
 }
 
 .dotCurrent {
-    border-color: #0f766e;
-    background-color: #0f766e;
-    box-shadow: 0 0 0 5px rgba(13, 148, 136, 0.14);
+    border-color: var(--color-primary);
+    background-color: var(--color-primary);
+    box-shadow: 0 0 0 5px rgba(238, 77, 45, 0.14);
 }
 
 .time {
