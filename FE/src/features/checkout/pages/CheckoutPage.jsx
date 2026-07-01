@@ -98,10 +98,8 @@ export default function CheckoutPage() {
             return;
         }
 
-        if (!selectedAddressId) {
-            setPreview(null);
-            return;
-        }
+        // We removed the !selectedAddressId block so the preview can load the product items 
+        // even if the user hasn't selected an address yet.
 
         let ignore = false;
 

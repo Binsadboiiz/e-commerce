@@ -93,6 +93,8 @@ namespace BE.Services.Implementation
 
             await _context.SaveChangesAsync();
 
+            _context.ChangeTracker.Clear();
+
             // Re-fetch with includes to build response
             cart = await GetOrCreateCart(userId);
             return MapToResponse(cart);
@@ -228,8 +230,8 @@ namespace BE.Services.Implementation
 
                         if (ci.Variant?.VariantAttributes != null && ci.Variant.VariantAttributes.Any())
                         {
-                            variantName = string.Join(", ", ci.Variant.VariantAttributes.Select(va => va.AttributeValue.AttributeType.Name));
-                            variantValue = string.Join(", ", ci.Variant.VariantAttributes.Select(va => va.AttributeValue.Value));
+                            variantName = string.Join(", ", ci.Variant.VariantAttributes.Select(va => va.AttributeValue?.AttributeType?.Name ?? ""));
+                            variantValue = string.Join(", ", ci.Variant.VariantAttributes.Select(va => va.AttributeValue?.Value ?? ""));
                         }
 
                         return new CartItemResponse

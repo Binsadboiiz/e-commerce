@@ -24,7 +24,8 @@ namespace BE.Middlewares
                 {
                     message = ex.Message
                 });
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 context.Response.StatusCode = 500;
                 context.Response.ContentType = "application/json";

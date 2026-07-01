@@ -53,7 +53,12 @@ namespace BE.Services.Implementation
         {
             ValidatePaymentMethod(request.PaymentMethod);
 
-            var address = await GetUserAddressAsync(userId, request.AddressId);
+            UserAddresses? address = null;
+            if (request.AddressId.HasValue && request.AddressId.Value > 0)
+            {
+                address = await GetUserAddressAsync(userId, request.AddressId.Value);
+            }
+
             var cartItems = await GetSelectedCartItemsAsync(userId, request.CartItemIds);
             var pricing = await BuildPricingAsync(cartItems, request.VoucherCodes);
 
@@ -68,6 +73,9 @@ namespace BE.Services.Implementation
         public async Task<PlaceOrderResponse> PlaceCartOrderAsync(string userId, CheckoutPlaceOrderRequest request)
         {
             ValidatePaymentMethod(request.PaymentMethod);
+
+            if (request.AddressId <= 0)
+                throw new AppException("Please provide a valid shipping address.", 400);
 
             using var tx = await _context.Database.BeginTransactionAsync();
 
@@ -112,7 +120,12 @@ namespace BE.Services.Implementation
         {
             ValidatePaymentMethod(request.PaymentMethod);
 
-            var address = await GetUserAddressAsync(userId, request.AddressId);
+            UserAddresses? address = null;
+            if (request.AddressId.HasValue && request.AddressId.Value > 0)
+            {
+                address = await GetUserAddressAsync(userId, request.AddressId.Value);
+            }
+
             var buyNowItem = await BuildBuyNowItemAsync(request);
             var pricing = await BuildPricingAsync(new List<CheckoutSourceItem> { buyNowItem }, request.VoucherCodes);
 
@@ -127,11 +140,14 @@ namespace BE.Services.Implementation
         {
             ValidatePaymentMethod(request.PaymentMethod);
 
+            if (!request.AddressId.HasValue || request.AddressId.Value <= 0)
+                throw new AppException("Please provide a valid shipping address.", 400);
+
             using var tx = await _context.Database.BeginTransactionAsync();
 
             try
             {
-                var address = await GetUserAddressAsync(userId, request.AddressId);
+                var address = await GetUserAddressAsync(userId, request.AddressId.Value);
                 var buyNowItem = await BuildBuyNowItemAsync(request);
                 var pricing = await BuildPricingAsync(new List<CheckoutSourceItem> { buyNowItem }, request.VoucherCodes);
                 var order = await CreateOrderAsync(userId, address, request.PaymentMethod, pricing);
@@ -261,6 +277,10 @@ namespace BE.Services.Implementation
                 .Include(ci => ci.Product).ThenInclude(p => p.Shop)
                 .Include(ci => ci.Variant)
                     .ThenInclude(v => v.Inventory)
+                .Include(ci => ci.Variant)
+                    .ThenInclude(v => v.VariantAttributes)
+                        .ThenInclude(va => va.AttributeValue)
+                            .ThenInclude(av => av.AttributeType)
                 .Include(ci => ci.Cart)
                 .Where(ci => ci.Cart.UserId == userId && cartItemIds.Contains(ci.Id))
                 .ToListAsync();
@@ -303,6 +323,9 @@ namespace BE.Services.Implementation
             {
                 variant = await _context.ProductVariants
                     .Include(v => v.Inventory)
+                    .Include(v => v.VariantAttributes)
+                        .ThenInclude(va => va.AttributeValue)
+                            .ThenInclude(av => av.AttributeType)
                     .FirstOrDefaultAsync(v => v.VariantId == request.VariantId.Value && v.ProductId == request.ProductId);
 
                 if (variant == null) throw new AppException("Variant does not exist.", 404);
@@ -332,6 +355,15 @@ namespace BE.Services.Implementation
         {
             var unitPrice = GetUnitPrice(product, variant);
 
+            var variantName = string.Empty;
+            var variantValue = string.Empty;
+
+            if (variant?.VariantAttributes != null && variant.VariantAttributes.Any())
+            {
+                variantName = string.Join(", ", variant.VariantAttributes.Select(va => va.AttributeValue?.AttributeType?.Name ?? ""));
+                variantValue = string.Join(", ", variant.VariantAttributes.Select(va => va.AttributeValue?.Value ?? ""));
+            }
+
             return new CheckoutSourceItem
             {
                 CartItem = cartItem,
@@ -340,6 +372,8 @@ namespace BE.Services.Implementation
                 VariantId = variant?.VariantId,
                 ProductName = product.Name,
                 ProductImage = product.Image,
+                VariantName = variantName,
+                VariantValue = variantValue,
                 UnitPrice = unitPrice,
                 Quantity = quantity,
                 LineTotal = unitPrice * quantity
@@ -392,7 +426,7 @@ namespace BE.Services.Implementation
             {
                 CheckoutType = checkoutType,
                 PaymentMethod = paymentMethod,
-                Address = new CheckoutAddressDto
+                Address = address != null ? new CheckoutAddressDto
                 {
                     Id = address.Id,
                     FullName = address.FullName,
@@ -401,7 +435,7 @@ namespace BE.Services.Implementation
                     StreetName = address.StreetName,
                     HouseNo = address.HouseNo,
                     IsDefault = address.IsDefault
-                },
+                } : null,
                 Items = pricing.Items,
                 AppliedVoucherCodes = pricing.Vouchers.Select(v => v.Code).ToList(),
                 MerchandiseSubtotal = pricing.MerchandiseSubtotal,

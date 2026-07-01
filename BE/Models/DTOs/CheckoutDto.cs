@@ -4,8 +4,7 @@ namespace BE.Models.DTOs
 {
     public class CheckoutPreviewRequest
     {
-        [Required]
-        public long AddressId { get; set; }
+        public long? AddressId { get; set; }
 
         [Required]
         public string PaymentMethod { get; set; }
@@ -18,6 +17,8 @@ namespace BE.Models.DTOs
 
     public class CheckoutPlaceOrderRequest : CheckoutPreviewRequest
     {
+        [Required]
+        public new long AddressId { get; set; }
     }
 
     public class CheckoutItemDto
@@ -49,7 +50,7 @@ namespace BE.Models.DTOs
     {
         public string CheckoutType { get; set; }
         public string PaymentMethod { get; set; }
-        public CheckoutAddressDto Address { get; set; }
+        public CheckoutAddressDto? Address { get; set; }
         public List<CheckoutItemDto> Items { get; set; } = new();
         public List<string> AppliedVoucherCodes { get; set; } = new();
         public decimal MerchandiseSubtotal { get; set; }

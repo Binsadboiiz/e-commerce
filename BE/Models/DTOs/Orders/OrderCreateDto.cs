@@ -10,8 +10,7 @@ namespace BE.Models.DTOs
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
         public int Quantity { get; set; }
 
-        [System.ComponentModel.DataAnnotations.Required]
-        public long AddressId { get; set; }
+        public long? AddressId { get; set; }
 
         [System.ComponentModel.DataAnnotations.Required]
         public string PaymentMethod { get; set; }
