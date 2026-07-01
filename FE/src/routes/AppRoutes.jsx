@@ -5,11 +5,11 @@
  */
 
 import { Routes } from 'react-router-dom'
-import PublicRoutes from './PublicRoutes'
-import DashboardRoutes from './DashboardRoutes'
+import PublicRoutes from '@/apps/customer/CustomerRoutes'
+import DashboardRoutes from '@/apps/admin/AdminRoutes'
 import StandaloneRoutes from './StandaloneRoutes'
-import RetailerRoute from './RetailerRoute'
-import ScrollToTop from '@/components/ScrollToTop'
+import RetailerRoute from '@/apps/seller/SellerRoutes'
+import ScrollToTop from '@/shared/components/ScrollToTop'
 
 export default function AppRouter() {
   return (

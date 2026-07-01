@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { ErrorContext } from "../../context/ErrorContext"
+import { ErrorContext } from "@/shared/context/ErrorContext"
 import { useNavigate } from "react-router-dom";
 import styles from "./ErrorPage.module.css";
 import { AlertOctagon, ArrowLeft, Home, RefreshCcw } from "lucide-react";

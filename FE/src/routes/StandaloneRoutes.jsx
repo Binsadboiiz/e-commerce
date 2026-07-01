@@ -5,11 +5,11 @@
  */
 
 import { Route } from 'react-router-dom'
-import { ROUTES } from '../config/route.config'
+import { ROUTES } from '@/config/route.config'
 
 import ErrorPage from '../pages/error/ErrorPage'
-import RegisterPage from '../features/auth/pages/RegisterPage'
-import LoginPage from '../features/auth/pages/LoginPage'
+import RegisterPage from "@/shared/features/auth/pages/RegisterPage";
+import LoginPage from "@/shared/features/auth/pages/LoginPage";
 
 
 export default function StandaloneRoutes() {
