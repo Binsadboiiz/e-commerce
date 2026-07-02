@@ -5,7 +5,7 @@ export default function OrderSummaryPanel({ summary }) {
     const items = summary?.items ?? [];
 
     return (
-        <section className={`${styles.panel} p-5`}>
+        <section className={styles.panel}>
             <h2 className={styles.panelTitle}>Order Summary</h2>
 
             <div className="mt-4 space-y-2">

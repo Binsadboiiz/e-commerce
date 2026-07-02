@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ROUTES } from "@/config/route.config";
+import { RotateCw, ShoppingBag, AlertTriangle } from "lucide-react";
 import useMyOrders from "../hooks/useMyOrders";
 import OrderCard from "../components/OrderCard";
 import styles from "./MyOrdersPage.module.css";
@@ -28,8 +29,9 @@ export default function MyOrdersPage() {
                     <button
                         type="button"
                         onClick={refreshOrders}
-                        className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                        className={styles.buttonSecondary}
                     >
+                        <RotateCw size={14} className={loading ? "animate-spin" : ""} />
                         Refresh
                     </button>
                 </header>
@@ -38,8 +40,9 @@ export default function MyOrdersPage() {
 
                 {!loading && error && (
                     <div className={styles.stateCard}>
-                        <p className="mb-3 text-sm">{error}</p>
-                        <Link to={ROUTES.LOGIN} className="inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white">
+                        <AlertTriangle size={32} className="mb-3 text-rose-500" />
+                        <p className="mb-4 text-sm font-medium text-slate-600">{error}</p>
+                        <Link to={ROUTES.LOGIN} className={styles.buttonPrimary}>
                             Log in again
                         </Link>
                     </div>
@@ -47,8 +50,9 @@ export default function MyOrdersPage() {
 
                 {!loading && !error && orders.length === 0 && (
                     <div className={styles.stateCard}>
-                        <p>You have no orders yet.</p>
-                        <Link to={ROUTES.PRODUCTS} className="mt-3 inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white">
+                        <ShoppingBag size={40} className="mb-3 text-slate-400" />
+                        <p className="text-sm font-medium text-slate-600 mb-4">You have no orders yet.</p>
+                        <Link to={ROUTES.PRODUCTS} className={styles.buttonPrimary}>
                             Shop now
                         </Link>
                     </div>

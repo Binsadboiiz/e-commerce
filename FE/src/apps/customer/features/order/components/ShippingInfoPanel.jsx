@@ -7,7 +7,7 @@ function Value({ children }) {
 
 export default function ShippingInfoPanel({ shipping, estimatedDeliveryDate }) {
     return (
-        <section className={`${styles.panel} p-5`}>
+        <section className={styles.panel}>
             <h2 className={styles.panelTitle}>Shipping Information</h2>
             <div className="mt-4 space-y-2">
                 <div className={styles.kvRow}>

@@ -3,6 +3,7 @@ import CartShopGroup from "../components/CartShopGroup";
 import CartFooter from "../components/CartFooter";
 import EmptyCart from "../components/EmptyCart";
 import { FiShoppingCart } from 'react-icons/fi';
+import styles from './CartPage.module.css';
 
 export default function CartPage() {
     const { cart, loading } = useCart();
@@ -18,12 +19,11 @@ export default function CartPage() {
     }
 
     return (
-        <div className="min-h-screen bg-bg-page">
-            {/* Page Header */}
-            <div className="max-w-6xl mx-auto px-4 pt-8 pb-4">
-                <div className="flex items-center gap-3 mb-6">
-                    <FiShoppingCart className="text-primary" size={24} />
-                    <h1 className="text-2xl font-bold text-text-primary">Shopping Cart</h1>
+        <div className={styles.page}>
+            <div className={styles.container}>
+                <div className={styles.header}>
+                    <FiShoppingCart className="text-primary" size={26} />
+                    <h1 className={styles.heading}>Shopping Cart</h1>
                     {hasItems && (
                         <span className="text-sm text-text-secondary ml-1">
                             ({cart.totalItems} products)
@@ -34,14 +34,13 @@ export default function CartPage() {
                 {hasItems ? (
                     <>
                         {/* Table Header */}
-                        <div className="bg-bg-card rounded-lg shadow-card px-5 py-3 mb-3
-                                        border border-border/50 hidden md:flex items-center gap-4">
+                        <div className={styles.tableHeader}>
                             <div className="w-[18px] flex-shrink-0"></div>
                             <div className="w-20 flex-shrink-0"></div>
-                            <div className="flex-1 text-sm text-text-secondary font-medium">Product</div>
-                            <div className="w-28 text-center text-sm text-text-secondary font-medium flex-shrink-0">Unit Price</div>
-                            <div className="w-[88px] text-center text-sm text-text-secondary font-medium flex-shrink-0">Quantity</div>
-                            <div className="w-28 text-right text-sm text-text-secondary font-medium flex-shrink-0">Total</div>
+                            <div className="flex-1 text-sm text-text-secondary font-semibold">Product</div>
+                            <div className="w-28 text-center text-sm text-text-secondary font-semibold flex-shrink-0">Unit Price</div>
+                            <div className="w-[88px] text-center text-sm text-text-secondary font-semibold flex-shrink-0">Quantity</div>
+                            <div className="w-28 text-right text-sm text-text-secondary font-semibold flex-shrink-0">Total</div>
                             <div className="w-10 flex-shrink-0"></div>
                         </div>
 

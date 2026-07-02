@@ -14,27 +14,31 @@
 
 .hero {
     border-radius: 18px;
-    background: linear-gradient(120deg, var(--color-primary), var(--color-primary-dark));
+    background: linear-gradient(135deg, #111827 0%, #1e293b 65%, #ee4d2d 100%);
     color: #ffffff;
-    padding: 22px;
-    box-shadow: 0 16px 30px rgba(238, 77, 45, 0.15);
+    padding: 28px 24px;
+    box-shadow: 0 16px 30px rgba(17, 24, 39, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .heroLabel {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 13px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    font-weight: 600;
 }
 
 .heroId {
-    font-size: 28px;
+    font-size: 32px;
     font-weight: 800;
-    margin-top: 6px;
+    line-height: 1.1;
+    margin-top: 4px;
+    letter-spacing: -0.02em;
 }
 
 .heroMeta {
-    margin-top: 10px;
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 14px;
+    margin-top: 8px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 13px;
 }
 
 .contentGrid {
@@ -54,6 +58,7 @@
     border-radius: 14px;
     background: #ffffff;
     box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+    padding: 24px;
 }
 
 .panelTitle {
@@ -67,7 +72,93 @@
     border: 1px dashed #d4dce7;
     border-radius: 14px;
     background-color: rgba(255, 255, 255, 0.8);
-    padding: 22px;
+    padding: 40px 24px;
     text-align: center;
     color: #64748b;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.buttonPrimary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: #111827;
+    color: #ffffff !important;
+    border: 1.5px solid #111827;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.buttonPrimary:hover {
+    background-color: #1f2937;
+    border-color: #1f2937;
+    box-shadow: 0 4px 12px rgba(17, 24, 39, 0.15);
+}
+
+.buttonPrimary:active {
+    transform: scale(0.98);
+}
+
+.buttonSecondary {
+    margin-bottom: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: #ffffff;
+    color: #111827 !important;
+    border: 1.5px solid #111827;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.buttonSecondary:hover {
+    background-color: #f9fafb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.buttonSecondary:active {
+    transform: scale(0.98);
+}
+
+.buttonBack {
+    margin-bottom: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: #ffffff;
+    color: #475569 !important;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.buttonBack:hover {
+    background-color: #f8fafc;
+    color: #0f172a !important;
+    border-color: #94a3b8;
+}
+
+.buttonBack:active {
+    transform: scale(0.98);
 }

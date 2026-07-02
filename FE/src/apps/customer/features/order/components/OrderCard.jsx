@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ROUTES } from "@/config/route.config";
+import { ArrowRight } from "lucide-react";
 import { currency, formatDateTime } from "../utils/orderFormat";
 import OrderStatusBadge from "./OrderStatusBadge";
 import styles from "./OrderCard.module.css";
@@ -10,7 +11,7 @@ function buildTrackingPath(orderId) {
 
 export default function OrderCard({ order }) {
     return (
-        <article className={`${styles.card} p-5`}>
+        <article className={styles.card}>
             <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="space-y-1">
                     <p className="text-xs font-medium text-slate-500">Order ID</p>
@@ -34,7 +35,7 @@ export default function OrderCard({ order }) {
                 </div>
             </div>
 
-            <div className="mt-4 grid gap-3 sm:grid-cols-3">
+            <div className={styles.metaGrid}>
                 <div>
                     <p className={styles.metaLabel}>Order date</p>
                     <p className={styles.metaValue}>{formatDateTime(order.orderDate)}</p>
@@ -45,16 +46,17 @@ export default function OrderCard({ order }) {
                 </div>
                 <div>
                     <p className={styles.metaLabel}>Payment</p>
-                    <p className={`${styles.metaValue} text-primary`}>{currency.format(order.finalAmount || 0)}</p>
+                    <p className={`${styles.metaValue} text-[#ee4d2d]`}>{currency.format(order.finalAmount || 0)}</p>
                 </div>
             </div>
 
             <div className="mt-5 flex justify-end">
                 <Link
                     to={buildTrackingPath(order.orderId)}
-                    className="inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary-dark"
+                    className={styles.buttonPrimary}
                 >
                     Track Order
+                    <ArrowRight size={14} />
                 </Link>
             </div>
         </article>

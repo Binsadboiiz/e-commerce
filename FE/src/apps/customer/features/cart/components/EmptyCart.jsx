@@ -21,7 +21,7 @@ export default function EmptyCart() {
             {/* CTA */}
             <Link
                 to="/"
-                className="px-8 py-3 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg
+                className="px-8 py-3 bg-[#111827] hover:bg-[#1f2937] text-white font-semibold rounded-lg
                            shadow-card hover:shadow-hover transition-all duration-200
                            transform hover:-translate-y-0.5 active:translate-y-0"
             >

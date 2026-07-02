@@ -4,6 +4,7 @@
     background: linear-gradient(180deg, #ffffff 0%, #fffdfb 100%);
     box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    padding: 24px;
 }
 
 .card:hover {
@@ -33,6 +34,23 @@
     font-size: 12px;
 }
 
+.metaGrid {
+    margin-top: 16px;
+    display: grid;
+    gap: 16px;
+    background-color: #f8fafc;
+    border: 1px solid #f1f5f9;
+    padding: 16px 20px;
+    border-radius: 12px;
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+    .metaGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
 .metaLabel {
     color: #64748b;
     font-size: 12px;
@@ -41,5 +59,34 @@
 .metaValue {
     color: #0f172a;
     font-weight: 600;
-    font-size: 13px;
+    font-size: 14px;
+    margin-top: 2px;
+}
+
+.buttonPrimary {
+    margin-top: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background-color: #111827;
+    color: #ffffff !important;
+    border: 1.5px solid #111827;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.buttonPrimary:hover {
+    background-color: #1f2937;
+    border-color: #1f2937;
+    box-shadow: 0 4px 12px rgba(17, 24, 39, 0.15);
+}
+
+.buttonPrimary:active {
+    transform: scale(0.98);
 }
