@@ -1,6 +1,6 @@
-export const currency = new Intl.NumberFormat("en-US", {
+export const currency = new Intl.NumberFormat("vi-VN", {
     style: "currency",
-    currency: "USD"
+    currency: "VND"
 });
 
 export function formatDateTime(value) {

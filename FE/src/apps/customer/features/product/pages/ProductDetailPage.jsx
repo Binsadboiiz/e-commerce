@@ -74,6 +74,11 @@ export default function ProductDetail() {
         setSelectedImage(primary.imageUrl);
     }, [product]);
 
+    /* Scroll to top when slug changes (from related product card click) */
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, [slug]);
+
     /* Build variant -> image map */
     const variantImageMap = useMemo(() => {
         const map = {};

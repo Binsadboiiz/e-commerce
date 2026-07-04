@@ -181,8 +181,8 @@ FE/
 
 ### 1. Setup Database
 1. Run MySQL and create a database named `VeloraMall`.
-2. Import the schema file: [VeloraMall.sql](file:///d:/Information%20Technology/Personal-Project/e-commerce/database/schema/VeloraMall.sql).
-3. Populate with dummy data: [seed_data.sql](file:///d:/Information%20Technology/Personal-Project/e-commerce/database/seed_data.sql).
+2. Import the unified schema file: [database_init.sql](file:///d:/MyProject/e-commerce/database/database_init.sql).
+3. (Optional for local development) Import the dev seed data: [seed_data_dev.sql](file:///d:/MyProject/e-commerce/database/seed_data_dev.sql) (This file contains test mock data, is ignored by Git, and only visible/used by developers).
 
 ### 2. Configure and Run Backend (BE)
 1. Navigate to the `BE/` directory.

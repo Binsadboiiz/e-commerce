@@ -17,12 +17,14 @@ namespace BE.Models.Entities
         [Column("IsActive")]
         public bool Is_active { get; set; } = true;
 
-        // Navigation
-        public ICollection<UserAddresses> UserAddressesCollection { get; set; }
-        public Cart Cart { get; set; }
-        public ICollection<Order> Orders { get; set; }
-        public ICollection<Shop> Shops { get; set; }
+        //Mapping 
+        public Cart? Cart { get; set; }
+        public SellerAccount? SellerAccount { get; set; }
 
-        public ICollection<Review> Reviews { get; set; }= new List<Review>();
+        // Navigation
+        public ICollection<UserAddresses> UserAddressesCollection { get; set; } = new List<UserAddresses>();
+        public ICollection<Order> Orders { get; set; } = new List<Order>();
+        public ICollection<Shop> Shops { get; set; } = new List<Shop>();
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 }

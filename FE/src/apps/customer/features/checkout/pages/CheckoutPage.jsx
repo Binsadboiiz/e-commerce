@@ -6,9 +6,9 @@ import { useCart } from "../../cart/hooks/useCart";
 import { ROUTES } from "@/config/route.config";
 import "./CheckoutPage.css";
 
-const currency = new Intl.NumberFormat("en-US", {
+const currency = new Intl.NumberFormat("vi-VN", {
     style: "currency",
-    currency: "USD"
+    currency: "VND"
 });
 
 export default function CheckoutPage() {

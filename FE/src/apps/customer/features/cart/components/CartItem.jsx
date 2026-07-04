@@ -2,6 +2,7 @@ import { FiTrash2 } from 'react-icons/fi';
 import QuantityControl from './QuantityControl';
 import { useCart } from '../hooks/useCart';
 import styles from '../pages/CartPage.module.css';
+import formatPrice from '@/apps/customer/features/product/utils/formatPrice';
 
 export default function CartItem({ item }) {
     const { updateQuantity, removeItem, toggleSelectItem, isItemSelected } = useCart();
@@ -70,15 +71,15 @@ export default function CartItem({ item }) {
                 {hasDiscount ? (
                     <div className="space-y-0.5">
                         <span className="text-xs text-text-secondary line-through block">
-                            ${item.price.toFixed(2)}
+                            {formatPrice(item.price)}
                         </span>
                         <span className="text-sm font-medium text-text-price">
-                            ${item.discountPrice.toFixed(2)}
+                            {formatPrice(item.discountPrice)}
                         </span>
                     </div>
                 ) : (
                     <span className="text-sm text-text-primary">
-                        ${item.price.toFixed(2)}
+                        {formatPrice(item.price)}
                     </span>
                 )}
             </div>
@@ -95,7 +96,7 @@ export default function CartItem({ item }) {
             {/* Subtotal */}
             <div className="w-28 text-right flex-shrink-0">
                 <span className="text-sm font-semibold text-text-price">
-                    ${item.subTotal.toFixed(2)}
+                    {formatPrice(item.subTotal)}
                 </span>
             </div>
 

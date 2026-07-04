@@ -50,3 +50,7 @@ FE/.env
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local database seed data
+database/seed_data_dev.sql
+

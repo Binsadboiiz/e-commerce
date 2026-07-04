@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '../hooks/useCart';
 import { ROUTES } from '@/config/route.config';
 import styles from '../pages/CartPage.module.css';
+import formatPrice from '@/apps/customer/features/product/utils/formatPrice';
 
 export default function CartFooter() {
     const navigate = useNavigate();
@@ -64,7 +65,7 @@ export default function CartFooter() {
                         Total amount ({selectedCount} items):
                     </div>
                     <div className="text-xl font-bold text-text-price">
-                        ${total.toFixed(2)}
+                        {formatPrice(total)}
                     </div>
                 </div>
 

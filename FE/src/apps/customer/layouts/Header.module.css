@@ -161,7 +161,7 @@
     border: 1px solid #e5e7eb;
     border-radius: 8px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    min-width: 120px;
+    min-width: 150px;
     z-index: 50;
     overflow: hidden;
 }

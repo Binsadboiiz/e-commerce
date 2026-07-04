@@ -5,6 +5,9 @@ import styles from './ProductCard.module.css';
 import { useNavigate } from 'react-router-dom';
 import { IoStar, IoStarHalf, IoStarOutline, IoCartOutline } from 'react-icons/io5';
 import { ROUTES } from '@/config/route.config';
+import { useCart } from '@/apps/customer/features/cart/hooks/useCart';
+import { notify } from '@/shared/utils/Notify';
+import formatPrice from '@/apps/customer/features/product/utils/formatPrice';
 
 /* Renders up to 5 star icons based on numeric ratingAvg */
 function Stars({ value = 0 }) {
@@ -28,6 +31,7 @@ function Stars({ value = 0 }) {
 export default function ProductCard({ product, onBuy }) {
 
     const navigate = useNavigate();
+    const { addToCart } = useCart();
 
     const {
         name,
@@ -45,6 +49,25 @@ export default function ProductCard({ product, onBuy }) {
 
     const handleGoDetail = () => {
         navigate(ROUTES.PRODUCT_DETAIL.replace(':slug', product.slug));
+    };
+
+    const handleCartClick = async (e) => {
+        e.stopPropagation();
+        if (onBuy) {
+            onBuy(product);
+            return;
+        }
+        try {
+            await addToCart(product.productId || product.id, 1, null);
+            notify.success(`Added ${name} to cart!`);
+        } catch (err) {
+            console.error("Failed to add to cart:", err);
+            if (err.response?.status === 401) {
+                notify.error("Please login to add products to cart.");
+            } else {
+                notify.error("Could not add product to cart.");
+            }
+        }
     };
 
     return (
@@ -71,10 +94,10 @@ export default function ProductCard({ product, onBuy }) {
                         {discountPrice ? (
                             <>
                                 <span className={styles.oldPrice}>
-                                    ${price.toFixed(2)}
+                                    {formatPrice(price)}
                                 </span>
                                 <span className={styles.currentPrice}>
-                                    ${discountPrice.toFixed(2)}
+                                    {formatPrice(discountPrice)}
                                 </span>
                                 <span className={styles.discountTag}>
                                     -{discountPercent}%
@@ -82,7 +105,7 @@ export default function ProductCard({ product, onBuy }) {
                             </>
                         ) : (
                             <span className={styles.currentPrice}>
-                                ${price.toFixed(2)}
+                                {formatPrice(price)}
                             </span>
                         )}
                     </div>
@@ -90,10 +113,7 @@ export default function ProductCard({ product, onBuy }) {
                     <button
                         className={styles.cartBtn}
                         aria-label={`Add ${name} to cart`}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            onBuy?.(product);
-                        }}
+                        onClick={handleCartClick}
                     >
                         <IoCartOutline />
                     </button>
