@@ -17,12 +17,12 @@ export const ROUTES = {
     PROFILE: "/profile",
 
     // Dashboard
-    DASHBOARD: "/dashboard",
-    DASH_PRODUCTS: "/dashboard/products",
-    DASH_ORDERS: "/dashboard/orders",
-    DASH_SETTINGS: "/dashboard/settings",
+    DASHBOARD: "admin/dashboard",
+    DASH_PRODUCTS: "admin/dashboard/products",
+    DASH_ORDERS: "admin/dashboard/orders",
+    DASH_SETTINGS: "admin/dashboard/settings",
 
-    // Retailer
-    RETAILER_DASHBOARD: "/retailer/dashboard",
-    RETAILER_PRODUCTS: "/retailer/products",
+    // Seller
+    SELLER_DASHBOARD: "/seller/dashboard",
+    SELLER_PRODUCTS: "/seller/products",
 };

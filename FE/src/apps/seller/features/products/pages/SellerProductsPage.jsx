@@ -1,10 +1,11 @@
 import { useState, useMemo } from "react";
 import { Search, Plus, Package, ChevronLeft, ChevronRight, SlidersHorizontal, Edit2, Trash2 } from "lucide-react";
-import useRetailerProducts from "../hooks/useRetailerProducts";
-import { retailerProductApi } from "../api/retailerProductApi";
+import useSellerProducts from "../hooks/useSellerProducts";
+import { sellerProductApi } from "../api/sellerProductApi";
 import ProductFormModal from "../components/ProductFormModal";
 import DeleteConfirmModal from "../components/DeleteConfirmModal";
-import styles from "./RetailerProducts.module.css";
+import styles from "./SellerProducts.module.css";
+import { notify } from "@/shared/utils/Notify";
 
 // Cấu hình filter options
 const STATUS_OPTIONS = [
@@ -26,7 +27,7 @@ const SORT_OPTIONS = [
     { value: "name_desc", label: "Name: Z → A" },
 ];
 
-export default function RetailerProducts() {
+export default function SellerProducts() {
     // Filter states
     const [searchInput, setSearchInput] = useState("");
     const [search, setSearch] = useState("");
@@ -44,7 +45,7 @@ export default function RetailerProducts() {
         sortBy: sortBy !== "newest" ? sortBy : undefined,
     }), [page, search, status, sortBy]);
 
-    const { products, loading, error, pagination, refetch } = useRetailerProducts(params);
+    const { products, loading, error, pagination, refetch } = useSellerProducts(params);
 
     // Modal states
     const [isFormModalOpen, setIsFormModalOpen] = useState(false);
@@ -74,15 +75,18 @@ export default function RetailerProducts() {
         try {
             setIsSubmitting(true);
             if (selectedProduct) {
-                await retailerProductApi.updateProduct(selectedProduct.id, data);
+                await sellerProductApi.updateProduct(selectedProduct.id, data);
+                notify.success("Product updated successfully!");
             } else {
-                await retailerProductApi.createProduct(data);
+                await sellerProductApi.createProduct(data);
+                notify.success("Product created successfully!");
             }
             setIsFormModalOpen(false);
             refetch(); // Refresh list
         } catch (err) {
             console.error("Error saving product:", err);
-            alert("An error occurred, please try again.");
+            const msg = err?.response?.data?.message || err?.message || "An error occurred, please try again.";
+            notify.error(msg);
         } finally {
             setIsSubmitting(false);
         }
@@ -92,12 +96,14 @@ export default function RetailerProducts() {
         if (!selectedProduct) return;
         try {
             setIsSubmitting(true);
-            await retailerProductApi.deleteProduct(selectedProduct.id);
+            await sellerProductApi.deleteProduct(selectedProduct.id);
+            notify.success("Product deleted successfully!");
             setIsDeleteModalOpen(false);
             refetch();
         } catch (err) {
             console.error("Error deleting product:", err);
-            alert("An error occurred while deleting.");
+            const msg = err?.response?.data?.message || err?.message || "An error occurred while deleting.";
+            notify.error(msg);
         } finally {
             setIsSubmitting(false);
         }

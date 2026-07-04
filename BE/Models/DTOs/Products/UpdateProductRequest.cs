@@ -8,6 +8,8 @@ namespace BE.Models.DTOs
         public long BrandId { get; set; }
         public string? ImageUrl { get; set; }
         public string Status { get; set; }
+        public decimal Price { get; set; }
+        public int Stock { get; set; }
     }
 }
 

@@ -2,13 +2,13 @@ import axiosClient from "@/shared/features/auth/api/axiosClient";
 
 /**
  * API service cho retailer products.
- * Gọi endpoint GET /api/retailer/products.
+ * Gọi endpoint GET /api/seller/products.
  */
-const RETAILER_PRODUCTS_URL = "/retailer/products";
+const SELLER_PRODUCTS_URL = "/seller/products";
 
-export const retailerProductApi = {
+export const sellerProductApi = {
     /**
-     * Lấy danh sách sản phẩm của retailer hiện tại.
+     * Lấy danh sách sản phẩm của seller hiện tại.
      * Hỗ trợ: search, filter status, sort, pagination.
      */
     async getMyProducts(params = {}) {
@@ -22,18 +22,18 @@ export const retailerProductApi = {
         if (status && status !== "all") queryParams.append("status", status);
         if (sortBy) queryParams.append("sortBy", sortBy);
 
-        return axiosClient.get(`${RETAILER_PRODUCTS_URL}?${queryParams.toString()}`);
+        return axiosClient.get(`${SELLER_PRODUCTS_URL}?${queryParams.toString()}`);
     },
 
     async createProduct(data) {
-        return axiosClient.post(RETAILER_PRODUCTS_URL, data);
+        return axiosClient.post(SELLER_PRODUCTS_URL, data);
     },
 
     async updateProduct(id, data) {
-        return axiosClient.put(`${RETAILER_PRODUCTS_URL}/update/${id}`, data);
+        return axiosClient.put(`${SELLER_PRODUCTS_URL}/update/${id}`, data);
     },
 
     async deleteProduct(id) {
-        return axiosClient.delete(`${RETAILER_PRODUCTS_URL}/remove/${id}`);
+        return axiosClient.delete(`${SELLER_PRODUCTS_URL}/remove/${id}`);
     }
 };

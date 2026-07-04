@@ -61,7 +61,9 @@ export default function ProductFormModal({ isOpen, onClose, onSubmit, initialDat
                 categoryId: parseInt(formData.categoryId) || 1,
                 brandId: parseInt(formData.brandId) || 1,
                 imageUrl: formData.imageUrl,
-                status: formData.status
+                status: formData.status,
+                price: parseFloat(formData.price) || 0,
+                stock: parseInt(formData.initialStock) || 0
             });
         } else {
             onSubmit({
@@ -120,7 +122,6 @@ export default function ProductFormModal({ isOpen, onClose, onSubmit, initialDat
                             />
                         </div>
 
-                        {!isUpdate && (
                             <div className={styles.variantSection}>
                                 <h3 className={styles.variantTitle}>Sales Information</h3>
                                 <div className={styles.variantRow}>
@@ -137,7 +138,7 @@ export default function ProductFormModal({ isOpen, onClose, onSubmit, initialDat
                                         />
                                     </div>
                                     <div className={styles.formGroup}>
-                                        <label>Initial Stock *</label>
+                                        <label>{isUpdate ? "Stock *" : "Initial Stock *"}</label>
                                         <input
                                             required
                                             type="number"
@@ -150,7 +151,6 @@ export default function ProductFormModal({ isOpen, onClose, onSubmit, initialDat
                                     </div>
                                 </div>
                             </div>
-                        )}
 
                         {isUpdate && (
                             <div className={styles.formGroup}>

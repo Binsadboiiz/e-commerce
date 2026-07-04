@@ -1,23 +1,23 @@
-//this's route of Retailer
+//this's route of Seller
 import { Route } from "react-router-dom";
 import { ROUTES } from "@/config/route.config";
-import { RetailerDashboard } from "@/apps/seller/features/dashboard/pages/RetailerDashboardPage";
-import RetailerProducts from "@/apps/seller/features/products/pages/RetailerProductsPage";
+import { SellerDashboard } from "@/apps/seller/features/dashboard/pages/SellerDashboardPage";
+import SellerProducts from "@/apps/seller/features/products/pages/SellerProductsPage";
 import DashboardLayout from "@/apps/seller/layouts/DashboardLayout";
 import ProtectedRoute from "@/shared/components/ProtectedRoute.jsx";
 import { ROLES } from "@/shared/constants/roles";
 
-export default function RetailerRoute() {
+export default function SellerRoute() {
     return (
         <Route element={<DashboardLayout />}>
-            <Route path={ROUTES.RETAILER_DASHBOARD} 
-                element={ <ProtectedRoute allowedRoles = {[ROLES.RETAILER]}>
-                    <RetailerDashboard />
+            <Route path={ROUTES.SELLER_DASHBOARD} 
+                element={ <ProtectedRoute allowedRoles = {[ROLES.SELLER]}>
+                    <SellerDashboard />
                 </ProtectedRoute>} />
 
-            <Route path={ROUTES.RETAILER_PRODUCTS} 
-                element={ <ProtectedRoute allowedRoles = {[ROLES.RETAILER]}>
-                    <RetailerProducts />
+            <Route path={ROUTES.SELLER_PRODUCTS} 
+                element={ <ProtectedRoute allowedRoles = {[ROLES.SELLER]}>
+                    <SellerProducts />
                 </ProtectedRoute>} />
         </Route>
     )

@@ -11,24 +11,24 @@ namespace BE.Services.Interface.Product
     {
         // CRUD product
         Task<ProductResponse> CreateProductAsync(
-            string retailerUserId,
+            string sellerUserId,
             CreateProductRequest request);
 
         Task<ProductResponse> UpdateProductAsync(
             long productId,
-            string retailerUserId,
+            string sellerUserId,
             UpdateProductRequest request);
 
         Task DeleteProductAsync(
             long productId,
-            string retailerUserId);
+            string sellerUserId);
 
         /// <summary>
-        /// Lấy danh sách sản phẩm của retailer (bao gồm cả deleted).
-        /// Chỉ trả về products thuộc shop mà retailer sở hữu.
+        /// Lấy danh sách sản phẩm của seller (bao gồm cả deleted).
+        /// Chỉ trả về products thuộc shop mà seller sở hữu.
         /// </summary>
-        Task<(IEnumerable<ProductListDto> items, int total)> GetProductsByRetailerAsync(
-            string retailerUserId,
+        Task<(IEnumerable<ProductListDto> items, int total)> GetProductsBySellerAsync(
+            string sellerUserId,
             int page,
             int pageSize,
             string? search,

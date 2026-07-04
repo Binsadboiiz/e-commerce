@@ -7,8 +7,9 @@ export const useRole = () => {
     const hasRole = (roles = []) => {
         if (!user) return false; // Nếu chưa đăng nhập thì không có quyền
         
-        // Kiểm tra xem role của user hiện tại có nằm trong mảng roles truyền vào không
-        return roles.includes(user.role); 
+        // Kiểm tra xem role của user hiện tại có nằm trong mảng roles truyền vào không (không phân biệt hoa thường)
+        const userRoleLower = user.role?.toLowerCase();
+        return roles.some(role => role?.toLowerCase() === userRoleLower); 
     };
 
     // Trả về hàm hasRole để các component khác (như ProtectedRoute) sử dụng

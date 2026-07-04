@@ -8,21 +8,21 @@
 
 import { useState, useEffect, useContext, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { PRIMARY_NAV, RETAILER_NAV, UTILITY_NAV } from "./sidebar.config.jsx";
+import { PRIMARY_NAV, SELLER_NAV, UTILITY_NAV } from "./sidebar.config.jsx";
 import { AuthContext } from "@/shared/features/auth/context/AuthContext.jsx";
 import SidebarView from "./SidebarView";
 
-export default function Sidebar() {
+export default function Sidebar({ isCollapsed, onToggle }) {
     const { user } = useContext(AuthContext);
     const location = useLocation();
     const navigate = useNavigate();
 
-    const [isCollapsed, setIsCollapsed] = useState(false);
     const [openSections, setOpenSections] = useState({});
 
-    // Role-based navigation: nếu role === "retailer" hoặc đang ở route retailer thì dùng RETAILER_NAV để test
+    // Role-based navigation: nếu role === "seller" hoặc đang ở route seller thì dùng SELLER_NAV để test
     const navItems = useMemo(() => {
-        if (user?.role === "retailer" || location.pathname.startsWith('/retailer')) return RETAILER_NAV;
+        const role = user?.role?.toLowerCase();
+        if (role === "seller" || location.pathname.startsWith('/seller')) return SELLER_NAV;
         return PRIMARY_NAV;
     }, [user?.role, location.pathname]);
 
@@ -34,10 +34,6 @@ export default function Sidebar() {
         const matched = allItems.find(item => item.path && item.path !== "#" && location.pathname === item.path);
         return matched?.key || navItems[0]?.key || "dashboard";
     }, [location.pathname, navItems]);
-
-    const handleToggleSidebar = () => {
-        setIsCollapsed(prev => !prev);
-    };
 
     const handleItemClick = (key) => {
         // Cần bao gồm cả UTILITY_NAV để các nút như Settings/Logout có thể xử lý (nếu có path)
@@ -84,7 +80,7 @@ export default function Sidebar() {
             activeItem={activeItem}
             openSections={openSections}
             onItemClick={handleItemClick}
-            onToggle={handleToggleSidebar}
+            onToggle={onToggle}
             onToggleSection={handleToggleSection}
         />
     );

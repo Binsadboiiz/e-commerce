@@ -79,28 +79,28 @@ export const PRIMARY_NAV = [
     },
 ];
 
-/* retailer navigation */
-export const RETAILER_NAV = [
+/* seller navigation */
+export const SELLER_NAV = [
     {
-        key: "retailer-dashboard",
+        key: "seller-dashboard",
         label: "Dashboard",
         icon: <LayoutDashboard size={18} />,
-        path: "/retailer/dashboard",
+        path: "/seller/dashboard",
     },
     {
-        key: "retailer-products",
+        key: "seller-products",
         label: "Products",
         icon: <Package size={18} />,
-        path: "/retailer/products",
+        path: "/seller/products",
     },
     {
-        key: "retailer-orders",
+        key: "seller-orders",
         label: "Orders",
         icon: <ShoppingCart size={18} />,
         path: "#",
     },
     {
-        key: "retailer-analytics",
+        key: "seller-analytics",
         label: "Analytics",
         icon: <BarChart3 size={18} />,
         path: "#",

@@ -167,3 +167,52 @@
     background: #e5e7eb;
     color: #374151;
 }
+
+.avatarImg {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.menuBtn {
+    display: none;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.menuBtn:hover {
+    background: #f3f4f6;
+    color: var(--text-primary);
+}
+
+@media (max-width: 1024px) {
+    .topbar {
+        padding: 0 20px;
+    }
+    .searchBar {
+        width: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    .topbar {
+        padding: 0 16px;
+    }
+    .menuBtn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .searchBar {
+        display: none;
+    }
+    .meta {
+        display: none;
+    }
+}

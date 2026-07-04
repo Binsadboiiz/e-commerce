@@ -4,6 +4,6 @@ namespace BE.Constants
     {
         public const string Admin = "Admin";
         public const string Customer = "Customer";
-        public const string Retailer = "Retailer";
+        public const string Seller = "Seller";
     }
 }

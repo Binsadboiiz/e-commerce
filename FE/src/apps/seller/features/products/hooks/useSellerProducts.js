@@ -1,13 +1,13 @@
 import { useEffect, useState, useCallback } from "react";
-import { retailerProductApi } from "../api/retailerProductApi";
+import { sellerProductApi } from "../api/sellerProductApi";
 import { notify } from "@/shared/utils/Notify";
 
 /**
- * Hook quản lý state danh sách sản phẩm của retailer.
+ * Hook quản lý state danh sách sản phẩm của seller.
  * Hỗ trợ: search, filter, sort, pagination, refetch.
  * Khi gặp lỗi API (ví dụ 401 chưa đăng nhập), hiển thị thông báo thay vì crash.
  */
-export default function useRetailerProducts(params = {}) {
+export default function useSellerProducts(params = {}) {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -23,7 +23,7 @@ export default function useRetailerProducts(params = {}) {
             setLoading(true);
             setError(null);
 
-            const res = await retailerProductApi.getMyProducts(params);
+            const res = await sellerProductApi.getMyProducts(params);
             const data = res?.data;
 
             setProducts(data?.items || []);

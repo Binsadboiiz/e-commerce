@@ -30,5 +30,6 @@ namespace BE.Models.DTOs
         public string? Status { get; set; }
         public DateTime? CreatedAt { get; set; }
         public int SoldCount { get; set; }
+        public string? Description { get; set; }
     }
 }

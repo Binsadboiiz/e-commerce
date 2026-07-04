@@ -52,11 +52,16 @@ namespace BE.Services.Implementation
                     .Sum(v => v.Inventory != null
                         ? v.Inventory.AvailableStock - v.Inventory.ReservedStock
                         : 0),
+                Stock = product.Variants
+                    .Sum(v => v.Inventory != null
+                        ? v.Inventory.AvailableStock - v.Inventory.ReservedStock
+                        : 0),
                 ImageUrl = product.Image,
                 RatingAvg = product.RatingAvg,
                 RatingCount = product.RatingCount,
                 CategoryName = product.Category != null ? product.Category.Type : null,
-                BrandName = product.Brand != null ? product.Brand.Name : null
+                BrandName = product.Brand != null ? product.Brand.Name : null,
+                Description = product.Description
             };
         }
 
@@ -142,11 +147,13 @@ namespace BE.Services.Implementation
                     DiscountPrice = x.Product.DiscountPrice,
                     FinalPrice = x.FinalPrice,
                     AvailableStock = x.AvailableStock,
+                    Stock = x.AvailableStock,
                     ImageUrl = x.Product.Image,
                     RatingAvg = x.Product.RatingAvg,
                     RatingCount = x.Product.RatingCount,
                     CategoryName = x.Product.Category!.Type,
-                    BrandName = x.Product.Brand!.Name
+                    BrandName = x.Product.Brand!.Name,
+                    Description = x.Product.Description
                 })
                 .ToListAsync();
 

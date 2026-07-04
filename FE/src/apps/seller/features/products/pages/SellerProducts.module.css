@@ -1,5 +1,5 @@
 /* ======================================================
-   RetailerProducts — Module CSS
+   SellerProducts — Module CSS
    Design: White background, black text, clean & modern
    ====================================================== */
 
@@ -193,6 +193,7 @@
 
 .thImage {
     width: 64px;
+    min-width: 64px;
 }
 
 .table td {
@@ -241,6 +242,7 @@
 /* ── Cell: Image ── */
 .cellImage {
     width: 64px;
+    min-width: 64px;
 }
 
 .productImage {
@@ -502,6 +504,16 @@
 
 
 /* ── Responsive ── */
+@media (max-width: 1024px) {
+    .tableWrapper {
+        overflow-x: auto;
+    }
+
+    .table {
+        min-width: 850px;
+    }
+}
+
 @media (max-width: 768px) {
     .pageHeader {
         flex-direction: column;
@@ -520,14 +532,6 @@
         flex-wrap: wrap;
     }
 
-    .tableWrapper {
-        overflow-x: auto;
-    }
-
-    .table {
-        min-width: 800px;
-    }
-
     .pagination {
         flex-direction: column;
         gap: 12px;
@@ -537,6 +541,8 @@
 /* ── Actions ── */
 .cellActions {
     white-space: nowrap;
+    width: 100px;
+    min-width: 100px;
 }
 
 .actionBtn {

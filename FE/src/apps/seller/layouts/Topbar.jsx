@@ -1,10 +1,17 @@
+import { useAuth } from "@/shared/features/auth/hooks/useAuth";
 import styles from "./Topbar.module.css";
-import { Search, Sun, Bell } from "lucide-react";
+import { Search, Sun, Bell, Menu } from "lucide-react";
 
-function Topbar() {
+function Topbar({ onToggleSidebar }) {
+    const { user } = useAuth();
+
     return (
         <header className={styles.topbar}>
             <div className={styles.inner}>
+                
+                <button className={styles.menuBtn} onClick={onToggleSidebar} aria-label="Toggle Menu">
+                    <Menu size={20} />
+                </button>
 
                 {/* search */}
                 <div className={styles.searchBar}>
@@ -30,16 +37,22 @@ function Topbar() {
 
                         <div className={styles.meta}>
                             <span className={styles.userText}>
-                                Hello, <strong>Adam</strong>
+                                Hello, <strong>{user?.fullName || "Seller"}</strong>
                             </span>
 
                             <span className={styles.badge}>
-                                Seller
+                                {user?.role || "Seller"}
                             </span>
                         </div>
 
                         <div className={styles.avatar}>
-
+                            {user?.avatar ? (
+                                <img src={user.avatar} alt={user.fullName} className={styles.avatarImg} />
+                            ) : (
+                                <div className={styles.avatarPlaceholder}>
+                                    {(user?.fullName || "?").charAt(0).toUpperCase()}
+                                </div>
+                            )}
                         </div>
 
                     </div>

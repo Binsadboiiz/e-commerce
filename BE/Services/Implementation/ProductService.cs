@@ -16,7 +16,7 @@ namespace BE.Services.Implementation
     /// Responsibilities:
     /// - Manage product lifecycle mutations
     /// - Create variants and initialize inventory
-    /// - Enforce retailer ownership checks
+    /// - Enforce seller ownership checks
     /// - Coordinate transactional consistency
     ///
     /// </summary>
@@ -45,7 +45,7 @@ namespace BE.Services.Implementation
         /// Rolls back all changes if any step fails.
         /// </summary>
         public async Task<ProductResponse> CreateProductAsync(
-            string retailerUserId,
+            string sellerUserId,
             CreateProductRequest request)
         {
             using var tx = await _context.Database.BeginTransactionAsync();
@@ -53,7 +53,7 @@ namespace BE.Services.Implementation
             try
             {
                 var shop = await _context.Shops
-                    .FirstOrDefaultAsync(x => x.OwnerId == retailerUserId);
+                    .FirstOrDefaultAsync(x => x.OwnerId == sellerUserId);
                 if (shop == null)
                     throw new Exception("Shop not found");
 
@@ -66,7 +66,7 @@ namespace BE.Services.Implementation
                     Slug = slug,
                     Description = request.Description,
                     ShopId = shop.ShopId,
-                    RetailerId = retailerUserId,
+                    RetailerId = sellerUserId,
                     CategoryId = request.CategoryId,
                     BrandId = request.BrandId,
                     Status = ProductConstants.ProductStatusActive,
@@ -134,12 +134,12 @@ namespace BE.Services.Implementation
 
         /// <summary>
         /// Updates mutable product information
-        /// after validating retailer ownership.
+        /// after validating seller ownership.
         ///
         /// </summary>
         public async Task<ProductResponse> UpdateProductAsync(
             long productId,
-            string retailerUserId,
+            string sellerUserId,
             UpdateProductRequest request)
         {
             var product = await _context.Products
@@ -149,7 +149,7 @@ namespace BE.Services.Implementation
             if (product == null)
                 throw new Exception("Product not found");
 
-            if (product.Shop.OwnerId != retailerUserId)
+            if (product.Shop.OwnerId != sellerUserId)
                 throw new UnauthorizedAccessException();
 
             if (!string.IsNullOrWhiteSpace(request.Name)
@@ -162,10 +162,36 @@ namespace BE.Services.Implementation
             product.Name = request.Name;
             product.Description = request.Description;
             product.Status = request.Status;
+            product.Price = request.Price;
             
             if (request.ImageUrl != null)
             {
                 product.Image = request.ImageUrl;
+            }
+
+            // Auto update status based on stock
+            if (request.Stock == 0)
+            {
+                product.Status = ProductConstants.ProductStatusOutOfStock;
+            }
+            else if (product.Status == ProductConstants.ProductStatusOutOfStock && request.Stock > 0)
+            {
+                product.Status = ProductConstants.ProductStatusActive;
+            }
+
+            // Update default variant & inventory
+            var variant = await _context.ProductVariants
+                .Include(v => v.Inventory)
+                .FirstOrDefaultAsync(v => v.ProductId == productId);
+            if (variant != null)
+            {
+                variant.Price = request.Price;
+                variant.Stock = request.Stock;
+                if (variant.Inventory != null)
+                {
+                    variant.Inventory.AvailableStock = request.Stock;
+                    variant.Inventory.UpdatedAt = DateTime.UtcNow;
+                }
             }
 
             await _context.SaveChangesAsync();
@@ -185,7 +211,7 @@ namespace BE.Services.Implementation
         /// </summary>
         public async Task DeleteProductAsync(
             long productId,
-            string retailerUserId)
+            string sellerUserId)
         {
             var product = await _context.Products
                 .Include(x => x.Shop)
@@ -193,7 +219,7 @@ namespace BE.Services.Implementation
             if (product == null)
                 throw new Exception("Product not found");
 
-            if (product.Shop.OwnerId != retailerUserId)
+            if (product.Shop.OwnerId != sellerUserId)
                 throw new UnauthorizedAccessException();
 
             // Soft delete
@@ -217,21 +243,21 @@ namespace BE.Services.Implementation
         }
 
         /// <summary>
-        /// Lấy toàn bộ sản phẩm của retailer (bao gồm deleted).
+        /// Lấy toàn bộ sản phẩm của seller (bao gồm deleted).
         /// Hỗ trợ search theo tên, filter theo status, sort theo nhiều tiêu chí, pagination.
         /// </summary>
-        public async Task<(IEnumerable<ProductListDto> items, int total)> GetProductsByRetailerAsync(
-            string retailerUserId,
+        public async Task<(IEnumerable<ProductListDto> items, int total)> GetProductsBySellerAsync(
+            string sellerUserId,
             int page,
             int pageSize,
             string? search,
             string? status,
             string? sortBy)
         {
-            // Tìm shop của retailer
+            // Tìm shop của seller
             var shop = await _context.Shops
                 .AsNoTracking()
-                .FirstOrDefaultAsync(s => s.OwnerId == retailerUserId);
+                .FirstOrDefaultAsync(s => s.OwnerId == sellerUserId);
 
             if (shop == null)
                 return (Enumerable.Empty<ProductListDto>(), 0);
@@ -307,6 +333,7 @@ namespace BE.Services.Implementation
                     DiscountPrice = x.Product.DiscountPrice,
                     FinalPrice = x.FinalPrice,
                     AvailableStock = x.AvailableStock,
+                    Stock = x.AvailableStock,
                     ImageUrl = x.Product.Images
                         .Where(i => i.IsPrimary)
                         .Select(i => i.ImageUrl)
@@ -317,7 +344,8 @@ namespace BE.Services.Implementation
                     BrandName = x.Product.Brand != null ? x.Product.Brand.Name : null,
                     Status = x.Product.Status,
                     CreatedAt = x.Product.CreatedAt,
-                    SoldCount = x.SoldCount
+                    SoldCount = x.SoldCount,
+                    Description = x.Product.Description
                 })
                 .ToListAsync();
 

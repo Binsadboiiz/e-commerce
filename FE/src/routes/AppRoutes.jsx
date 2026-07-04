@@ -8,7 +8,7 @@ import { Routes } from 'react-router-dom'
 import PublicRoutes from '@/apps/customer/CustomerRoutes'
 import DashboardRoutes from '@/apps/admin/AdminRoutes'
 import StandaloneRoutes from './StandaloneRoutes'
-import RetailerRoute from '@/apps/seller/SellerRoutes'
+import SellerRoute from '@/apps/seller/SellerRoutes'
 import ScrollToTop from '@/shared/components/ScrollToTop'
 
 export default function AppRouter() {
@@ -19,7 +19,7 @@ export default function AppRouter() {
         {PublicRoutes()}
         {DashboardRoutes()}
         {StandaloneRoutes()}
-        {RetailerRoute()}
+        {SellerRoute()}
       </Routes>
     </>
   )

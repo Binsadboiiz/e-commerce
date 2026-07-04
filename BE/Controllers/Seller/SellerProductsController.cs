@@ -6,15 +6,15 @@ using BE.Helpers;
 using BE.Services.Interface.Product;
 using Microsoft.AspNetCore.Authorization;
 
-namespace BE.Controllers.Retailer
+namespace BE.Controllers.Seller
 {
-    [Authorize(Roles = "Retailer")]
+    [Authorize(Roles = "Seller,SELLER,seller")]
     [ApiController]
-    [Route("api/retailer/products")]
-    public class RetailerProductsController : ControllerBase
+    [Route("api/seller/products")]
+    public class SellerProductsController : ControllerBase
     {
         private readonly IProductService _productService;
-        public RetailerProductsController(IProductService productService)
+        public SellerProductsController(IProductService productService)
         {
             _productService = productService;
         }
@@ -35,7 +35,7 @@ namespace BE.Controllers.Retailer
             string userId = UserClaimsHelper.GetUserId(User);
 
             var (items, total) = await _productService
-                .GetProductsByRetailerAsync(userId, page, pageSize, search, status, sortBy);
+                .GetProductsBySellerAsync(userId, page, pageSize, search, status, sortBy);
 
             var data = new
             {

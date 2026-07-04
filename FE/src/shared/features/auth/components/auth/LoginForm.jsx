@@ -7,6 +7,7 @@ import { useAuth } from "../../hooks/useAuth";
 import styles from "./LoginForm.module.css";
 import { notify } from '../../../../utils/Notify.js';
 import { ROUTES } from "@/config/route.config.js";
+import { ROLES } from "@/shared/constants/roles";
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -23,7 +24,17 @@ export default function LoginForm() {
       const res = await loginApi(form);
       setUser(res.data);
       notify.success("Login Successfully");
-      navigate(ROUTES.HOME);
+      
+      const role = res.data?.role;
+      if (role === ROLES.SELLER || role?.toLowerCase() === "seller") {
+        navigate(ROUTES.SELLER_DASHBOARD);
+      } 
+      else if (role === ROLES.ADMIN || role?.toLowerCase() === "admin") {
+        navigate(ROUTES.DASHBOARD);
+      }
+      else {
+        navigate(ROUTES.HOME);
+      }
     } catch (err) {
       notify.error("Login failed");
       console.log(err.response?.data?.message || "Login failed");

@@ -47,7 +47,7 @@ export default function PublicRoutes() {
             </ProtectedRoute>} />
             
             <Route path={ROUTES.PROFILE} 
-                element={ <ProtectedRoute allowedRoles={[ROLES.CUSTOMER, ROLES.ADMIN, ROLES.RETAILER]}>
+                element={ <ProtectedRoute allowedRoles={[ROLES.CUSTOMER, ROLES.ADMIN, ROLES.SELLER]}>
                 <ProfilePage />
             </ProtectedRoute>} /> */}
 

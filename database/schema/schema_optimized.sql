@@ -46,6 +46,173 @@ CREATE INDEX idx_user_addresses_user ON User_addresses(UserId);
 
 
 -- =========================================================================
+-- 2A. SELLER TYPES
+-- =========================================================================
+CREATE TABLE Seller_types (
+    SellerTypeId INT AUTO_INCREMENT PRIMARY KEY,
+
+    Code VARCHAR(50) NOT NULL UNIQUE,
+    Name VARCHAR(100) NOT NULL,
+    Description VARCHAR(255),
+
+    DisplayOrder INT DEFAULT 0,
+
+    IsActive BOOLEAN DEFAULT TRUE,
+
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+INSERT INTO Seller_types (Code, Name, Description, DisplayOrder) VALUES
+('PERSONAL','Personal','Individual seller',1),
+('BUSINESS','Business','Business seller',2);
+
+
+-- =========================================================================
+-- 2B. SELLER STATUSES
+-- =========================================================================
+CREATE TABLE Seller_statuses (
+    SellerStatusId INT AUTO_INCREMENT PRIMARY KEY,
+
+    Code VARCHAR(50) NOT NULL UNIQUE,
+    Name VARCHAR(100) NOT NULL,
+    Description VARCHAR(255),
+
+    DisplayOrder INT DEFAULT 0,
+
+    IsActive BOOLEAN DEFAULT TRUE,
+
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+INSERT INTO Seller_statuses (Code, Name, Description, DisplayOrder) VALUES
+('DRAFT','Draft','Seller registration has not been submitted.',1),
+('PENDING','Pending','Waiting for verification.',2),
+('UNDER_REVIEW','Under Review','Seller information is under review.',3),
+('APPROVED','Approved','Seller account approved.',4),
+('REJECTED','Rejected','Seller registration rejected.',5),
+('SUSPENDED','Suspended','Seller account suspended.',6),
+('BANNED','Banned','Seller account banned.',7),
+('CLOSED','Closed','Seller account closed.',8);
+
+
+-- =========================================================================
+-- 2C. SELLER ACCOUNTS
+-- =========================================================================
+CREATE TABLE Seller_accounts (
+    SellerId VARCHAR(50) PRIMARY KEY,
+    UserId VARCHAR(50) NOT NULL UNIQUE,
+    SellerTypeId INT NOT NULL,
+    SellerStatusId INT NOT NULL,
+    MaxShopLimit INT DEFAULT 1,
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    CONSTRAINT FK_SellerAccounts_Users FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE,
+    CONSTRAINT FK_SellerAccounts_SellerTypes FOREIGN KEY (SellerTypeId) REFERENCES Seller_types(SellerTypeId),
+    CONSTRAINT FK_SellerAccounts_SellerStatuses FOREIGN KEY (SellerStatusId) REFERENCES Seller_statuses(SellerStatusId)
+);
+
+CREATE INDEX idx_seller_user ON Seller_accounts(UserId);
+CREATE INDEX idx_seller_status ON Seller_accounts(SellerStatusId);
+
+
+-- =========================================================================
+-- 2D. SELLER ADDRESSES
+-- =========================================================================
+CREATE TABLE Seller_addresses (
+    SellerAddressId BIGINT AUTO_INCREMENT PRIMARY KEY,
+    SellerId VARCHAR(50) NOT NULL,
+    FullName VARCHAR(255) NOT NULL,
+    PhoneNumber VARCHAR(20) NOT NULL,
+    City VARCHAR(100),
+    District VARCHAR(100),
+    Ward VARCHAR(100),
+    StreetAddress VARCHAR(255),
+    PostalCode VARCHAR(20),
+    IsDefault BOOLEAN DEFAULT TRUE,
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    CONSTRAINT FK_SellerAddresses_SellerAccounts FOREIGN KEY (SellerId) REFERENCES Seller_accounts(SellerId) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_seller_address ON Seller_addresses(SellerId);
+
+
+-- =========================================================================
+-- 2E. SELLER DOCUMENT TYPES
+-- =========================================================================
+CREATE TABLE Seller_document_types (
+    DocumentTypeId INT AUTO_INCREMENT PRIMARY KEY,
+    Code VARCHAR(50) UNIQUE,
+    Name VARCHAR(100),
+    Description VARCHAR(255),
+    DisplayOrder INT DEFAULT 0,
+    IsActive BOOLEAN DEFAULT TRUE
+);
+
+INSERT INTO Seller_document_types (Code, Name, DisplayOrder) VALUES
+('CCCD_FRONT','Citizen ID Front',1),
+('CCCD_BACK','Citizen ID Back',2),
+('SELFIE','Selfie Verification',3),
+('BUSINESS_LICENSE','Business License',4);
+
+
+-- =========================================================================
+-- 2F. SELLER DOCUMENTS
+-- =========================================================================
+CREATE TABLE Seller_documents (
+    DocumentId BIGINT AUTO_INCREMENT PRIMARY KEY,
+    SellerId VARCHAR(50) NOT NULL,
+    DocumentTypeId INT NOT NULL,
+    FileUrl LONGTEXT NOT NULL,
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT FK_SellerDocuments_Seller FOREIGN KEY (SellerId) REFERENCES Seller_accounts(SellerId) ON DELETE CASCADE,
+    CONSTRAINT FK_SellerDocuments_DocumentType FOREIGN KEY (DocumentTypeId) REFERENCES Seller_document_types(DocumentTypeId)
+);
+
+CREATE INDEX idx_seller_document ON Seller_documents(SellerId);
+
+
+-- =========================================================================
+-- 2G. SELLER BUSINESSES
+-- =========================================================================
+CREATE TABLE Seller_businesses (
+    BusinessId BIGINT AUTO_INCREMENT PRIMARY KEY,
+    SellerId VARCHAR(50) NOT NULL UNIQUE,
+    CompanyName VARCHAR(255),
+    TaxCode VARCHAR(100),
+    BusinessLicenseNumber VARCHAR(100),
+    Representative VARCHAR(255),
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    CONSTRAINT FK_SellerBusinesses_Seller FOREIGN KEY (SellerId) REFERENCES Seller_accounts(SellerId) ON DELETE CASCADE
+);
+
+
+-- =========================================================================
+-- 2H. SELLER BANKS
+-- =========================================================================
+CREATE TABLE Seller_banks (
+    SellerBankId BIGINT AUTO_INCREMENT PRIMARY KEY,
+    SellerId VARCHAR(50) NOT NULL,
+    BankCode VARCHAR(50),
+    AccountNumber VARCHAR(100),
+    AccountName VARCHAR(255),
+    IsPrimary BOOLEAN DEFAULT TRUE,
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT FK_SellerBanks_Seller FOREIGN KEY (SellerId) REFERENCES Seller_accounts(SellerId) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_seller_bank ON Seller_banks(SellerId);
+
+
+-- =========================================================================
 -- 3. SHOPS
 -- =========================================================================
 CREATE TABLE Shops (
@@ -517,6 +684,11 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 -- Clean existing data to ensure seed scripts can be run multiple times
 TRUNCATE TABLE Accounts;
+TRUNCATE TABLE Seller_banks;
+TRUNCATE TABLE Seller_businesses;
+TRUNCATE TABLE Seller_documents;
+TRUNCATE TABLE Seller_addresses;
+TRUNCATE TABLE Seller_accounts;
 TRUNCATE TABLE Review_Replies;
 TRUNCATE TABLE Review_Images;
 TRUNCATE TABLE Reviews;
@@ -565,6 +737,40 @@ INSERT INTO User_addresses (Id, UserId, FullName, PhoneNumber, City, StreetName,
 (4, 'usr_cust_3', 'Le Van C', 967890123, 'Da Nang', 'Vo Nguyen Giap Street', '45', 1),
 (5, 'usr_cust_4', 'Pham Thi D', 978901234, 'Can Tho', '3 Thang 2 Street', '101A', 1),
 (6, 'usr_cust_5', 'Hoang Van E', 989012345, 'Hai Phong', 'Le Hong Phong', '55/2', 1);
+
+-- 2A. Seller Accounts
+INSERT INTO Seller_accounts (SellerId, UserId, SellerTypeId, SellerStatusId, MaxShopLimit) VALUES
+('sel_seller_1', 'usr_seller_1', 2, 4, 3),
+('sel_seller_2', 'usr_seller_2', 2, 4, 3),
+('sel_seller_3', 'usr_seller_3', 2, 4, 3);
+
+-- 2B. Seller Addresses
+INSERT INTO Seller_addresses (SellerAddressId, SellerId, FullName, PhoneNumber, City, District, Ward, StreetAddress, PostalCode, IsDefault) VALUES
+(1, 'sel_seller_1', 'Apple Retailer Vietnam', '0912345678', 'Ho Chi Minh City', 'District 1', 'Ben Nghe Ward', 'Dong Khoi Street 235', '70000', 1),
+(2, 'sel_seller_2', 'Coolmate Warehouse', '0923456789', 'Ha Noi', 'Thanh Xuan District', 'Thanh Xuan Trung', 'Nguyen Trai Street 12', '10000', 1),
+(3, 'sel_seller_3', 'Sony Authorized Agent', '0934567890', 'Ho Chi Minh City', 'District 3', 'Ward 6', 'Tran Hung Dao Street 456', '70000', 1);
+
+-- 2C. Seller Businesses
+INSERT INTO Seller_businesses (BusinessId, SellerId, CompanyName, TaxCode, BusinessLicenseNumber, Representative) VALUES
+(1, 'sel_seller_1', 'Apple Premium Reseller JSC', '0101234567', 'GP-12345', 'John Doe'),
+(2, 'sel_seller_2', 'Coolmate Fashion Vietnam Ltd', '0201234567', 'GP-67890', 'Pham Chi Nhu'),
+(3, 'sel_seller_3', 'Sony Center Vietnam Corporation', '0301234567', 'GP-54321', 'Kenichiro Yoshida');
+
+-- 2D. Seller Banks
+INSERT INTO Seller_banks (SellerBankId, SellerId, BankCode, AccountNumber, AccountName, IsPrimary) VALUES
+(1, 'sel_seller_1', 'VCB', '0071001234567', 'APPLE PREMIUM APR', 1),
+(2, 'sel_seller_2', 'TCB', '1903009876543', 'COOLMATE FASHION VN', 1),
+(3, 'sel_seller_3', 'ACB', '2004005678901', 'SONY CENTER VIETNAM', 1);
+
+-- 2E. Seller Documents
+INSERT INTO Seller_documents (DocumentId, SellerId, DocumentTypeId, FileUrl) VALUES
+(1, 'sel_seller_1', 1, 'https://images.unsplash.com/photo-1554774853-aae0a22c8aa4?w=500'),
+(2, 'sel_seller_1', 2, 'https://images.unsplash.com/photo-1554774853-aae0a22c8aa4?w=500'),
+(3, 'sel_seller_2', 1, 'https://images.unsplash.com/photo-1554774853-aae0a22c8aa4?w=500'),
+(4, 'sel_seller_2', 2, 'https://images.unsplash.com/photo-1554774853-aae0a22c8aa4?w=500'),
+(5, 'sel_seller_3', 1, 'https://images.unsplash.com/photo-1554774853-aae0a22c8aa4?w=500'),
+(6, 'sel_seller_3', 2, 'https://images.unsplash.com/photo-1554774853-aae0a22c8aa4?w=500');
+
 
 -- 3. Shops
 INSERT INTO Shops (ShopId, OwnerId, Name, Description, Status, Logo, IsActive, Create_At, Update_At) VALUES
