@@ -1,4 +1,4 @@
-﻿using BE.Data;
+using BE.Data;
 using BE.Services.Implementation;
 using BE.Services.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +8,7 @@ namespace BE.Extensions.DependencyInjection;
 /// <summary>
 /// Registers infrastructure dependencies.
 /// </summary>
-public static class InfrastructureExtensions
+public static class InfrastructureDependencyInjection
 {
     public static IServiceCollection AddInfrastructure(
         this IServiceCollection services,

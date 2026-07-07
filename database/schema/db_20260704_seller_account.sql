@@ -154,8 +154,8 @@ CREATE TABLE Seller_document_types (
 INSERT INTO Seller_document_types
 (Code,Name,DisplayOrder)
 VALUES
-('CCCD_FRONT','Citizen ID Front',1),
-('CCCD_BACK','Citizen ID Back',2),
+('IDENTITY_FRONT','Citizen ID Front',1),
+('IDENTITY_BACK','Citizen ID Back',2),
 ('SELFIE','Selfie Verification',3),
 ('BUSINESS_LICENSE','Business License',4);
 

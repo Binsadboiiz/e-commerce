@@ -7,7 +7,7 @@ using BE.Helpers;
 
 namespace BE.Extensions.DependencyInjection
 {
-    public static class AuthModuleExtensions
+    public static class AuthDependencyInjection
     {
         public static IServiceCollection AddAuthModule(
             this IServiceCollection services)

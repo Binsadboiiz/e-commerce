@@ -1,5 +1,5 @@
-import { Profiler, useContext, useState } from 'react';
-import { Link, useNavigate, useLocation, Route } from 'react-router-dom';
+import { useContext, useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FiShoppingCart, FiUser, FiLogOut } from 'react-icons/fi';
 import styles from './Header.module.css';
 import SearchBar from "@/apps/customer/features/product/components/list/search/SearchBar";
@@ -9,6 +9,7 @@ import { logoutApi } from "@/shared/features/auth/api/authService";
 import { ROUTES } from "@/config/route.config";
 import { notify } from "@/shared/utils/Notify";
 import CartContext from "@/apps/customer/features/cart/context/CartContext";
+import SellerHeaderAction from "@/apps/customer/features/seller/components/common/SellerHeaderAction";
 
 function Header() {
     const location = useLocation();
@@ -58,6 +59,7 @@ function Header() {
 
             {/* RIGHT */}
             <div className={styles.right}>
+                {user && <SellerHeaderAction />}
                 {user ? (
                     <div className={styles.userSection}>
                         <div

@@ -28,11 +28,10 @@ namespace BE.Models.Entities
 
         public DateTime UpdatedAt { get; set; }
 
-        #region Navigation Properties
+        // Navigation
 
         public virtual ICollection<SellerAccount> SellerAccounts { get; set; }
             = new List<SellerAccount>();
 
-        #endregion
     }
 }

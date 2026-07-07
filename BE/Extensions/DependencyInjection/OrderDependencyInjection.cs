@@ -1,4 +1,4 @@
-﻿using BE.Services.Implementation;
+using BE.Services.Implementation;
 using BE.Services.Interface;
 
 namespace BE.Extensions.DependencyInjection;
@@ -6,7 +6,7 @@ namespace BE.Extensions.DependencyInjection;
 /// <summary>
 /// Registers order module dependencies.
 /// </summary>
-public static class OrderModuleExtensions
+public static class OrderDependencyInjection
 {
     public static IServiceCollection AddOrderModule(
         this IServiceCollection services)
