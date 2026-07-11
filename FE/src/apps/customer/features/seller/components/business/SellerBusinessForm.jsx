@@ -5,7 +5,7 @@ const defaultForm = {
     companyName: "",
     taxCode: "",
     businessLicenseNumber: "",
-    representativeName: "",
+    representative: "",
     businessAddress: ""
 };
 
@@ -42,7 +42,7 @@ export default function SellerBusinessForm({
                 <h3>Business Information</h3>
 
                 <div className={styles.formGroup}>
-                    <label>Company Name</label>
+                    <label>Company Name <span style={{ color: "#ff4d4f", marginLeft: "4px" }}>*</span></label>
                     <input
                         type="text"
                         placeholder="Enter company name"
@@ -50,11 +50,12 @@ export default function SellerBusinessForm({
                         onChange={(e) =>
                             handleChange("companyName", e.target.value)
                         }
+                        required
                     />
                 </div>
 
                 <div className={styles.formGroup}>
-                    <label>Tax Code</label>
+                    <label>Tax Code <span style={{ color: "#ff4d4f", marginLeft: "4px" }}>*</span></label>
                     <input
                         type="text"
                         placeholder="Enter tax code"
@@ -62,11 +63,14 @@ export default function SellerBusinessForm({
                         onChange={(e) =>
                             handleChange("taxCode", e.target.value)
                         }
+                        pattern="[0-9]{10}|[0-9]{13}"
+                        title="Tax code must contain 10 or 13 digits."
+                        required
                     />
                 </div>
 
                 <div className={styles.formGroup}>
-                    <label>Business Registration Number</label>
+                    <label>Business Registration Number <span style={{ color: "#ff4d4f", marginLeft: "4px" }}>*</span></label>
                     <input
                         type="text"
                         placeholder="Business registration number"
@@ -77,21 +81,23 @@ export default function SellerBusinessForm({
                                 e.target.value
                             )
                         }
+                        required
                     />
                 </div>
 
                 <div className={styles.formGroup}>
-                    <label>Representative Name</label>
+                    <label>Representative Name <span style={{ color: "#ff4d4f", marginLeft: "4px" }}>*</span></label>
                     <input
                         type="text"
                         placeholder="Legal representative"
-                        value={form.representativeName}
+                        value={form.representative}
                         onChange={(e) =>
                             handleChange(
-                                "representativeName",
+                                "representative",
                                 e.target.value
                             )
                         }
+                        required
                     />
                 </div>
 

@@ -51,7 +51,7 @@ export default function SellerAddressForm({
 
                 <div className={styles.grid}>
                     <div className={styles.formGroup}>
-                        <label>Full Name</label>
+                        <label>Full Name <span style={{ color: "#ff4d4f", marginLeft: "4px" }}>*</span></label>
 
                         <input
                             type="text"
@@ -60,11 +60,12 @@ export default function SellerAddressForm({
                             onChange={(e) =>
                                 handleChange("fullName", e.target.value)
                             }
+                            required
                         />
                     </div>
 
                     <div className={styles.formGroup}>
-                        <label>Phone Number</label>
+                        <label>Phone Number <span style={{ color: "#ff4d4f", marginLeft: "4px" }}>*</span></label>
 
                         <input
                             type="tel"
@@ -73,6 +74,9 @@ export default function SellerAddressForm({
                             onChange={(e) =>
                                 handleChange("phoneNumber", e.target.value)
                             }
+                            pattern="[0-9]{9,11}"
+                            title="Phone number must contain 9 to 11 digits."
+                            required
                         />
                     </div>
                 </div>
@@ -83,7 +87,7 @@ export default function SellerAddressForm({
 
                 <div className={styles.grid}>
                     <div className={styles.formGroup}>
-                        <label>City / Province</label>
+                        <label>City / Province <span style={{ color: "#ff4d4f", marginLeft: "4px" }}>*</span></label>
 
                         <input
                             type="text"
@@ -92,11 +96,12 @@ export default function SellerAddressForm({
                             onChange={(e) =>
                                 handleChange("city", e.target.value)
                             }
+                            required
                         />
                     </div>
 
                     <div className={styles.formGroup}>
-                        <label>District</label>
+                        <label>District <span style={{ color: "#ff4d4f", marginLeft: "4px" }}>*</span></label>
 
                         <input
                             type="text"
@@ -105,11 +110,12 @@ export default function SellerAddressForm({
                             onChange={(e) =>
                                 handleChange("district", e.target.value)
                             }
+                            required
                         />
                     </div>
 
                     <div className={styles.formGroup}>
-                        <label>Ward</label>
+                        <label>Ward <span style={{ color: "#ff4d4f", marginLeft: "4px" }}>*</span></label>
 
                         <input
                             type="text"
@@ -118,6 +124,7 @@ export default function SellerAddressForm({
                             onChange={(e) =>
                                 handleChange("ward", e.target.value)
                             }
+                            required
                         />
                     </div>
 
@@ -136,7 +143,7 @@ export default function SellerAddressForm({
                 </div>
 
                 <div className={styles.formGroup}>
-                    <label>Street Address</label>
+                    <label>Street Address <span style={{ color: "#ff4d4f", marginLeft: "4px" }}>*</span></label>
 
                     <textarea
                         rows={4}
@@ -145,6 +152,7 @@ export default function SellerAddressForm({
                         onChange={(e) =>
                             handleChange("streetAddress", e.target.value)
                         }
+                        required
                     />
                 </div>
             </section>

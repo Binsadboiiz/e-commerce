@@ -12,7 +12,8 @@ const sellerApi = {
         headers: {
             "Content-Type": "multipart/form-data"
         }
-    })
+    }),
+    updateSellerType: (payload) => axiosClient.put("/seller/registration/seller-type", payload),
 };
 
 export default sellerApi;

@@ -164,5 +164,11 @@ namespace BE.Validators
             if (business.Representative.Length > 255)
                 throw new AppException("Representative name cannot exceed 255 characters.");
         }
+
+        public static void ValidateChangeSellerType(ChangeSellerTypeRequest request)
+        {
+            if (request.SellerTypeId <= 0)
+                throw new AppException("Seller type is required.");
+        }
     }
 }

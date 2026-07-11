@@ -14,5 +14,7 @@ namespace BE.Services.Interface.Seller
         Task UpdateRegistrationAsync(string userId, UpdateSellerRegistrationRequest request);
 
         Task SubmitRegistrationAsync(string userId);
+
+        Task ChangeSellerTypeAsync(string userId, ChangeSellerTypeRequest request);
     }
 }

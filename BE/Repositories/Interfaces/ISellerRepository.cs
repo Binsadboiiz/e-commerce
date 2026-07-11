@@ -45,5 +45,7 @@ namespace BE.Repositories.Interfaces
         void RemoveDocument(SellerDocument document);
 
         Task SaveChangesAsync();
+
+        Task ClearRegistrationAsync(string sellerId);
     }
 }

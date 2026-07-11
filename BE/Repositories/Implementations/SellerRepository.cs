@@ -120,5 +120,49 @@ namespace BE.Repositories.Implementations
         {
             await _context.SaveChangesAsync();
         }
+
+        public async Task ClearRegistrationAsync(string sellerId)
+        {
+            //clear address
+            var addresses = await _context.SellerAddresses
+                .Where(x => x.SellerId == sellerId)
+                .ToListAsync();
+
+            if(addresses.Any())
+            {
+                _context.SellerAddresses.RemoveRange(addresses);
+            }
+
+            //clear bank
+            var banks = await _context.SellerBanks
+                .Where(x => x.SellerId == sellerId)
+                .ToListAsync();
+
+            if (banks.Any())
+            {
+                _context.SellerBanks.RemoveRange(banks);
+            }
+
+            //clear business info
+            var businesses = await _context.SellerBusinesses
+                .Where(x => x.SellerId == sellerId)
+                .ToListAsync();
+
+            if (businesses.Any())
+            {
+                _context.SellerBusinesses.RemoveRange(businesses);
+            }
+
+            //clear document update
+            var documents = await _context.SellerDocuments
+                .Where(x => x.SellerId == sellerId) 
+                .ToListAsync();
+
+            if (documents.Any())
+            {
+                _context.SellerDocuments.RemoveRange(documents);
+            } 
+
+        }
     }
 }

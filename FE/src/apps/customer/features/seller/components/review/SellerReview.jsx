@@ -2,7 +2,8 @@ import styles from "./SellerReview.module.css";
 
 export default function SellerReview({
     registration,
-    onSubmit
+    onSubmit,
+    isReadOnly = false
 }) {
 
     if (!registration) {
@@ -16,6 +17,26 @@ export default function SellerReview({
         business,
         documents = []
     } = registration;
+
+    const sellerTypeName = summary?.sellerTypeCode === "BUSINESS" ? "Business" : "Individual";
+
+    const formatStatus = (status) => {
+        if (!status) return "-";
+        return status.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+    };
+
+    const mapDocTypeToName = (type) => {
+        switch (type) {
+            case "IDENTITY_FRONT":
+                return "Identity Card (Front)";
+            case "IDENTITY_BACK":
+                return "Identity Card (Back)";
+            case "BUSINESS_LICENSE":
+                return "Business License";
+            default:
+                return type ? type.replace('_', ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase()) : "-";
+        }
+    };
 
     return (
         <div className={styles.wrapper}>
@@ -36,12 +57,12 @@ export default function SellerReview({
                 <div className={styles.grid}>
                     <Item
                         label="Seller Type"
-                        value={summary?.sellerTypeName}
+                        value={sellerTypeName}
                     />
 
                     <Item
                         label="Status"
-                        value={summary?.sellerStatusName}
+                        value={formatStatus(summary?.sellerStatusCode)}
                     />
                 </div>
 
@@ -100,7 +121,7 @@ export default function SellerReview({
 
                     <Item
                         label="Bank"
-                        value={bank?.bankName}
+                        value={bank?.bankCode}
                     />
 
                     <Item
@@ -142,7 +163,7 @@ export default function SellerReview({
 
                         <Item
                             label="Representative"
-                            value={business.representativeName}
+                            value={business.representative}
                         />
 
                     </div>
@@ -162,28 +183,26 @@ export default function SellerReview({
                     )}
 
                     {documents.map(document => (
-
                         <li key={document.documentId || document.documentType}>
-                            {document.documentTypeName || document.documentType}
+                            {mapDocTypeToName(document.documentType)}
                         </li>
-
                     ))}
 
                 </ul>
 
             </section>
 
-            <div className={styles.footer}>
-
-                <button
-                    type="button"
-                    className={styles.submitButton}
-                    onClick={onSubmit}
-                >
-                    Submit Registration
-                </button>
-
-            </div>
+            {!isReadOnly && summary?.sellerStatusCode !== "PENDING" && summary?.sellerStatusCode !== "UNDER_REVIEW" && (
+                <div className={styles.footer}>
+                    <button
+                        type="button"
+                        className={styles.submitButton}
+                        onClick={onSubmit}
+                    >
+                        Submit Registration
+                    </button>
+                </div>
+            )}
 
         </div>
     );

@@ -69,5 +69,16 @@ namespace BE.Controllers.Seller
         {
             return User.FindFirstValue(ClaimTypes.NameIdentifier)!;
         }
+
+        [HttpPut("seller-type")]
+        public async Task<IActionResult> ChangeSellerType(
+        [FromBody] ChangeSellerTypeRequest request)
+        {
+            string userId = GetUserId();
+
+            await _registrationService.ChangeSellerTypeAsync(userId, request);
+
+            return Ok(ApiResponse.SuccessResponse("Seller type changed successfully."));
+        }
     }
 }

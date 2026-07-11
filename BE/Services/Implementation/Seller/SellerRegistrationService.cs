@@ -350,5 +350,30 @@ namespace BE.Services.Implementation.Seller
             };
         }
 
+        public async Task ChangeSellerTypeAsync(string userId, ChangeSellerTypeRequest request)
+        {
+            var seller = await _repository.GetByUserIdAsync(userId);
+
+            if (seller == null)
+                throw new Exception("Seller registration is not found");
+
+            if (seller.SellerStatus.Code != SellerStatusConstants.Draft)
+                throw new AppException("Seller type can only be changed while registration is in Draft state.");
+
+            var sellerType = await _repository.GetSellerTypeAsync(request.SellerTypeId);
+
+            if (sellerType == null)
+                throw new AppException("Invalid seller type.");
+
+            if (seller.SellerTypeId == request.SellerTypeId)
+                return;
+
+            await _repository.ClearRegistrationAsync(seller.SellerId);
+
+            seller.SellerTypeId = sellerType.SellerTypeId;
+
+            await _repository.SaveChangesAsync();
+        }
+
     }
 }

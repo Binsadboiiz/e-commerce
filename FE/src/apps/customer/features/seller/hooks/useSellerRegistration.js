@@ -38,6 +38,14 @@ export default function useSellerRegistration() {
         await loadRegistration();
     };
 
+    const changeSellerType = async function (sellerTypeId) {
+        await sellerApi.updateSellerType({
+            sellerTypeId
+        });
+
+        await loadRegistration();
+    }
+
     useEffect(function () {
         loadRegistration();
     }, [loadRegistration]);
@@ -50,6 +58,7 @@ export default function useSellerRegistration() {
 
         createRegistration,
         updateRegistration,
-        submitRegistration
+        submitRegistration,
+        changeSellerType
     };
 }

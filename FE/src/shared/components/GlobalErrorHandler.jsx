@@ -20,8 +20,11 @@ export default function GlobalErrorHandler({ children }) {
                 // Lưu vào context
                 setGlobalError(formattedError);
                 
-                // Tạm thời TẮT redirect 
-                navigate(ROUTES.ERROR || "/error");
+                // Chỉ chuyển hướng sang trang error đối với các lỗi server (>= 500) hoặc lỗi kết nối mạng (không có status)
+                const status = error.response?.status;
+                if (!status || status >= 500) {
+                    navigate(ROUTES.ERROR || "/error");
+                }
                 
                 // Vẫn reject để hook (nếu cần) có thể catch
                 return Promise.reject(formattedError);

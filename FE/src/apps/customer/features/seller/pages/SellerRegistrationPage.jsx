@@ -7,11 +7,13 @@ import styles from "./SellerRegistrationPage.module.css";
 
 import SellerStepper from "../components/common/SellerStepper";
 import SellerTypeSelector from "../components/type/SellerTypeSelector";
+import SellerChangeTypeModal from "../components/type/SellerChangeTypeModal";
 import SellerAddressForm from "../components/address/SellerAddressForm";
 import SellerBankForm from "../components/bank/SellerBankForm";
 import SellerBusinessForm from "../components/business/SellerBusinessForm";
 import SellerDocumentUpload from "../components/document/SellerDocumentUpload";
 import SellerReview from "../components/review/SellerReview";
+import SellerPendingPage from "./SellerPendingPage";
 
 export default function SellerRegistrationPage() {
     const {
@@ -20,11 +22,13 @@ export default function SellerRegistrationPage() {
         createRegistration,
         updateRegistration,
         submitRegistration,
+        changeSellerType,
         reload
     } = useSellerRegistration();
 
     const { currentStepIndex } = calculateSellerProgress(registration);
     const [userSelectedStepIndex, setUserSelectedStepIndex] = useState(null);
+    const [pendingChangeTypeId, setPendingChangeTypeId] = useState(null);
 
     const activeStepIndex = userSelectedStepIndex !== null ? userSelectedStepIndex : currentStepIndex;
 
@@ -35,6 +39,17 @@ export default function SellerRegistrationPage() {
                 <div className={styles.loadingText}>
                     Loading registration details...
                 </div>
+            </div>
+        );
+    }
+
+    const statusCode = registration?.summary?.sellerStatusCode;
+    const isSubmitted = statusCode === "PENDING" || statusCode === "UNDER_REVIEW";
+
+    if (isSubmitted) {
+        return (
+            <div className={styles.container}>
+                <SellerPendingPage registration={registration} />
             </div>
         );
     }
@@ -78,6 +93,25 @@ export default function SellerRegistrationPage() {
         setUserSelectedStepIndex(null);
     };
 
+    const handleChangeSellerType = (typeId) => {
+        setPendingChangeTypeId(typeId);
+    };
+
+    const handleConfirmChangeSellerType = async () => {
+        if (pendingChangeTypeId === null) return;
+
+        const typeId = pendingChangeTypeId;
+        setPendingChangeTypeId(null);
+
+        try {
+            await changeSellerType(typeId);
+            setUserSelectedStepIndex(null);
+            notify.success("Seller type changed successfully.");
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const renderStepContent = () => {
         if (!registration?.summary) {
             return (
@@ -94,7 +128,9 @@ export default function SellerRegistrationPage() {
                 return (
                     <SellerTypeSelector
                         value={registration.summary.sellerTypeId}
-                        onChange={handleTypeSelect}
+                        sellerStatus={registration.summary.sellerStatusCode}
+                        onCreate={handleTypeSelect}
+                        onChangeType={handleChangeSellerType}
                     />
                 );
 
@@ -145,7 +181,7 @@ export default function SellerRegistrationPage() {
                                     companyName: value.companyName,
                                     taxCode: value.taxCode,
                                     businessLicenseNumber: value.businessLicenseNumber,
-                                    representative: value.representativeName
+                                    representative: value.representative
                                 }
                             })
                         }
@@ -191,6 +227,12 @@ export default function SellerRegistrationPage() {
             <div className={styles.card}>
                 {renderStepContent()}
             </div>
+
+            <SellerChangeTypeModal
+                isOpen={pendingChangeTypeId !== null}
+                onClose={() => setPendingChangeTypeId(null)}
+                onConfirm={handleConfirmChangeSellerType}
+            />
         </div>
     );
 }
