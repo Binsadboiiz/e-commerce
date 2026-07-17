@@ -19,21 +19,29 @@ namespace BE.Helpers
         /// <summary>
         /// Hàm khởi tạo JSON Web Token dựa trên thông tin người dùng và cấu hình hệ thống.
         /// </summary>
-        public string GenerateToken(string userId, string email, string role)
+        public string GenerateToken(string userId, string email, string roles)
         {
             // 1. Khởi tạo danh sách các Claims 
             // Đây là các cặp Key-Value lưu trữ thông tin thực thể (User) trong Payload của Token.
-            var claims = new[]
+            var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, userId), // Định danh duy nhất của người dùng
-                new Claim(ClaimTypes.Email, email),          // Email người dùng
-                new Claim(ClaimTypes.Role, role)             // Vai trò (Phân quyền)
+                new Claim(ClaimTypes.Email, email)          // Email người dùng
+                //new Claim(ClaimTypes.Role, role)             // Vai trò (Phân quyền)
             };
+
+            if (!string.IsNullOrWhiteSpace(roles))
+            {
+                foreach (var role in roles.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, role));
+                }
+            }
 
             // 2. Thiết lập Khóa bí mật (Secret Key)
             // Chuyển đổi chuỗi Key từ cấu hình thành mảng bytes để đưa vào thuật toán băm.
             var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_config["Jwt:Secret"]));
+            Encoding.UTF8.GetBytes(_config["Jwt:Secret"]));
 
             // 3. Khởi tạo Thông tin ký (Signing Credentials)
             // Sử dụng thuật toán HmacSha256 để ký số lên Token, đảm bảo tính toàn vẹn dữ liệu.

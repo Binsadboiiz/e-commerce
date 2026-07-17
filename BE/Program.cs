@@ -19,6 +19,8 @@ builder.Services.AddCartModule();
 builder.Services.AddAuthModule();
 builder.Services.AddReviewModule();
 builder.Services.AddSellerModule();
+builder.Services.AddAdminModule();
+
 
 // ── JWT Authentication ──
 builder.Services.AddJwtAuthentication(builder.Configuration);

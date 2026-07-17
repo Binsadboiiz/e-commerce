@@ -4,7 +4,7 @@ export const ROUTES = {
     PRODUCTS_LIST: "/products",
     PRODUCT_DETAIL: "/products/:slug",
     SHOP: "/shops/:id",
-    
+
     CART: "/cart",
     CHECKOUT: "/checkout",
     MY_ORDERS: "/my-orders",
@@ -16,11 +16,10 @@ export const ROUTES = {
     ERROR: "/error",
     PROFILE: "/profile",
 
-    // Dashboard
-    DASHBOARD: "admin/dashboard",
-    DASH_PRODUCTS: "admin/dashboard/products",
-    DASH_ORDERS: "admin/dashboard/orders",
-    DASH_SETTINGS: "admin/dashboard/settings",
+    // Admin
+    ADMIN_DASHBOARD: "/admin/dashboard",
+    ADMIN_SELLER_APPLICATIONS: "/admin/seller-applications",
+    ADMIN_SETTINGS: "/admin/settings",
 
     // Seller
     SELLER_DASHBOARD: "/seller/dashboard",

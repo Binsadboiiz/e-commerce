@@ -1,0 +1,48 @@
+/* layout */
+.layout {
+    display: flex;
+    height: 100vh;
+    background: #f9fafb;
+    color: #111827;
+}
+
+/* content */
+.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+/* main */
+.main {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 28px 32px;
+    background: #ffffff;
+}
+
+.backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 999;
+    display: none;
+}
+
+@media (max-width: 1024px) {
+    .main {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .main {
+        padding: 16px 12px;
+    }
+    .backdrop {
+        display: block;
+    }
+}

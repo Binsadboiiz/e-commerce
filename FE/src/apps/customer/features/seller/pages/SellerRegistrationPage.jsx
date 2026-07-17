@@ -116,7 +116,7 @@ export default function SellerRegistrationPage() {
         if (!registration?.summary) {
             return (
                 <SellerTypeSelector
-                    onChange={handleTypeSelect}
+                    onCreate={handleTypeSelect}
                 />
             );
         }

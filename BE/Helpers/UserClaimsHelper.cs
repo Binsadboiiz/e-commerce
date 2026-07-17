@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using System.Security.Claims;
 using BE.Middlewares;
 
@@ -22,6 +22,21 @@ namespace BE.Helpers
         {
             return user.FindFirst(ClaimTypes.Role)?.Value
                 ?? throw new AppException("User role claim is missing.", 403);
+        }
+
+        //cho phép 1 user account có nhiều role
+        public static List<string> GetUserRoles(ClaimsPrincipal user)
+        {
+            return user.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+        }
+        public static bool HasRole(ClaimsPrincipal user, string role)
+        {
+            return user.Claims
+                .Any(c => c.Type == ClaimTypes.Role &&
+                          c.Value.Equals(role, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

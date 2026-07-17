@@ -30,7 +30,7 @@ export default function LoginForm() {
         navigate(ROUTES.SELLER_DASHBOARD);
       } 
       else if (role === ROLES.ADMIN || role?.toLowerCase() === "admin") {
-        navigate(ROUTES.DASHBOARD);
+        navigate(ROUTES.ADMIN_DASHBOARD);
       }
       else {
         navigate(ROUTES.HOME);
