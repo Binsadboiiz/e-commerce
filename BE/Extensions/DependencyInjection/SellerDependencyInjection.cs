@@ -17,6 +17,7 @@ namespace BE.Extensions.DependencyInjection
             services.AddScoped<ISellerRegistrationService, SellerRegistrationService>();
             services.AddScoped<ISellerDocumentService, SellerDocumentService>();
             services.AddScoped<ISellerHeaderService, SellerHeaderService>();
+            services.AddScoped<ISellerDashboardService, SellerDashboardService>();
 
             return services;
         }
