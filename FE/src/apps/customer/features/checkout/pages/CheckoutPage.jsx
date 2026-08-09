@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { FiChevronRight, FiMapPin, FiShoppingBag } from "react-icons/fi";
+import { FiChevronRight, FiMapPin, FiShoppingBag, FiTag } from "react-icons/fi";
 import checkoutApi from "../api/checkoutApi";
 import { useCart } from "../../cart/hooks/useCart";
 import { ROUTES } from "@/config/route.config";
@@ -25,6 +25,12 @@ export default function CheckoutPage() {
     const [previewLoading, setPreviewLoading] = useState(false);
     const [placingOrder, setPlacingOrder] = useState(false);
     const [error, setError] = useState("");
+
+    const [voucherCodes, setVoucherCodes] = useState([]);
+    const [availableVouchers, setAvailableVouchers] = useState([]);
+    const [vouchersLoading, setVouchersLoading] = useState(false);
+    const [showVoucherModal, setShowVoucherModal] = useState(false);
+    const [manualVoucherCode, setManualVoucherCode] = useState("");
 
     const checkoutMode = location.state?.mode === "buy-now" ? "buy-now" : "cart";
     const buyNowState = location.state?.buyNow ?? null;
@@ -81,6 +87,51 @@ export default function CheckoutPage() {
         };
     }, []);
 
+    // Tải danh sách voucher khả dụng
+    useEffect(() => {
+        if (loading) {
+            return;
+        }
+
+        if (checkoutMode === "cart" && cartItemIds.length === 0) {
+            return;
+        }
+
+        let ignore = false;
+
+        async function loadVouchers() {
+            setVouchersLoading(true);
+            const payload = checkoutMode === "buy-now"
+                ? {
+                    buyNowProductId: buyNowState?.productId,
+                    buyNowVariantId: buyNowState?.variantId,
+                    buyNowQuantity: buyNowState?.quantity
+                }
+                : {
+                    cartItemIds
+                };
+
+            try {
+                const response = await checkoutApi.getApplicableVouchers(payload);
+                if (!ignore) {
+                    setAvailableVouchers(response?.data || []);
+                }
+            } catch (err) {
+                console.error("Failed to load vouchers", err);
+            } finally {
+                if (!ignore) {
+                    setVouchersLoading(false);
+                }
+            }
+        }
+
+        loadVouchers();
+
+        return () => {
+            ignore = true;
+        };
+    }, [loading, checkoutMode, buyNowState, cartItemIds]);
+
     useEffect(() => {
         if (loading) {
             return;
@@ -98,9 +149,6 @@ export default function CheckoutPage() {
             return;
         }
 
-        // We removed the !selectedAddressId block so the preview can load the product items 
-        // even if the user hasn't selected an address yet.
-
         let ignore = false;
 
         async function loadPreview() {
@@ -111,16 +159,17 @@ export default function CheckoutPage() {
                 ? {
                     ...buyNowState,
                     addressId: selectedAddressId,
-                    paymentMethod: selectedPaymentMethod
+                    paymentMethod: selectedPaymentMethod,
+                    voucherCodes
                 }
                 : {
                     addressId: selectedAddressId,
                     paymentMethod: selectedPaymentMethod,
-                    cartItemIds
+                    cartItemIds,
+                    voucherCodes
                 };
 
             try {
-                // Preview keeps the UI totals in sync with backend rules.
                 const response = checkoutMode === "buy-now"
                     ? await checkoutApi.previewBuyNow(payload)
                     : await checkoutApi.previewCart(payload);
@@ -145,7 +194,7 @@ export default function CheckoutPage() {
         return () => {
             ignore = true;
         };
-    }, [loading, checkoutMode, buyNowState, cartItemIds, selectedAddressId, selectedPaymentMethod]);
+    }, [loading, checkoutMode, buyNowState, cartItemIds, selectedAddressId, selectedPaymentMethod, voucherCodes]);
 
     async function handlePlaceOrder() {
         if (!preview || !selectedAddressId) {
@@ -160,12 +209,14 @@ export default function CheckoutPage() {
                 ? {
                     ...buyNowState,
                     addressId: selectedAddressId,
-                    paymentMethod: selectedPaymentMethod
+                    paymentMethod: selectedPaymentMethod,
+                    voucherCodes
                 }
                 : {
                     addressId: selectedAddressId,
                     paymentMethod: selectedPaymentMethod,
-                    cartItemIds
+                    cartItemIds,
+                    voucherCodes
                 };
 
             const response = checkoutMode === "buy-now"
@@ -316,6 +367,59 @@ export default function CheckoutPage() {
                 </section>
 
                 <section className="checkout-card">
+                    <div className="checkout-block-heading">
+                        <div className="checkout-icon-badge checkout-icon-badge-dark">
+                            <FiTag size={18} />
+                        </div>
+                        <h2 className="checkout-section-title">Vouchers</h2>
+                    </div>
+
+                    <div className="checkout-vouchers-widget">
+                        {voucherCodes.length > 0 ? (
+                            <div className="applied-vouchers-list">
+                                {voucherCodes.map(code => {
+                                    const vDetails = availableVouchers.find(v => v.code === code);
+                                    let descriptionText = "Discount applied";
+                                    if (vDetails) {
+                                        descriptionText = vDetails.voucherType === "Shipping" ? "Free Shipping" : "";
+                                        if (vDetails.discountType === "percent") {
+                                            descriptionText += ` ${vDetails.value}% Off`;
+                                        } else {
+                                            descriptionText += ` ${currency.format(vDetails.value)} Off`;
+                                        }
+                                        if (vDetails.shopName) {
+                                            descriptionText += ` (${vDetails.shopName})`;
+                                        }
+                                    }
+                                    return (
+                                        <div key={code} className="applied-voucher-badge">
+                                            <span className="applied-voucher-code">{code}</span>
+                                            <span className="applied-voucher-desc">{descriptionText}</span>
+                                            <button
+                                                type="button"
+                                                onClick={() => setVoucherCodes(prev => prev.filter(c => c !== code))}
+                                                className="remove-voucher-btn"
+                                            >
+                                                ×
+                                            </button>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <p className="no-vouchers-applied-text">No vouchers applied to this order yet.</p>
+                        )}
+                        <button
+                            type="button"
+                            onClick={() => setShowVoucherModal(true)}
+                            className="select-vouchers-trigger-btn"
+                        >
+                            Select or Enter Voucher Code
+                        </button>
+                    </div>
+                </section>
+
+                <section className="checkout-card">
                     <div className="checkout-bottom-grid">
                         <div className="checkout-payment-panel">
                             <h2 className="checkout-section-title">Payment Method</h2>
@@ -373,6 +477,110 @@ export default function CheckoutPage() {
                     </div>
                 </section>
             </div>
+
+            {showVoucherModal && (
+                <div className="voucher-modal-backdrop" onClick={() => setShowVoucherModal(false)}>
+                    <div className="voucher-modal-container" onClick={(e) => e.stopPropagation()}>
+                        <div className="voucher-modal-header">
+                            <h3>Select Voucher</h3>
+                            <button className="voucher-modal-close-btn" onClick={() => setShowVoucherModal(false)}>×</button>
+                        </div>
+                        
+                        <div className="voucher-manual-apply-box">
+                            <input
+                                type="text"
+                                placeholder="Enter voucher code (e.g. HOT2026)"
+                                value={manualVoucherCode}
+                                onChange={(e) => setManualVoucherCode(e.target.value)}
+                                className="voucher-manual-input"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    if (!manualVoucherCode.trim()) return;
+                                    const code = manualVoucherCode.trim().toUpperCase();
+                                    if (voucherCodes.includes(code)) {
+                                        window.alert("This voucher code is already applied.");
+                                        return;
+                                    }
+                                    setVoucherCodes(prev => [...prev, code]);
+                                    setManualVoucherCode("");
+                                    setShowVoucherModal(false);
+                                }}
+                                className="voucher-manual-apply-btn"
+                            >
+                                Apply
+                            </button>
+                        </div>
+
+                        {vouchersLoading ? (
+                            <div className="voucher-modal-loading">Loading vouchers...</div>
+                        ) : availableVouchers.length === 0 ? (
+                            <div className="voucher-modal-empty">No applicable vouchers found for this order.</div>
+                        ) : (
+                            <div className="voucher-modal-list">
+                                {availableVouchers.map(voucher => {
+                                    const isApplied = voucherCodes.includes(voucher.code);
+                                    let discountText = voucher.discountType === "percent" ? `${voucher.value}%` : currency.format(voucher.value);
+                                    let typeLabel = "Product Discount";
+                                    if (voucher.voucherType === "Shipping") {
+                                        typeLabel = "Shipping";
+                                    } else if (voucher.voucherType === "Category") {
+                                        typeLabel = `Category: ${voucher.categoryName}`;
+                                    }
+
+                                    return (
+                                        <div key={voucher.id} className={`voucher-option-card ${!voucher.isApplicable ? "disabled" : ""} ${isApplied ? "applied" : ""}`}>
+                                            <div className={`voucher-option-left ${voucher.voucherType.toLowerCase()}`}>
+                                                <span className="voucher-option-discount-type">{typeLabel}</span>
+                                                <span className="voucher-option-discount-value">{discountText}</span>
+                                            </div>
+                                            <div className="voucher-option-right">
+                                                <div className="voucher-option-top-row">
+                                                    <span className="voucher-option-code">{voucher.code}</span>
+                                                    {voucher.shopName && (
+                                                        <span className="voucher-option-shop-tag">
+                                                            Shop: {voucher.shopName}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <p className="voucher-option-condition">
+                                                    Min spend {voucher.minOrderValue ? currency.format(voucher.minOrderValue) : "0đ"}.
+                                                    {voucher.maxDiscount && ` Max discount ${currency.format(voucher.maxDiscount)}.`}
+                                                </p>
+                                                {voucher.expiredAt && (
+                                                    <p className="voucher-option-expired">
+                                                        Expiry: {new Date(voucher.expiredAt).toLocaleDateString("en-US")}
+                                                    </p>
+                                                )}
+                                                
+                                                {!voucher.isApplicable ? (
+                                                    <p className="voucher-option-reason-error">{voucher.reason}</p>
+                                                ) : (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            if (isApplied) {
+                                                                setVoucherCodes(prev => prev.filter(c => c !== voucher.code));
+                                                            } else {
+                                                                setVoucherCodes(prev => [...prev, voucher.code]);
+                                                            }
+                                                            setShowVoucherModal(false);
+                                                        }}
+                                                        className={`voucher-option-apply-btn ${isApplied ? "applied" : ""}`}
+                                                    >
+                                                        {isApplied ? "Remove" : "Apply"}
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

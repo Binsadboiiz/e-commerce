@@ -1,48 +1,33 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { X, Save, Image as ImageIcon } from "lucide-react";
 import styles from "./ProductFormModal.module.css";
+
+const getInitialFormData = (data) => ({
+    name: data?.name || "",
+    description: data?.description || "",
+    categoryId: data?.categoryId || 1,
+    brandId: data?.brandId || 1,
+    imageUrl: data?.imageUrl || "",
+    status: data?.status || "active",
+    price: data?.price || 0,
+    initialStock: data?.stock || 0
+});
 
 export default function ProductFormModal({ isOpen, onClose, onSubmit, initialData, isSubmitting }) {
     const isUpdate = !!initialData;
 
-    const [formData, setFormData] = useState({
-        name: "",
-        description: "",
-        categoryId: 1, // Default mock value
-        brandId: 1,    // Default mock value
-        imageUrl: "",
-        status: "active",
-        price: 0,
-        initialStock: 0
-    });
+    const [prevInitialData, setPrevInitialData] = useState(initialData);
+    const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
+    const [formData, setFormData] = useState(() => getInitialFormData(initialData));
 
-    useEffect(() => {
+    // Reset/sync form state when modal opens or initialData changes
+    if (isOpen !== prevIsOpen || initialData !== prevInitialData) {
+        setPrevIsOpen(isOpen);
+        setPrevInitialData(initialData);
         if (isOpen) {
-            if (isUpdate && initialData) {
-                setFormData({
-                    name: initialData.name || "",
-                    description: initialData.description || "",
-                    categoryId: initialData.categoryId || 1,
-                    brandId: initialData.brandId || 1,
-                    imageUrl: initialData.imageUrl || "",
-                    status: initialData.status || "active",
-                    price: initialData.price || 0,
-                    initialStock: initialData.stock || 0
-                });
-            } else {
-                setFormData({
-                    name: "",
-                    description: "",
-                    categoryId: 1,
-                    brandId: 1,
-                    imageUrl: "",
-                    status: "active",
-                    price: 0,
-                    initialStock: 0
-                });
-            }
+            setFormData(getInitialFormData(initialData));
         }
-    }, [isOpen, initialData, isUpdate]);
+    }
 
     if (!isOpen) return null;
 

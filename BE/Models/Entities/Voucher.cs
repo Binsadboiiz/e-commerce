@@ -20,15 +20,33 @@ namespace BE.Models.Entities
         [Required]
         public double Value { get; set; }
 
-        // giới hạn giảm tối đa (optional)
+        // maximum discount limit (optional)
         public double? MaxDiscount { get; set; }
 
-        // điều kiện đơn tối thiểu
+        // minimum order value condition
         public double? MinOrderValue { get; set; }
 
         public DateTime? ExpiredAt { get; set; }
 
         public bool IsActive { get; set; } = true;
+
+        [Required]
+        [MaxLength(20)]
+        public string VoucherType { get; set; } = "AllItems"; // Shipping, AllItems, Category
+
+        public long? CategoryId { get; set; }
+
+        [ForeignKey("CategoryId")]
+        public Category? Category { get; set; }
+
+        public long? ShopId { get; set; }
+
+        [ForeignKey("ShopId")]
+        public Shop? Shop { get; set; }
+
+        public int? UsageLimit { get; set; }
+
+        public int UsageCount { get; set; } = 0;
 
         // ========================
         // Navigation

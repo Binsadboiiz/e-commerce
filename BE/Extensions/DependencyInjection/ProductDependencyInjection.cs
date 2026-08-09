@@ -1,6 +1,7 @@
-﻿using BE.Repositories.Implementations;
+using BE.Repositories.Implementations;
 using BE.Repositories.Interfaces;
 using BE.Services.Implementation;
+using BE.Services.Interface;
 using BE.Services.Interface.Product;
 
 namespace BE.Extensions.DependencyInjection
@@ -14,11 +15,13 @@ namespace BE.Extensions.DependencyInjection
         {
             // repositories
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             // services
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IProductQueryService, ProductQueryService>();
             services.AddScoped<IProductDomainService, ProductDomainService>();
+            services.AddScoped<ICategoryService, CategoryService>();
 
             return services;
         }

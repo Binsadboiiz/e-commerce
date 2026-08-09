@@ -66,4 +66,12 @@ namespace BE.Models.DTOs
         public string PaymentStatus { get; set; }
         public decimal FinalAmount { get; set; }
     }
+
+    public class GetVouchersRequest
+    {
+        public List<long>? CartItemIds { get; set; }
+        public long? BuyNowProductId { get; set; }
+        public long? BuyNowVariantId { get; set; }
+        public int? BuyNowQuantity { get; set; }
+    }
 }

@@ -34,6 +34,14 @@ namespace BE.Controllers.Checkout
             return Ok(ApiResponse<CheckoutPreviewResponse>.SuccessResponse(response));
         }
 
+        [HttpPost("vouchers/applicable")]
+        public async Task<IActionResult> GetApplicableVouchers([FromBody] GetVouchersRequest request)
+        {
+            var userId = UserClaimsHelper.GetUserId(User);
+            var response = await _orderService.GetApplicableVouchersAsync(userId, request);
+            return Ok(ApiResponse<List<BE.Models.DTOs.Seller.VoucherApplicableDto>>.SuccessResponse(response));
+        }
+
         [HttpPost("place-order")]
         public async Task<IActionResult> PlaceCartOrder([FromBody] CheckoutPlaceOrderRequest request)
         {

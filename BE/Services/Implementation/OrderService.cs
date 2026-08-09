@@ -369,6 +369,7 @@ namespace BE.Services.Implementation
                 CartItem = cartItem,
                 ProductId = product.ProductId,
                 ShopId = product.ShopId,
+                CategoryId = product.CategoryId,
                 VariantId = variant?.VariantId,
                 ProductName = product.Name,
                 ProductImage = product.Image,
@@ -393,8 +394,9 @@ namespace BE.Services.Implementation
             var subtotal = sourceItems.Sum(item => item.LineTotal);
             var shippingFee = CalculateShippingFee(sourceItems);
             var vouchers = await LoadValidVouchersAsync(voucherCodes);
-            var discountAmount = CalculateDiscountAmount(subtotal, vouchers);
-            var finalAmount = Math.Max(0, subtotal + shippingFee - discountAmount);
+            var discountAmount = CalculateDiscountAmount(sourceItems, subtotal, shippingFee, vouchers, out decimal shippingDiscount);
+            var totalDiscount = discountAmount + shippingDiscount;
+            var finalAmount = Math.Max(0, subtotal + shippingFee - totalDiscount);
 
             return new CheckoutPricingResult
             {
@@ -415,7 +417,7 @@ namespace BE.Services.Implementation
                 SourceItems = sourceItems,
                 MerchandiseSubtotal = subtotal,
                 ShippingFee = shippingFee,
-                DiscountAmount = discountAmount,
+                DiscountAmount = totalDiscount,
                 FinalAmount = finalAmount
             };
         }
@@ -446,7 +448,7 @@ namespace BE.Services.Implementation
         }
 
         /// <summary>
-        /// Khởi tạo và lưu đơn hàng vào Database cùng các thông tin liên quan (Item, Voucher, Transaction).
+        /// Initialize and save the order to the Database along with related details (Item, Voucher, Transaction).
         /// </summary>
         private async Task<Order> CreateOrderAsync(string userId, UserAddresses address, string paymentMethod, CheckoutPricingResult pricing)
         {
@@ -482,7 +484,7 @@ namespace BE.Services.Implementation
                 }
             };
 
-            // Lưu danh sách sản phẩm trong đơn hàng
+            // Save products in the order
             foreach (var item in pricing.SourceItems)
             {
                 order.OrderItems.Add(new OrderItem
@@ -499,13 +501,14 @@ namespace BE.Services.Implementation
                 });
             }
 
-            // Lưu vết các Voucher đã áp dụng
+            // Record the applied Vouchers
             foreach (var voucher in pricing.Vouchers)
             {
                 order.OrderVouchers.Add(new OrderVoucher { VoucherId = voucher.Id });
+                voucher.UsageCount++; // Increment the voucher usage count
             }
 
-            // Khởi tạo giao dịch thanh toán
+            // Initialize payment transaction
             order.PaymentTransaction = new PaymentTransaction
             {
                 Method = paymentMethod,
@@ -519,7 +522,7 @@ namespace BE.Services.Implementation
         }
 
         /// <summary>
-        /// Kiểm tra tính hợp lệ của danh sách mã Voucher người dùng nhập vào.
+        /// Verify validity of the list of voucher codes entered by the user.
         /// </summary>
         private async Task<List<Voucher>> LoadValidVouchersAsync(List<string> voucherCodes)
         {
@@ -549,44 +552,115 @@ namespace BE.Services.Implementation
                 throw new AppException($"Voucher '{expiredVoucher.Code}' has expired.");
             }
 
+            var limitReachedVoucher = vouchers.FirstOrDefault(v => v.UsageLimit.HasValue && v.UsageCount >= v.UsageLimit.Value);
+            if (limitReachedVoucher != null)
+            {
+                throw new AppException($"Voucher '{limitReachedVoucher.Code}' usage limit has been reached.");
+            }
+
             return vouchers;
         }
 
         /// <summary>
-        /// Tính toán tổng số tiền giảm giá dựa trên loại Voucher (Phần trăm hoặc Số tiền cố định).
+        /// Calculate total discount amount based on Voucher type (Percentage or Fixed amount).
         /// </summary>
-        private decimal CalculateDiscountAmount(decimal subtotal, List<Voucher> vouchers)
+        private decimal CalculateDiscountAmount(
+            List<CheckoutSourceItem> sourceItems,
+            decimal subtotal,
+            decimal shippingFee,
+            List<Voucher> vouchers,
+            out decimal shippingDiscount)
         {
-            decimal discountAmount = 0;
+            decimal merchandiseDiscount = 0;
+            shippingDiscount = 0;
 
             foreach (var voucher in vouchers)
             {
-                if (voucher.MinOrderValue.HasValue && subtotal < (decimal)voucher.MinOrderValue.Value)
+                decimal applicableSubtotal = 0;
+                if (voucher.VoucherType == "Shipping")
                 {
-                    throw new AppException($"Voucher '{voucher.Code}' requires a higher order value.");
+                    applicableSubtotal = subtotal;
+                }
+                else
+                {
+                    // Filter products applicable for the voucher: by ShopId (if seller voucher) and CategoryId (if category type voucher)
+                    var items = sourceItems.AsEnumerable();
+                    if (voucher.ShopId.HasValue)
+                    {
+                        items = items.Where(i => i.ShopId == voucher.ShopId.Value);
+                    }
+                    if (voucher.VoucherType == "Category" && voucher.CategoryId.HasValue)
+                    {
+                        items = items.Where(i => i.CategoryId == voucher.CategoryId.Value);
+                    }
+                    applicableSubtotal = items.Sum(i => i.LineTotal);
                 }
 
-                decimal voucherDiscount = voucher.DiscountType.ToLowerInvariant() switch
+                // If no items are valid to apply the voucher (except shipping vouchers)
+                if (applicableSubtotal <= 0 && voucher.VoucherType != "Shipping")
                 {
-                    "percent" or "percentage" => subtotal * ((decimal)voucher.Value / 100m),
-                    "fixed" => (decimal)voucher.Value,
-                    _ => throw new AppException($"Voucher '{voucher.Code}' has unsupported discount type.")
-                };
-
-                // Áp dụng mức giảm tối đa nếu có
-                if (voucher.MaxDiscount.HasValue)
-                {
-                    voucherDiscount = Math.Min(voucherDiscount, (decimal)voucher.MaxDiscount.Value);
+                    throw new AppException($"Voucher '{voucher.Code}' is not applicable to any items in your checkout.");
                 }
 
-                discountAmount += voucherDiscount;
+                // Check minimum order value condition
+                if (voucher.MinOrderValue.HasValue && applicableSubtotal < (decimal)voucher.MinOrderValue.Value)
+                {
+                    throw new AppException($"Voucher '{voucher.Code}' requires a minimum order value of {voucher.MinOrderValue.Value:N0} VND.");
+                }
+
+                if (voucher.VoucherType == "Shipping")
+                {
+                    decimal maxShippingToDiscount = shippingFee;
+                    if (voucher.ShopId.HasValue)
+                    {
+                        var hasItemsFromShop = sourceItems.Any(i => i.ShopId == voucher.ShopId.Value);
+                        if (!hasItemsFromShop)
+                        {
+                            throw new AppException($"Voucher '{voucher.Code}' is only applicable for shop shipping fee.");
+                        }
+                        maxShippingToDiscount = 22000m; // Default shop shipping fee
+                    }
+
+                    decimal discountValue = voucher.DiscountType.ToLowerInvariant() switch
+                    {
+                        "percent" or "percentage" => shippingFee * ((decimal)voucher.Value / 100m),
+                        "fixed" => (decimal)voucher.Value,
+                        _ => throw new AppException($"Voucher '{voucher.Code}' has unsupported discount type.")
+                    };
+
+                    if (voucher.MaxDiscount.HasValue)
+                    {
+                        discountValue = Math.Min(discountValue, (decimal)voucher.MaxDiscount.Value);
+                    }
+
+                    shippingDiscount += Math.Min(discountValue, maxShippingToDiscount);
+                }
+                else
+                {
+                    decimal discountValue = voucher.DiscountType.ToLowerInvariant() switch
+                    {
+                        "percent" or "percentage" => applicableSubtotal * ((decimal)voucher.Value / 100m),
+                        "fixed" => (decimal)voucher.Value,
+                        _ => throw new AppException($"Voucher '{voucher.Code}' has unsupported discount type.")
+                    };
+
+                    if (voucher.MaxDiscount.HasValue)
+                    {
+                        discountValue = Math.Min(discountValue, (decimal)voucher.MaxDiscount.Value);
+                    }
+
+                    merchandiseDiscount += Math.Min(discountValue, applicableSubtotal);
+                }
             }
 
-            return Math.Min(discountAmount, subtotal); // Không cho phép giảm quá tổng tiền
+            shippingDiscount = Math.Min(shippingDiscount, shippingFee);
+            merchandiseDiscount = Math.Min(merchandiseDiscount, subtotal);
+
+            return merchandiseDiscount;
         }
 
         /// <summary>
-        /// Tính phí vận chuyển (Tạm tính: 22k cho mỗi Shop khác nhau).
+        /// Calculate shipping fee (Estimated: 22k VND for each unique Shop).
         /// </summary>
         private decimal CalculateShippingFee(List<CheckoutSourceItem> items)
         {
@@ -595,7 +669,7 @@ namespace BE.Services.Implementation
         }
 
         /// <summary>
-        /// Lấy giá đơn vị sau khi cộng chênh lệch của Variant (nếu có).
+        /// Get unit price after adding Variant price adjustments (if any).
         /// </summary>
         private decimal GetUnitPrice(Product product, ProductVariant? variant)
         {
@@ -606,7 +680,7 @@ namespace BE.Services.Implementation
         }
 
         /// <summary>
-        /// Kiểm tra số lượng tồn kho từ Inventory.
+        /// Verify inventory stock availability.
         /// </summary>
         private void ValidateStock(Product product, ProductVariant? variant, int quantity)
         {
@@ -618,7 +692,7 @@ namespace BE.Services.Implementation
         }
 
         /// <summary>
-        /// Kiểm tra stock từ Inventory table (nguồn truth duy nhất).
+        /// Verify stock from the Inventory table (the single source of truth).
         /// </summary>
         private void ValidateInventoryStock(ProductVariant variant, int quantity)
         {
@@ -642,13 +716,14 @@ namespace BE.Services.Implementation
         }
 
         /// <summary>
-        /// Class nội bộ dùng để đồng nhất dữ liệu từ Giỏ hàng hoặc Mua ngay trước khi tính toán.
+        /// Internal class used to consolidate checkout source item properties from Cart or Buy Now before evaluation.
         /// </summary>
         private class CheckoutSourceItem
         {
             public CartItem? CartItem { get; set; }
             public long ProductId { get; set; }
             public long ShopId { get; set; }
+            public long CategoryId { get; set; }
             public long? VariantId { get; set; }
             public string ProductName { get; set; }
             public string? ProductImage { get; set; }
@@ -660,7 +735,7 @@ namespace BE.Services.Implementation
         }
 
         /// <summary>
-        /// Kết quả tính toán giá cuối cùng.
+        /// Final price calculation results.
         /// </summary>
         private class CheckoutPricingResult
         {
@@ -671,6 +746,119 @@ namespace BE.Services.Implementation
             public decimal ShippingFee { get; set; }
             public decimal DiscountAmount { get; set; }
             public decimal FinalAmount { get; set; }
+        }
+
+        public async Task<List<BE.Models.DTOs.Seller.VoucherApplicableDto>> GetApplicableVouchersAsync(string userId, GetVouchersRequest request)
+        {
+            List<CheckoutSourceItem> sourceItems = new();
+            if (request.CartItemIds != null && request.CartItemIds.Count > 0)
+            {
+                sourceItems = await GetSelectedCartItemsAsync(userId, request.CartItemIds);
+            }
+            else if (request.BuyNowProductId.HasValue && request.BuyNowQuantity.HasValue)
+            {
+                var buyNowRequest = new BuyNowRequest
+                {
+                    ProductId = request.BuyNowProductId.Value,
+                    VariantId = request.BuyNowVariantId,
+                    Quantity = request.BuyNowQuantity.Value
+                };
+                var buyNowItem = await BuildBuyNowItemAsync(buyNowRequest);
+                sourceItems.Add(buyNowItem);
+            }
+
+            if (sourceItems.Count == 0)
+            {
+                return new List<BE.Models.DTOs.Seller.VoucherApplicableDto>();
+            }
+
+            var shopIds = sourceItems.Select(i => i.ShopId).Distinct().ToList();
+            var categoryIds = sourceItems.Select(i => i.CategoryId).Distinct().ToList();
+            var subtotal = sourceItems.Sum(item => item.LineTotal);
+            var shippingFee = CalculateShippingFee(sourceItems);
+
+            // Get all active and unexpired vouchers: platform-wide or belonging to Shops with products in the order
+            var now = DateTime.UtcNow;
+            var vouchers = await _context.Vouchers
+                .Include(v => v.Category)
+                .Include(v => v.Shop)
+                .Where(v => v.IsActive && (!v.ExpiredAt.HasValue || v.ExpiredAt.Value > now))
+                .Where(v => !v.ShopId.HasValue || shopIds.Contains(v.ShopId.Value))
+                .ToListAsync();
+
+            var result = new List<BE.Models.DTOs.Seller.VoucherApplicableDto>();
+
+            foreach (var voucher in vouchers)
+            {
+                var dto = new BE.Models.DTOs.Seller.VoucherApplicableDto
+                {
+                    Id = voucher.Id,
+                    Code = voucher.Code,
+                    DiscountType = voucher.DiscountType,
+                    Value = voucher.Value,
+                    MaxDiscount = voucher.MaxDiscount,
+                    MinOrderValue = voucher.MinOrderValue,
+                    ExpiredAt = voucher.ExpiredAt,
+                    VoucherType = voucher.VoucherType,
+                    CategoryId = voucher.CategoryId,
+                    CategoryName = voucher.Category?.Type,
+                    ShopId = voucher.ShopId,
+                    ShopName = voucher.Shop?.Name,
+                    UsageLimit = voucher.UsageLimit,
+                    UsageCount = voucher.UsageCount,
+                    IsApplicable = true
+                };
+
+                // Check usage limit constraint
+                if (voucher.UsageLimit.HasValue && voucher.UsageCount >= voucher.UsageLimit.Value)
+                {
+                    dto.IsApplicable = false;
+                    dto.Reason = "Voucher usage limit has been reached.";
+                }
+                // Check matching product categories
+                else if (voucher.VoucherType == "Category" && voucher.CategoryId.HasValue && !categoryIds.Contains(voucher.CategoryId.Value))
+                {
+                    dto.IsApplicable = false;
+                    dto.Reason = $"Only applicable to products in the category '{voucher.Category?.Type}'.";
+                }
+                // Check minimum order value condition
+                else
+                {
+                    decimal applicableSubtotal = 0;
+                    if (voucher.VoucherType == "Shipping")
+                    {
+                        applicableSubtotal = subtotal;
+                    }
+                    else
+                    {
+                        var items = sourceItems.AsEnumerable();
+                        if (voucher.ShopId.HasValue)
+                        {
+                            items = items.Where(i => i.ShopId == voucher.ShopId.Value);
+                        }
+                        if (voucher.VoucherType == "Category" && voucher.CategoryId.HasValue)
+                        {
+                            items = items.Where(i => i.CategoryId == voucher.CategoryId.Value);
+                        }
+                        applicableSubtotal = items.Sum(i => i.LineTotal);
+                    }
+
+                    if (applicableSubtotal <= 0)
+                    {
+                        dto.IsApplicable = false;
+                        dto.Reason = "No items match the voucher criteria.";
+                    }
+                    else if (voucher.MinOrderValue.HasValue && applicableSubtotal < (decimal)voucher.MinOrderValue.Value)
+                    {
+                        dto.IsApplicable = false;
+                        dto.Reason = $"Minimum order value of {voucher.MinOrderValue.Value:N0} VND not reached.";
+                    }
+                }
+
+                result.Add(dto);
+            }
+
+            return result.OrderByDescending(r => r.IsApplicable).ThenByDescending(r => r.Value).ToList();
         }
     }
 }

@@ -125,6 +125,7 @@ export const SellerDashboard = () => {
             toast.success("Dashboard metrics updated successfully!");
         } catch (err) {
             toast.error("Failed to refresh statistics.");
+            console.error("Dashboard refresh error:", err);
         } finally {
             setIsRefreshing(false);
         }
@@ -208,35 +209,6 @@ export const SellerDashboard = () => {
     };
 
     // ----------------------------------------------------
-    // Helpers
-    // ----------------------------------------------------
-
-    /**
-     * Formats raw numeric values into Vietnamese Dong currency structure.
-     */
-    const formatCurrency = (value) => {
-        return new Intl.NumberFormat("en-US", {
-            style: "currency",
-            currency: "VND",
-            minimumFractionDigits: 0
-        }).format(value).replace("$", "₫ ");
-    };
-
-    /**
-     * Formats DateTime strings into consistent readable dates.
-     */
-    const formatDate = (dateStr) => {
-        const d = new Date(dateStr);
-        return d.toLocaleDateString("en-US", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit"
-        });
-    };
-
-    // ----------------------------------------------------
     // Filtering & Pagination
     // ----------------------------------------------------
 
@@ -266,33 +238,6 @@ export const SellerDashboard = () => {
         const start = (currentPage - 1) * itemsPerPage;
         return filteredOrders.slice(start, start + itemsPerPage);
     }, [filteredOrders, currentPage]);
-
-    // ----------------------------------------------------
-    // Custom Chart Tooltip
-    // ----------------------------------------------------
-    const CustomTooltip = ({ active, payload, label }) => {
-        if (active && payload && payload.length) {
-            return (
-                <div style={{
-                    backgroundColor: "#111827",
-                    color: "#ffffff",
-                    padding: "12px",
-                    borderRadius: "8px",
-                    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.15)",
-                    border: "none",
-                    fontSize: "13px"
-                }}>
-                    <p style={{ margin: "0 0 6px 0", fontWeight: "600" }}>{label}</p>
-                    {payload.map((item, idx) => (
-                        <p key={idx} style={{ margin: "2px 0", color: item.name === "Revenue" ? "#ee4d2d" : "#9ca3af" }}>
-                            {item.name}: {item.name === "Revenue" ? formatCurrency(item.value) : `${item.value} units`}
-                        </p>
-                    ))}
-                </div>
-            );
-        }
-        return null;
-    };
 
     // ----------------------------------------------------
     // Render loading skeletons
@@ -739,3 +684,59 @@ export const SellerDashboard = () => {
         </div>
     );
 };
+
+    // ----------------------------------------------------
+    // Custom Chart Tooltip
+    // ----------------------------------------------------
+    const CustomTooltip = ({ active, payload, label }) => {
+        if (active && payload && payload.length) {
+            return (
+                <div style={{
+                    backgroundColor: "#111827",
+                    color: "#ffffff",
+                    padding: "12px",
+                    borderRadius: "8px",
+                    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.15)",
+                    border: "none",
+                    fontSize: "13px"
+                }}>
+                    <p style={{ margin: "0 0 6px 0", fontWeight: "600" }}>{label}</p>
+                    {payload.map((item, idx) => (
+                        <p key={idx} style={{ margin: "2px 0", color: item.name === "Revenue" ? "#ee4d2d" : "#9ca3af" }}>
+                            {item.name}: {item.name === "Revenue" ? formatCurrency(item.value) : `${item.value} units`}
+                        </p>
+                    ))}
+                </div>
+            );
+        }
+        return null;
+    };
+
+    // ----------------------------------------------------
+    // Helpers
+    // ----------------------------------------------------
+
+    /**
+     * Formats raw numeric values into Vietnamese Dong currency structure.
+     */
+    const formatCurrency = (value) => {
+        return new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "VND",
+            minimumFractionDigits: 0
+        }).format(value).replace("$", "₫ ");
+    };
+
+    /**
+     * Formats DateTime strings into consistent readable dates.
+     */
+    const formatDate = (dateStr) => {
+        const d = new Date(dateStr);
+        return d.toLocaleDateString("en-US", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+        });
+    };

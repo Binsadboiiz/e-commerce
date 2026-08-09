@@ -18,6 +18,9 @@ const checkoutApi = {
     },
     placeBuyNowOrder(payload) {
         return axiosClient.post("/checkout/buy-now/place-order", payload);
+    },
+    getApplicableVouchers(payload) {
+        return axiosClient.post("/checkout/vouchers/applicable", payload);
     }
 };
 

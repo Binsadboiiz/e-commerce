@@ -9,5 +9,6 @@ namespace BE.Services.Interface
         Task<PlaceOrderResponse> PlaceCartOrderAsync(string userId, CheckoutPlaceOrderRequest request);
         Task<CheckoutPreviewResponse> PreviewBuyNowAsync(string userId, BuyNowRequest request);
         Task<PlaceOrderResponse> PlaceBuyNowOrderAsync(string userId, BuyNowRequest request);
+        Task<List<BE.Models.DTOs.Seller.VoucherApplicableDto>> GetApplicableVouchersAsync(string userId, GetVouchersRequest request);
     }
 }

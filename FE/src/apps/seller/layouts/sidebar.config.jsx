@@ -13,7 +13,8 @@ import {
     FileText,
     BarChart3,
     Settings,
-    LogOut
+    LogOut,
+    Tag
 } from "lucide-react";
 
 /* primary navigation (admin) */
@@ -92,6 +93,12 @@ export const SELLER_NAV = [
         label: "Products",
         icon: <Package size={18} />,
         path: "/seller/products",
+    },
+    {
+        key: "seller-vouchers",
+        label: "Vouchers",
+        icon: <Tag size={18} />,
+        path: "/seller/vouchers",
     },
     {
         key: "seller-orders",
