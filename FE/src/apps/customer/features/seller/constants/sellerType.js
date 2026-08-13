@@ -1,0 +1,4 @@
+export const SELLER_TYPE = {
+    PERSONAL: "PERSONAL",
+    BUSINESS: "BUSINESS"
+};

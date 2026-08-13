@@ -1,0 +1,68 @@
+.wrapper{
+    display:flex;
+    flex-direction:column;
+    gap:28px;
+}
+
+.header h3{
+    margin:0;
+    font-size:24px;
+}
+
+.header p{
+    color:#666;
+}
+
+.section{
+    border:1px solid #ececec;
+    border-radius:10px;
+    padding:20px;
+    background:#fff;
+}
+
+.section h4{
+    margin-bottom:18px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+}
+
+.item{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.item span{
+    color:#777;
+    font-size:13px;
+}
+
+.item strong{
+    font-size:15px;
+}
+
+.documentList{
+    padding-left:18px;
+}
+
+.footer{
+    display:flex;
+    justify-content:flex-end;
+}
+
+.submitButton{
+    background:#000000;
+    color:white;
+    border:none;
+    border-radius:8px;
+    padding:12px 28px;
+    cursor:pointer;
+}
+
+.submitButton:hover{
+    background:#374151;
+}

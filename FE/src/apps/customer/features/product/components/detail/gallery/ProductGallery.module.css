@@ -1,0 +1,24 @@
+/* ================================================================
+   Gallery wrapper — stacks main image above thumbnails
+   ================================================================ */
+.gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Empty state placeholder */
+.empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    aspect-ratio: 1;
+    border-radius: 16px;
+
+    background: #f3f4f6;
+    color: #9ca3af;
+
+    font-size: 14px;
+    font-weight: 500;
+}

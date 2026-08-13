@@ -1,0 +1,96 @@
+.item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+    background: #f5f7fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.name {
+    font-weight: 600;
+    color: #222;
+}
+
+.type {
+    font-size: 13px;
+    color: #777;
+}
+
+.removeButton {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+    background: transparent;
+    color: #4b5563;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.removeButton:hover {
+    opacity: .8;
+}
+
+.viewLink {
+    color: #4b5563;
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.viewLink:hover {
+    color: #111827;
+}
+
+.uploadButton {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #374151;
+    background: transparent;
+    color: #374151;
+    cursor: pointer;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.uploadButton:hover {
+    background: #f3f4f6;
+}
+
+.loadingText {
+    font-size: 13px;
+    color: #64748b;
+    font-style: italic;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
