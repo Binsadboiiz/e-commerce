@@ -1,10 +1,10 @@
-# 🛍️ VeloraMall - Multi-Tenant E-commerce Platform
+# VeloraMall - Multi-Tenant E-commerce Platform
 
 Welcome to **VeloraMall**, a highly scalable, robust, and modern multi-tenant e-commerce platform. Built with a decoupled Client-Server architecture, this project ensures exceptional separation of concerns, high performance, and an outstanding developer experience. 
 
 ---
 
-## 🌟 Project Analysis & Description
+## Project Analysis and Description
 
 **VeloraMall** is designed to address the complexities of modern online retail marketplaces. Unlike standard single-store e-commerce systems, VeloraMall implements a **Multi-Tenant Architecture**, allowing multiple independent shops (run by **Retailers**) to operate concurrently on the same platform, while sharing a unified storefront and core administrative controls.
 
@@ -22,7 +22,7 @@ Welcome to **VeloraMall**, a highly scalable, robust, and modern multi-tenant e-
 
 ---
 
-## 🏗️ System Architecture Overview
+## System Architecture Overview
 
 The system is decoupled into a high-performance **ASP.NET Core Web API** backend and a reactive **React Single Page Application (SPA)** frontend, communicating via secure RESTful APIs.
 
@@ -61,7 +61,7 @@ graph TD
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 ### 1. Backend (BE)
 * **Core Framework:** `ASP.NET Core 10.0 Web API` (leveraging C# 13 productivity enhancements, nullable safety, and implicit global usings).
@@ -88,7 +88,7 @@ graph TD
 
 ---
 
-## 📂 Backend Architecture & Structure
+## Backend Architecture and Structure
 
 The Backend is designed following the **Modular Service-Repository** pattern. Business domains are isolated into dedicated modules to avoid code coupling and keep the core execution pipeline clean and maintainable.
 
@@ -128,7 +128,7 @@ BE/
 
 ---
 
-## 📂 Frontend Architecture & Structure
+## Frontend Architecture and Structure
 
 The Frontend uses a **Domain-Driven Feature-based Architecture**. Instead of arranging code by technical types (all components in one folder, all pages in another), files are grouped into cohesive, self-contained business domain modules.
 
@@ -152,7 +152,7 @@ FE/
     │   ├── ProtectedRoute.jsx  # Role-restricted route guard component
     │   └── GlobalErrorHandler.jsx # Top-level error boundary capturing runtime UI exceptions
     │
-    └── features/        # 🌟 CORE DOMAINS - Encapsulated Feature Modules
+    └── features/        # CORE DOMAINS - Encapsulated Feature Modules
         ├── auth/        # Authentication, login, sign up, and account profile
         │   ├── api/     # Localized axios request functions
         │   ├── components/ # Local components (LoginForm, ProfileSettingsCard)
@@ -173,7 +173,7 @@ FE/
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites:
 * **.NET SDK 10.0** installed.
