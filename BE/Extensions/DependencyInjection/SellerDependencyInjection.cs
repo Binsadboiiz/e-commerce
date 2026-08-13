@@ -1,5 +1,7 @@
 using BE.Repositories.Implementations;
 using BE.Repositories.Interfaces;
+using BE.Repositories.Implementations.Seller;
+using BE.Repositories.Interfaces.Seller;
 using BE.Services.Implementation.Seller;
 using BE.Services.Interface.Seller;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +14,7 @@ namespace BE.Extensions.DependencyInjection
         {
             // Repository
             services.AddScoped<ISellerRepository, SellerRepository>();
+            services.AddScoped<ISellerOrderRepository, SellerOrderRepository>();
 
             // Services
             services.AddScoped<ISellerRegistrationService, SellerRegistrationService>();
@@ -19,6 +22,7 @@ namespace BE.Extensions.DependencyInjection
             services.AddScoped<ISellerHeaderService, SellerHeaderService>();
             services.AddScoped<ISellerDashboardService, SellerDashboardService>();
             services.AddScoped<ISellerVoucherService, SellerVoucherService>();
+            services.AddScoped<ISellerOrderService, SellerOrderService>();
 
             return services;
         }

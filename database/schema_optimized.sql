@@ -245,6 +245,7 @@ CREATE TABLE Order_items (
     VariantValue VARCHAR(255) NULL,
     Price DECIMAL(18,2),
     Quantity INT,
+    SellerStatus VARCHAR(20) DEFAULT 'pending',
 
     FOREIGN KEY (OrderId) REFERENCES Orders(OrderId) ON DELETE CASCADE,
     FOREIGN KEY (ShopId) REFERENCES Shops(ShopId),
@@ -256,6 +257,7 @@ CREATE INDEX idx_order_items_order ON Order_items(OrderId);
 CREATE INDEX idx_order_items_shop ON Order_items(ShopId);
 CREATE INDEX idx_order_items_product ON Order_items(ProductId);
 CREATE INDEX idx_order_items_variant ON Order_items(VariantId);
+CREATE INDEX idx_order_items_shop_status ON Order_items(ShopId, SellerStatus);
 
 
 -- =========================================================================
@@ -320,17 +322,20 @@ CREATE INDEX idx_order_vouchers_voucher ON Order_Vouchers(VoucherId);
 CREATE TABLE Order_Tracking (
     OrderTrackingId BIGINT AUTO_INCREMENT PRIMARY KEY,
     OrderId         BIGINT       NOT NULL,
+    ShopId          BIGINT       NULL,
     Status          VARCHAR(50)  NOT NULL,
     Location        VARCHAR(255) NULL,
     Description     VARCHAR(500) NULL,
     UpdatedBy       VARCHAR(50)  NULL,
     CreatedAt       DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    FOREIGN KEY (OrderId) REFERENCES Orders(OrderId) ON DELETE CASCADE
+    FOREIGN KEY (OrderId) REFERENCES Orders(OrderId) ON DELETE CASCADE,
+    FOREIGN KEY (ShopId) REFERENCES Shops(ShopId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE INDEX idx_tracking_order ON Order_Tracking(OrderId);
 CREATE INDEX idx_tracking_status ON Order_Tracking(Status);
+CREATE INDEX idx_tracking_shop_order ON Order_Tracking(ShopId, OrderId);
 
 
 -- =========================================================================

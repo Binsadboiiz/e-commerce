@@ -16,7 +16,7 @@ export default function OrderStatusBadge({ status, label }) {
     const styleClass = STATUS_CLASS[status] ?? "bg-zinc-100 text-zinc-700";
 
     return (
-        <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${styleClass}`}>
+        <span className={`inline-flex rounded-full px-5 py-1 text-xs font-semibold ${styleClass}`}>
             {label || statusToLabel(status)}
         </span>
     );

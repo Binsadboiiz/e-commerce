@@ -9,6 +9,7 @@ namespace BE.Models.Entities
         [Key]
         public long OrderTrackingId { get; set; }
         public long OrderId { get; set; }
+        public long? ShopId { get; set; }
         public string Status { get; set; }
         public string? Location { get; set; }
         public string? Description { get; set; }
@@ -18,5 +19,7 @@ namespace BE.Models.Entities
         // Navigation
         [ForeignKey("OrderId")]
         public Order Order { get; set; }
+        [ForeignKey("ShopId")]
+        public Shop Shop { get; set; }
     }
 }
