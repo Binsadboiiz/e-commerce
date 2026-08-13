@@ -8,6 +8,7 @@ Welcome to **VeloraMall**, a highly scalable, robust, and modern multi-tenant e-
 
 **VeloraMall** is designed to address the complexities of modern online retail marketplaces. Unlike standard single-store e-commerce systems, VeloraMall implements a **Multi-Tenant Architecture**, allowing multiple independent shops (run by **Retailers**) to operate concurrently on the same platform, while sharing a unified storefront and core administrative controls.
 
+
 ## Project Identification
 
 * **Project Name**: E-Commerce Web Application
