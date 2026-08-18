@@ -5,14 +5,16 @@ using BE.Models.DTOs.Seller.Dashboard;
 using BE.Services.Interface.Seller;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace BE.Controllers.Seller
 {
     /// <summary>
     /// API Controller exposing endpoints for retrieving seller dashboard statistics.
-    /// Access is restricted to authenticated users in the Seller role.
+    /// Access is restricted to authenticated users in the Seller role and rate limited with GeneralPolicy.
     /// </summary>
     [Authorize(Roles = "Seller,SELLER,seller")]
+    [EnableRateLimiting("GeneralPolicy")]
     [ApiController]
     [Route("api/seller/dashboard")]
     public class SellerDashboardController : ControllerBase

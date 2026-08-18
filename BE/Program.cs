@@ -1,9 +1,13 @@
 using BE.Data;
 using BE.Middlewares;
 using BE.Extensions.DependencyInjection;
+using BE.Extensions;
+
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
-using BE.Extensions;
+using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.RateLimiting;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +40,64 @@ builder.Services.AddCors(options =>
               .AllowCredentials();
     });
 });
+// ── Rate Limiting ──
+// Configures IP-partitioned fixed window rate limiting policies to prevent brute-force attacks and service abuse.
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+    // Custom response handler when a client exceeds rate limits
+    options.OnRejected = async (context, cancellationToken) =>
+    {
+        context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+        context.HttpContext.Response.ContentType = "application/json";
+        await context.HttpContext.Response.WriteAsJsonAsync(new
+        {
+            status = false,
+            message = "Too many requests. Please slow down and try again later."
+        }, cancellationToken: cancellationToken);
+    };
+
+    // 1. Auth Policy: Strict limit of 5 requests per minute per IP (for login & register endpoints)
+    options.AddPolicy("AuthPolicy", httpContext => 
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 5,
+                Window = TimeSpan.FromMinutes(1),
+                QueueLimit = 0,
+                AutoReplenishment = true
+            }
+        ));
+
+    // 2. Upload Policy: Limit of 10 image uploads per minute per IP
+    options.AddPolicy("UploadPolicy", httpContext => 
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 10,
+                Window = TimeSpan.FromMinutes(1),
+                QueueLimit = 0,
+                AutoReplenishment = true
+            }
+        ));
+
+    // 3. General API Policy: Standard limit of 60 requests per minute per IP
+    options.AddPolicy("GeneralPolicy", httpContext => 
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 60,
+                Window = TimeSpan.FromMinutes(1),
+                QueueLimit = 2,
+                AutoReplenishment = true
+            }
+        ));
+});
+
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
@@ -50,11 +112,20 @@ if (app.Environment.IsDevelopment())
 
 app.UseMiddleware<ExceptionMiddleware>();
 
-// CORS must come before Authorization and Controllers
+// CORS must be executed before Authentication & Authorization
 app.UseCors("AllowFrontend");
 
 app.UseHttpsRedirection();
+
+// UseAuthentication validates JWT tokens/cookies and populates ClaimsPrincipal (User)
+app.UseAuthentication();
+
+// Rate Limiter middleware evaluates request limits before authorization checks
+app.UseRateLimiter();
+
+// UseAuthorization enforces policy and role-based access control [Authorize]
 app.UseAuthorization();
+
 app.MapControllers();
 
 

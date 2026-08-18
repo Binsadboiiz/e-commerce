@@ -1,11 +1,17 @@
-﻿using BE.Models.DTOs;
+using BE.Models.DTOs;
 using BE.Models.DTOs.Reviews;
 using BE.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace BE.Controllers.Review
 {
+    /// <summary>
+    /// Controller for reading product customer reviews.
+    /// Rate limited using GeneralPolicy.
+    /// </summary>
+    [EnableRateLimiting("GeneralPolicy")]
     [ApiController]
     [Route("api/products/{productId:long}/reviews")]
     [AllowAnonymous]

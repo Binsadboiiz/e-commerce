@@ -1,12 +1,20 @@
 using BE.Middlewares;
 using BE.Models.DTOs;
 using BE.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using System.Security.Claims;
 using BE.Helpers;
 
 namespace BE.Controllers.Checkout
 {
+    /// <summary>
+    /// Controller handling checkout previews, address retrieval, voucher application, and order placement.
+    /// Requires user authentication and rate limiting protection for all checkout operations.
+    /// </summary>
+    [Authorize]
+    [EnableRateLimiting("GeneralPolicy")]
     [ApiController]
     [Route("api/checkout")]
     public class CheckoutController : ControllerBase

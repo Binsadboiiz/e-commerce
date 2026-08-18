@@ -2,16 +2,20 @@ using BE.Constants;
 using BE.Helpers;
 using BE.Models.DTOs;
 using BE.Services.Interface.Admin;
-using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace BE.Controllers.Admin
 {
+    /// <summary>
+    /// Controller for handling system-wide administration and seller application approvals.
+    /// Rate limited using GeneralPolicy and protected by Admin role authorization.
+    /// </summary>
     [ApiController]
     [Authorize(Roles = RoleConstants.Admin)]
+    [EnableRateLimiting("GeneralPolicy")]
     [Route("api/admin/dashboard")]
-
     public class AdminDashboardController : ControllerBase
     {
         private readonly IAdminDashboardService _adminDashboardService;

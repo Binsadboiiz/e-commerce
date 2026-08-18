@@ -6,10 +6,16 @@ using BE.Models.DTOs.Seller;
 using BE.Services.Interface.Seller;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace BE.Controllers.Seller
 {
+    /// <summary>
+    /// Controller for managing seller order fulfillment and tracking.
+    /// Rate limited using GeneralPolicy and protected by Seller role authorization.
+    /// </summary>
     [Authorize(Roles = "Seller,SELLER,seller")]
+    [EnableRateLimiting("GeneralPolicy")]
     [ApiController]
     [Route("api/seller/orders")]
     public class SellerOrderController : ControllerBase

@@ -5,13 +5,16 @@ using BE.Models.DTOs.Seller;
 using BE.Services.Interface.Seller;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace BE.Controllers.Seller
 {
     /// <summary>
     /// Controller for seller store management operations (view and update store profile).
+    /// Secured with Seller role authorization and GeneralPolicy Rate Limiting.
     /// </summary>
     [Authorize(Roles = "Seller,SELLER,seller")]
+    [EnableRateLimiting("GeneralPolicy")]
     [ApiController]
     [Route("api/seller/store")]
     public class SellerStoreController : ControllerBase

@@ -4,13 +4,15 @@ using BE.Models.DTOs.Products.ProductFilter;
 using BE.Services.Interface.Product;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace BE.Controllers.Product
 {
     /// <summary>
     /// Exposes read-only product catalog endpoints.
+    /// Protected by GeneralPolicy rate limiting to prevent scraping and API abuse.
     /// </summary>
-   
+    [EnableRateLimiting("GeneralPolicy")]
     [ApiController]
     [Route("api/products")]
     [AllowAnonymous]
