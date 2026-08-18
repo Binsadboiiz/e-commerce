@@ -23,6 +23,7 @@ namespace BE.Data
 
         //Shop
         public DbSet<Shop> Shops { get; set; }
+        public DbSet<StoreDetail> StoreDetails { get; set; }
 
         //Brand
         public DbSet<Brand> Brands { get; set; }

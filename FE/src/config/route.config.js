@@ -25,5 +25,6 @@ export const ROUTES = {
     SELLER_DASHBOARD: "/seller/dashboard",
     SELLER_PRODUCTS: "/seller/products",
     SELLER_VOUCHERS: "/seller/vouchers",
+    SELLER_ORDERS: "/seller/orders",
     SELLER_REGISTRATION: "/seller/registration",
 };

@@ -5,10 +5,16 @@ using BE.Validators;
 using BE.Helpers;
 using BE.Services.Interface.Product;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace BE.Controllers.Seller
 {
+    /// <summary>
+    /// Controller for managing products owned by the authenticated seller.
+    /// Secured with Seller role authorization and GeneralPolicy Rate Limiting.
+    /// </summary>
     [Authorize(Roles = "Seller,SELLER,seller")]
+    [EnableRateLimiting("GeneralPolicy")]
     [ApiController]
     [Route("api/seller/products")]
     public class SellerProductsController : ControllerBase

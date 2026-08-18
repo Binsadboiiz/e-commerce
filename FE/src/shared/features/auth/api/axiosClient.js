@@ -2,19 +2,23 @@ import axios from "axios";
 import { notify } from "../../../utils/Notify";
 import { ROUTES } from "@/config/route.config";
 
+/**
+ * Global Axios client configuration.
+ * Configured with base API URL, timeout limits, and credentials support for HttpOnly cookies.
+ */
 const axiosClient = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL || "https://localhost:5269/api",
-    withCredentials: true,
+    withCredentials: true, // Crucial for sending and receiving HttpOnly cookies across cross-origin requests
     headers: {
         "Content-Type": "application/json",
     },
     timeout: 10000
 });
 
-// intercept request
+// Request Interceptor: Checks internet connectivity before sending API requests
 axiosClient.interceptors.request.use(
     (config) => {
-        if(!navigator.onLine) {
+        if (!navigator.onLine) {
             notify.error("No Internet Connection");
 
             return Promise.reject(
@@ -29,7 +33,7 @@ axiosClient.interceptors.request.use(
     }
 );
 
-// intercept response
+// Response Interceptor: Handles global API response formatting, session expiration, and error notifications
 let isShowingServerError = false;
 let isRedirectingAuth = false;
 

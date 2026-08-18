@@ -104,7 +104,7 @@ export const SELLER_NAV = [
         key: "seller-orders",
         label: "Orders",
         icon: <ShoppingCart size={18} />,
-        path: "#",
+        path: "/seller/orders",
     },
     {
         key: "seller-analytics",

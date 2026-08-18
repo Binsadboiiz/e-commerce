@@ -1,11 +1,19 @@
 using BE.Services.Interface;
 using BE.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using System.Security.Claims;
 using BE.Helpers;
 
 namespace BE.Controllers.Cart
 {
+    /// <summary>
+    /// Controller managing user shopping cart operations.
+    /// Requires authentication and general rate limiting protection.
+    /// </summary>
+    [Authorize]
+    [EnableRateLimiting("GeneralPolicy")]
     [ApiController]
     [Route("api/cart")]
     public class CartController : ControllerBase

@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BE.Models.Entities
@@ -27,5 +27,7 @@ namespace BE.Models.Entities
         public ICollection<ShopAddresses> Addresses { get; set; }
 
         public ICollection<ReviewReply> ReviewReplies { get; set; } = new List<ReviewReply>();
+
+        public StoreDetail? StoreDetail { get; set; }
     }
 }

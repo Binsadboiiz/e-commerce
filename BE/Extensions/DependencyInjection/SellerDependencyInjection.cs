@@ -15,6 +15,7 @@ namespace BE.Extensions.DependencyInjection
             // Repository
             services.AddScoped<ISellerRepository, SellerRepository>();
             services.AddScoped<ISellerOrderRepository, SellerOrderRepository>();
+            services.AddScoped<IStoreRepository, StoreRepository>();
 
             // Services
             services.AddScoped<ISellerRegistrationService, SellerRegistrationService>();
@@ -23,6 +24,7 @@ namespace BE.Extensions.DependencyInjection
             services.AddScoped<ISellerDashboardService, SellerDashboardService>();
             services.AddScoped<ISellerVoucherService, SellerVoucherService>();
             services.AddScoped<ISellerOrderService, SellerOrderService>();
+            services.AddScoped<IStoreService, StoreService>();
 
             return services;
         }

@@ -1,6 +1,10 @@
 import { useMemo } from "react";
 import { useAuth } from "@/shared/features/auth/hooks/useAuth";
 
+/**
+ * Helper function to safely decode base64url encoded JWT payload.
+ * Returns null if token is missing or invalid.
+ */
 function decodeJwtPayload(token) {
     if (!token) {
         return null;
@@ -20,10 +24,13 @@ function decodeJwtPayload(token) {
     }
 }
 
+/**
+ * Extracts the user identifier from authenticated user context or decoded JWT payload.
+ */
 function getUserIdFromSources(user, jwtPayload) {
     const candidates = [
-        user?.id,
         user?.userId,
+        user?.id,
         user?.customerId,
         user?.sub,
         jwtPayload?.sub,
@@ -34,6 +41,9 @@ function getUserIdFromSources(user, jwtPayload) {
     return candidates.find(value => typeof value === "string" && value.trim().length > 0) ?? null;
 }
 
+/**
+ * React hook to retrieve the current authenticated user's ID for order operations.
+ */
 export function useOrderUserId() {
     const { user } = useAuth();
 

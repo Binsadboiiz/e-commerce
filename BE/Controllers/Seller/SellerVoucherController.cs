@@ -4,10 +4,16 @@ using BE.Models.DTOs.Seller;
 using BE.Services.Interface.Seller;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace BE.Controllers.Seller
 {
+    /// <summary>
+    /// Controller for creating, updating, and deleting shop promotion vouchers.
+    /// Secured with Seller role authorization and GeneralPolicy Rate Limiting.
+    /// </summary>
     [Authorize(Roles = "Seller,SELLER,seller")]
+    [EnableRateLimiting("GeneralPolicy")]
     [ApiController]
     [Route("api/seller/vouchers")]
     public class SellerVoucherController : ControllerBase
