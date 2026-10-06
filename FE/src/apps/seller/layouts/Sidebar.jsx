@@ -10,10 +10,13 @@ import { useState, useEffect, useContext, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { PRIMARY_NAV, SELLER_NAV, UTILITY_NAV } from "./sidebar.config.jsx";
 import { AuthContext } from "@/shared/features/auth/context/AuthContext.jsx";
+import { logoutApi } from "@/shared/features/auth/api/authService";
+import { notify } from "@/shared/utils/Notify";
+import { ROUTES } from "@/config/route.config";
 import SidebarView from "./SidebarView";
 
 export default function Sidebar({ isCollapsed, onToggle }) {
-    const { user } = useContext(AuthContext);
+    const { user, setUser } = useContext(AuthContext);
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -35,7 +38,7 @@ export default function Sidebar({ isCollapsed, onToggle }) {
         return matched?.key || navItems[0]?.key || "dashboard";
     }, [location.pathname, navItems]);
 
-    const handleItemClick = (key) => {
+    const handleItemClick = async (key) => {
         // Cần bao gồm cả UTILITY_NAV để các nút như Settings/Logout có thể xử lý (nếu có path)
         const allItems = [
             ...navItems.flatMap(item => item.children ? [item, ...item.children] : [item]),
@@ -46,8 +49,15 @@ export default function Sidebar({ isCollapsed, onToggle }) {
         if (item?.path && item.path !== "#") {
             navigate(item.path);
         } else if (key === "logout") {
-            // Placeholder cho logout
-            console.log("Logout clicked");
+            try {
+                await logoutApi();
+            } catch (error) {
+                console.warn("Logout API error:", error);
+            } finally {
+                setUser(null);
+                notify.success("Logged out successfully");
+                navigate(ROUTES.LOGIN);
+            }
         }
     };
 

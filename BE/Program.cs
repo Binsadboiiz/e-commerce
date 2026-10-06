@@ -58,15 +58,15 @@ builder.Services.AddRateLimiter(options =>
         }, cancellationToken: cancellationToken);
     };
 
-    // 1. Auth Policy: Strict limit of 5 requests per minute per IP (for login & register endpoints)
+    // 1. Auth Policy: Strict limit of 10 requests per minute per IP (for login & register endpoints)
     options.AddPolicy("AuthPolicy", httpContext => 
         RateLimitPartition.GetFixedWindowLimiter(
             partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
             factory: _ => new FixedWindowRateLimiterOptions
             {
-                PermitLimit = 5,
+                PermitLimit = 10,
                 Window = TimeSpan.FromMinutes(1),
-                QueueLimit = 0,
+                QueueLimit = 1,
                 AutoReplenishment = true
             }
         ));

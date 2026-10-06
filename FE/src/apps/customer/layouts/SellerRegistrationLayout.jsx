@@ -17,14 +17,13 @@ export default function SellerRegistrationLayout() {
     const handleLogout = async () => {
         try {
             await logoutApi();
-            notify.success('Logout successfully');
-            setUser(null);
-            setCart(null);
-            navigate(ROUTES.HOME);
         } catch (error) {
-            console.error(error);
-            const message = error.response?.data?.message || "Logout failed";
-            notify.error(message);
+            console.warn("Logout API error:", error);
+        } finally {
+            setUser(null);
+            if (setCart) setCart(null);
+            notify.success('Logged out successfully');
+            navigate(ROUTES.HOME);
         }
     };
 

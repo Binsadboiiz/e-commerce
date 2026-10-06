@@ -34,14 +34,13 @@ function Header() {
     const handleLogout = async () => {
         try {
             await logoutApi();
-            notify.success(lang === 'vi' ? 'Đã đăng xuất thành công' : 'Logged out successfully');
-            setUser(null);
-            setCart(null);
-            navigate(ROUTES.HOME);
         } catch (error) {
-            console.error("Logout error:", error);
-            const message = error.response?.data?.message || (lang === 'vi' ? "Đăng xuất thất bại" : "Logout failed");
-            notify.error(message);
+            console.warn("Logout API error:", error);
+        } finally {
+            setUser(null);
+            if (setCart) setCart(null);
+            notify.success(lang === 'vi' ? 'Đã đăng xuất thành công' : 'Logged out successfully');
+            navigate(ROUTES.HOME);
         }
     };
 
