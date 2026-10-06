@@ -4,6 +4,8 @@ import { FiChevronRight, FiMapPin, FiShoppingBag, FiTag } from "react-icons/fi";
 import checkoutApi from "../api/checkoutApi";
 import { useCart } from "../../cart/hooks/useCart";
 import { ROUTES } from "@/config/route.config";
+import Button from "@/shared/components/ui/Button";
+import SEOHead from "@/shared/components/SEOHead";
 import "./CheckoutPage.css";
 
 const currency = new Intl.NumberFormat("vi-VN", {
@@ -253,6 +255,10 @@ export default function CheckoutPage() {
 
     return (
         <div className="checkout-page">
+            <SEOHead 
+                title="Thanh Toán Đơn Hàng" 
+                description="Hoàn tất thông tin thanh toán, địa chỉ nhận hàng và áp dụng mã giảm giá ưu đãi."
+            />
             <div className="checkout-shell">
                 <div className="checkout-breadcrumb">
                     <button onClick={() => navigate(-1)} className="checkout-back-button">Back</button>
@@ -465,14 +471,17 @@ export default function CheckoutPage() {
                                 </div>
                             </div>
 
-                            <button
+                            <Button
                                 type="button"
+                                variant="primary"
+                                size="lg"
+                                fullWidth
                                 onClick={handlePlaceOrder}
-                                disabled={!preview || placingOrder || previewLoading || !selectedAddress}
-                                className="checkout-submit-button"
+                                isLoading={placingOrder}
+                                disabled={!preview || previewLoading || !selectedAddress}
                             >
-                                {placingOrder ? "Placing Order..." : "Place Order"}
-                            </button>
+                                Place Order
+                            </Button>
                         </div>
                     </div>
                 </section>

@@ -1,4 +1,5 @@
 import { X, Trash2 } from "lucide-react";
+import Button from "@/shared/components/ui/Button";
 import styles from "./ProductFormModal.module.css";
 
 export default function DeleteConfirmModal({ isOpen, onClose, onConfirm, product, isSubmitting }) {
@@ -9,7 +10,7 @@ export default function DeleteConfirmModal({ isOpen, onClose, onConfirm, product
             <div className={styles.modalContent} style={{ maxWidth: '400px' }} onClick={e => e.stopPropagation()}>
                 <div className={styles.modalHeader}>
                     <h2 className={styles.modalTitle}>Confirm Deletion</h2>
-                    <button className={styles.closeBtn} onClick={onClose}>
+                    <button className={styles.closeBtn} onClick={onClose} aria-label="Close">
                         <X size={20} />
                     </button>
                 </div>
@@ -26,13 +27,21 @@ export default function DeleteConfirmModal({ isOpen, onClose, onConfirm, product
                 </div>
 
                 <div className={styles.modalFooter} style={{ justifyContent: 'center' }}>
-                    <button type="button" className={styles.cancelBtn} onClick={onClose} disabled={isSubmitting}>
+                    <Button 
+                        variant="outline" 
+                        onClick={onClose} 
+                        disabled={isSubmitting}
+                    >
                         Cancel
-                    </button>
-                    <button type="button" className={styles.deleteBtn} onClick={onConfirm} disabled={isSubmitting}>
-                        <Trash2 size={18} />
-                        {isSubmitting ? "Deleting..." : "Delete Product"}
-                    </button>
+                    </Button>
+                    <Button 
+                        variant="danger" 
+                        onClick={onConfirm} 
+                        isLoading={isSubmitting}
+                        icon={<Trash2 size={18} />}
+                    >
+                        Delete Product
+                    </Button>
                 </div>
             </div>
         </div>

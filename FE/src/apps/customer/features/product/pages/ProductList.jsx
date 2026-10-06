@@ -10,6 +10,7 @@ import ProductSkeleton from "../components/shared/ProductSkeleton";
 import SidebarFilter from "../components/list/filter/SidebarFilter";
 import SortBar from "../components/list/sort/SortBar";
 import Pagination from "../components/list/pagination/Pagination";
+import SEOHead from "@/shared/components/SEOHead";
 
 export default function ProductList() {
 
@@ -59,8 +60,14 @@ export default function ProductList() {
 
     console.log("PRODUCT LIST:", products);
 
+    const searchQuery = searchParams.get("q") || "";
+
     return (
         <div className={styles.container}>
+            <SEOHead 
+                title={searchQuery ? `Tìm kiếm: "${searchQuery}"` : "Danh Sách Sản Phẩm Tất Cả Nổi Bật"} 
+                description="Khám phá bộ sưu tập sản phẩm đa dạng, chất lượng cao với giá cực tốt tại E-Commerce Enterprise."
+            />
 
             {/* SIDEBAR */}
             <div className={styles.sidebar}>

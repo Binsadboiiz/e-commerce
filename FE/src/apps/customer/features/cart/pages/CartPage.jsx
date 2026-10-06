@@ -3,6 +3,7 @@ import CartShopGroup from "../components/CartShopGroup";
 import CartFooter from "../components/CartFooter";
 import EmptyCart from "../components/EmptyCart";
 import { FiShoppingCart } from 'react-icons/fi';
+import SEOHead from '@/shared/components/SEOHead';
 import styles from './CartPage.module.css';
 
 export default function CartPage() {
@@ -20,6 +21,10 @@ export default function CartPage() {
 
     return (
         <div className={styles.page}>
+            <SEOHead 
+                title="Giỏ Hàng Của Bạn" 
+                description="Xem lại các sản phẩm trong giỏ hàng, cập nhật số lượng và chuẩn bị thanh toán an toàn, nhanh chóng."
+            />
             <div className={styles.container}>
                 <div className={styles.header}>
                     <FiShoppingCart className="text-primary" size={26} />

@@ -1,19 +1,20 @@
 /** @summary Displays product info (image, pricing, rating)
- * and handles add-to-cart action. */
+ * and handles add-to-cart action with modern UI/UX. */
 
 import styles from './ProductCard.module.css';
 import { useNavigate } from 'react-router-dom';
-import { IoStar, IoStarHalf, IoStarOutline, IoCartOutline } from 'react-icons/io5';
+import { IoStar, IoStarHalf, IoStarOutline, IoCartOutline, IoEyeOutline } from 'react-icons/io5';
 import { ROUTES } from '@/config/route.config';
 import { useCart } from '@/apps/customer/features/cart/hooks/useCart';
 import { notify } from '@/shared/utils/Notify';
 import formatPrice from '@/apps/customer/features/product/utils/formatPrice';
+import { useLanguage } from '@/shared/context/LanguageContext';
 
 /* Renders up to 5 star icons based on numeric ratingAvg */
 function Stars({ value = 0 }) {
     const full = Math.floor(value);
     const half = value - full >= 0.5;
-    const empty = 5 - full - (half ? 1 : 0);
+    const empty = Math.max(0, 5 - full - (half ? 1 : 0));
 
     return (
         <div className={styles.stars} aria-label={`${value} out of 5 stars`}>
@@ -29,26 +30,39 @@ function Stars({ value = 0 }) {
 }
 
 export default function ProductCard({ product, onBuy }) {
-
     const navigate = useNavigate();
     const { addToCart } = useCart();
+    
+    let t = (key) => key;
+    try {
+        const langCtx = useLanguage();
+        if (langCtx?.t) t = langCtx.t;
+    } catch {
+        // Fallback if rendered outside LanguageProvider
+    }
+
+    if (!product) return null;
 
     const {
         name,
         imageUrl,
         price,
         discountPrice,
-        ratingAvg,
-        ratingCount,
+        ratingAvg = 4.5,
+        ratingCount = 0,
         isTopSeller,
+        brandName,
+        soldCount,
     } = product;
 
-    const discountPercent = price && discountPrice
+    const discountPercent = price && discountPrice && price > discountPrice
         ? Math.round(((price - discountPrice) / price) * 100)
         : 0;
 
     const handleGoDetail = () => {
-        navigate(ROUTES.PRODUCT_DETAIL.replace(':slug', product.slug));
+        if (product.slug) {
+            navigate(ROUTES.PRODUCT_DETAIL.replace(':slug', product.slug));
+        }
     };
 
     const handleCartClick = async (e) => {
@@ -59,48 +73,81 @@ export default function ProductCard({ product, onBuy }) {
         }
         try {
             await addToCart(product.productId || product.id, 1, null);
-            notify.success(`Added ${name} to cart!`);
+            notify.success(t('addedSuccess') || `Đã thêm ${name} vào giỏ hàng!`);
         } catch (err) {
             console.error("Failed to add to cart:", err);
             if (err.response?.status === 401) {
-                notify.error("Please login to add products to cart.");
+                notify.error("Vui lòng đăng nhập để thêm vào giỏ hàng.");
             } else {
-                notify.error("Could not add product to cart.");
+                notify.error("Không thể thêm sản phẩm vào giỏ hàng.");
             }
         }
     };
 
     return (
-        <div className={styles.productCard} onClick={handleGoDetail}>
-
+        <div className={styles.productCard} onClick={handleGoDetail} role="button" tabIndex={0}>
+            {/* IMAGE SECTION */}
             <div className={styles.imageWrapper}>
                 {imageUrl ? (
-                    <img src={imageUrl} alt={name} className={styles.productImg} />
+                    <img src={imageUrl} alt={name} className={styles.productImg} loading="lazy" />
                 ) : (
-                    <div className={styles.placeholderImg} />
+                    <div className={styles.placeholderImg}>
+                        <IoEyeOutline className={styles.placeholderIcon} />
+                    </div>
                 )}
+
+                {/* BADGES */}
+                {isTopSeller && (
+                    <span className={styles.topBadge}>
+                        {t('topSeller') || 'TOP SELLER'}
+                    </span>
+                )}
+
+                {discountPercent > 0 && (
+                    <span className={styles.discountBadge}>
+                        -{discountPercent}%
+                    </span>
+                )}
+
+                {/* OVERLAY ACTION ON HOVER */}
+                <div className={styles.quickActionOverlay}>
+                    <button
+                        className={styles.quickBuyBtn}
+                        onClick={handleCartClick}
+                        title={t('addToCart') || 'Thêm vào giỏ'}
+                        aria-label={t('addToCart') || 'Thêm vào giỏ'}
+                    >
+                        <IoCartOutline /> <span>{t('addToCart') || 'Thêm vào giỏ'}</span>
+                    </button>
+                </div>
             </div>
 
+            {/* CONTENT SECTION */}
             <div className={styles.content}>
-                <div className={styles.headerRow}>
-                    {isTopSeller && (
-                        <span className={styles.badge}>Top seller</span>
-                    )}
-                    <h2 className={styles.name}>{name || 'Product name'}</h2>
+                {brandName && <div className={styles.brandTag}>{brandName}</div>}
+
+                <h3 className={styles.name} title={name}>
+                    {name || 'Tên sản phẩm'}
+                </h3>
+
+                <div className={styles.ratingRow}>
+                    <Stars value={ratingAvg} />
+                    <span className={styles.ratingText}>
+                        <strong>{ratingAvg > 0 ? ratingAvg : 5.0}</strong>
+                        {ratingCount > 0 && <span className={styles.countText}>({ratingCount})</span>}
+                        {soldCount && <span className={styles.soldText}> • Đã bán {soldCount}</span>}
+                    </span>
                 </div>
 
                 <div className={styles.priceRow}>
-                    <div className={styles.priceValue}>
+                    <div className={styles.priceContainer}>
                         {discountPrice ? (
                             <>
-                                <span className={styles.oldPrice}>
-                                    {formatPrice(price)}
-                                </span>
                                 <span className={styles.currentPrice}>
                                     {formatPrice(discountPrice)}
                                 </span>
-                                <span className={styles.discountTag}>
-                                    -{discountPercent}%
+                                <span className={styles.oldPrice}>
+                                    {formatPrice(price)}
                                 </span>
                             </>
                         ) : (
@@ -112,21 +159,14 @@ export default function ProductCard({ product, onBuy }) {
 
                     <button
                         className={styles.cartBtn}
-                        aria-label={`Add ${name} to cart`}
+                        aria-label={`Thêm ${name} vào giỏ`}
                         onClick={handleCartClick}
+                        title={t('addToCart') || 'Thêm vào giỏ'}
                     >
                         <IoCartOutline />
                     </button>
                 </div>
-
-                <div className={styles.ratingRow}>
-                    <Stars value={ratingAvg} />
-                    <span className={styles.ratingText}>
-                        <strong>{ratingAvg}</strong> ({ratingCount} reviews)
-                    </span>
-                </div>
             </div>
-
         </div>
     );
 }

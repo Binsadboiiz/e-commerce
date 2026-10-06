@@ -4,6 +4,7 @@ import useSellerProducts from "../hooks/useSellerProducts";
 import { sellerProductApi } from "../api/sellerProductApi";
 import ProductFormModal from "../components/ProductFormModal";
 import DeleteConfirmModal from "../components/DeleteConfirmModal";
+import SEOHead from "@/shared/components/SEOHead";
 import styles from "./SellerProducts.module.css";
 import { notify } from "@/shared/utils/Notify";
 
@@ -158,6 +159,11 @@ export default function SellerProducts() {
 
     return (
         <div className={styles.container}>
+            <SEOHead 
+                title="Quản Lý Sản Phẩm - Kênh Người Bán" 
+                robots="noindex, nofollow" 
+                description="Bảng điều khiển quản lý danh sách sản phẩm, kho hàng và giá bán dành cho người bán."
+            />
             {/* Page Header */}
             <div className={styles.pageHeader}>
                 <div>

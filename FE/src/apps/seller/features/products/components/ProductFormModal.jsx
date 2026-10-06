@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { X, Save, Image as ImageIcon } from "lucide-react";
+import Button from "@/shared/components/ui/Button";
 import styles from "./ProductFormModal.module.css";
 
 const getInitialFormData = (data) => ({
@@ -194,13 +195,22 @@ export default function ProductFormModal({ isOpen, onClose, onSubmit, initialDat
                     </div>
 
                     <div className={styles.modalFooter}>
-                        <button type="button" className={styles.cancelBtn} onClick={onClose} disabled={isSubmitting}>
+                        <Button 
+                            type="button" 
+                            variant="outline" 
+                            onClick={onClose} 
+                            disabled={isSubmitting}
+                        >
                             Cancel
-                        </button>
-                        <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
-                            <Save size={18} />
-                            {isSubmitting ? "Saving..." : "Save Product"}
-                        </button>
+                        </Button>
+                        <Button 
+                            type="submit" 
+                            variant="primary" 
+                            isLoading={isSubmitting}
+                            icon={<Save size={18} />}
+                        >
+                            Save Product
+                        </Button>
                     </div>
                 </form>
             </div>

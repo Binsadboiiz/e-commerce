@@ -3,6 +3,7 @@ import { Search, Plus, Tag, ChevronLeft, ChevronRight, Edit2, Trash2, Calendar, 
 import axiosClient from "@/shared/features/auth/api/axiosClient.js";
 import { sellerVoucherApi } from "../api/sellerVoucherApi.js";
 import { notify } from "@/shared/utils/Notify.js";
+import Button from "@/shared/components/ui/Button.jsx";
 import "./SellerVouchersPage.css";
 
 const currencyFormatter = new Intl.NumberFormat("vi-VN", {
@@ -248,15 +249,19 @@ export default function SellerVouchersPage() {
 
     return (
         <div className="seller-vouchers-container">
+            <SEOHead 
+                title="Quản Lý Mã Giảm Giá - Kênh Người Bán" 
+                robots="noindex, nofollow" 
+                description="Tạo và quản lý các chương trình khuyến mãi, voucher giảm giá cho shop."
+            />
             <header className="vouchers-header">
                 <div>
                     <h1 className="vouchers-title">Voucher Management</h1>
                     <p className="vouchers-subtitle">Create and manage discounts to boost your shop sales</p>
                 </div>
-                <button className="add-voucher-btn" onClick={handleOpenCreate}>
-                    <Plus size={18} />
-                    <span>Create Voucher</span>
-                </button>
+                <Button variant="primary" icon={<Plus size={18} />} onClick={handleOpenCreate}>
+                    Create Voucher
+                </Button>
             </header>
 
             {/* Filter and search */}
@@ -270,7 +275,7 @@ export default function SellerVouchersPage() {
                         onChange={(e) => setSearchInput(e.target.value)}
                         className="search-input"
                     />
-                    <button type="submit" className="search-btn">Search</button>
+                    <Button type="submit" variant="secondary">Search</Button>
                 </form>
             </div>
 
@@ -578,21 +583,21 @@ export default function SellerVouchersPage() {
                             </div>
 
                             <div className="modal-actions">
-                                <button
+                                <Button
                                     type="button"
-                                    className="cancel-btn"
+                                    variant="outline"
                                     onClick={() => setIsModalOpen(false)}
                                     disabled={submitLoading}
                                 >
                                     Cancel
-                                </button>
-                                <button
+                                </Button>
+                                <Button
                                     type="submit"
-                                    className="submit-btn"
-                                    disabled={submitLoading}
+                                    variant="primary"
+                                    isLoading={submitLoading}
                                 >
-                                    {submitLoading ? "Saving..." : "Save Voucher"}
-                                </button>
+                                    Save Voucher
+                                </Button>
                             </div>
                         </form>
                     </div>

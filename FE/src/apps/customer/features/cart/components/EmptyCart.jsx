@@ -1,31 +1,37 @@
-import { FiShoppingCart } from 'react-icons/fi';
+import { FiShoppingCart, FiArrowRight } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '@/shared/context/LanguageContext';
 
 export default function EmptyCart() {
+    const { t } = useLanguage();
+
     return (
-        <div className="flex flex-col items-center justify-center py-20 animate-fade-in">
-            {/* Icon */}
-            <div className="w-28 h-28 rounded-full bg-gradient-to-br from-primary/10 to-primary/5
-                            flex items-center justify-center mb-6">
-                <FiShoppingCart className="text-primary/40" size={48} />
+        <div className="flex flex-col items-center justify-center py-16 px-4 animate-fade-in text-center">
+            {/* Visual Icon Badge */}
+            <div className="w-24 h-24 rounded-full bg-red-50 text-primary
+                            flex items-center justify-center mb-6 shadow-sm border border-red-100">
+                <FiShoppingCart size={42} />
             </div>
 
-            {/* Text */}
-            <h2 className="text-xl font-semibold text-text-primary mb-2">
-                Your shopping cart is empty
+            {/* Empty Title & Subtitle */}
+            <h2 className="text-2xl font-bold text-gray-900 mb-2 tracking-tight">
+                {t('emptyTitle')}
             </h2>
-            <p className="text-text-secondary text-sm mb-8 text-center max-w-sm">
-                Go discover more products and add them to your cart!
+            <p className="text-gray-500 text-sm mb-8 max-w-md leading-relaxed">
+                {t('emptySubtitle')}
             </p>
 
-            {/* CTA */}
+            {/* Redesigned Enterprise CTA Button */}
             <Link
                 to="/"
-                className="px-8 py-3 bg-[#111827] hover:bg-[#1f2937] text-white font-semibold rounded-lg
-                           shadow-card hover:shadow-hover transition-all duration-200
-                           transform hover:-translate-y-0.5 active:translate-y-0"
+                className="inline-flex items-center justify-center gap-2.5 px-8 py-3.5 
+                           bg-primary hover:bg-[#d73211] active:bg-[#b8280c]
+                           text-white font-semibold text-base rounded-xl
+                           shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0
+                           transition-all duration-200 group cursor-pointer"
             >
-                Shop Now
+                <span>{t('shopNow')}</span>
+                <FiArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </Link>
         </div>
     );

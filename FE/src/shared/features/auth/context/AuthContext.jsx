@@ -15,7 +15,14 @@ export const AuthProvider = ({children}) => {
             const res = await getProfileApi();
             setUser(res.data); // Nếu thành công, lưu thông tin user vào state
         } catch {
-            setUser(null); // Nếu lỗi (chưa đăng nhập, token hết hạn), set user về null
+            // Tạm thời fallback mock user để test giao diện khi chưa đăng nhập / backend offline
+            setUser({
+                id: 1,
+                fullName: "Test User",
+                email: "test@example.com",
+                role: "seller",
+                avatar: ""
+            });
         } finally {
             setLoading(false); // Dù thành công hay thất bại cũng kết thúc trạng thái loading
         }

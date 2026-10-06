@@ -17,6 +17,7 @@ import { sellerOrderApi } from "../api/sellerOrderApi";
 import SellerOrderDetailModal from "../components/SellerOrderDetailModal";
 import UpdateOrderStatusModal from "../components/UpdateOrderStatusModal";
 import { notify } from "@/shared/utils/Notify";
+import SEOHead from "@/shared/components/SEOHead";
 import "./SellerOrdersPage.css";
 
 const currencyFormatter = new Intl.NumberFormat("vi-VN", {
@@ -104,6 +105,11 @@ export default function SellerOrdersPage() {
 
     return (
         <div className="seller-orders-container">
+            <SEOHead 
+                title="Quản Lý Đơn Hàng - Kênh Người Bán" 
+                robots="noindex, nofollow" 
+                description="Bảng quản lý và xử lý đơn hàng của shop từ khách hàng."
+            />
             {/* Page Header */}
             <header className="orders-header">
                 <div>
