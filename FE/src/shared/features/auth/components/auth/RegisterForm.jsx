@@ -48,7 +48,7 @@ export default function RegisterForm() {
         <AuthInput
           label="Full Name"
           type="text"
-          placeholder="YOUR FULL NAME"
+          placeholder="John Doe"
           value={form.fullName}
           onChange={handleChange}
           name="fullName"

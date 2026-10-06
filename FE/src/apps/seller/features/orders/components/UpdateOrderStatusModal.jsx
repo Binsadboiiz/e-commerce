@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { X, RefreshCw, MapPin, FileText } from "lucide-react";
 import { sellerOrderApi } from "../api/sellerOrderApi";
 import { notify } from "@/shared/utils/Notify";
+import Button from "@/shared/components/ui/Button";
 
 const STATUS_TRANSITIONS = {
     pending: [
@@ -175,13 +176,13 @@ export default function UpdateOrderStatusModal({ order, isOpen, onClose, onSucce
                     </div>
 
                     <div className="modal-actions">
-                        <button type="button" className="cancel-btn" onClick={onClose} disabled={loading}>
+                        <Button type="button" variant="outline" onClick={onClose} disabled={loading}>
                             Cancel
-                        </button>
+                        </Button>
                         {!isTerminal && (
-                            <button type="submit" className="submit-btn" disabled={loading}>
-                                {loading ? "Updating..." : "Confirm Update"}
-                            </button>
+                            <Button type="submit" variant="primary" isLoading={loading}>
+                                Confirm Update
+                            </Button>
                         )}
                     </div>
                 </form>

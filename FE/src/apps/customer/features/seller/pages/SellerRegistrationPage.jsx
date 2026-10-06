@@ -3,6 +3,7 @@ import useSellerRegistration from "../hooks/useSellerRegistration";
 import { calculateSellerProgress } from "../utils/sellerProgress";
 import { getSellerSteps } from "../constants/sellerSteps";
 import { notify } from "@/shared/utils/Notify";
+import SEOHead from "@/shared/components/SEOHead";
 import styles from "./SellerRegistrationPage.module.css";
 
 import SellerStepper from "../components/common/SellerStepper";
@@ -213,6 +214,10 @@ export default function SellerRegistrationPage() {
 
     return (
         <div className={styles.container}>
+            <SEOHead 
+                title="Đăng Ký Bán Hàng Cùng Chúng Tôi" 
+                description="Mở gian hàng kinh doanh miễn phí tại E-Commerce Enterprise, tiếp cận hàng triệu khách hàng tiềm năng."
+            />
             <h2 className={styles.title}>
                 Seller Registration
             </h2>

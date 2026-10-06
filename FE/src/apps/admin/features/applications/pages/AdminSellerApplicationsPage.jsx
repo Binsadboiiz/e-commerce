@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import axiosClient from "@/shared/features/auth/api/axiosClient";
+import Button from "@/shared/components/ui/Button";
 import styles from "./AdminSellerApplications.module.css";
 
 export const AdminSellerApplicationsPage = () => {
@@ -89,6 +90,11 @@ export const AdminSellerApplicationsPage = () => {
 
     return (
         <div className={styles.container}>
+            <SEOHead 
+                title="Quản Lý Đơn Đăng Ký Seller | Admin Portal" 
+                robots="noindex, nofollow" 
+                description="Trang duyệt đơn đăng ký bán hàng của các đối tác seller."
+            />
             <h1 className={styles.title}>Seller Applications</h1>
             <p className={styles.subtitle}>Review and manage seller registration requests.</p>
 
@@ -124,26 +130,29 @@ export const AdminSellerApplicationsPage = () => {
                             </td>
                             <td style={{ textAlign: "center" }}>
                                 <div style={{ display: "flex", gap: "8px", justifyContent: "center", flexWrap: "wrap" }}>
-                                    <button
+                                    <Button
+                                        size="sm"
+                                        variant="outline"
                                         onClick={() => handleViewDetail(app.id)}
-                                        className={styles.detailBtn}
                                     >
                                         View
-                                    </button>
+                                    </Button>
                                     {app.status === "PENDING" && (
                                         <>
-                                            <button
+                                            <Button
+                                                size="sm"
+                                                variant="success"
                                                 onClick={() => handleApprove(app.id)}
-                                                className={styles.approveBtn}
                                             >
                                                 Approve
-                                            </button>
-                                            <button
+                                            </Button>
+                                            <Button
+                                                size="sm"
+                                                variant="danger"
                                                 onClick={() => handleReject(app.id)}
-                                                className={styles.rejectBtn}
                                             >
                                                 Reject
-                                            </button>
+                                            </Button>
                                         </>
                                     )}
                                     {app.status !== "PENDING" && (
@@ -296,18 +305,18 @@ export const AdminSellerApplicationsPage = () => {
                                 {/* Actions */}
                                 {selectedDetail.summary?.sellerStatusCode === "PENDING" && (
                                     <div className={styles.modalActions}>
-                                        <button
+                                        <Button
+                                            variant="success"
                                             onClick={() => handleApprove(selectedDetail.summary.sellerId)}
-                                            className={styles.approveBtn}
                                         >
                                             ✓ Approve
-                                        </button>
-                                        <button
+                                        </Button>
+                                        <Button
+                                            variant="danger"
                                             onClick={() => handleReject(selectedDetail.summary.sellerId)}
-                                            className={styles.rejectBtn}
                                         >
                                             ✕ Reject
-                                        </button>
+                                        </Button>
                                     </div>
                                 )}
                             </div>

@@ -1,5 +1,6 @@
 import { useAuth } from "../hooks/useAuth";
 import { User, Mail, Shield, Camera, CalendarDays } from "lucide-react";
+import SEOHead from "@/shared/components/SEOHead";
 import styles from "./ProfilePage.module.css";
 
 export default function ProfilePage() {
@@ -11,6 +12,10 @@ export default function ProfilePage() {
 
     return (
         <div className={styles.page}>
+            <SEOHead 
+                title="Thông Tin Tài Khoản" 
+                description="Quản lý hồ sơ thông tin cá nhân, vai trò tài khoản và bảo mật tại E-Commerce Enterprise."
+            />
             <div className={styles.container}>
                 <div className={styles.titleSection}>
                     <h2 className={styles.title}>My Profile</h2>

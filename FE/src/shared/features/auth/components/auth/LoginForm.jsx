@@ -59,7 +59,7 @@ export default function LoginForm() {
         <AuthInput
           label="Identity / Email"
           type="email"
-          placeholder="ENTER YOUR EMAIL"
+          placeholder="EMAIL@EXAMPLE.COM"
           value={form.email}
           onChange={handleChange}
           name="email"

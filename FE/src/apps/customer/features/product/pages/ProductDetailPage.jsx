@@ -23,6 +23,7 @@ import RelatedProducts from "../components/detail/related/RelatedProducts";
 import { ROUTES } from "@/config/route.config";
 import { useCart } from "@/apps/customer/features/cart/hooks/useCart";
 import { notify } from "@/shared/utils/Notify";
+import SEOHead from "@/shared/components/SEOHead";
 
 // Navigation sections - defined outside to avoid recreation on re-render
 const PRODUCT_SECTIONS = [
@@ -183,8 +184,33 @@ export default function ProductDetail() {
         }
     };
 
+    const productJsonLd = {
+        "@context": "https://schema.org/",
+        "@type": "Product",
+        "name": product.name,
+        "image": product.images?.[0] || product.imageUrl,
+        "description": product.description || `Mua sản phẩm ${product.name} giá rẻ, giao hàng tận nơi.`,
+        "sku": `PROD-${product.productId}`,
+        "brand": {
+            "@type": "Brand",
+            "name": product.brandName || "Enterprise"
+        },
+        "offers": {
+            "@type": "Offer",
+            "priceCurrency": "VND",
+            "price": product.price || 0,
+            "availability": product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
+        }
+    };
+
     return (
         <div className={styles.page}>
+            <SEOHead 
+                title={`${product.name} - Mua Ngay Giá Tốt`}
+                description={product.description?.substring(0, 160) || `Sản phẩm ${product.name} chính hãng, ưu đãi độc quyền tại E-Commerce Enterprise.`}
+                ogImage={product.images?.[0] || product.imageUrl}
+                jsonLd={productJsonLd}
+            />
 
             {/* Top sentinel to trigger sticky navigation visibility */}
             <div ref={sentinelRef} className={styles.sentinel} />
