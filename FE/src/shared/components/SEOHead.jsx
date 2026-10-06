@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-const DEFAULT_SITE_NAME = 'E-Commerce Enterprise';
+const DEFAULT_SITE_NAME = 'PolarisX Mall';
 const DEFAULT_DESCRIPTION = 'Sàn thương mại điện tử uy tín hàng đầu - Mua sắm trực tuyến hàng chính hãng, giao hàng nhanh chóng, ưu đãi hấp dẫn mỗi ngày.';
 const DEFAULT_KEYWORDS = 'e-commerce, mua sắm trực tuyến, hàng chính hãng, giảm giá, sản phẩm chất lượng';
 const DEFAULT_OG_IMAGE = '/favicon.ico';

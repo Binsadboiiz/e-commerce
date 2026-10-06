@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const DEFAULT_SITE_NAME = 'E-Commerce Enterprise';
+const DEFAULT_SITE_NAME = 'PolarisX Mall';
 
 /**
  * Custom Hook to set dynamic page title & meta description
