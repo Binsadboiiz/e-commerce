@@ -244,7 +244,7 @@ namespace BE.Services.Implementation
             var product = await _context.Products
                 .AsNoTracking()
                 .Include(p => p.Shop)
-                .Where(p => p.Slug == slug)
+                .Where(p => p.Slug == slug && p.Status == BE.Constants.ProductConstants.ProductStatusActive)
                 .Select(p => new ProductDetailDto
                 {
                     ProductId = p.ProductId,

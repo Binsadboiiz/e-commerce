@@ -1,7 +1,11 @@
+using System.Globalization;
 using System.Text;
+using System.Xml;
 using System.Xml.Linq;
+using BE.Constants;
 using BE.Data;
 using BE.Middlewares;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -11,134 +15,224 @@ namespace BE.Controllers.Seo;
 [ApiController]
 public class SeoController : ControllerBase
 {
+    private const string DefaultDomain = "https://polarisx.vn";
+    private const int MaxProductUrls = 10_000;
+    private static readonly XNamespace SitemapNamespace = "http://www.sitemaps.org/schemas/sitemap/0.9";
+
     private readonly ApplicationDbContext _dbContext;
     private readonly IMemoryCache _cache;
     private readonly IConfiguration _configuration;
+    private readonly ILogger<SeoController> _logger;
 
-    public SeoController(ApplicationDbContext dbContext, IMemoryCache cache, IConfiguration configuration)
+    public SeoController(
+        ApplicationDbContext dbContext,
+        IMemoryCache cache,
+        IConfiguration configuration,
+        ILogger<SeoController> logger)
     {
         _dbContext = dbContext;
         _cache = cache;
         _configuration = configuration;
+        _logger = logger;
     }
 
-    /// <summary>
-    /// Serves robots.txt for search engine crawlers
-    /// Route: GET /robots.txt
-    /// </summary>
+    /// <summary>Serves robots.txt for search engine crawlers.</summary>
     [HttpGet("robots.txt")]
     [Produces("text/plain")]
     public IActionResult GetRobotsTxt()
     {
-        var domain = _configuration["SiteSettings:Domain"] ?? "https://polarisx.vn";
+        var domain = GetCanonicalDomain();
+        var robots = new StringBuilder()
+            .AppendLine("User-agent: *")
+            .AppendLine("Allow: /")
+            .AppendLine("Allow: /products")
+            .AppendLine("Allow: /products/*")
+            .AppendLine()
+            .AppendLine("Disallow: /api/")
+            .AppendLine("Disallow: /cart")
+            .AppendLine("Disallow: /checkout")
+            .AppendLine("Disallow: /my-orders")
+            .AppendLine("Disallow: /profile")
+            .AppendLine("Allow: /seller/registration")
+            .AppendLine("Disallow: /seller/")
+            .AppendLine("Disallow: /admin/")
+            .AppendLine()
+            .AppendLine($"Sitemap: {domain}/sitemap.xml")
+            .ToString();
 
-        var sb = new StringBuilder();
-        sb.AppendLine("User-agent: *");
-        sb.AppendLine("Allow: /");
-        sb.AppendLine("Allow: /products");
-        sb.AppendLine("Allow: /products/*");
-        sb.AppendLine("Allow: /shops/*");
-        sb.AppendLine();
-        sb.AppendLine("Disallow: /api/");
-        sb.AppendLine("Disallow: /cart");
-        sb.AppendLine("Disallow: /checkout");
-        sb.AppendLine("Disallow: /my-orders");
-        sb.AppendLine("Disallow: /profile");
-        sb.AppendLine("Disallow: /seller/");
-        sb.AppendLine("Disallow: /admin/");
-        sb.AppendLine();
-        sb.AppendLine($"Sitemap: {domain}/sitemap.xml");
-
-        return Content(sb.ToString(), "text/plain", Encoding.UTF8);
+        return Content(robots, "text/plain", Encoding.UTF8);
     }
 
-    /// <summary>
-    /// Serves dynamic XML sitemap for indexed pages, products, categories, and shops
-    /// Route: GET /sitemap.xml
-    /// </summary>
+    /// <summary>Serves the dynamic sitemap for public, indexable routes.</summary>
     [HttpGet("sitemap.xml")]
     [Produces("application/xml")]
     public async Task<IActionResult> GetSitemapXml()
     {
-        var domain = (_configuration["SiteSettings:Domain"] ?? "https://polarisx.vn").TrimEnd('/');
+        var domain = GetCanonicalDomain();
+        var urls = new XElement(SitemapNamespace + "urlset");
+        var knownLocations = new HashSet<string>(StringComparer.Ordinal);
 
-        XNamespace ns = "http://www.sitemaps.org/schemas/sitemap/0.9";
-        var urlset = new XElement(ns + "urlset");
+        AddSitemapUrl(urls, knownLocations, domain + "/", null, "daily", "1.0");
+        AddSitemapUrl(urls, knownLocations, domain + "/products", null, "hourly", "0.9");
+        AddSitemapUrl(urls, knownLocations, domain + "/seller/registration", null, "monthly", "0.5");
 
-        // 1. Static Core Pages
-        AddSitemapUrl(urlset, ns, $"{domain}/", DateTime.UtcNow, "daily", "1.0");
-        AddSitemapUrl(urlset, ns, $"{domain}/products", DateTime.UtcNow, "hourly", "0.9");
-        AddSitemapUrl(urlset, ns, $"{domain}/seller/registration", DateTime.UtcNow, "monthly", "0.5");
+        await AddProductUrlsAsync(urls, knownLocations, domain);
+        await AddCategoryUrlsAsync(urls, knownLocations, domain);
 
-        // 2. Dynamic Products
-        var products = await _dbContext.Products
+        var document = new XDocument(new XDeclaration("1.0", "utf-8", null), urls);
+        return Content(document.ToString(), "application/xml", Encoding.UTF8);
+    }
+
+    private async Task AddProductUrlsAsync(XElement urlset, ISet<string> knownLocations, string domain)
+    {
+        // Log malformed ACTIVE rows by id, then query only products that can form a detail URL.
+        var productsMissingSlug = await _dbContext.Products
             .AsNoTracking()
-            .Where(p => p.Status == "active")
-            .Select(p => new { p.ProductId, p.Slug, p.UpdatedAt, p.CreatedAt })
-            .Take(10000)
+            .Where(product => product.Status == ProductConstants.ProductStatusActive
+                && (product.Slug == null || product.Slug == ""))
+            .Select(product => product.ProductId)
             .ToListAsync();
 
-        foreach (var prod in products)
+        foreach (var productId in productsMissingSlug)
         {
-            var productUrl = !string.IsNullOrWhiteSpace(prod.Slug)
-                ? $"{domain}/products/{prod.Slug}"
-                : $"{domain}/products/{prod.ProductId}";
-
-            var lastMod = prod.UpdatedAt != default ? prod.UpdatedAt : prod.CreatedAt;
-            AddSitemapUrl(urlset, ns, productUrl, lastMod, "daily", "0.8");
+            _logger.LogWarning(
+                "Skipping ACTIVE product {ProductId} from sitemap because its slug is missing.",
+                productId);
         }
 
-        // 3. Dynamic Categories
-        var categories = await _dbContext.Categories
+        // The existing implementation caps product URLs at 10,000; this does not cover larger catalogs.
+        var productRows = await _dbContext.Products
             .AsNoTracking()
-            .Select(c => new { c.CategoryId })
+            .Where(product => product.Status == ProductConstants.ProductStatusActive
+                && product.Slug != null
+                && product.Slug != "")
+            .OrderBy(product => product.ProductId)
+            .Select(product => new
+            {
+                product.ProductId,
+                product.Slug,
+                product.UpdatedAt,
+                product.CreatedAt
+            })
+            .Take(MaxProductUrls + 1)
             .ToListAsync();
 
-        foreach (var cat in categories)
+        if (productRows.Count > MaxProductUrls)
         {
-            AddSitemapUrl(urlset, ns, $"{domain}/products?categoryIds={cat.CategoryId}", DateTime.UtcNow, "weekly", "0.7");
+            _logger.LogWarning(
+                "Sitemap product URL limit of {MaxProductUrls} reached; products beyond the limit are omitted.",
+                MaxProductUrls);
         }
 
-        // 4. Dynamic Shops
-        var shops = await _dbContext.Shops
+        foreach (var product in productRows.Take(MaxProductUrls))
+        {
+            if (string.IsNullOrWhiteSpace(product.Slug))
+            {
+                _logger.LogWarning(
+                    "Skipping ACTIVE product {ProductId} from sitemap because its slug is blank.",
+                    product.ProductId);
+                continue;
+            }
+
+            var location = $"{domain}/products/{Uri.EscapeDataString(product.Slug)}";
+            AddSitemapUrl(
+                urlset,
+                knownLocations,
+                location,
+                GetLastModified(product.UpdatedAt, product.CreatedAt),
+                "daily",
+                "0.8");
+        }
+    }
+
+    private async Task AddCategoryUrlsAsync(XElement urlset, ISet<string> knownLocations, string domain)
+    {
+        // ProductList is a public route and currently consumes categoryIds as a filter query parameter.
+        var categoryIds = await _dbContext.Categories
             .AsNoTracking()
-            .Where(s => s.IsActive)
-            .Select(s => new { s.ShopId, s.Update_At, s.Create_At })
+            .Select(category => category.CategoryId)
             .ToListAsync();
 
-        foreach (var shop in shops)
+        foreach (var categoryId in categoryIds)
         {
-            var lastMod = shop.Update_At != default ? shop.Update_At : shop.Create_At;
-            AddSitemapUrl(urlset, ns, $"{domain}/shops/{shop.ShopId}", lastMod, "weekly", "0.7");
+            AddSitemapUrl(
+                urlset,
+                knownLocations,
+                $"{domain}/products?categoryIds={categoryId.ToString(CultureInfo.InvariantCulture)}",
+                null,
+                "weekly",
+                "0.6");
         }
-
-        var doc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), urlset);
-        return Content(doc.ToString(), "application/xml", Encoding.UTF8);
     }
 
     /// <summary>
-    /// Endpoint to clear Prerender.io memory cache
-    /// Route: POST /api/seo/clear-cache
+    /// Clears the shared in-memory cache. Restricted to administrators because this affects
+    /// application-wide cache entries, not only SEO data.
     /// </summary>
+    [Authorize(Roles = RoleConstants.Admin)]
     [HttpPost("api/seo/clear-cache")]
     public IActionResult ClearCache()
     {
-        if (_cache is MemoryCache memoryCache)
+        if (_cache is not MemoryCache memoryCache)
         {
-            memoryCache.Compact(1.0); // Evict 100% of entries
-            return Ok(new { status = true, message = "Prerender memory cache cleared successfully." });
+            return StatusCode(StatusCodes.Status501NotImplemented,
+                new { status = false, message = "Cache provider does not support bulk compact." });
         }
 
-        return Ok(new { status = false, message = "Cache provider does not support bulk compact." });
+        memoryCache.Compact(1.0);
+        return Ok(new { status = true, message = "Application memory cache cleared successfully." });
     }
 
-    private static void AddSitemapUrl(XElement parent, XNamespace ns, string loc, DateTime lastmod, string changefreq, string priority)
+    private string GetCanonicalDomain()
     {
-        parent.Add(new XElement(ns + "url",
-            new XElement(ns + "loc", loc),
-            new XElement(ns + "lastmod", lastmod.ToString("yyyy-MM-ddTHH:mm:ssK")),
-            new XElement(ns + "changefreq", changefreq),
-            new XElement(ns + "priority", priority)
-        ));
+        var configuredDomain = _configuration["SiteSettings:Domain"];
+        return (string.IsNullOrWhiteSpace(configuredDomain) ? DefaultDomain : configuredDomain).TrimEnd('/');
+    }
+
+    private static DateTime? GetLastModified(DateTime updatedAt, DateTime createdAt)
+    {
+        if (updatedAt != default)
+        {
+            return updatedAt;
+        }
+
+        return createdAt != default ? createdAt : null;
+    }
+
+    private static void AddSitemapUrl(
+        XElement parent,
+        ISet<string> knownLocations,
+        string location,
+        DateTime? lastModified,
+        string changeFrequency,
+        string priority)
+    {
+        if (string.IsNullOrWhiteSpace(location) || !knownLocations.Add(location))
+        {
+            return;
+        }
+
+        var url = new XElement(SitemapNamespace + "url",
+            new XElement(SitemapNamespace + "loc", location),
+            new XElement(SitemapNamespace + "changefreq", changeFrequency),
+            new XElement(SitemapNamespace + "priority", priority));
+
+        if (lastModified.HasValue)
+        {
+            url.Add(new XElement(
+                SitemapNamespace + "lastmod",
+                XmlConvert.ToString(lastModified.Value, XmlDateTimeSerializationMode.RoundtripKind)));
+        }
+
+        parent.Add(url);
+    }
+}
+        url.Add(new XElement(ns + "lastmod", lastmod.Value.ToString("yyyy-MM-ddTHH:mm:ssK")));
+        if (lastmod.HasValue)
+        {
+            url.Add(new XElement(ns + "lastmod", lastmod.Value.ToString("yyyy-MM-ddTHH:mm:ssK")));
+        }
+
+        parent.Add(url);
     }
 }

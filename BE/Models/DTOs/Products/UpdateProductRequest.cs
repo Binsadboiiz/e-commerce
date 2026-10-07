@@ -1,3 +1,5 @@
+using BE.Constants;
+
 namespace BE.Models.DTOs
 {
     public class UpdateProductRequest
@@ -10,7 +12,7 @@ namespace BE.Models.DTOs
         public decimal? DiscountPrice { get; set; }
         public string? ImageUrl { get; set; }
         public List<string>? ImageUrls { get; set; }
-        public string Status { get; set; } = "active";
+        public string Status { get; set; } = ProductConstants.ProductStatusActive;
         public int Stock { get; set; }
         public List<CreateVariantRequest>? Variants { get; set; }
     }

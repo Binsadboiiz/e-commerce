@@ -37,7 +37,7 @@ namespace BE.Models.Entities
 
         [Required]
         [MaxLength(20)]
-        public string Status { get; set; } = "active";
+        public string Status { get; set; } = BE.Constants.ProductConstants.ProductStatusActive;
 
         public string Slug { get; set; }
 

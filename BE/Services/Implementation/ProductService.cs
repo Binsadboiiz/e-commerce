@@ -172,6 +172,11 @@ namespace BE.Services.Implementation
             string sellerUserId,
             UpdateProductRequest request)
         {
+            if (!ProductConstants.IsAllowedStatus(request.Status))
+                throw new BE.Middlewares.AppException(
+                    $"Status must be one of: {string.Join(", ", ProductConstants.AllowedStatuses)}.",
+                    400);
+
             var product = await _context.Products
                 .Include(x => x.Shop)
                 .FirstOrDefaultAsync(x => x.ProductId == productId);
@@ -335,8 +340,8 @@ namespace BE.Services.Implementation
                 query = query.Where(p => p.Name.Contains(search));
 
             // FILTER theo status (nếu không truyền thì lấy tất cả)
-            if (!string.IsNullOrWhiteSpace(status) && status.ToLower() != "all")
-                query = query.Where(p => p.Status == status.ToLower());
+            if (!string.IsNullOrWhiteSpace(status) && status != "all")
+                query = query.Where(p => p.Status == status);
 
             // PROJECT — tính stock/sold từ Inventory
             var projected = query.Select(p => new

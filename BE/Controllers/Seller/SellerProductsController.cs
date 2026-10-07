@@ -80,6 +80,12 @@ namespace BE.Controllers.Seller
             long productId,
             UpdateProductRequest request)
         {
+            var errors = new ProductValidator().ValidateStatus(request.Status);
+            if (errors.Any())
+            {
+                return BadRequest(ApiResponse<object>.FailureResponse(string.Join(" ", errors)));
+            }
+
             string userId = UserClaimsHelper.GetUserId(User);
 
             var result = await _productService
