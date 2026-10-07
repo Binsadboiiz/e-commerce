@@ -26,6 +26,11 @@ builder.Services.AddSellerModule();
 builder.Services.AddAdminModule();
 
 
+// ── SEO & Prerender.io Dynamic Rendering Services ──
+builder.Services.AddMemoryCache();
+builder.Services.AddHttpClient("PrerenderClient");
+builder.Services.Configure<PrerenderOptions>(builder.Configuration.GetSection(PrerenderOptions.SectionName));
+
 // ── JWT Authentication ──
 builder.Services.AddJwtAuthentication(builder.Configuration);
 
@@ -124,6 +129,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ExceptionMiddleware>();
+app.UseMiddleware<PrerenderMiddleware>();
 
 // CORS must be executed before Authentication & Authorization
 app.UseCors("AllowFrontend");

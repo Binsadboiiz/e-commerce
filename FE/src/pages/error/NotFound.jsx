@@ -7,6 +7,8 @@ export default function NotFound() {
         <div className="flex flex-col items-center justify-center min-h-[70vh] px-4 text-center">
             <SEOHead 
                 title="404 - Trang Không Tồn Tại" 
+                statusCode={404}
+                isReady={true}
                 robots="noindex, nofollow" 
                 description="Rất tiếc, trang bạn đang tìm kiếm không tồn tại hoặc đã được di chuyển."
             />

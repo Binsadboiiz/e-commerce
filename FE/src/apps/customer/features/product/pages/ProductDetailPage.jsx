@@ -145,11 +145,25 @@ export default function ProductDetail() {
         setActiveSection(sectionId);
     }, []);
 
-    if (loading) return <ProductDetailSkeleton />;
+    if (loading) {
+        return (
+            <>
+                <SEOHead title="Đang tải sản phẩm..." isReady={false} />
+                <ProductDetailSkeleton />
+            </>
+        );
+    }
 
     if (!product) {
         return (
             <div className={styles.notFound}>
+                <SEOHead 
+                    title="Sản Phẩm Không Tồn Tại" 
+                    description="Rất tiếc, sản phẩm bạn đang tìm kiếm không tồn tại hoặc đã ngưng kinh doanh."
+                    statusCode={404} 
+                    robots="noindex, nofollow" 
+                    isReady={true} 
+                />
                 <span className={styles.notFoundIcon}>🔍</span>
                 <p>Product not found.</p>
                 <a href={ROUTES.PRODUCTS_LIST} className={styles.notFoundLink}>
@@ -188,12 +202,12 @@ export default function ProductDetail() {
         "@context": "https://schema.org/",
         "@type": "Product",
         "name": product.name,
-        "image": product.images?.[0] || product.imageUrl,
+        "image": product.images?.[0]?.imageUrl || product.imageUrl || "/logo.png",
         "description": product.description || `Mua sản phẩm ${product.name} giá rẻ, giao hàng tận nơi.`,
         "sku": `PROD-${product.productId}`,
         "brand": {
             "@type": "Brand",
-            "name": product.brandName || "Enterprise"
+            "name": product.brandName || "PolarisX"
         },
         "offers": {
             "@type": "Offer",
@@ -207,8 +221,10 @@ export default function ProductDetail() {
         <div className={styles.page}>
             <SEOHead 
                 title={`${product.name} - Mua Ngay Giá Tốt`}
-                description={product.description?.substring(0, 160) || `Sản phẩm ${product.name} chính hãng, ưu đãi độc quyền tại E-Commerce Enterprise.`}
-                ogImage={product.images?.[0] || product.imageUrl}
+                description={product.description?.substring(0, 160) || `Sản phẩm ${product.name} chính hãng, ưu đãi độc quyền tại PolarisX Mall.`}
+                ogImage={product.images?.[0]?.imageUrl || product.imageUrl || "/logo.png"}
+                statusCode={200}
+                isReady={true}
                 jsonLd={productJsonLd}
             />
 

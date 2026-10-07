@@ -62,11 +62,26 @@ export default function ProductList() {
 
     const searchQuery = searchParams.get("q") || "";
 
+    const itemListJsonLd = Array.isArray(products) && products.length > 0 ? {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "numberOfItems": products.length,
+        "itemListElement": products.map((prod, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "name": prod.name,
+            "url": `${window.location.origin}/products/${prod.slug || prod.productId}`
+        }))
+    } : null;
+
     return (
         <div className={styles.container}>
             <SEOHead 
                 title={searchQuery ? `Tìm kiếm: "${searchQuery}"` : "Danh Sách Sản Phẩm Tất Cả Nổi Bật"} 
-                description="Khám phá bộ sưu tập sản phẩm đa dạng, chất lượng cao với giá cực tốt tại E-Commerce Enterprise."
+                description="Khám phá bộ sưu tập sản phẩm đa dạng, chất lượng cao với giá cực tốt tại PolarisX Mall."
+                isReady={!loading}
+                statusCode={200}
+                jsonLd={itemListJsonLd}
             />
 
             {/* SIDEBAR */}
