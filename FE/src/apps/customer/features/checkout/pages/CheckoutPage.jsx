@@ -7,6 +7,7 @@ import { ROUTES } from "@/config/route.config";
 import Button from "@/shared/components/ui/Button";
 import SEOHead from "@/shared/components/SEOHead";
 import "./CheckoutPage.css";
+import { notify } from "@/shared/utils/Notify";
 
 const currency = new Intl.NumberFormat("vi-VN", {
     style: "currency",
@@ -230,7 +231,8 @@ export default function CheckoutPage() {
                 await fetchCart();
             }
 
-            window.alert(`Order placed successfully. Order ID: ${orderResult?.orderId}`);
+            // window.alert(`Order placed successfully. Order ID: ${orderResult?.orderId}`);
+            notify.success("Order placed successfully!")
             navigate(ROUTES.ORDER_TRACKING.replace(":orderId", String(orderResult?.orderId)));
         } catch (err) {
             setError(err.message || "Failed to place order.");
@@ -478,7 +480,7 @@ export default function CheckoutPage() {
                                 fullWidth
                                 onClick={handlePlaceOrder}
                                 isLoading={placingOrder}
-                                disabled={!preview || previewLoading || !selectedAddress}
+                                disabled={!preview || previewLoading || !selectedAddress} replace
                             >
                                 Place Order
                             </Button>

@@ -35,5 +35,38 @@ export const sellerProductApi = {
 
     async deleteProduct(id) {
         return axiosClient.delete(`${SELLER_PRODUCTS_URL}/remove/${id}`);
+    },
+
+    /**
+     * Upload single image to Cloudinary CDN
+     */
+    async uploadImage(file) {
+        const formData = new FormData();
+        formData.append("file", file);
+        return axiosClient.post("/images/upload", formData, {
+            timeout: 60000,
+        });
+    },
+
+    /**
+     * Upload multiple images to Cloudinary CDN
+     */
+    async uploadImages(files) {
+        const formData = new FormData();
+        const fileList = Array.isArray(files) ? files : Array.from(files);
+        fileList.forEach((file) => {
+            formData.append("files", file);
+        });
+        return axiosClient.post("/images/upload-multiple", formData, {
+            timeout: 60000,
+        });
+    },
+
+    async getCategories() {
+        return axiosClient.get("/categories");
+    },
+
+    async getBrands() {
+        return axiosClient.get("/brands");
     }
 };

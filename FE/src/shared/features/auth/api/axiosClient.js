@@ -20,11 +20,13 @@ axiosClient.interceptors.request.use(
     (config) => {
         if (!navigator.onLine) {
             notify.error("No Internet Connection");
-
-            return Promise.reject(
-                new Error("No Internet Connection")
-            );
+            return Promise.reject(new Error("No Internet Connection"));
         }
+
+        if (config.data instanceof FormData) {
+            delete config.headers["Content-Type"];
+        }
+
         return config;
     },
     (error) => {

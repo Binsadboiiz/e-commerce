@@ -17,17 +17,30 @@ namespace BE.Services.Implementation
 
         public CloudinaryService(IConfiguration config)
         {
-            var cloudName = config["Cloudinary:CloudName"];
-            var apiKey = config["Cloudinary:ApiKey"];
-            var apiSecret = config["Cloudinary:ApiSecret"];
+            var cloudName = config["Cloudinary:CloudName"]
+                            ?? Environment.GetEnvironmentVariable("CLOUDINARY_CLOUD_NAME");
+            var apiKey = config["Cloudinary:ApiKey"]
+                         ?? Environment.GetEnvironmentVariable("CLOUDINARY_API_KEY");
+            var apiSecret = config["Cloudinary:ApiSecret"]
+                          ?? Environment.GetEnvironmentVariable("CLOUDINARY_API_SECRET");
 
-            if (string.IsNullOrWhiteSpace(cloudName) || string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(apiSecret))
+            var cloudinaryUrl = Environment.GetEnvironmentVariable("CLOUDINARY_URL");
+
+            if (!string.IsNullOrWhiteSpace(cloudinaryUrl))
             {
-                throw new InvalidOperationException("Cloudinary credentials are not properly configured in settings or environment variables.");
+                _cloudinary = new Cloudinary(cloudinaryUrl);
+            }
+            else if (!string.IsNullOrWhiteSpace(cloudName) && !string.IsNullOrWhiteSpace(apiKey) && !string.IsNullOrWhiteSpace(apiSecret))
+            {
+                var account = new Account(cloudName, apiKey, apiSecret);
+                _cloudinary = new Cloudinary(account);
+            }
+            else
+            {
+                throw new InvalidOperationException(
+                    "Cloudinary credentials are not properly configured. Please set 'Cloudinary:CloudName', 'Cloudinary:ApiKey', and 'Cloudinary:ApiSecret' in appsettings.Development.json or set environment variables (Cloudinary__ApiKey, Cloudinary__ApiSecret, or CLOUDINARY_URL).");
             }
 
-            var account = new Account(cloudName, apiKey, apiSecret);
-            _cloudinary = new Cloudinary(account);
             _cloudinary.Api.Secure = true; // Enforce HTTPS for Cloudinary URL generation
         }
 
@@ -70,6 +83,21 @@ namespace BE.Services.Implementation
                 throw new AppException($"Cloudinary upload failed: {result.Error.Message}", 500);
 
             return result.SecureUrl?.ToString() ?? "";
+        }
+
+        /// <summary>
+        /// Validates and uploads multiple image files concurrently to Cloudinary CDN.
+        /// </summary>
+        /// <param name="files">List of form files submitted by the client.</param>
+        /// <returns>List of secure HTTPS URLs of the uploaded images.</returns>
+        public async Task<List<string>> UploadImagesAsync(IEnumerable<IFormFile> files)
+        {
+            if (files == null || !files.Any())
+                throw new AppException("No files provided for upload.", 400);
+
+            var uploadTasks = files.Select(file => UploadImageAsync(file));
+            var results = await Task.WhenAll(uploadTasks);
+            return results.ToList();
         }
     }
 }

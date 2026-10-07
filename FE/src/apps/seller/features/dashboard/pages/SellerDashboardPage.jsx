@@ -263,12 +263,12 @@ export const SellerDashboard = () => {
                 </div>
                 <div className={styles.filterActions}>
                     <div className="d-flex align-items-center gap-2">
-                        
+                        <Calendar size={18} className="text-secondary" />
                         <select 
                             className={styles.select} 
                             value={timeRange} 
                             onChange={(e) => setTimeRange(e.target.value)}
-                        > <Calendar size={18} className="text-secondary" />
+                        >
                             <option value="today">Today</option>
                             <option value="7d">Last 7 days</option>
                             <option value="30d">Last 30 days</option>

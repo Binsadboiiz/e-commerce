@@ -4,6 +4,7 @@ import axiosClient from "@/shared/features/auth/api/axiosClient.js";
 import { sellerVoucherApi } from "../api/sellerVoucherApi.js";
 import { notify } from "@/shared/utils/Notify.js";
 import Button from "@/shared/components/ui/Button.jsx";
+import SEOHead from "@/shared/components/SEOHead.jsx";
 import "./SellerVouchersPage.css";
 
 const currencyFormatter = new Intl.NumberFormat("vi-VN", {

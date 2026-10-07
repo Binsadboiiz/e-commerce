@@ -54,9 +54,9 @@ export default function Sidebar({ isCollapsed, onToggle }) {
             } catch (error) {
                 console.warn("Logout API error:", error);
             } finally {
+                navigate(ROUTES.LOGIN);
                 setUser(null);
                 notify.success("Logged out successfully");
-                navigate(ROUTES.LOGIN);
             }
         }
     };

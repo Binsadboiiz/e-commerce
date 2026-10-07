@@ -3,7 +3,7 @@ import { useAuth } from "@/shared/features/auth/hooks/useAuth"
 import { useRole } from "@/shared/features/auth/hooks/useRole";
 
 // FLAG TẠM THỜI TẮT BẢO VỆ ROUTE ĐỂ TEST GIAO DIỆN (Đổi thành false khi muốn bật lại)
-const DISABLE_PROTECTION = true;
+const DISABLE_PROTECTION = false;
 
 // Nhận vào children (nội dung trang cần bảo vệ) và allowedRoles (mảng các quyền được phép truy cập)
 const ProtectedRoute = ({ children, allowedRoles }) => {

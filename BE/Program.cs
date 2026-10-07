@@ -96,6 +96,19 @@ builder.Services.AddRateLimiter(options =>
                 AutoReplenishment = true
             }
         ));
+
+        // 4. Place order Policy: Limit of 5 place order request per minute per IP
+        options.AddPolicy("PlaceOrder", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknow",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 30,
+                Window = TimeSpan.FromMinutes(1),
+                QueueLimit = 1,
+                AutoReplenishment = true
+            }
+        ));
 });
 
 

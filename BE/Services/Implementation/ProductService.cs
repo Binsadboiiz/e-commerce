@@ -60,6 +60,18 @@ namespace BE.Services.Implementation
                 var baseSlug = SlugHelper.GenerateSlug(request.Name);
                 var slug = await GenerateUniqueSlugAsync(baseSlug);
 
+                var imageList = request.ImageUrls?.Where(url => !string.IsNullOrWhiteSpace(url)).ToList() ?? new List<string>();
+                if (!imageList.Any() && !string.IsNullOrWhiteSpace(request.ImageUrl))
+                {
+                    imageList.Add(request.ImageUrl);
+                }
+
+                var primaryImage = imageList.FirstOrDefault() ?? request.ImageUrl;
+
+                var basePrice = request.Price > 0 
+                    ? request.Price 
+                    : (request.Variants.Any() ? request.Variants.Min(v => v.Price) : 0);
+
                 var product = new Product
                 {
                     Name = request.Name,
@@ -69,13 +81,31 @@ namespace BE.Services.Implementation
                     RetailerId = sellerUserId,
                     CategoryId = request.CategoryId,
                     BrandId = request.BrandId,
+                    Price = basePrice,
+                    DiscountPrice = request.DiscountPrice,
                     Status = ProductConstants.ProductStatusActive,
-                    Image = request.ImageUrl,
+                    Image = primaryImage,
                     CreatedAt = DateTime.UtcNow,
                 };
 
                 _context.Products.Add(product);
                 await _context.SaveChangesAsync();
+
+                if (imageList.Any())
+                {
+                    for (int i = 0; i < imageList.Count; i++)
+                    {
+                        var pImg = new ProductImage
+                        {
+                            ProductId = product.ProductId,
+                            ImageUrl = imageList[i],
+                            IsPrimary = (i == 0),
+                            SortOrder = i,
+                            CreatedAt = DateTime.UtcNow
+                        };
+                        _context.ProductImages.Add(pImg);
+                    }
+                }
 
                 int totalStock = 0;
 
@@ -161,10 +191,38 @@ namespace BE.Services.Implementation
 
             product.Name = request.Name;
             product.Description = request.Description;
-            product.Status = request.Status;
+            if (request.CategoryId > 0) product.CategoryId = request.CategoryId;
+            if (request.BrandId > 0) product.BrandId = request.BrandId;
             product.Price = request.Price;
-            
-            if (request.ImageUrl != null)
+            product.DiscountPrice = request.DiscountPrice;
+            product.Status = request.Status;
+
+            var imageList = request.ImageUrls?.Where(url => !string.IsNullOrWhiteSpace(url)).ToList();
+            if (imageList != null && imageList.Any())
+            {
+                product.Image = imageList.First();
+
+                // Remove existing product images
+                var existingImages = await _context.ProductImages
+                    .Where(pi => pi.ProductId == productId)
+                    .ToListAsync();
+                _context.ProductImages.RemoveRange(existingImages);
+
+                // Add new images
+                for (int i = 0; i < imageList.Count; i++)
+                {
+                    var pImg = new ProductImage
+                    {
+                        ProductId = product.ProductId,
+                        ImageUrl = imageList[i],
+                        IsPrimary = (i == 0),
+                        SortOrder = i,
+                        CreatedAt = DateTime.UtcNow
+                    };
+                    _context.ProductImages.Add(pImg);
+                }
+            }
+            else if (request.ImageUrl != null)
             {
                 product.Image = request.ImageUrl;
             }
@@ -338,8 +396,17 @@ namespace BE.Services.Implementation
                         .Where(i => i.IsPrimary)
                         .Select(i => i.ImageUrl)
                         .FirstOrDefault() ?? x.Product.Image,
+                    ImageUrls = x.Product.Images.Any()
+                        ? x.Product.Images
+                            .OrderByDescending(i => i.IsPrimary)
+                            .ThenBy(i => i.SortOrder)
+                            .Select(i => i.ImageUrl)
+                            .ToList()
+                        : (!string.IsNullOrEmpty(x.Product.Image) ? new List<string> { x.Product.Image } : new List<string>()),
                     RatingAvg = x.Product.RatingAvg,
                     RatingCount = x.Product.RatingCount,
+                    CategoryId = x.Product.CategoryId,
+                    BrandId = x.Product.BrandId,
                     CategoryName = x.Product.Category != null ? x.Product.Category.Type : null,
                     BrandName = x.Product.Brand != null ? x.Product.Brand.Name : null,
                     Status = x.Product.Status,

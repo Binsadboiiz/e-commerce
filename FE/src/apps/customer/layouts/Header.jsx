@@ -115,10 +115,10 @@ function Header() {
                         <SearchBar initialQuery={initialQuery} placeholder={t('searchPlaceholder')} />
                         <div className={styles.popularTags}>
                             <span>{t('searchSuggestions')}</span>
-                            <Link to="/products?q=Áo+khoác" className={styles.tagLink}>Áo khoác</Link>
-                            <Link to="/products?q=Điện+thoại" className={styles.tagLink}>Điện thoại</Link>
-                            <Link to="/products?q=Tai+nghe" className={styles.tagLink}>Tai nghe</Link>
-                            <Link to="/products?q=Giày" className={styles.tagLink}>Giày thể thao</Link>
+                            <Link to="/products?categoryIds=3" className={styles.tagLink}>Áo khoác</Link>
+                            <Link to="/products?categoryIds=1" className={styles.tagLink}>Điện thoại</Link>
+                            <Link to="/products?categoryIds=2" className={styles.tagLink}>Laptop</Link>
+                            <Link to="/products?categoryIds=6" className={styles.tagLink}>Giày thể thao</Link>
                         </div>
                     </div>
 

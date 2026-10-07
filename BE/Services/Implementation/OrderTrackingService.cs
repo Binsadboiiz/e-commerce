@@ -29,11 +29,13 @@ namespace BE.Services.Implementation
         {
             try
             {
-                // Fetch order with related tracking events, shipping details, and line items
+                // Fetch order with related tracking events, shipping details, line items and product images
                 var order = await _context.Orders
                     .Include(o => o.OrderTrackings)
                     .Include(o => o.ShippingDetail)
                     .Include(o => o.OrderItems)
+                        .ThenInclude(i => i.Product)
+                            .ThenInclude(p => p.Images)
                     .FirstOrDefaultAsync((o => o.OrderId == orderId
                                                && o.CustomerId == userId));
                 
@@ -64,6 +66,8 @@ namespace BE.Services.Implementation
                 var orders = await _context.Orders
                     .AsNoTracking()
                     .Include(x => x.OrderItems)
+                        .ThenInclude(i => i.Product)
+                            .ThenInclude(p => p.Images)
                     .Where(x => x.CustomerId == userId)
                     .OrderByDescending(x => x.Create_At)
                     .ToListAsync();
@@ -233,12 +237,24 @@ namespace BE.Services.Implementation
                 PaymentMethod = order.PaymentMethod,
                 PaymentStatus = order.PaymentStatus,
                 Items = order.OrderItems
-                    .Select(i => new OrderItemSummaryDto
-                {
-                    ProductName = i.ProductName,
-                    Price = i.Price,
-                    Quantity = i.Quantity
-                }).ToList()
+                    .Select(i => {
+                        string? img = i.ProductImage;
+                        if (string.IsNullOrWhiteSpace(img) && i.Product != null)
+                        {
+                            img = i.Product.Images?.FirstOrDefault(p => p.IsPrimary)?.ImageUrl
+                                  ?? i.Product.Images?.FirstOrDefault()?.ImageUrl
+                                  ?? i.Product.Image;
+                        }
+                        return new OrderItemSummaryDto
+                        {
+                            ProductName = i.ProductName,
+                            ProductImage = img,
+                            VariantName = i.VariantName,
+                            VariantValue = i.VariantValue,
+                            Price = i.Price,
+                            Quantity = i.Quantity
+                        };
+                    }).ToList()
             };
         }
         
@@ -247,6 +263,15 @@ namespace BE.Services.Implementation
         /// </summary>
         private MyOrderDto MapMyOrder(Order o)
         {
+            var firstItem = o.OrderItems.FirstOrDefault();
+            string? firstImage = firstItem?.ProductImage;
+            if (string.IsNullOrWhiteSpace(firstImage) && firstItem?.Product != null)
+            {
+                firstImage = firstItem.Product.Images?.FirstOrDefault(p => p.IsPrimary)?.ImageUrl
+                             ?? firstItem.Product.Images?.FirstOrDefault()?.ImageUrl
+                             ?? firstItem.Product.Image;
+            }
+
             return new MyOrderDto
             {
                 OrderId = o.OrderId,
@@ -254,7 +279,8 @@ namespace BE.Services.Implementation
                 StatusLabel = o.Status,
                 FinalAmount = o.FinalAmount,
                 ItemCount = o.OrderItems.Count,
-                FirstItemName = o.OrderItems.FirstOrDefault()?.ProductName,
+                FirstItemName = firstItem?.ProductName,
+                FirstItemImage = firstImage,
                 OrderDate = o.Create_At,
                 EstimatedDeliveryDate = o.EstimatedDeliveryDate
             };

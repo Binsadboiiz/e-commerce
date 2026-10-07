@@ -4,11 +4,16 @@ import ListCategory from './category/ListCategory'
 import FlashSale from './flash-sale/FlashSale'
 import TopResearch from './top-research/TopResearch'
 import RecommendedProducts from './RecommendedProducts'
+import SEOHead from '@/shared/components/SEOHead'
 
 export default function HomePage() {
 
   return (
     <div className={styles.homepageContainer}>
+      <SEOHead 
+                      title="Trang chủ - E-Commerce Enterprise"
+                      description="Khám phá bộ sưu tập sản phẩm đa dạng, chất lượng cao với giá cực tốt tại E-Commerce Enterprise."
+                  />
 
       {/* banner */}
       <Banner />

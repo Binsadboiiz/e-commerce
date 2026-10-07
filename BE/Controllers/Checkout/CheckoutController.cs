@@ -51,6 +51,7 @@ namespace BE.Controllers.Checkout
         }
 
         [HttpPost("place-order")]
+        [EnableRateLimiting("PlaceOrder")]
         public async Task<IActionResult> PlaceCartOrder([FromBody] CheckoutPlaceOrderRequest request)
         {
             var userId = UserClaimsHelper.GetUserId(User);
@@ -67,6 +68,7 @@ namespace BE.Controllers.Checkout
         }
 
         [HttpPost("buy-now/place-order")]
+        [EnableRateLimiting("PlaceOrder")]
         public async Task<IActionResult> PlaceBuyNow([FromBody] BuyNowRequest request)
         {
             var userId = UserClaimsHelper.GetUserId(User);

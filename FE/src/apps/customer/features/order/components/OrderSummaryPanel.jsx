@@ -39,10 +39,20 @@ export default function OrderSummaryPanel({ summary }) {
                 <p className="mb-2 text-sm font-semibold text-slate-800">Products ({items.length})</p>
                 <div className="space-y-2">
                     {items.map((item, index) => (
-                        <div key={`${item.productName}-${index}`} className="flex items-start justify-between gap-3 text-sm">
-                            <div>
-                                <p className="font-medium text-slate-800">{item.productName}</p>
-                                <p className="text-xs text-slate-500">Qty: {item.quantity}</p>
+                        <div key={`${item.productName}-${index}`} className="flex items-center justify-between gap-3 text-sm py-2 border-b border-slate-100 last:border-none">
+                            <div className="flex items-center gap-3">
+                                {item.productImage ? (
+                                    <img src={item.productImage} alt={item.productName} className="w-12 h-12 object-cover rounded-lg border border-slate-200" />
+                                ) : (
+                                    <div className="w-12 h-12 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-[10px] text-slate-400 font-medium">No img</div>
+                                )}
+                                <div>
+                                    <p className="font-medium text-slate-800">{item.productName}</p>
+                                    {(item.variantName || item.variantValue) && (
+                                        <p className="text-xs text-slate-400">{item.variantName}: {item.variantValue}</p>
+                                    )}
+                                    <p className="text-xs text-slate-500">Qty: {item.quantity}</p>
+                                </div>
                             </div>
                             <p className="font-semibold text-slate-700">{currency.format((item.price || 0) * (item.quantity || 0))}</p>
                         </div>

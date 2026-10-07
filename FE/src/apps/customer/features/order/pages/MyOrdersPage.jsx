@@ -52,7 +52,7 @@ export default function MyOrdersPage() {
                     <div className={styles.stateCard}>
                         <ShoppingBag size={40} className="mb-3 text-slate-400" />
                         <p className="text-sm font-medium text-slate-600 mb-4">You have no orders yet.</p>
-                        <Link to={ROUTES.PRODUCTS} className={styles.buttonPrimary}>
+                        <Link to={ROUTES.PRODUCTS_LIST} className={styles.buttonPrimary}>
                             Shop now
                         </Link>
                     </div>

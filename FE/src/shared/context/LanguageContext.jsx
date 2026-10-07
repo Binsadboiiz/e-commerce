@@ -102,6 +102,7 @@ const dictionary = {
     privacyPolicy: "Privacy Policy",
     termsOfService: "Terms of Service",
     legalTerms: "Terms & Conditions",
+    
 
     // Cart
     emptyTitle: "Your cart is empty",

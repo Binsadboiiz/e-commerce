@@ -50,7 +50,7 @@ namespace BE.Helpers
             // 4. Cấu hình các thành phần chính của JWT
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(30),
+                expires: DateTime.UtcNow.AddMinutes(60),
                 signingCredentials: creds
             );
 

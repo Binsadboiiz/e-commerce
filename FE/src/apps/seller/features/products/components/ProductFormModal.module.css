@@ -16,7 +16,7 @@
 .modalContent {
     background: #ffffff;
     width: 100%;
-    max-width: 600px;
+    max-width: 680px;
     max-height: 90vh;
     border-radius: 16px;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
@@ -79,6 +79,12 @@
     color: #374151;
 }
 
+.gridTwoCols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
 .inputField, .selectField, .textareaField {
     width: 100%;
     padding: 10px 14px;
@@ -97,57 +103,120 @@
 }
 
 .textareaField {
-    min-height: 100px;
+    min-height: 90px;
     resize: vertical;
 }
 
-.imagePreviewContainer {
-    margin-top: 12px;
-    width: 100%;
-    height: 200px;
-    border: 2px dashed #d1d5db;
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
+.discountBadge {
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    background: #f9fafb;
-    overflow: hidden;
-    position: relative;
-}
-
-.imagePreview {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    background: #e5e7eb;
-}
-
-.noImageText {
-    color: #9ca3af;
-    font-size: 13px;
-    margin-top: 8px;
-    font-weight: 500;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #dc2626;
+    background: #fef2f2;
+    padding: 2px 8px;
+    border-radius: 4px;
+    width: fit-content;
 }
 
 .variantSection {
     background: #f9fafb;
-    padding: 16px;
+    padding: 18px;
     border-radius: 12px;
     border: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.variantSectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .variantTitle {
     font-size: 15px;
     font-weight: 700;
     color: #111827;
-    margin: 0 0 12px 0;
+    margin: 0;
+}
+
+.variantToggleLabel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4b5563;
+    cursor: pointer;
 }
 
 .variantRow {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
+}
+
+.variantListContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.variantCard {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr auto;
+    gap: 10px;
+    align-items: center;
+    background: #ffffff;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.variantCardHeader {
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7280;
+    margin-bottom: 4px;
+}
+
+.removeVariantBtn {
+    background: transparent;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.removeVariantBtn:hover {
+    background: #fef2f2;
+}
+
+.addVariantBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: #eff6ff;
+    color: #2563eb;
+    border: 1px dashed #93c5fd;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    width: fit-content;
+    transition: all 0.2s ease;
+}
+
+.addVariantBtn:hover {
+    background: #dbeafe;
 }
 
 .modalFooter {
@@ -157,83 +226,6 @@
     justify-content: flex-end;
     gap: 12px;
     background: #f9fafb;
-}
-
-.cancelBtn, .submitBtn {
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border: none;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.cancelBtn {
-    background: #ffffff;
-    color: #374151;
-    border: 1px solid #d1d5db;
-}
-
-.cancelBtn:hover {
-    background: #f3f4f6;
-    border-color: #9ca3af;
-}
-
-.submitBtn {
-    background: #111827;
-    color: #ffffff;
-}
-
-.submitBtn:hover {
-    background: #1f2937;
-    transform: translateY(-1px);
-}
-
-.submitBtn:disabled {
-    background: #9ca3af;
-    cursor: not-allowed;
-    transform: none;
-}
-
-/* Delete Modal Specific */
-.deleteIconWrapper {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: #fef2f2;
-    color: #ef4444;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 16px;
-}
-
-.deleteText {
-    text-align: center;
-    color: #4b5563;
-    font-size: 15px;
-    line-height: 1.5;
-    margin: 0;
-}
-
-.deleteBtn {
-    background: #ef4444;
-    color: #ffffff;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    border: none;
-    transition: all 0.2s ease;
-}
-
-.deleteBtn:hover {
-    background: #dc2626;
 }
 
 @keyframes fadeIn {
@@ -253,18 +245,10 @@
         margin: 16px;
         max-height: 95vh;
     }
-    .modalHeader {
-        padding: 16px;
-    }
-    .modalBody {
-        padding: 16px;
-        gap: 16px;
-    }
-    .variantRow {
+    .gridTwoCols {
         grid-template-columns: 1fr;
-        gap: 12px;
     }
-    .modalFooter {
-        padding: 12px 16px;
+    .variantCard {
+        grid-template-columns: 1fr 1fr;
     }
 }
