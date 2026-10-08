@@ -1,10 +1,12 @@
 import styles from './FlashSale.module.css';
 import FlashSaleSkeleton from './FlashSaleSkeleton';
+import { useLanguage } from '@/shared/context/LanguageContext';
 
 /**
  * @param {boolean} [loading=false] - Truyền vào khi section kết nối API thực
  */
 export default function FlashSale({ loading = false }) {
+    const { t } = useLanguage();
 
     if (loading) return <FlashSaleSkeleton count={8} />;
 
@@ -24,7 +26,7 @@ export default function FlashSale({ loading = false }) {
             <div className={styles.flashSaleContainer}>
 
                 <div className={styles.flashSaleHeader}>
-                    <h2 className={styles.sectionTitle}>Flash Sale</h2>
+                    <h2 className={styles.sectionTitle}>{t('home.flashSale')}</h2>
                     <div className={styles.flashSaleTimer}>02 : 15 : 30</div>
                 </div>
 

@@ -6,13 +6,15 @@ import ColorFilter from "./filters/ColorFilter";
 import SizeFilter from "./filters/SizeFilter";
 import MaterialFilter from "./filters/MaterialFilter";
 import { useSearchParams } from "react-router-dom";
+import { useLanguage } from "@/shared/context/LanguageContext";
 
 export default function SidebarFilter({ filterMeta }) {
+    const { t } = useLanguage();
     const [searchParams, setSearchParams] = useSearchParams();
 
     return (
         <aside className={styles.sidebar}>
-            <h3 className={styles.title}>Filter</h3>
+            <h3 className={styles.title}>{t('product.filter')}</h3>
 
             {/* CATEGORY */}
             <CategoryFilter

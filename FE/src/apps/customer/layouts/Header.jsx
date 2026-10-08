@@ -132,7 +132,7 @@ function Header() {
                             onClick={() => navigate(ROUTES.CART)}
                             role="button"
                             aria-label="Shopping Cart"
-                            title={t('cart')}
+                            title={t('header.cart')}
                         >
                             <div className={styles.cartIconWrapper}>
                                 <FiShoppingCart size={22} />
@@ -142,7 +142,7 @@ function Header() {
                                     </span>
                                 )}
                             </div>
-                            <span className={styles.cartLabel}>{t('cart')}</span>
+                            <span className={styles.cartLabel}>{t('header.cart')}</span>
                         </div>
 
                         {/* User Profile Widget */}

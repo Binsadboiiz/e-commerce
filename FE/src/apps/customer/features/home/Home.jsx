@@ -5,8 +5,10 @@ import FlashSale from './flash-sale/FlashSale'
 import TopResearch from './top-research/TopResearch'
 import RecommendedProducts from './RecommendedProducts'
 import SEOHead from '@/shared/components/SEOHead'
+import { useLanguage } from '@/shared/context/LanguageContext'
 
 export default function HomePage() {
+  const { t } = useLanguage();
 
   return (
     <div className={styles.homepageContainer}>
@@ -34,7 +36,7 @@ export default function HomePage() {
         <div className={styles.productContainer}>
 
           <div className={styles.productHeader}>
-            <h2 className={styles.sectionTitle}>Products</h2>
+            <h2 className={styles.sectionTitle}>{t('home.featuredProducts')}</h2>
           </div>
 
           <RecommendedProducts />

@@ -5,8 +5,10 @@ import EmptyCart from "../components/EmptyCart";
 import { FiShoppingCart } from 'react-icons/fi';
 import SEOHead from '@/shared/components/SEOHead';
 import styles from './CartPage.module.css';
+import { useLanguage } from '@/shared/context/LanguageContext';
 
 export default function CartPage() {
+    const { t } = useLanguage();
     const { cart, loading } = useCart();
 
     const hasItems = cart?.shopGroups?.length > 0;
@@ -22,16 +24,16 @@ export default function CartPage() {
     return (
         <div className={styles.page}>
             <SEOHead 
-                title="Giỏ Hàng Của Bạn" 
+                title={t('cart.shoppingCart')} 
                 description="Xem lại các sản phẩm trong giỏ hàng, cập nhật số lượng và chuẩn bị thanh toán an toàn, nhanh chóng."
             />
             <div className={styles.container}>
                 <div className={styles.header}>
                     <FiShoppingCart className="text-primary" size={26} />
-                    <h1 className={styles.heading}>Shopping Cart</h1>
+                    <h1 className={styles.heading}>{t('cart.shoppingCart')}</h1>
                     {hasItems && (
                         <span className="text-sm text-text-secondary ml-1">
-                            ({cart.totalItems} products)
+                            ({cart.totalItems})
                         </span>
                     )}
                 </div>
@@ -42,10 +44,10 @@ export default function CartPage() {
                         <div className={styles.tableHeader}>
                             <div className="w-[18px] flex-shrink-0"></div>
                             <div className="w-20 flex-shrink-0"></div>
-                            <div className="flex-1 text-sm text-text-secondary font-semibold">Product</div>
-                            <div className="w-28 text-center text-sm text-text-secondary font-semibold flex-shrink-0">Unit Price</div>
-                            <div className="w-[88px] text-center text-sm text-text-secondary font-semibold flex-shrink-0">Quantity</div>
-                            <div className="w-28 text-right text-sm text-text-secondary font-semibold flex-shrink-0">Total</div>
+                            <div className="flex-1 text-sm text-text-secondary font-semibold">{t('cart.shopGroup')} / {t('cart.actions')}</div>
+                            <div className="w-28 text-center text-sm text-text-secondary font-semibold flex-shrink-0">{t('cart.itemPrice')}</div>
+                            <div className="w-[88px] text-center text-sm text-text-secondary font-semibold flex-shrink-0">{t('cart.quantity')}</div>
+                            <div className="w-28 text-right text-sm text-text-secondary font-semibold flex-shrink-0">{t('cart.subtotal')}</div>
                             <div className="w-10 flex-shrink-0"></div>
                         </div>
 

@@ -4,8 +4,10 @@ import { useCart } from '../hooks/useCart';
 import { ROUTES } from '@/config/route.config';
 import styles from '../pages/CartPage.module.css';
 import formatPrice from '@/apps/customer/features/product/utils/formatPrice';
+import { useLanguage } from '@/shared/context/LanguageContext';
 
 export default function CartFooter() {
+    const { t } = useLanguage();
     const navigate = useNavigate();
     const {
         cart,
@@ -40,7 +42,7 @@ export default function CartFooter() {
                         )}
                     </div>
                     <span className="text-sm text-text-primary ml-2">
-                        Select All ({totalItems})
+                        {t('cart.selectAll')} ({totalItems})
                     </span>
                 </label>
 
@@ -52,7 +54,7 @@ export default function CartFooter() {
                                    hover:text-danger transition-colors"
                     >
                         <FiTrash2 size={14} />
-                        Delete
+                        {t('cart.deleteAll')}
                     </button>
                 )}
             </div>
@@ -62,7 +64,7 @@ export default function CartFooter() {
                 {/* Total Price */}
                 <div className="text-right">
                     <div className="text-sm text-text-secondary">
-                        Total amount ({selectedCount} items):
+                        {t('cart.totalAmount')} ({selectedCount}):
                     </div>
                     <div className="text-xl font-bold text-text-price">
                         {formatPrice(total)}
@@ -75,7 +77,7 @@ export default function CartFooter() {
                     disabled={selectedCount === 0}
                     className={styles.buttonPrimary}
                 >
-                    Checkout
+                    {t('cart.checkout')}
                 </button>
             </div>
         </div>

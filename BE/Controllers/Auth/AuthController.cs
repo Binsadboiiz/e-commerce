@@ -95,7 +95,7 @@ namespace BE.Controllers.Auth
                     HttpOnly = true, // Prevents client-side JavaScript access (XSS protection)
                     Secure = true,   // Requires HTTPS transmission
                     SameSite = SameSiteMode.None, // Supports cross-site API calls (e.g., local dev port differences)
-                    Expires = DateTime.UtcNow.AddDays(7)
+                    Expires = DateTime.UtcNow.AddDays(1)
                 }
             );
         }

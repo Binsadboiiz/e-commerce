@@ -11,9 +11,10 @@ import SidebarFilter from "../components/list/filter/SidebarFilter";
 import SortBar from "../components/list/sort/SortBar";
 import Pagination from "../components/list/pagination/Pagination";
 import SEOHead from "@/shared/components/SEOHead";
+import { useLanguage } from "@/shared/context/LanguageContext";
 
 export default function ProductList() {
-
+    const { t } = useLanguage();
     const [searchParams, setSearchParams] = useSearchParams();
 
     const page = Number(searchParams.get("page") || 1);
@@ -127,7 +128,7 @@ export default function ProductList() {
                 {/* EMPTY */}
                 {!loading && !error && (!products || products.length === 0) && (
                     <p className={styles.empty}>
-                        No products found
+                        {t('product.noProductsFound')}
                     </p>
                 )}
 

@@ -71,11 +71,11 @@ export default function Footer() {
                         <ul className={styles.contactList}>
                             <li>
                                 <FiMapPin size={16} />
-                                <span>Tòa nhà PolarisX, Phố Công Nghệ, Hà Nội</span>
+                                <span>{t('footer.address')}</span>
                             </li>
                             <li>
                                 <FiPhoneCall size={16} />
-                                <span>Hotline: 1900 8888 (8:00 - 21:00)</span>
+                                <span>{t('footer.hotlineHours')}</span>
                             </li>
                             <li>
                                 <FiMail size={16} />
@@ -93,12 +93,12 @@ export default function Footer() {
                     <div className={styles.colLink}>
                         <h4 className={styles.colTitle}>{t('colCustomerSupport')}</h4>
                         <ul className={styles.linkList}>
-                            <li><a href="#help">Trung Tâm Trợ Giúp</a></li>
-                            <li><a href="#guide">Hướng Dẫn Mua Hàng & Thanh Toán</a></li>
-                            <li><a href="#shipping">Chính Sách Vận Chuyển</a></li>
-                            <li><a href="#return">Chính Sách Đổi Trả & Hoàn Tiền</a></li>
-                            <li><a href="#warranty">Chính Sách Bảo Hành</a></li>
-                            <li><a href="#voucher">Hướng Dẫn Sử Dụng Voucher</a></li>
+                            <li><a href="#help">{t('footer.helpCenter')}</a></li>
+                            <li><a href="#guide">{t('footer.buyingGuide')}</a></li>
+                            <li><a href="#shipping">{t('footer.shippingPolicy')}</a></li>
+                            <li><a href="#return">{t('footer.returnPolicy')}</a></li>
+                            <li><a href="#warranty">{t('footer.warrantyPolicy')}</a></li>
+                            <li><a href="#voucher">{t('footer.voucherGuide')}</a></li>
                         </ul>
                     </div>
 
@@ -106,12 +106,12 @@ export default function Footer() {
                     <div className={styles.colLink}>
                         <h4 className={styles.colTitle}>{t('colAboutUs')}</h4>
                         <ul className={styles.linkList}>
-                            <li><a href="#about">Giới Thiệu Về Chúng Tôi</a></li>
-                            <li><a href="#careers">Tuyển Dụng (Careers)</a></li>
-                            <li><a href="#terms">Điều Khoản Sử Dụng</a></li>
-                            <li><Link to="/seller/register">Đăng Ký Bán Hàng (Seller)</Link></li>
-                            <li><a href="#privacy">Chính Sách Bảo Mật Thông Tin</a></li>
-                            <li><a href="#affiliate">Chương Trình Tiếp Thị Liên Kết</a></li>
+                            <li><a href="#about">{t('footer.aboutUs')}</a></li>
+                            <li><a href="#careers">{t('footer.careers')}</a></li>
+                            <li><a href="#terms">{t('footer.termsOfUse')}</a></li>
+                            <li><Link to="/seller/register">{t('footer.sellerRegisterLink')}</Link></li>
+                            <li><a href="#privacy">{t('footer.privacyPolicyInfo')}</a></li>
+                            <li><a href="#affiliate">{t('footer.affiliateProgram')}</a></li>
                         </ul>
                     </div>
 
@@ -119,7 +119,7 @@ export default function Footer() {
                     <div className={styles.colLink}>
                         <h4 className={styles.colTitle}>{t('colPaymentShip')}</h4>
                         <div className={styles.badgeSection}>
-                            <h5 className={styles.badgeSubtitle}>Phương Thức Thanh Toán</h5>
+                            <h5 className={styles.badgeSubtitle}>{t('footer.paymentMethods')}</h5>
                             <div className={styles.badgeGrid}>
                                 <span className={styles.payBadge}>COD</span>
                                 <span className={styles.payBadge}>VISA</span>
@@ -129,7 +129,7 @@ export default function Footer() {
                             </div>
                         </div>
                         <div className={styles.badgeSection}>
-                            <h5 className={styles.badgeSubtitle}>Đơn Vị Vận Chuyển</h5>
+                            <h5 className={styles.badgeSubtitle}>{t('footer.shippingPartners')}</h5>
                             <div className={styles.badgeGrid}>
                                 <span className={styles.shipBadge}>GHN</span>
                                 <span className={styles.shipBadge}>GHTK</span>

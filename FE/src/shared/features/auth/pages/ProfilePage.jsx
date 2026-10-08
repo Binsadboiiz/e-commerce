@@ -2,8 +2,10 @@ import { useAuth } from "../hooks/useAuth";
 import { User, Mail, Shield, Camera, CalendarDays } from "lucide-react";
 import SEOHead from "@/shared/components/SEOHead";
 import styles from "./ProfilePage.module.css";
+import { useLanguage } from "@/shared/context/LanguageContext";
 
 export default function ProfilePage() {
+    const { t } = useLanguage();
     const { user } = useAuth();
 
     if (!user) {
@@ -13,13 +15,13 @@ export default function ProfilePage() {
     return (
         <div className={styles.page}>
             <SEOHead 
-                title="Thông Tin Tài Khoản" 
+                title={t('profile.myProfile')} 
                 description="Quản lý hồ sơ thông tin cá nhân, vai trò tài khoản và bảo mật tại E-Commerce Enterprise."
             />
             <div className={styles.container}>
                 <div className={styles.titleSection}>
-                    <h2 className={styles.title}>My Profile</h2>
-                    <p className={styles.subtitle}>Manage your account information and preferences</p>
+                    <h2 className={styles.title}>{t('profile.myProfile')}</h2>
+                    <p className={styles.subtitle}>{t('profile.profileSubtitle')}</p>
                 </div>
                 
                 <div className={styles.card}>
@@ -56,7 +58,7 @@ export default function ProfilePage() {
                                     <Mail size={24} />
                                 </div>
                                 <div className={styles.infoBody}>
-                                    <p className={styles.infoLabel}>Email Address</p>
+                                    <p className={styles.infoLabel}>{t('profile.emailAddress')}</p>
                                     <p className={styles.infoValue}>{user.email || "No email provided"}</p>
                                 </div>
                             </div>
@@ -66,7 +68,7 @@ export default function ProfilePage() {
                                     <User size={24} />
                                 </div>
                                 <div className={styles.infoBody}>
-                                    <p className={styles.infoLabel}>Full Name</p>
+                                    <p className={styles.infoLabel}>{t('profile.fullName')}</p>
                                     <p className={styles.infoValue}>{user.fullName || "Not set"}</p>
                                 </div>
                             </div>
@@ -76,15 +78,15 @@ export default function ProfilePage() {
                                     <CalendarDays size={24} />
                                 </div>
                                 <div className={styles.infoBody}>
-                                    <p className={styles.infoLabel}>Member Status</p>
-                                    <p className={styles.infoValue}>Active User</p>
+                                    <p className={styles.infoLabel}>{t('profile.memberStatus')}</p>
+                                    <p className={styles.infoValue}>{t('profile.activeUser')}</p>
                                 </div>
                             </div>
                         </div>
 
                         <div className={styles.footerSection}>
                             <button className={styles.buttonPrimary}>
-                                Edit Profile
+                                {t('profile.editProfile')}
                             </button>
                         </div>
                     </div>

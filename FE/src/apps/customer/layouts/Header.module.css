@@ -301,16 +301,97 @@
 
 /* ── Responsive Header ── */
 @media (max-width: 900px) {
-  .topBar {
+  .topBarInner {
+    padding: 0.25rem 1rem;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  /* Hide secondary promo text on smaller screens, keeping essential links visible */
+  .topBarText {
     display: none;
   }
+
+  .topBarLeft,
+  .topBarRight {
+    gap: 0.5rem;
+  }
+
+  .divider {
+    display: none;
+  }
+
   .mainHeaderInner {
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 0.75rem;
+    padding: 0.5rem 1rem;
   }
+
+  .brandLogoLink {
+    order: 1;
+  }
+
+  .actionsSection {
+    order: 2;
+    gap: 0.75rem;
+  }
+
   .searchSection {
     order: 3;
     max-width: 100%;
     width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .topBar {
+    font-size: 0.7rem;
+    padding: 0.25rem 0;
+  }
+
+  .topBarInner {
+    padding: 0.25rem 0.5rem;
+    justify-content: space-between;
+  }
+
+  .topBarLeft {
+    gap: 0.35rem;
+  }
+
+  .topBarRight {
+    gap: 0.5rem;
+  }
+
+  .logoImage {
+    height: 30px;
+  }
+
+  .brandNamePrimary,
+  .brandNameSub {
+    font-size: 1.1rem;
+  }
+
+  .brandNameHighlight {
+    font-size: 1.2rem;
+  }
+
+  .cartLabel {
+    display: none;
+  }
+
+  .cartWidget {
+    padding: 0.35rem 0.5rem;
+  }
+
+  .userName {
+    display: none;
+  }
+
+  .userInfo {
+    padding: 0.25rem 0.4rem;
+  }
+
+  .popularTags {
+    display: none;
   }
 }
