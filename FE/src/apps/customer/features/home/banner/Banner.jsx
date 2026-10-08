@@ -1,4 +1,5 @@
-import styles from "./Banner.module.css"
+import styles from "./Banner.module.css";
+import { banners } from "./bannerConfig";
 
 export default function Banner() {
     return (
@@ -8,12 +9,17 @@ export default function Banner() {
 
                     {/* left banners */}
                     <div className={styles.bannerLeft}>
-                        <div className={styles.bannerItem}>
-                            <img src="/banner-left-1.jpg" alt="banner" />
-                        </div>
-                        <div className={styles.bannerItem}>
-                            <img src="/banner-left-2.jpg" alt="banner" />
-                        </div>
+                        {banners.left.map(banner => (
+                            <div key={banner.id} className={styles.bannerItem}>
+                                {banner.linkTo ? (
+                                    <a href={banner.linkTo}>
+                                        <img src={banner.imageUrl} alt="banner left" />
+                                    </a>
+                                ) : (
+                                    <img src={banner.imageUrl} alt="banner left" />
+                                )}
+                            </div>
+                        ))}
                     </div>
 
                     {/* center banner */}
@@ -21,37 +27,45 @@ export default function Banner() {
                         <div className={styles.bannerSlider}>
 
                             <div className={styles.bannerTrack}>
-                                <div className={styles.bannerSlide}>
-                                    <img src="/banner1.jpg" alt="banner" />
-                                </div>
-                                <div className={styles.bannerSlide}>
-                                    <img src="/banner2.jpg" alt="banner" />
-                                </div>
-                                <div className={styles.bannerSlide}>
-                                    <img src="/banner3.jpg" alt="banner" />
-                                </div>
+                                {banners.main.map(banner => (
+                                    <div key={banner.id} className={styles.bannerSlide}>
+                                        {banner.linkTo ? (
+                                            <a href={banner.linkTo}>
+                                                <img src={banner.imageUrl} alt="banner main" />
+                                            </a>
+                                        ) : (
+                                            <img src={banner.imageUrl} alt="banner main" />
+                                        )}
+                                    </div>
+                                ))}
                             </div>
 
                             {/* dots */}
                             <div className={styles.bannerDots}>
-                                <span className={`${styles.dot} ${styles.active}`}></span>
-                                <span className={styles.dot}></span>
-                                <span className={styles.dot}></span>
+                                {banners.main.map((banner, index) => (
+                                    <span 
+                                        key={banner.id} 
+                                        className={`${styles.dot} ${index === 0 ? styles.active : ''}`}
+                                    ></span>
+                                ))}
                             </div>
 
                         </div>
                     </div>
 
-
-
                     {/* right banners */}
                     <div className={styles.bannerRight}>
-                        <div className={styles.bannerItem}>
-                            <img src="/banner-right-1.jpg" alt="banner" />
-                        </div>
-                        <div className={styles.bannerItem}>
-                            <img src="/banner-right-2.jpg" alt="banner" />
-                        </div>
+                        {banners.right.map(banner => (
+                            <div key={banner.id} className={styles.bannerItem}>
+                                {banner.linkTo ? (
+                                    <a href={banner.linkTo}>
+                                        <img src={banner.imageUrl} alt="banner right" />
+                                    </a>
+                                ) : (
+                                    <img src={banner.imageUrl} alt="banner right" />
+                                )}
+                            </div>
+                        ))}
                     </div>
 
                 </div>
