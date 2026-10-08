@@ -1,17 +1,7 @@
 import styles from './RelatedProducts.module.css';
 import useRelatedProducts from '../../../hooks/useRelatedProducts';
 import ProductCard from '@/apps/customer/features/product/components/shared/ProductCard';
-
-/* Shimmer placeholder for a single product card */
-function RelatedSkeleton() {
-    return (
-        <div className={styles.skeletonCard}>
-            <div className={styles.skeletonImg} />
-            <div className={styles.skeletonLine} />
-            <div className={styles.skeletonLineShort} />
-        </div>
-    );
-}
+import ProductSkeleton from '@/apps/customer/features/product/components/shared/ProductSkeleton';
 
 export default function RelatedProducts({ categoryName, currentProductId }) {
 
@@ -25,16 +15,15 @@ export default function RelatedProducts({ categoryName, currentProductId }) {
 
             <h2 className={styles.heading}>You May Also Like</h2>
 
-            <div className={styles.grid}>
-                {loading
-                    ? Array.from({ length: 4 }).map((_, i) => (
-                        <RelatedSkeleton key={i} />
-                    ))
-                    : products.map(p => (
+            {loading ? (
+                <ProductSkeleton count={4} wrapperClass={styles.grid} />
+            ) : (
+                <div className={styles.grid}>
+                    {products.map(p => (
                         <ProductCard key={p.productId ?? p.slug} product={p} />
-                    ))
-                }
-            </div>
+                    ))}
+                </div>
+            )}
 
         </section>
     );

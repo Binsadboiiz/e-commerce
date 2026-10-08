@@ -5,6 +5,7 @@ import EmptyCart from "../components/EmptyCart";
 import { FiShoppingCart } from 'react-icons/fi';
 import SEOHead from '@/shared/components/SEOHead';
 import styles from './CartPage.module.css';
+import skeletonStyles from '@/shared/components/ui/Skeleton.module.css';
 import { useLanguage } from '@/shared/context/LanguageContext';
 
 export default function CartPage() {
@@ -72,32 +73,32 @@ export default function CartPage() {
 // ── Loading Skeleton ──
 function CartSkeleton() {
     return (
-        <div className="space-y-3 animate-pulse">
+        <div className="space-y-3">
             {/* Header skeleton */}
             <div className="flex items-center gap-3 mb-6">
-                <div className="w-6 h-6 bg-gray-200 rounded" />
-                <div className="w-32 h-7 bg-gray-200 rounded" />
+                <div className={`w-6 h-6 rounded ${skeletonStyles.skeleton}`} />
+                <div className={`w-32 h-7 rounded ${skeletonStyles.skeleton}`} />
             </div>
 
             {/* Table header */}
-            <div className="h-12 bg-gray-200 rounded-lg" />
+            <div className={`h-12 rounded-lg ${skeletonStyles.skeleton}`} />
 
             {/* Shop groups */}
             {[1, 2].map(i => (
                 <div key={i} className="bg-white rounded-lg overflow-hidden border border-gray-100">
-                    <div className="h-12 bg-gray-100 border-b border-gray-100" />
+                    <div className={`h-12 border-b border-gray-100 ${skeletonStyles.skeleton}`} />
                     {[1, 2].map(j => (
                         <div key={j} className="flex items-center gap-4 px-5 py-4 border-b border-gray-50">
-                            <div className="w-[18px] h-[18px] bg-gray-200 rounded" />
-                            <div className="w-20 h-20 bg-gray-200 rounded-lg" />
+                            <div className={`w-[18px] h-[18px] rounded ${skeletonStyles.skeleton}`} />
+                            <div className={`w-20 h-20 rounded-lg ${skeletonStyles.skeleton}`} />
                             <div className="flex-1 space-y-2">
-                                <div className="w-3/4 h-4 bg-gray-200 rounded" />
-                                <div className="w-1/4 h-3 bg-gray-200 rounded" />
+                                <div className={`w-3/4 h-4 rounded ${skeletonStyles.skeleton}`} />
+                                <div className={`w-1/4 h-3 rounded ${skeletonStyles.skeleton}`} />
                             </div>
-                            <div className="w-16 h-4 bg-gray-200 rounded" />
-                            <div className="w-20 h-8 bg-gray-200 rounded" />
-                            <div className="w-16 h-4 bg-gray-200 rounded" />
-                            <div className="w-8 h-8 bg-gray-200 rounded" />
+                            <div className={`w-16 h-4 rounded ${skeletonStyles.skeleton}`} />
+                            <div className={`w-20 h-8 rounded ${skeletonStyles.skeleton}`} />
+                            <div className={`w-16 h-4 rounded ${skeletonStyles.skeleton}`} />
+                            <div className={`w-8 h-8 rounded ${skeletonStyles.skeleton}`} />
                         </div>
                     ))}
                 </div>
