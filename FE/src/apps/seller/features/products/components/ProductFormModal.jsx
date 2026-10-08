@@ -25,7 +25,7 @@ const getInitialFormData = (data) => {
         discountPrice: data?.discountPrice || "",
         imageUrl: data?.imageUrl || (imagesList[0] || ""),
         imageUrls: imagesList,
-        status: data?.status || "active",
+        status: data?.status || "ACTIVE",
         initialStock: data?.stock || 0,
         hasMultipleVariants: hasVariants,
         variants: hasVariants ? data.variants.map(v => ({
@@ -453,9 +453,9 @@ export default function ProductFormModal({ isOpen, onClose, onSubmit, initialDat
                                     onChange={handleChange}
                                     className={styles.selectField}
                                 >
-                                    <option value="active">Active</option>
-                                    <option value="inactive">Inactive</option>
-                                    <option value="out_of_stock">Out of Stock</option>
+                                    <option value="ACTIVE">Active</option>
+                                    <option value="INACTIVE">Inactive</option>
+                                    <option value="OUT_OF_STOCK">Out of Stock</option>
                                 </select>
                             </div>
                         )}

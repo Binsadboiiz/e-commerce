@@ -13,11 +13,13 @@ namespace BE.Constants
 
         public static readonly string[] AllowedStatuses =
         {
-            ProductStatusDraft,
             ProductStatusActive,
             ProductStatusInactive,
             ProductStatusDeleted,
             ProductStatusOutOfStock
         };
+
+        public static bool IsAllowedStatus(string? status) =>
+            status is not null && AllowedStatuses.Contains(status, StringComparer.Ordinal);
     }
 }

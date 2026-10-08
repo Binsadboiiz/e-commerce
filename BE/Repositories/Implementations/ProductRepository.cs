@@ -23,7 +23,7 @@ namespace BE.Repositories.Implementations
                 .Include(p => p.Variants)
                 .Include(p => p.Images)
                 .AsNoTracking()
-                .Where(p => p.Status == "active");
+                .Where(p => p.Status == BE.Constants.ProductConstants.ProductStatusActive);
         }
 
         public async Task<Product?> GetByIdAsync(long id)
@@ -36,7 +36,8 @@ namespace BE.Repositories.Implementations
         {
             return await _context.Products
                 .AsNoTracking()
-                .FirstOrDefaultAsync(p => p.Slug == slug);
+                .FirstOrDefaultAsync(p =>
+                    p.Slug == slug && p.Status == BE.Constants.ProductConstants.ProductStatusActive);
         }
     }
 }

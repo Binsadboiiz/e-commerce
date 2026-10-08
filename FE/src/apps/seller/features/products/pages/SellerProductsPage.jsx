@@ -11,9 +11,10 @@ import { notify } from "@/shared/utils/Notify";
 // Cấu hình filter options
 const STATUS_OPTIONS = [
     { value: "all", label: "All" },
-    { value: "active", label: "Active" },
-    { value: "inactive", label: "Inactive" },
-    { value: "deleted", label: "Deleted" },
+    { value: "ACTIVE", label: "Active" },
+    { value: "INACTIVE", label: "Inactive" },
+    { value: "OUT_OF_STOCK", label: "Out of Stock" },
+    { value: "DELETED", label: "Deleted" },
 ];
 
 const SORT_OPTIONS = [
@@ -61,13 +62,13 @@ export default function SellerProducts() {
     };
 
     const handleOpenUpdate = (product) => {
-        if (product.status === "deleted") return; // Prevent editing deleted items
+        if (product.status === "DELETED") return; // Prevent editing deleted items
         setSelectedProduct(product);
         setIsFormModalOpen(true);
     };
 
     const handleOpenDelete = (product) => {
-        if (product.status === "deleted") return; // Prevent deleting already deleted items
+        if (product.status === "DELETED") return; // Prevent deleting already deleted items
         setSelectedProduct(product);
         setIsDeleteModalOpen(true);
     };
@@ -149,11 +150,12 @@ export default function SellerProducts() {
     // Status badge
     const getStatusBadge = (productStatus) => {
         const map = {
-            active: { class: styles.badgeActive, label: "Active" },
-            inactive: { class: styles.badgeInactive, label: "Inactive" },
-            deleted: { class: styles.badgeDeleted, label: "Deleted" },
+            ACTIVE: { class: styles.badgeActive, label: "Active" },
+            INACTIVE: { class: styles.badgeInactive, label: "Inactive" },
+            DELETED: { class: styles.badgeDeleted, label: "Deleted" },
+            OUT_OF_STOCK: { class: styles.badgeInactive, label: "Out of Stock" },
         };
-        const info = map[productStatus] || map.active;
+        const info = map[productStatus] || map.ACTIVE;
         return <span className={`${styles.badge} ${info.class}`}>{info.label}</span>;
     };
 
@@ -274,7 +276,7 @@ export default function SellerProducts() {
                             {products.map((product) => (
                                 <tr
                                     key={product.id}
-                                    className={`${styles.row} ${product.status === "deleted" ? styles.rowDeleted : ""}`}
+                                    className={`${styles.row} ${product.status === "DELETED" ? styles.rowDeleted : ""}`}
                                 >
                                     <td className={styles.cellImage}>
                                         {product.imageUrl ? (
@@ -333,7 +335,7 @@ export default function SellerProducts() {
                                             <button 
                                                 className={styles.actionBtn} 
                                                 onClick={() => handleOpenUpdate(product)}
-                                                disabled={product.status === "deleted"}
+                                                disabled={product.status === "DELETED"}
                                                 title="Edit"
                                             >
                                                 <Edit2 size={16} />
@@ -341,7 +343,7 @@ export default function SellerProducts() {
                                             <button 
                                                 className={`${styles.actionBtn} ${styles.actionBtnDanger}`}
                                                 onClick={() => handleOpenDelete(product)}
-                                                disabled={product.status === "deleted"}
+                                                disabled={product.status === "DELETED"}
                                                 title="Delete"
                                             >
                                                 <Trash2 size={16} />
