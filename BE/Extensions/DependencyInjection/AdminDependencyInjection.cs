@@ -12,6 +12,7 @@ namespace BE.Extensions.DependencyInjection
         {
             services.AddScoped<IAdminDashboardRepository, AdminDashboardRepository>();
             services.AddScoped<IAdminDashboardService, AdminDashboardService>();
+            services.AddScoped<IRedirectService, RedirectService>();
             
             return services;
         }
