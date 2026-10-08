@@ -10,7 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace BE.Controllers.Seo;
+namespace BE.Controllers.Seo
+{
 
 [ApiController]
 public class SeoController : ControllerBase
@@ -227,12 +228,4 @@ public class SeoController : ControllerBase
         parent.Add(url);
     }
 }
-        url.Add(new XElement(ns + "lastmod", lastmod.Value.ToString("yyyy-MM-ddTHH:mm:ssK")));
-        if (lastmod.HasValue)
-        {
-            url.Add(new XElement(ns + "lastmod", lastmod.Value.ToString("yyyy-MM-ddTHH:mm:ssK")));
-        }
-
-        parent.Add(url);
-    }
 }
