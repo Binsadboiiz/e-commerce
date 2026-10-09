@@ -31,7 +31,7 @@ export default function OrderSummaryPanel({ summary }) {
                 </div>
                 <div className={styles.kvRow}>
                     <span className={styles.kvKey}>Total Amount</span>
-                    <span className={`${styles.kvValue} text-primary`}>{currency.format(summary?.finalAmount || 0)}</span>
+                    <span className={`${styles.kvValue} text-text-price`}>{currency.format(summary?.finalAmount || 0)}</span>
                 </div>
             </div>
 

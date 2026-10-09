@@ -1,6 +1,7 @@
 {
   "header": {
     "sellerCenter": "Seller Center",
+    "becomeSeller": "Register as Seller",
     "downloadApp": "Download PolarisX App",
     "connectSocial": "Connect Facebook & Instagram",
     "hotline": "Hotline: 1900 8888",
@@ -14,6 +15,58 @@
     "searchPlaceholder": "Search products, brands...",
     "searchSuggestions": "Hot trends:"
   },
+  "trust": {
+    "shipping": {
+      "title": "Free Shipping",
+      "sub": "On orders over $50"
+    },
+    "returns": {
+      "title": "15-Day Returns",
+      "sub": "Hassle-free policy"
+    },
+    "secure": {
+      "title": "Secure Payment",
+      "sub": "100% protected"
+    }
+  },
+  "productDetail": {
+    "home": "Home",
+    "products": "Products",
+    "outOfStock": "Out of Stock",
+    "addToCart": "Add to Cart",
+    "buyNow": "Buy Now",
+    "inStock": "In Stock",
+    "onlyLeft": "Only {count} left",
+    "reviewsCount": "reviews",
+    "productDescription": "Product Description",
+    "noDescription": "No description available.",
+    "showMore": "Show More",
+    "showLess": "Show Less",
+    "youMayAlsoLike": "You May Also Like",
+    "customerReviews": "Customer Reviews",
+    "brand": "Brand:",
+    "sold": "Sold",
+    "shippingInfo": "Shipping",
+    "guaranteedBy": "Guaranteed to get by 16 Jan - 18 Jan",
+    "shoppingGuarantee": "Shopping Guarantee",
+    "freeReturns15Days": "15-Day Free Returns",
+    "viewShop": "View Shop",
+    "shopRating": "Rating",
+    "shopProducts": "Products",
+    "responseRate": "Response Rate",
+    "responseTime": "Response Time",
+    "joined": "Joined",
+    "followers": "Followers",
+    "chatNow": "Chat now",
+    "online": "Online",
+    "offline": "Offline",
+    "noReviewsYet": "No reviews yet",
+    "beTheFirstToReview": "Be the first to share your experience with this product.",
+    "newest": "Newest",
+    "oldest": "Oldest",
+    "highestRating": "Highest Rating",
+    "lowestRating": "Lowest Rating"
+  },
   "footer": {
     "value1Title": "100% Authentic Products",
     "value1Desc": "Quality & origin guaranteed",
@@ -26,6 +79,7 @@
     "brandDesc": "Leading enterprise e-commerce platform - Shop authentic products with top daily deals.",
     "address": "PolarisX Building, Tech Street, Hanoi",
     "hotlineHours": "Hotline: 1900 8888 (8:00 AM - 9:00 PM)",
+    "followUs": "Follow Us",
     "colCustomerSupport": "Customer Support",
     "helpCenter": "Help Center",
     "buyingGuide": "Shopping & Payment Guide",
@@ -70,7 +124,12 @@
     "priceRange": "Price Range",
     "material": "Material",
     "color": "Color",
+    "size": "Size",
+    "rating": "Rating",
     "ratingFilter": "Rating Filter",
+    "andUp": "& up",
+    "minPricePlaceholder": "$ Min",
+    "maxPricePlaceholder": "$ Max",
     "filter": "Filter",
     "clearFilter": "Clear Filter",
     "sort": "Sort by:",
@@ -133,7 +192,16 @@
     "orderTotal": "Total Amount",
     "trackOrder": "Track Order",
     "viewDetail": "View Details",
-    "cancelOrder": "Cancel Order"
+    "cancelOrder": "Cancel Order",
+    "trackSubheading": "Track your order status and purchase history.",
+    "refresh": "Refresh",
+    "noOrders": "You have no orders yet",
+    "noOrdersSubtitle": "Your orders will appear here once you make a purchase.",
+    "shopNow": "Shop Now",
+    "logInAgain": "Log in again",
+    "totalItems": "Total items:",
+    "estimatedDelivery": "Est. delivery:",
+    "payment": "Payment:"
   },
   "auth": {
     "login": "Login",

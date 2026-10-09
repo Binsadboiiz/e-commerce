@@ -42,13 +42,15 @@
     width: 48px;
     height: 100%;
     border: none;
-    background-color: #febd69;
+    background-color: var(--color-primary);
+    color: #ffffff;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: filter 0.2s;
 }
 
 .button:hover {
-    background-color: #f3a847;
+    filter: brightness(0.9);
 }

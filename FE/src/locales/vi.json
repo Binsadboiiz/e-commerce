@@ -1,6 +1,7 @@
 {
   "header": {
     "sellerCenter": "Kênh Người Bán",
+    "becomeSeller": "Trở Thành Người Bán",
     "downloadApp": "Tải ứng dụng PolarisX",
     "connectSocial": "Kết nối Facebook & Instagram",
     "hotline": "Hotline: 1900 8888",
@@ -14,6 +15,58 @@
     "searchPlaceholder": "Tìm kiếm sản phẩm, thương hiệu...",
     "searchSuggestions": "Gợi ý hot:"
   },
+  "trust": {
+    "shipping": {
+      "title": "Miễn Phí Vận Chuyển",
+      "sub": "Cho đơn hàng từ 50k"
+    },
+    "returns": {
+      "title": "Đổi Trả 15 Ngày",
+      "sub": "Chính sách dễ dàng"
+    },
+    "secure": {
+      "title": "Thanh Toán Bảo Mật",
+      "sub": "Bảo vệ 100%"
+    }
+  },
+  "productDetail": {
+    "home": "Trang chủ",
+    "products": "Sản phẩm",
+    "outOfStock": "Hết hàng",
+    "addToCart": "Thêm vào giỏ",
+    "buyNow": "Mua ngay",
+    "inStock": "Còn hàng",
+    "onlyLeft": "Chỉ còn {count} sản phẩm",
+    "reviewsCount": "đánh giá",
+    "productDescription": "Mô tả sản phẩm",
+    "noDescription": "Không có mô tả chi tiết.",
+    "showMore": "Xem thêm",
+    "showLess": "Thu gọn",
+    "youMayAlsoLike": "Có thể bạn cũng thích",
+    "customerReviews": "Đánh Giá Của Khách Hàng",
+    "brand": "Thương hiệu:",
+    "sold": "Đã bán",
+    "shippingInfo": "Vận chuyển",
+    "guaranteedBy": "Đảm bảo nhận hàng từ 16 - 18 Thg 1",
+    "shoppingGuarantee": "Đảm bảo mua sắm",
+    "freeReturns15Days": "Miễn phí đổi trả 15 ngày",
+    "viewShop": "Xem Shop",
+    "shopRating": "Đánh giá",
+    "shopProducts": "Sản phẩm",
+    "responseRate": "Tỉ lệ phản hồi",
+    "responseTime": "Thời gian phản hồi",
+    "joined": "Tham gia",
+    "followers": "Người theo dõi",
+    "chatNow": "Chat ngay",
+    "online": "Trực tuyến",
+    "offline": "Ngoại tuyến",
+    "noReviewsYet": "Chưa có đánh giá nào",
+    "beTheFirstToReview": "Hãy là người đầu tiên chia sẻ trải nghiệm về sản phẩm này.",
+    "newest": "Mới nhất",
+    "oldest": "Cũ nhất",
+    "highestRating": "Đánh giá cao nhất",
+    "lowestRating": "Đánh giá thấp nhất"
+  },
   "footer": {
     "value1Title": "100% Hàng Chính Hãng",
     "value1Desc": "Cam kết chất lượng & nguồn gốc sản phẩm",
@@ -26,6 +79,7 @@
     "brandDesc": "Sàn thương mại điện tử hàng đầu - Nơi mua sắm sản phẩm chính hãng với ưu đãi tốt nhất mỗi ngày.",
     "address": "Tòa nhà PolarisX, Phố Công Nghệ, Hà Nội",
     "hotlineHours": "Hotline: 1900 8888 (8:00 - 21:00)",
+    "followUs": "Theo Dõi Chúng Tôi",
     "colCustomerSupport": "Hỗ Trợ Khách Hàng",
     "helpCenter": "Trung Tâm Trợ Giúp",
     "buyingGuide": "Hướng Dẫn Mua Hàng & Thanh Toán",
@@ -65,14 +119,19 @@
     "rating": "Đánh giá"
   },
   "product": {
-    "productList": "Danh Sách Sản Phẩm",
-    "categories": "Danh Mục",
-    "priceRange": "Khoảng Giá",
-    "material": "Chất Liệu",
-    "color": "Màu Sắc",
-    "ratingFilter": "Đánh Giá",
-    "filter": "Bộ Lọc",
-    "clearFilter": "Xóa Bộ Lọc",
+    "productList": "Danh sách sản phẩm",
+    "categories": "Danh mục",
+    "priceRange": "Khoảng giá",
+    "material": "Chất liệu",
+    "color": "Màu sắc",
+    "size": "Kích cỡ",
+    "rating": "Đánh giá",
+    "ratingFilter": "Đánh giá",
+    "andUp": "trở lên",
+    "minPricePlaceholder": "đ Tối thiểu",
+    "maxPricePlaceholder": "đ Tối đa",
+    "filter": "Bộ lọc",
+    "clearFilter": "Xóa bộ lọc",
     "sort": "Sắp xếp theo:",
     "sortPriceAsc": "Giá: Thấp đến Cao",
     "sortPriceDesc": "Giá: Cao đến Thấp",
@@ -133,7 +192,16 @@
     "orderTotal": "Tổng tiền",
     "trackOrder": "Theo Dõi Đơn Hàng",
     "viewDetail": "Xem Chi Tiết",
-    "cancelOrder": "Hủy Đơn Hàng"
+    "cancelOrder": "Hủy Đơn Hàng",
+    "trackSubheading": "Theo dõi trạng thái đơn hàng và lịch sử mua sắm của bạn.",
+    "refresh": "Làm mới",
+    "noOrders": "Bạn chưa có đơn hàng nào",
+    "noOrdersSubtitle": "Các đơn hàng của bạn sẽ xuất hiện tại đây sau khi đặt hàng.",
+    "shopNow": "Khám Phá Ngay",
+    "logInAgain": "Đăng nhập lại",
+    "totalItems": "Tổng số sản phẩm:",
+    "estimatedDelivery": "Dự kiến giao:",
+    "payment": "Thanh toán:"
   },
   "auth": {
     "login": "Đăng Nhập",

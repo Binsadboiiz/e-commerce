@@ -1,15 +1,11 @@
 .page {
     min-height: calc(100vh - 120px);
-    background:
-        radial-gradient(circle at 0% 0%, rgba(238, 77, 45, 0.08) 0, transparent 28%),
-        radial-gradient(circle at 100% 100%, rgba(238, 77, 45, 0.04) 0, transparent 24%),
-        var(--color-bg-page);
 }
 
 .container {
-    width: min(1100px, 100%);
+    width: 100%;
+    max-width: 1280px;
     margin: 0 auto;
-    padding: 32px 16px 44px;
 }
 
 .header {
@@ -28,14 +24,14 @@
 
 .tableHeader {
     background-color: #ffffff;
-    border: 1px solid #eceef2;
+    border: 1px solid #e2e8f0;
     border-radius: 12px;
     padding: 14px 24px;
     margin-bottom: 16px;
     display: none;
     align-items: center;
     gap: 16px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
 @media (min-width: 768px) {
@@ -45,17 +41,17 @@
 }
 
 .shopCard {
-    background: linear-gradient(180deg, #ffffff 0%, #fffdfb 100%);
-    border: 1px solid #eceef2;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
     border-radius: 16px;
-    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
     margin-bottom: 20px;
     padding: 20px 24px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .shopCard:hover {
-    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08);
 }
 
 .shopHeader {
@@ -85,9 +81,9 @@
     bottom: 16px;
     z-index: 10;
     background-color: #ffffff;
-    border: 1px solid #eceef2;
+    border: 1px solid #e2e8f0;
     border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
     padding: 16px 24px;
     margin-top: 24px;
     display: flex;
@@ -99,8 +95,9 @@
 /* Custom Checkbox Design */
 .checkboxContainer {
     position: relative;
-    display: flex;
+    display: inline-flex;
     align-items: center;
+    gap: 10px;
     cursor: pointer;
     user-select: none;
 }
@@ -131,8 +128,8 @@
 }
 
 .checkboxInput:checked ~ .checkboxCustom {
-    background-color: #ee4d2d;
-    border-color: #ee4d2d;
+    background-color: var(--color-primary, #2563eb);
+    border-color: var(--color-primary, #2563eb);
 }
 
 .checkboxCheckmark {
@@ -147,26 +144,22 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background-color: #111827;
+    background-color: var(--color-primary, #2563eb);
     color: #ffffff !important;
-    border: 1.5px solid #111827;
+    border: none;
     border-radius: 8px;
-    padding: 12px 28px;
+    padding: 10px 24px;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
     text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    box-shadow: 0 2px 4px rgba(17, 24, 39, 0.08);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .buttonPrimary:hover:not(:disabled) {
-    background-color: #1f2937;
-    border-color: #1f2937;
-    box-shadow: 0 4px 12px rgba(17, 24, 39, 0.15);
-    transform: translateY(-1px);
+    background-color: var(--color-primary-active, #1d4ed8);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
 }
 
 .buttonPrimary:active:not(:disabled) {
@@ -174,7 +167,7 @@
 }
 
 .buttonPrimary:disabled {
-    opacity: 0.4;
+    opacity: 0.5;
     cursor: not-allowed;
 }
 

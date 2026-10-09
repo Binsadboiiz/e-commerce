@@ -2,7 +2,7 @@ import { useCart } from '../hooks/useCart';
 import CartShopGroup from "../components/CartShopGroup";
 import CartFooter from "../components/CartFooter";
 import EmptyCart from "../components/EmptyCart";
-import { FiShoppingCart } from 'react-icons/fi';
+import { RotateCw } from 'lucide-react';
 import SEOHead from '@/shared/components/SEOHead';
 import styles from './CartPage.module.css';
 import skeletonStyles from '@/shared/components/ui/Skeleton.module.css';
@@ -10,7 +10,7 @@ import { useLanguage } from '@/shared/context/LanguageContext';
 
 export default function CartPage() {
     const { t } = useLanguage();
-    const { cart, loading } = useCart();
+    const { cart, loading, fetchCart } = useCart();
 
     const hasItems = cart?.shopGroups?.length > 0;
 
@@ -23,21 +23,32 @@ export default function CartPage() {
     }
 
     return (
-        <div className={styles.page}>
+        <div className="customerPage">
             <SEOHead 
                 title={t('cart.shoppingCart')} 
                 description="Xem lại các sản phẩm trong giỏ hàng, cập nhật số lượng và chuẩn bị thanh toán an toàn, nhanh chóng."
             />
-            <div className={styles.container}>
-                <div className={styles.header}>
-                    <FiShoppingCart className="text-primary" size={26} />
-                    <h1 className={styles.heading}>{t('cart.shoppingCart')}</h1>
-                    {hasItems && (
-                        <span className="text-sm text-text-secondary ml-1">
-                            ({cart.totalItems})
-                        </span>
-                    )}
-                </div>
+            <div className="customerContainer">
+                <header className="customerHeader">
+                    <div className="customerTitleSection">
+                        <h1 className="customerPageTitle">
+                            <span>{t('cart.shoppingCart')}</span>
+                            {hasItems && (
+                                <span className="text-sm font-normal text-slate-500 ml-1">
+                                    ({cart.totalItems})
+                                </span>
+                            )}
+                        </h1>
+                    </div>
+                    <button
+                        type="button"
+                        onClick={fetchCart}
+                        className="customerBtnTextAction"
+                    >
+                        <RotateCw size={14} className={loading ? "animate-spin" : ""} />
+                        <span>{t('orders.refresh') || 'Làm mới'}</span>
+                    </button>
+                </header>
 
                 {hasItems ? (
                     <>

@@ -25,7 +25,7 @@ export default function CartFooter() {
     return (
         <div className={styles.footerSticky}>
             {/* Left: Select All & Delete */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-6">
                 {/* Select All Checkbox */}
                 <label className={styles.checkboxContainer}>
                     <input
@@ -41,7 +41,7 @@ export default function CartFooter() {
                             </svg>
                         )}
                     </div>
-                    <span className="text-sm text-text-primary ml-2">
+                    <span className="text-sm font-medium text-slate-800">
                         {t('cart.selectAll')} ({totalItems})
                     </span>
                 </label>
@@ -50,11 +50,10 @@ export default function CartFooter() {
                 {selectedCount > 0 && (
                     <button
                         onClick={clearCart}
-                        className="flex items-center gap-1.5 text-sm text-text-secondary
-                                   hover:text-danger transition-colors"
+                        className="flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-rose-600 transition-colors"
                     >
-                        <FiTrash2 size={14} />
-                        {t('cart.deleteAll')}
+                        <FiTrash2 size={15} />
+                        <span>{t('cart.deleteAll')}</span>
                     </button>
                 )}
             </div>
@@ -63,12 +62,12 @@ export default function CartFooter() {
             <div className="flex items-center gap-6">
                 {/* Total Price */}
                 <div className="text-right">
-                    <div className="text-sm text-text-secondary">
+                    <span className="text-sm text-slate-500 mr-2">
                         {t('cart.totalAmount')} ({selectedCount}):
-                    </div>
-                    <div className="text-xl font-bold text-text-price">
+                    </span>
+                    <span className="text-xl font-bold text-rose-600">
                         {formatPrice(total)}
-                    </div>
+                    </span>
                 </div>
 
                 {/* Checkout Button */}

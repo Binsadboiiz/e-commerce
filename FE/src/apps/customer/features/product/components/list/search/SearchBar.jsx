@@ -28,7 +28,7 @@ export default function SearchBar({
     return (
         <form className={styles.searchBar} onSubmit={handleSubmit}>
 
-            <button type="button" className={styles.filter}>
+            <button type="button" className={styles.filter} aria-label="Filter Search Categories">
                 <span>All</span>
                 <FaCaretDown />
             </button>
@@ -41,7 +41,7 @@ export default function SearchBar({
                 onChange={(e) => setInput(e.target.value)}
             />
 
-            <button type="submit" className={styles.button}>
+            <button type="submit" className={styles.button} aria-label="Search Submit">
                 <FaSearch />
             </button>
 

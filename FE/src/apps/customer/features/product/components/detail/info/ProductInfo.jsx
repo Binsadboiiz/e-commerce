@@ -1,6 +1,7 @@
 import { IoStar } from 'react-icons/io5';
 import styles from './ProductInfo.module.css';
 import formatPrice from '@/apps/customer/features/product/utils/formatPrice';
+import { useLanguage } from '@/shared/context/LanguageContext';
 
 /* Tính % giảm giá từ giá gốc và giá sale */
 function calcDiscountPercent(original, sale) {
@@ -10,27 +11,21 @@ function calcDiscountPercent(original, sale) {
 
 /* Render stock status label + class tùy theo số lượng tồn */
 function StockStatus({ variant }) {
+    const { t } = useLanguage();
     if (!variant) return null;
 
     const stock = variant.availableStock ?? 0;
     const available = variant.isAvailable && stock > 0;
 
     if (!available) {
-        return <span className={styles.stockOut}>Out of Stock</span>;
+        return <span className={styles.stockOut}>{t('productDetail.outOfStock') || "Out of Stock"}</span>;
     }
 
-    if (stock <= 5) {
-        return (
-            <span className={styles.stockLow}>
-                Only {stock} left
-            </span>
-        );
-    }
-
-    return <span className={styles.stockIn}>In Stock</span>;
+    return <span className={styles.stockIn}>{t('productDetail.inStock') || "In Stock"}</span>;
 }
 
 export default function ProductInfo({ product, selectedVariant }) {
+    const { t } = useLanguage();
     if (!product) return null;
 
     const {
@@ -75,7 +70,7 @@ export default function ProductInfo({ product, selectedVariant }) {
                     {ratingAvg || 0}
                 </span>
                 <span className={styles.ratingCount}>
-                    ({ratingCount || 0} reviews)
+                    ({ratingCount || 0} {t('productDetail.reviewsCount') || 'reviews'})
                 </span>
             </div>
 

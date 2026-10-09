@@ -4,8 +4,9 @@
 }
 
 .bannerContainer {
-    max-width: 1200px;
+    max-width: 1280px;
     margin: 0 auto;
+    padding: 0 24px;
 }
 
 .bannerGrid {
@@ -23,9 +24,9 @@
 
 .bannerItem {
     height: 120px;
-    border-radius: 8px;
+    border-radius: var(--radius-lg, 12px);
     overflow: hidden;
-    background: #ddd;
+    background: #f1f5f9;
 }
 
 .bannerItem img {
@@ -42,7 +43,7 @@
     position: relative;
     height: 256px;
     overflow: hidden;
-    border-radius: 8px;
+    border-radius: var(--radius-lg, 12px);
 }
 
 .bannerTrack {
@@ -50,6 +51,7 @@
     width: 300%;
     height: 100%;
     animation: slideAuto 9s infinite;
+    animation-delay: 2.5s;
 }
 
 .bannerSlide {
@@ -78,10 +80,12 @@
     height: 8px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.6);
+    transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .active {
-    background: #757070;
+    background: var(--color-primary, #2563eb);
+    transform: scale(1.2);
 }
 
 @keyframes slideAuto {
@@ -99,5 +103,19 @@
     70%,
     100% {
         transform: translateX(-200%);
+    }
+}
+
+/* ================================================================
+   Responsive — Tablet & Mobile (< 768px)
+   ================================================================ */
+@media (max-width: 768px) {
+    .bannerGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .bannerLeft,
+    .bannerRight {
+        display: none;
     }
 }

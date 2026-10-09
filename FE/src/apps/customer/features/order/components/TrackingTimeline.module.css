@@ -45,7 +45,7 @@
 .dotCurrent {
     border-color: var(--color-primary);
     background-color: var(--color-primary);
-    box-shadow: 0 0 0 5px rgba(238, 77, 45, 0.14);
+    box-shadow: 0 0 0 5px rgba(37, 99, 235, 0.14);
 }
 
 .time {

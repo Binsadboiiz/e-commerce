@@ -7,7 +7,8 @@ import {
     FiPhoneCall, 
     FiGlobe, 
     FiChevronDown, 
-    FiShoppingBag 
+    FiShoppingBag,
+    FiMenu
 } from 'react-icons/fi';
 import styles from './Header.module.css';
 import SearchBar from "@/apps/customer/features/product/components/list/search/SearchBar";
@@ -17,7 +18,6 @@ import { logoutApi } from "@/shared/features/auth/api/authService";
 import { ROUTES } from "@/config/route.config";
 import { notify } from "@/shared/utils/Notify";
 import CartContext from "@/apps/customer/features/cart/context/CartContext";
-import SellerHeaderAction from "@/apps/customer/features/seller/components/common/SellerHeaderAction";
 import { useLanguage } from "@/shared/context/LanguageContext";
 
 function Header() {
@@ -28,6 +28,7 @@ function Header() {
     const { cartCount } = useCart();
     const { user, setUser } = useContext(AuthContext);
     const [showDropdown, setShowDropdown] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const { setCart } = useContext(CartContext);
     const { lang, setLanguage, t } = useLanguage();
 
@@ -51,13 +52,17 @@ function Header() {
 
     return (
         <header className={styles.headerWrapper}>
-            {/* Top Bar / Mini Utility Header */}
+            {/* Top Bar / Mini Utility Header (Desktop Only) */}
             <div className={styles.topBar}>
                 <div className={styles.topBarInner}>
                     <div className={styles.topBarLeft}>
-                        <Link to={user?.role === 'Seller' ? ROUTES.SELLER_DASHBOARD : "/seller/register"} className={styles.topBarLink}>
+                        <Link to={user?.role === 'Seller' ? ROUTES.SELLER_DASHBOARD : ROUTES.SELLER_REGISTRATION} className={styles.topBarLink}>
                             <FiShoppingBag size={13} />
                             <span>{t('sellerCenter')}</span>
+                        </Link>
+                        <span className={styles.divider}>|</span>
+                        <Link to={ROUTES.SELLER_REGISTRATION} className={styles.topBarLink}>
+                            <span>{t('header.becomeSeller') || 'Trở Thành Người Bán'}</span>
                         </Link>
                         <span className={styles.divider}>|</span>
                         <span className={styles.topBarText}>{t('downloadApp')}</span>
@@ -72,7 +77,6 @@ function Header() {
                         </div>
                         <span className={styles.divider}>|</span>
                         
-                        {/* Multilingual Switcher VI / EN */}
                         <div 
                             className={styles.topBarLink} 
                             onClick={toggleLanguage} 
@@ -97,12 +101,12 @@ function Header() {
                 </div>
             </div>
 
-            {/* Main Header Container */}
+            {/* Main Header Container - ROW 1 */}
             <div className={styles.mainHeader}>
                 <div className={styles.mainHeaderInner}>
-                    {/* Brand Logo & Name (PolarisX Mall) */}
+                    {/* Brand Logo & Name */}
                     <Link to={ROUTES.HOME} className={styles.brandLogoLink} title="PolarisX Mall - Trang chủ">
-                        <img src="/logo.png" alt="PolarisX Mall Logo" className={styles.logoImage} />
+                        <img src="/logo.png" alt="PolarisX Mall Logo" className={styles.logoImage} width="160" height="38" />
                         <div className={styles.brandTextWrapper}>
                             <span className={styles.brandNamePrimary}>Polaris</span>
                             <span className={styles.brandNameHighlight}>X</span>
@@ -124,15 +128,12 @@ function Header() {
 
                     {/* Right User & Cart Actions */}
                     <div className={styles.actionsSection}>
-                        {user && <SellerHeaderAction />}
-
                         {/* Cart Widget */}
                         <div
                             className={styles.cartWidget}
                             onClick={() => navigate(ROUTES.CART)}
                             role="button"
                             aria-label="Shopping Cart"
-                            title={t('header.cart')}
                         >
                             <div className={styles.cartIconWrapper}>
                                 <FiShoppingCart size={22} />
@@ -142,21 +143,26 @@ function Header() {
                                     </span>
                                 )}
                             </div>
-                            <span className={styles.cartLabel}>{t('header.cart')}</span>
                         </div>
 
                         {/* User Profile Widget */}
-                        {user && (
+                        {user ? (
                             <div className={styles.userDropdownWrapper}>
                                 <div
                                     className={styles.userInfo}
                                     onClick={() => setShowDropdown(!showDropdown)}
                                 >
-                                    <img
-                                        src={user.avatar || 'https://via.placeholder.com/35'}
-                                        alt={user.fullName}
-                                        className={styles.userAvatar}
-                                    />
+                                    {user.avatar ? (
+                                        <img
+                                            src={user.avatar}
+                                            alt={user.fullName}
+                                            className={styles.userAvatar}
+                                        />
+                                    ) : (
+                                        <div className={styles.userAvatarFallback}>
+                                            <FiUser size={16} />
+                                        </div>
+                                    )}
                                     <span className={styles.userName}>{user.fullName}</span>
                                     <FiChevronDown size={14} className={styles.chevron} />
                                 </div>
@@ -178,10 +184,50 @@ function Header() {
                                     </div>
                                 )}
                             </div>
+                        ) : (
+                            <Link to={ROUTES.LOGIN} className={styles.guestIconMobileOnly} aria-label="Login">
+                                <FiUser size={22} />
+                            </Link>
                         )}
                     </div>
                 </div>
+
+                {/* ROW 2 Mobile Only - Burger Navigation */}
+                <div className={styles.mobileRow2}>
+                    <button 
+                        className={styles.burgerBtn} 
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
+                        aria-label="Open menu"
+                        aria-expanded={isMobileMenuOpen}
+                    >
+                        <FiMenu size={22} />
+                        <span>Menu</span>
+                    </button>
+                </div>
             </div>
+
+            {/* Mobile Burger Menu Overlay/Dropdown */}
+            {isMobileMenuOpen && (
+                <nav className={styles.mobileBurgerMenu}>
+                    <Link to={ROUTES.HOME} className={styles.burgerItem} onClick={() => setIsMobileMenuOpen(false)}>
+                        {t('home')}
+                    </Link>
+                    <Link to={user?.role === 'Seller' ? ROUTES.SELLER_DASHBOARD : "/seller/register"} className={styles.burgerItem} onClick={() => setIsMobileMenuOpen(false)}>
+                        <FiShoppingBag size={18} /> {t('sellerCenter')}
+                    </Link>
+                    <button onClick={() => { toggleLanguage(); setIsMobileMenuOpen(false); }} className={styles.burgerItem}>
+                        <FiGlobe size={18} /> {lang === 'vi' ? 'English (EN)' : 'Tiếng Việt (VI)'}
+                    </button>
+                    <div className={styles.burgerItem}>
+                        <FiPhoneCall size={18} /> {t('hotline')}
+                    </div>
+                    {user && (
+                        <button onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }} className={styles.burgerItem} style={{ color: 'var(--color-danger)' }}>
+                            <FiLogOut size={18} /> {t('logout')}
+                        </button>
+                    )}
+                </nav>
+            )}
         </header>
     );
 }

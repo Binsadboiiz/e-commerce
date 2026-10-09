@@ -23,7 +23,7 @@ export default function PriceFilter({ searchParams, setSearchParams }) {
             <div className={styles.priceInputsContainer}>
                 <input
                     type="number"
-                    placeholder="$ Min"
+                    placeholder={t('product.minPricePlaceholder') || "$ Min"}
                     className={styles.priceInput}
                     value={searchParams.get("minPrice") || ""}
                     onChange={(e) => handlePriceChange("minPrice", e.target.value)}
@@ -31,7 +31,7 @@ export default function PriceFilter({ searchParams, setSearchParams }) {
                 <span className={styles.priceSeparator}>-</span>
                 <input
                     type="number"
-                    placeholder="$ Max"
+                    placeholder={t('product.maxPricePlaceholder') || "$ Max"}
                     className={styles.priceInput}
                     value={searchParams.get("maxPrice") || ""}
                     onChange={(e) => handlePriceChange("maxPrice", e.target.value)}

@@ -3,6 +3,7 @@ import QuantityControl from './QuantityControl';
 import { useCart } from '../hooks/useCart';
 import styles from '../pages/CartPage.module.css';
 import formatPrice from '@/apps/customer/features/product/utils/formatPrice';
+import OptimizedImage from '@/shared/components/ui/OptimizedImage';
 
 export default function CartItem({ item }) {
     const { updateQuantity, removeItem, toggleSelectItem, isItemSelected } = useCart();
@@ -42,12 +43,14 @@ export default function CartItem({ item }) {
 
             {/* Product Image */}
             <div className="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border border-border bg-gray-50">
-                <img
+                <OptimizedImage
                     src={item.productImage || '/placeholder-product.png'}
                     alt={item.productName}
-                    className="w-full h-full object-cover transition-transform duration-300
-                               group-hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     onError={(e) => { e.target.src = 'https://placehold.co/80x80/f5f5f5/999?text=No+Img'; }}
+                    width={80}
+                    height={80}
+                    crop="fill"
                 />
             </div>
 

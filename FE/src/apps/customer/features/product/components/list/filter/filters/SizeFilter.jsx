@@ -2,8 +2,10 @@ import styles from "./filters.module.css";
 import { useState, useEffect } from "react";
 import { productsService } from "@/apps/customer/features/product/services/productService";
 import { parseQuery } from "../utils/parseQuery";
+import { useLanguage } from "@/shared/context/LanguageContext";
 
 export default function SizeFilter({ data = [], searchParams, setSearchParams }) {
+    const { t } = useLanguage();
 
     const [sizes, setSizes] = useState([]);
 
@@ -43,7 +45,7 @@ export default function SizeFilter({ data = [], searchParams, setSearchParams })
 
     return (
         <div className={styles.section}>
-            <p className={styles.label}>Size</p>
+            <p className={styles.label}>{t('product.size')}</p>
 
             {sizes.map(size => {
                 const idStr = String(size.id);

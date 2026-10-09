@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
 import { ROUTES } from "@/config/route.config";
 import { RotateCw, ShoppingBag, AlertTriangle } from "lucide-react";
+import SEOHead from "@/shared/components/SEOHead";
+import { useLanguage } from "@/shared/context/LanguageContext";
 import useMyOrders from "../hooks/useMyOrders";
 import OrderCard from "../components/OrderCard";
 import styles from "./MyOrdersPage.module.css";
+import EmptyState from "@/shared/components/ui/EmptyState";
 
 function LoadingSkeleton() {
     return (
@@ -16,23 +19,28 @@ function LoadingSkeleton() {
 }
 
 export default function MyOrdersPage() {
+    const { t } = useLanguage();
     const { orders, loading, error, refreshOrders } = useMyOrders();
 
     return (
-        <div className={styles.page}>
-            <div className={styles.container}>
-                <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
-                    <div>
-                        <h1 className={styles.heading}>My Orders</h1>
-                        <p className={styles.subheading}>Track your order status and purchase history.</p>
+        <div className="customerPage">
+            <SEOHead 
+                title={t('orders.myOrders')} 
+                description="Quản lý lịch sử đơn hàng và theo dõi trạng thái giao hàng."
+            />
+            <div className="customerContainer">
+                <header className="customerHeader">
+                    <div className="customerTitleSection">
+                        <h1 className="customerPageTitle">{t('orders.myOrders')}</h1>
+                        <p className="customerPageSubtitle">{t('orders.trackSubheading')}</p>
                     </div>
                     <button
                         type="button"
                         onClick={refreshOrders}
-                        className={styles.buttonSecondary}
+                        className="customerBtnTextAction"
                     >
                         <RotateCw size={14} className={loading ? "animate-spin" : ""} />
-                        Refresh
+                        <span>{t('orders.refresh')}</span>
                     </button>
                 </header>
 
@@ -43,19 +51,19 @@ export default function MyOrdersPage() {
                         <AlertTriangle size={32} className="mb-3 text-rose-500" />
                         <p className="mb-4 text-sm font-medium text-slate-600">{error}</p>
                         <Link to={ROUTES.LOGIN} className={styles.buttonPrimary}>
-                            Log in again
+                            {t('orders.logInAgain')}
                         </Link>
                     </div>
                 )}
 
                 {!loading && !error && orders.length === 0 && (
-                    <div className={styles.stateCard}>
-                        <ShoppingBag size={40} className="mb-3 text-slate-400" />
-                        <p className="text-sm font-medium text-slate-600 mb-4">You have no orders yet.</p>
-                        <Link to={ROUTES.PRODUCTS_LIST} className={styles.buttonPrimary}>
-                            Shop now
-                        </Link>
-                    </div>
+                    <EmptyState
+                        icon={<ShoppingBag size={36} />}
+                        title={t('orders.noOrders') || "Bạn chưa có đơn hàng nào"}
+                        description={t('orders.noOrdersSubtitle') || "Các đơn hàng của bạn sẽ xuất hiện tại đây sau khi đặt hàng."}
+                        actionText={t('orders.shopNow') || "Khám Phá Ngay"}
+                        actionLink={ROUTES.PRODUCTS_LIST || "/products"}
+                    />
                 )}
 
                 {!loading && !error && orders.length > 0 && (
@@ -69,3 +77,4 @@ export default function MyOrdersPage() {
         </div>
     );
 }
+

@@ -1,5 +1,6 @@
 import { IoCartOutline } from "react-icons/io5";
 import styles from "./ProductActions.module.css";
+import { useLanguage } from '@/shared/context/LanguageContext';
 
 export default function ProductActions({
     selectedVariant,
@@ -8,6 +9,7 @@ export default function ProductActions({
     onBuyNow,
     onAddToCart,
 }) {
+    const { t } = useLanguage();
     const stock = selectedVariant?.availableStock ?? 0;
 
     const isOutOfStock =
@@ -16,11 +18,33 @@ export default function ProductActions({
         stock <= 0;
 
     const decrease = () => {
-        setQuantity((q) => Math.max(1, q - 1));
+        setQuantity((q) => Math.max(1, Number(q || 1) - 1));
     };
 
     const increase = () => {
-        setQuantity((q) => Math.min(stock, q + 1));
+        setQuantity((q) => Math.min(stock, Number(q || 1) + 1));
+    };
+
+    const handleInputChange = (e) => {
+        const val = e.target.value;
+        if (val === '') {
+            setQuantity('');
+            return;
+        }
+        const num = parseInt(val, 10);
+        if (!isNaN(num)) {
+            if (num > stock) setQuantity(stock);
+            else if (num < 1) setQuantity(1);
+            else setQuantity(num);
+        }
+    };
+
+    const handleInputBlur = () => {
+        if (!quantity || Number(quantity) < 1) {
+            setQuantity(1);
+        } else if (Number(quantity) > stock) {
+            setQuantity(stock);
+        }
     };
 
     return (
@@ -29,15 +53,18 @@ export default function ProductActions({
                 <button
                     type="button"
                     onClick={decrease}
-                    disabled={quantity <= 1}
+                    disabled={Number(quantity || 1) <= 1}
                 >
                     -
                 </button>
 
                 <input
                     type="number"
+                    min={1}
+                    max={stock}
                     value={quantity}
-                    readOnly
+                    onChange={handleInputChange}
+                    onBlur={handleInputBlur}
                 />
 
                 <button
@@ -56,7 +83,7 @@ export default function ProductActions({
                 onClick={onAddToCart}
             >
                 <IoCartOutline />
-                {isOutOfStock ? "Out of Stock" : "Add to Cart"}
+                {isOutOfStock ? (t('productDetail.outOfStock') || "Out of Stock") : (t('productDetail.addToCart') || "Add to Cart")}
             </button>
 
             <button
@@ -65,7 +92,7 @@ export default function ProductActions({
                 disabled={isOutOfStock}
                 onClick={onBuyNow}
             >
-                Buy Now
+                {t('productDetail.buyNow') || "Buy Now"}
             </button>
         </div>
     );

@@ -41,10 +41,10 @@ export default function OrderTrackingPage() {
                     <button
                         type="button"
                         onClick={refreshTracking}
-                        className={styles.buttonSecondary}
+                        className="customerBtnTextAction"
                     >
                         <RotateCw size={14} className={loading ? "animate-spin" : ""} />
-                        Refresh Tracking
+                        <span>Refresh Tracking</span>
                     </button>
                 </div>
 
