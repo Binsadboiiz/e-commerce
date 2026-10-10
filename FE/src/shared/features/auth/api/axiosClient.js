@@ -1,6 +1,7 @@
 import axios from "axios";
 import { notify } from "../../../utils/Notify";
 import { ROUTES } from "@/config/route.config";
+import { apiCache } from "./apiCache";
 
 /**
  * Global Axios client configuration.
@@ -15,7 +16,7 @@ const axiosClient = axios.create({
     timeout: 10000
 });
 
-// Request Interceptor: Checks internet connectivity before sending API requests
+// Request Interceptor: Checks internet connectivity and in-memory cache before hitting the network
 axiosClient.interceptors.request.use(
     (config) => {
         if (!navigator.onLine) {
@@ -27,6 +28,28 @@ axiosClient.interceptors.request.use(
             delete config.headers["Content-Type"];
         }
 
+        const isGet = (config.method || 'get').toLowerCase() === 'get';
+        const useCache = isGet && config.cache !== false;
+
+        if (useCache) {
+            const cacheKey = apiCache.generateKey(config.url, config.params);
+            config._cacheKey = cacheKey;
+
+            if (!config.forceRefresh) {
+                const cached = apiCache.get(cacheKey);
+                if (cached !== null) {
+                    config.adapter = () => Promise.resolve({
+                        data: cached,
+                        status: 200,
+                        statusText: 'OK',
+                        headers: {},
+                        config,
+                        request: {}
+                    });
+                }
+            }
+        }
+
         return config;
     },
     (error) => {
@@ -35,12 +58,36 @@ axiosClient.interceptors.request.use(
     }
 );
 
-// Response Interceptor: Handles global API response formatting, session expiration, and error notifications
+// Response Interceptor: Handles caching, cache invalidation, and global errors
 let isShowingServerError = false;
 let isRedirectingAuth = false;
 
 axiosClient.interceptors.response.use(
-    (response) => response.data,
+    (response) => {
+        const config = response.config || {};
+        const isGet = (config.method || 'get').toLowerCase() === 'get';
+
+        if (isGet && config.cache !== false && config._cacheKey) {
+            apiCache.set(config._cacheKey, response.data, config.cacheTTL || 30000);
+        } else if (!isGet) {
+            // Mutation occurred: automatically invalidate relevant caches
+            const url = config.url || '';
+            if (url.includes('/cart')) {
+                apiCache.invalidate('/cart');
+            } else if (url.includes('/checkout') || url.includes('/order')) {
+                apiCache.invalidate('/order');
+                apiCache.invalidate('/cart');
+            } else if (url.includes('/seller')) {
+                apiCache.invalidate('/seller');
+            } else if (url.includes('/products')) {
+                apiCache.invalidate('/products');
+            } else {
+                apiCache.invalidate(url);
+            }
+        }
+
+        return response.data;
+    },
 
     async (error) => {
         if(error.code === "ECONNABORTED") {
@@ -106,4 +153,5 @@ axiosClient.interceptors.response.use(
     }
 );
 
+export { apiCache };
 export default axiosClient;

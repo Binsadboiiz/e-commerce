@@ -16,8 +16,8 @@ import {
 import { sellerOrderApi } from "../api/sellerOrderApi";
 import SellerOrderDetailModal from "../components/SellerOrderDetailModal";
 import UpdateOrderStatusModal from "../components/UpdateOrderStatusModal";
-import { notify } from "@/shared/utils/Notify";
 import SEOHead from "@/shared/components/SEOHead";
+import { SellerOrdersSkeleton } from "../components/SellerOrdersSkeleton";
 import "./SellerOrdersPage.css";
 
 const currencyFormatter = new Intl.NumberFormat("vi-VN", {
@@ -141,10 +141,7 @@ export default function SellerOrdersPage() {
             {/* Orders Table Container */}
             <div className="orders-list-card">
                 {loading ? (
-                    <div className="orders-loading">
-                        <div className="spinner" />
-                        <p>Loading orders...</p>
-                    </div>
+                    <SellerOrdersSkeleton />
                 ) : orders.length === 0 ? (
                     <div className="orders-empty">
                         <ShoppingCart size={48} className="empty-icon" />

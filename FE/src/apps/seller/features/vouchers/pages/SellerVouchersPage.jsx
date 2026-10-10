@@ -5,6 +5,7 @@ import { sellerVoucherApi } from "../api/sellerVoucherApi.js";
 import { notify } from "@/shared/utils/Notify.js";
 import Button from "@/shared/components/ui/Button.jsx";
 import SEOHead from "@/shared/components/SEOHead.jsx";
+import SellerVouchersSkeleton from "../components/SellerVouchersSkeleton.jsx";
 import "./SellerVouchersPage.css";
 
 const currencyFormatter = new Intl.NumberFormat("vi-VN", {
@@ -283,10 +284,7 @@ export default function SellerVouchersPage() {
             {/* Voucher list */}
             <div className="vouchers-list-card">
                 {loading ? (
-                    <div className="vouchers-loading">
-                        <div className="spinner" />
-                        <p>Loading vouchers...</p>
-                    </div>
+                    <SellerVouchersSkeleton />
                 ) : vouchers.length === 0 ? (
                     <div className="vouchers-empty">
                         <Tag size={48} className="empty-icon" />

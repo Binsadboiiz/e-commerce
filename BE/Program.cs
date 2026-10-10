@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.ResponseCompression;
+using System.IO.Compression;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +27,26 @@ builder.Services.AddReviewModule();
 builder.Services.AddSellerModule();
 builder.Services.AddAdminModule();
 
+// ── Response Compression (Brotli & Gzip) to minimize API latency & payload size ──
+builder.Services.AddResponseCompression(options =>
+{
+    options.EnableForHttps = true;
+    options.Providers.Add<BrotliCompressionProvider>();
+    options.Providers.Add<GzipCompressionProvider>();
+    options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]
+    {
+        "application/json",
+        "application/problem+json"
+    });
+});
+builder.Services.Configure<BrotliCompressionProviderOptions>(options =>
+{
+    options.Level = CompressionLevel.Fastest;
+});
+builder.Services.Configure<GzipCompressionProviderOptions>(options =>
+{
+    options.Level = CompressionLevel.Fastest;
+});
 
 // ── SEO & Prerender.io Dynamic Rendering Services ──
 builder.Services.AddMemoryCache();
@@ -134,6 +156,9 @@ app.UseMiddleware<PrerenderMiddleware>();
 
 // CORS must be executed before Authentication & Authorization
 app.UseCors("AllowFrontend");
+
+// Response compression must run before HttpsRedirection / returning payloads
+app.UseResponseCompression();
 
 app.UseHttpsRedirection();
 

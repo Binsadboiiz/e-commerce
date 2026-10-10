@@ -16,6 +16,7 @@ import {
 import axiosClient from '@/shared/features/auth/api/axiosClient';
 import Button from '@/shared/components/ui/Button';
 import SEOHead from '@/shared/components/SEOHead';
+import Skeleton from '@/shared/components/ui/Skeleton';
 
 export const AdminRedirectManagerPage = () => {
   const [rules, setRules] = useState([]);
@@ -260,11 +261,22 @@ export const AdminRedirectManagerPage = () => {
           </thead>
           <tbody>
             {loading ? (
-              <tr>
-                <td colSpan={7} style={{ textAlign: 'center', padding: '40px', color: '#6b7280' }}>
-                  Đang tải danh sách quy tắc chuyển hướng...
-                </td>
-              </tr>
+              Array.from({ length: 5 }).map((_, i) => (
+                <tr key={i} style={{ borderBottom: '1px solid #f3f4f6' }}>
+                  <td style={{ padding: '16px' }}><Skeleton width={140} height={20} borderRadius={4} /></td>
+                  <td style={{ padding: '16px' }}><Skeleton width={180} height={20} borderRadius={4} /></td>
+                  <td style={{ padding: '16px' }}><Skeleton width={60} height={24} borderRadius={6} /></td>
+                  <td style={{ padding: '16px' }}><Skeleton width={70} height={24} borderRadius={6} /></td>
+                  <td style={{ padding: '16px' }}><Skeleton width={40} height={20} borderRadius={4} /></td>
+                  <td style={{ padding: '16px' }}><Skeleton width={80} height={24} borderRadius={12} /></td>
+                  <td style={{ padding: '16px', textAlign: 'right' }}>
+                    <div style={{ display: 'inline-flex', gap: '8px' }}>
+                      <Skeleton width={32} height={32} borderRadius={6} />
+                      <Skeleton width={32} height={32} borderRadius={6} />
+                    </div>
+                  </td>
+                </tr>
+              ))
             ) : filteredRules.length === 0 ? (
               <tr>
                 <td colSpan={7} style={{ textAlign: 'center', padding: '40px', color: '#6b7280' }}>

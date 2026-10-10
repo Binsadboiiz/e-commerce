@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { X, Package, CreditCard, User, Calendar, DollarSign, RefreshCw } from "lucide-react";
 import { sellerOrderApi } from "../api/sellerOrderApi";
 import { notify } from "@/shared/utils/Notify";
+import { SellerOrderDetailSkeleton } from "./SellerOrdersSkeleton";
 
 const currencyFormatter = new Intl.NumberFormat("vi-VN", {
     style: "currency",
@@ -66,10 +67,7 @@ export default function SellerOrderDetailModal({ orderId, isOpen, onClose, onOpe
 
                 <div className="modal-body-scroll">
                     {loading ? (
-                        <div className="modal-loading">
-                            <div className="spinner" />
-                            <p>Loading order details...</p>
-                        </div>
+                        <SellerOrderDetailSkeleton />
                     ) : !orderDetail ? (
                         <div className="modal-empty">
                             <Package size={40} className="empty-icon" />

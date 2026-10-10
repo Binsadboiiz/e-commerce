@@ -1,16 +1,23 @@
+import { lazy, Suspense } from 'react';
 import { Route } from 'react-router-dom';
 import { ROUTES } from '@/config/route.config';
-import { AdminDashboardPage } from '@/apps/admin/features/dashboard/pages/AdminDashboardPage';
-import { AdminSellerApplicationsPage } from '@/apps/admin/features/applications/pages/AdminSellerApplicationsPage';
-import { AdminRedirectManagerPage } from '@/apps/admin/features/seo/pages/AdminRedirectManagerPage';
-import { AdminSettingsPage } from '@/apps/admin/features/settings/pages/AdminSettingsPage';
-import DashboardLayout from '@/apps/admin/layouts/DashboardLayout';
 import ProtectedRoute from '@/shared/components/ProtectedRoute.jsx';
 import { ROLES } from '@/shared/constants/roles';
+import AdminDashboardSkeleton from '@/apps/admin/features/dashboard/components/AdminDashboardSkeleton';
+
+const DashboardLayout = lazy(() => import('@/apps/admin/layouts/DashboardLayout'));
+const AdminDashboardPage = lazy(() => import('@/apps/admin/features/dashboard/pages/AdminDashboardPage').then(m => ({ default: m.AdminDashboardPage })));
+const AdminSellerApplicationsPage = lazy(() => import('@/apps/admin/features/applications/pages/AdminSellerApplicationsPage').then(m => ({ default: m.AdminSellerApplicationsPage })));
+const AdminRedirectManagerPage = lazy(() => import('@/apps/admin/features/seo/pages/AdminRedirectManagerPage').then(m => ({ default: m.AdminRedirectManagerPage })));
+const AdminSettingsPage = lazy(() => import('@/apps/admin/features/settings/pages/AdminSettingsPage').then(m => ({ default: m.AdminSettingsPage })));
 
 export default function DashboardRoutes() {
     return (
-        <Route element={<DashboardLayout />}>
+        <Route element={
+            <Suspense fallback={<AdminDashboardSkeleton />}>
+                <DashboardLayout />
+            </Suspense>
+        }>
             <Route 
                 path={ROUTES.ADMIN_DASHBOARD} 
                 element={

@@ -13,10 +13,10 @@ export default function Banner() {
                             <div key={banner.id} className={styles.bannerItem}>
                                 {banner.linkTo ? (
                                     <a href={banner.linkTo}>
-                                        <img src={banner.imageUrl} alt="banner left" />
+                                        <img src={banner.imageUrl} alt="banner left" width="350" height="120" loading="lazy" decoding="async" />
                                     </a>
                                 ) : (
-                                    <img src={banner.imageUrl} alt="banner left" />
+                                    <img src={banner.imageUrl} alt="banner left" width="350" height="120" loading="lazy" decoding="async" />
                                 )}
                             </div>
                         ))}
@@ -27,14 +27,30 @@ export default function Banner() {
                         <div className={styles.bannerSlider}>
 
                             <div className={styles.bannerTrack}>
-                                {banners.main.map(banner => (
+                                {banners.main.map((banner, index) => (
                                     <div key={banner.id} className={styles.bannerSlide}>
                                         {banner.linkTo ? (
                                             <a href={banner.linkTo}>
-                                                <img src={banner.imageUrl} alt="banner main" />
+                                                <img 
+                                                    src={banner.imageUrl} 
+                                                    alt="banner main" 
+                                                    width="800" 
+                                                    height="400" 
+                                                    loading={index === 0 ? "eager" : "lazy"} 
+                                                    fetchPriority={index === 0 ? "high" : "auto"}
+                                                    decoding="async" 
+                                                />
                                             </a>
                                         ) : (
-                                            <img src={banner.imageUrl} alt="banner main" />
+                                            <img 
+                                                src={banner.imageUrl} 
+                                                alt="banner main" 
+                                                width="800" 
+                                                height="400" 
+                                                loading={index === 0 ? "eager" : "lazy"} 
+                                                fetchPriority={index === 0 ? "high" : "auto"}
+                                                decoding="async" 
+                                            />
                                         )}
                                     </div>
                                 ))}
@@ -59,10 +75,10 @@ export default function Banner() {
                             <div key={banner.id} className={styles.bannerItem}>
                                 {banner.linkTo ? (
                                     <a href={banner.linkTo}>
-                                        <img src={banner.imageUrl} alt="banner right" />
+                                        <img src={banner.imageUrl} alt="banner right" width="350" height="120" loading="lazy" decoding="async" />
                                     </a>
                                 ) : (
-                                    <img src={banner.imageUrl} alt="banner right" />
+                                    <img src={banner.imageUrl} alt="banner right" width="350" height="120" loading="lazy" decoding="async" />
                                 )}
                             </div>
                         ))}

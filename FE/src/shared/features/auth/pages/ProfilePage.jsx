@@ -3,13 +3,14 @@ import { User, Mail, Shield, Camera, CalendarDays } from "lucide-react";
 import SEOHead from "@/shared/components/SEOHead";
 import styles from "./ProfilePage.module.css";
 import { useLanguage } from "@/shared/context/LanguageContext";
+import ProfileSkeleton from "../components/ProfileSkeleton";
 
 export default function ProfilePage() {
     const { t } = useLanguage();
     const { user } = useAuth();
 
     if (!user) {
-        return null; // The ProtectedRoute handles the redirect if not logged in
+        return <ProfileSkeleton />;
     }
 
     return (

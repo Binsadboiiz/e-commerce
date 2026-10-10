@@ -32,6 +32,7 @@ import {
 import toast from "react-hot-toast";
 import styles from "./SellerDashboard.module.css";
 import { sellerDashboardApi } from "../api/sellerDashboardApi";
+import SellerDashboardSkeleton from "../components/SellerDashboardSkeleton";
 
 /**
  * SellerDashboard Component
@@ -243,14 +244,7 @@ export const SellerDashboard = () => {
     // Render loading skeletons
     // ----------------------------------------------------
     if (isLoading && !stats) {
-        return (
-            <div className={styles.container} style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "400px" }}>
-                <div className="d-flex flex-column align-items-center gap-3">
-                    <RefreshCw size={40} className="animate-spin text-primary" />
-                    <p className="text-secondary font-semibold">Loading dashboard stats...</p>
-                </div>
-            </div>
-        );
+        return <SellerDashboardSkeleton />;
     }
 
     return (

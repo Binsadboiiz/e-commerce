@@ -5,6 +5,8 @@ import axiosClient from "@/shared/features/auth/api/axiosClient";
 import { ROUTES } from "@/config/route.config";
 import styles from "./AdminDashboard.module.css";
 
+import AdminDashboardSkeleton from "../components/AdminDashboardSkeleton";
+
 export const AdminDashboardPage = () => {
     const navigate = useNavigate();
     const [pendingCount, setPendingCount] = useState(0);
@@ -28,7 +30,7 @@ export const AdminDashboardPage = () => {
         fetchDashboardData();
     }, []);
 
-    if (loading) return <div className={styles.loading}>Đang tải...</div>;
+    if (loading) return <AdminDashboardSkeleton />;
 
     return (
         <div className={styles.container}>

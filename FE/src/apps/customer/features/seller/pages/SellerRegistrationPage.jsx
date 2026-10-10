@@ -15,6 +15,7 @@ import SellerBusinessForm from "../components/business/SellerBusinessForm";
 import SellerDocumentUpload from "../components/document/SellerDocumentUpload";
 import SellerReview from "../components/review/SellerReview";
 import SellerPendingPage from "./SellerPendingPage";
+import SellerRegistrationSkeleton from "../components/SellerRegistrationSkeleton";
 
 export default function SellerRegistrationPage() {
     const {
@@ -34,14 +35,7 @@ export default function SellerRegistrationPage() {
     const activeStepIndex = userSelectedStepIndex !== null ? userSelectedStepIndex : currentStepIndex;
 
     if (loading) {
-        return (
-            <div className={styles.loadingContainer}>
-                <div className={styles.spinner}></div>
-                <div className={styles.loadingText}>
-                    Loading registration details...
-                </div>
-            </div>
-        );
+        return <SellerRegistrationSkeleton />;
     }
 
     const statusCode = registration?.summary?.sellerStatusCode;

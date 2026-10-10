@@ -6,30 +6,37 @@
 
 import { Route } from 'react-router-dom'
 import { ROUTES } from '@/config/route.config'
+import { lazy, Suspense } from 'react'
 
 import MainLayout from '@/apps/customer/layouts/MainLayout'
 import SellerRegistrationLayout from '@/apps/customer/layouts/SellerRegistrationLayout'
-import HomePage from '@/apps/customer/features/home/Home'
-import ProductList from '@/apps/customer/features/product/pages/ProductList'
-import ProductDetailPage from '@/apps/customer/features/product/pages/ProductDetailPage'
-import CartPage from '@/apps/customer/features/cart/pages/CartPage'
-import CheckoutPage from '@/apps/customer/features/checkout/pages/CheckoutPage'
-import MyOrdersPage from '@/apps/customer/features/order/pages/MyOrdersPage'
-import OrderTrackingPage from '@/apps/customer/features/order/pages/OrderTrackingPage'
-import ProfilePage from '@/shared/features/auth/pages/ProfilePage'
 import ProtectedRoute from '@/shared/components/ProtectedRoute';
 import { ROLES } from '@/shared/constants/roles';
-import { SellerRegistrationPage } from '@/apps/customer/features/seller';
+import PageSkeleton from '@/shared/components/ui/PageSkeleton';
+
+const HomePage = lazy (() => import('@/apps/customer/features/home/Home'));
+const ProductList = lazy(() => import('@/apps/customer/features/product/pages/ProductList'));
+const ProductDetailPage = lazy(() => import('@/apps/customer/features/product/pages/ProductDetailPage'));
+const CartPage = lazy(() => import('@/apps/customer/features/cart/pages/CartPage'));
+const CheckoutPage = lazy(() => import('@/apps/customer/features/checkout/pages/CheckoutPage'));
+const MyOrdersPage = lazy(() => import('@/apps/customer/features/order/pages/MyOrdersPage'));
+const OrderTrackingPage = lazy(() => import('@/apps/customer/features/order/pages/OrderTrackingPage'));
+const ProfilePage = lazy(() => import('@/shared/features/auth/pages/ProfilePage'));
+const SellerRegistrationPage = lazy(() => import('@/apps/customer/features/seller').then(m => ({ default: m.SellerRegistrationPage })));
 
 export default function PublicRoutes() {
     return (
         <>
-            <Route element={<MainLayout />}>
+            <Route element={
+                <Suspense fallback={<PageSkeleton />}>
+                    <MainLayout />
+                </Suspense>
+            }>
                 <Route index element={<HomePage />} />
                 <Route path={ROUTES.PRODUCTS_LIST} element={<ProductList />} />
                 <Route path={ROUTES.PRODUCT_DETAIL} element={<ProductDetailPage />} />
 
-                {/* <Route path={ROUTES.CART} 
+                <Route path={ROUTES.CART} 
                     element={ <ProtectedRoute allowedRoles={[ROLES.CUSTOMER]}>
                         <CartPage />
                 </ProtectedRoute>} />
@@ -52,16 +59,14 @@ export default function PublicRoutes() {
                 <Route path={ROUTES.PROFILE} 
                     element={ <ProtectedRoute allowedRoles={[ROLES.CUSTOMER, ROLES.ADMIN, ROLES.SELLER]}>
                     <ProfilePage />
-                </ProtectedRoute>} /> */}
-
-                <Route path={ROUTES.CART} element={<CartPage />} />
-                <Route path={ROUTES.CHECKOUT} element={<CheckoutPage />} />
-                <Route path={ROUTES.MY_ORDERS} element={<MyOrdersPage />} />
-                <Route path={ROUTES.ORDER_TRACKING} element={<OrderTrackingPage />} />
-                <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
+                </ProtectedRoute>} />
             </Route>
 
-            <Route element={<SellerRegistrationLayout />}>
+            <Route element={
+                <Suspense fallback={<PageSkeleton />}>
+                    <SellerRegistrationLayout />
+                </Suspense>
+            }>
                 <Route path={ROUTES.SELLER_REGISTRATION} element={<SellerRegistrationPage />} />
             </Route>
         </>

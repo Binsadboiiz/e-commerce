@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import axiosClient from "@/shared/features/auth/api/axiosClient";
 import Button from "@/shared/components/ui/Button";
 import styles from "./AdminSellerApplications.module.css";
+import { AdminTableSkeleton, AdminDetailModalSkeleton } from "@/apps/admin/components/AdminTableSkeleton";
 
 export const AdminSellerApplicationsPage = () => {
     const [applications, setApplications] = useState([]);
@@ -85,8 +86,7 @@ export const AdminSellerApplicationsPage = () => {
         if (status === "REJECTED") return styles.badgeRejected;
         return styles.badgePending;
     };
-
-    if (loading) return <div className={styles.loading}>Loading...</div>;
+    if (loading) return <AdminTableSkeleton />;
 
     return (
         <div className={styles.container}>
@@ -182,7 +182,7 @@ export const AdminSellerApplicationsPage = () => {
                         </div>
 
                         {detailLoading ? (
-                            <div className={styles.loading}>Loading...</div>
+                            <AdminDetailModalSkeleton />
                         ) : (
                             <div className={styles.modalBody}>
                                 {/* Summary */}
