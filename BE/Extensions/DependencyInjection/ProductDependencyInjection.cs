@@ -22,6 +22,7 @@ namespace BE.Extensions.DependencyInjection
             services.AddScoped<IProductQueryService, ProductQueryService>();
             services.AddScoped<IProductDomainService, ProductDomainService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ISearchSuggestionService, SearchSuggestionService>();
 
             return services;
         }

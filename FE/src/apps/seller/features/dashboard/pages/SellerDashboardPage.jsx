@@ -528,6 +528,7 @@ export const SellerDashboard = () => {
                                 <th>Order ID</th>
                                 <th>Product</th>
                                 <th>Customer</th>
+                                <th>Email</th>
                                 <th>Date</th>
                                 <th>Amount</th>
                                 <th>Payment</th>
@@ -559,7 +560,10 @@ export const SellerDashboard = () => {
                                         </td>
                                         <td>
                                             <div className="d-flex flex-column">
-                                                <span className="font-semibold">{order.customer}</span>
+                                                <span className="font-semibold">{order.customer}</span>                                            </div>
+                                        </td>
+                                        <td>
+                                            <div className="d-flex flex-column">
                                                 <span className="text-secondary text-xs">{order.email}</span>
                                             </div>
                                         </td>

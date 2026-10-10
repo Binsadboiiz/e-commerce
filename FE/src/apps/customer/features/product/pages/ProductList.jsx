@@ -36,6 +36,11 @@ export default function ProductList() {
             .map(Number)
             .filter(Boolean),
 
+        brandIds: searchParams
+            .getAll("brandIds")
+            .map(Number)
+            .filter(Boolean),
+
         minRating: searchParams.get("minRating")
             ? Number(searchParams.get("minRating"))
             : null,

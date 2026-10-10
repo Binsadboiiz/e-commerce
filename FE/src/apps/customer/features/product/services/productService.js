@@ -34,5 +34,17 @@ export const productsService = {
     async getProductDetail(slug) {
         const res = await axiosClient.get(`${PRODUCT_URL}/${slug}`);
         return res.data;
+    },
+
+    /*
+    * Gets instant search suggestions (categories, brands, products, keywords)
+    */
+    getSuggestions(query, options = {}) {
+        return axiosClient.get(`${PRODUCT_URL}/suggestions`, {
+            params: { q: query },
+            signal: options.signal,
+            skipErrorToast: true,
+            cache: false
+        });
     }
 };
