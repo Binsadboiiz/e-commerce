@@ -20,6 +20,7 @@ export const ROUTES = {
     // Admin
     ADMIN_DASHBOARD: "/admin/dashboard",
     ADMIN_SELLER_APPLICATIONS: "/admin/seller-applications",
+    ADMIN_REDIRECTS: "/admin/redirects",
     ADMIN_SETTINGS: "/admin/settings",
 
     // Seller

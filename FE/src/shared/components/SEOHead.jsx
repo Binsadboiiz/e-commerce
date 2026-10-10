@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { buildCanonicalUrl } from '../utils/canonicalHelper';
 
 const DEFAULT_SITE_NAME = 'PolarisX Mall';
 const DEFAULT_DESCRIPTION = 'Sàn thương mại điện tử uy tín hàng đầu - Mua sắm trực tuyến hàng chính hãng, giao hàng nhanh chóng, ưu đãi hấp dẫn mỗi ngày.';
@@ -77,8 +78,9 @@ export default function SEOHead({
       el.setAttribute('href', href);
     };
 
-    // Current page URL
-    const currentUrl = canonicalUrl || `${window.location.origin}${location.pathname}${location.search}`;
+    // Compute Clean Canonical URL (strips tracking params like utm_*, fbclid, etc.)
+    const rawUrl = `${window.location.origin}${location.pathname}${location.search}`;
+    const cleanCanonicalUrl = buildCanonicalUrl(rawUrl, canonicalUrl);
 
     // Standard Meta Tags
     setMetaTag('description', description);
@@ -103,7 +105,7 @@ export default function SEOHead({
     setMetaTag('og:title', fullTitle, 'property');
     setMetaTag('og:description', description, 'property');
     setMetaTag('og:type', 'website', 'property');
-    setMetaTag('og:url', currentUrl, 'property');
+    setMetaTag('og:url', cleanCanonicalUrl, 'property');
     setMetaTag('og:image', fullOgImage, 'property');
     setMetaTag('og:site_name', DEFAULT_SITE_NAME, 'property');
 
@@ -114,7 +116,7 @@ export default function SEOHead({
     setMetaTag('twitter:image', fullOgImage);
 
     // Canonical URL
-    setLinkTag('canonical', currentUrl);
+    setLinkTag('canonical', cleanCanonicalUrl);
 
     // 5. JSON-LD Structured Data
     let scriptEl = document.getElementById('json-ld-schema');

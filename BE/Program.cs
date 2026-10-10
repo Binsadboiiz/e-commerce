@@ -129,6 +129,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ExceptionMiddleware>();
+app.UseMiddleware<RedirectMiddleware>();
 app.UseMiddleware<PrerenderMiddleware>();
 
 // CORS must be executed before Authentication & Authorization

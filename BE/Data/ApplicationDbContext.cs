@@ -72,6 +72,9 @@ namespace BE.Data
         public DbSet<SellerDocument> SellerDocuments { get; set; }
         public DbSet<SellerDocumentType> SellerDocumentTypes { get; set; }
 
+        //RedirectRule
+        public DbSet<RedirectRule> RedirectRules { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
