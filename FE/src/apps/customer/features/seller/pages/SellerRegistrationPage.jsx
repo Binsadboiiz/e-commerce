@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { FiShoppingBag } from "react-icons/fi";
 import useSellerRegistration from "../hooks/useSellerRegistration";
 import { calculateSellerProgress } from "../utils/sellerProgress";
 import { getSellerSteps } from "../constants/sellerSteps";
 import { notify } from "@/shared/utils/Notify";
 import SEOHead from "@/shared/components/SEOHead";
+import { ROUTES } from "@/config/route.config";
 import styles from "./SellerRegistrationPage.module.css";
 
 import SellerStepper from "../components/common/SellerStepper";
@@ -15,9 +18,17 @@ import SellerBusinessForm from "../components/business/SellerBusinessForm";
 import SellerDocumentUpload from "../components/document/SellerDocumentUpload";
 import SellerReview from "../components/review/SellerReview";
 import SellerPendingPage from "./SellerPendingPage";
-import SellerRegistrationSkeleton from "../components/SellerRegistrationSkeleton";
 
+import { useLanguage } from "@/shared/context/LanguageContext";
+
+/**
+ * Main Onboarding Page for Seller Registration.
+ * Guides prospective sellers through account type selection, address setup, bank account input,
+ * optional business information, document uploading, and final submission for admin approval.
+ */
 export default function SellerRegistrationPage() {
+    const navigate = useNavigate();
+    const { t } = useLanguage();
     const {
         registration,
         loading,
@@ -28,29 +39,51 @@ export default function SellerRegistrationPage() {
         reload
     } = useSellerRegistration();
 
+    //Calculate active progress step from submitted API profile data
     const { currentStepIndex } = calculateSellerProgress(registration);
     const [userSelectedStepIndex, setUserSelectedStepIndex] = useState(null);
     const [pendingChangeTypeId, setPendingChangeTypeId] = useState(null);
 
+    const hasShop = Boolean(registration?.summary?.hasShop);
+
+    useEffect(() => {
+        if (hasShop) {
+            navigate(ROUTES.SELLER_DASHBOARD || '/seller/dashboard', { replace: true });
+        }
+    }, [hasShop, navigate]);
+
     const activeStepIndex = userSelectedStepIndex !== null ? userSelectedStepIndex : currentStepIndex;
 
+    //Render loading spinner while fetching registration status
     if (loading) {
-        return <SellerRegistrationSkeleton />;
+        return (
+            <div className={styles.loadingContainer}>
+                <div className={styles.spinner}></div>
+                <div className={styles.loadingText}>
+                    {t("common.loading")}
+                </div>
+            </div>
+        );
     }
 
+    //Check if application has already been submitted for review
     const statusCode = registration?.summary?.sellerStatusCode;
-    const isSubmitted = statusCode === "PENDING" || statusCode === "UNDER_REVIEW";
+    const isSubmitted = statusCode === "PENDING" || statusCode === "UNDER_REVIEW" || statusCode === "APPROVED" || statusCode === "REJECTED";
 
+    //If application is submitted, approved, or rejected, redirect view to the SellerPendingPage status tracker
     if (isSubmitted) {
         return (
             <div className={styles.container}>
-                <SellerPendingPage registration={registration} />
+                <SellerPendingPage
+                    registration={registration}
+                    onReEdit={() => setUserSelectedStepIndex(0)}
+                />
             </div>
         );
     }
 
     const typeCode = registration?.summary?.sellerTypeCode;
-    const steps = getSellerSteps(typeCode);
+    const steps = getSellerSteps(typeCode, t);
 
     const handleStepSubmit = async (payload) => {
         try {
@@ -65,8 +98,11 @@ export default function SellerRegistrationPage() {
         try {
             await createRegistration({ sellerTypeId: typeId });
             setUserSelectedStepIndex(null);
+            notify.success("Đã chọn loại hình gian hàng thành công.");
         } catch (error) {
             console.error(error);
+            const msg = error?.response?.data?.message || "Không thể khởi tạo đăng ký gian hàng. Vui lòng thử lại.";
+            notify.error(msg);
         }
     };
 
@@ -81,7 +117,7 @@ export default function SellerRegistrationPage() {
         );
 
         if (!hasAllDocs) {
-            notify.error("Please upload all required verification documents.");
+            notify.error("Vui lòng tải lên đầy đủ các chứng từ xác minh bắt buộc.");
             return;
         }
 
@@ -101,9 +137,11 @@ export default function SellerRegistrationPage() {
         try {
             await changeSellerType(typeId);
             setUserSelectedStepIndex(null);
-            notify.success("Seller type changed successfully.");
+            notify.success("Đã thay đổi loại hình gian hàng thành công.");
         } catch (error) {
             console.error(error);
+            const msg = error?.response?.data?.message || "Không thể thay đổi loại hình gian hàng.";
+            notify.error(msg);
         }
     };
 
@@ -123,6 +161,7 @@ export default function SellerRegistrationPage() {
                 return (
                     <SellerTypeSelector
                         value={registration.summary.sellerTypeId}
+                        code={registration.summary.sellerTypeCode}
                         sellerStatus={registration.summary.sellerStatusCode}
                         onCreate={handleTypeSelect}
                         onChangeType={handleChangeSellerType}
@@ -198,6 +237,7 @@ export default function SellerRegistrationPage() {
                     <SellerReview
                         registration={registration}
                         onSubmit={submitRegistration}
+                        onEditStep={(stepIdx) => setUserSelectedStepIndex(stepIdx)}
                     />
                 );
 
@@ -208,14 +248,23 @@ export default function SellerRegistrationPage() {
 
     return (
         <div className={styles.container}>
-            <SEOHead 
-                title="Đăng Ký Bán Hàng Cùng Chúng Tôi" 
-                description="Mở gian hàng kinh doanh miễn phí tại E-Commerce Enterprise, tiếp cận hàng triệu khách hàng tiềm năng."
+            <SEOHead
+                title="Đăng Ký Bán Hàng Cùng PolarisX Mall"
+                description="Mở gian hàng kinh doanh miễn phí tại PolarisX Mall, tiếp cận hàng triệu khách hàng tiềm năng."
             />
-            <h2 className={styles.title}>
-                Seller Registration
-            </h2>
 
+            {/* Hero Header Section */}
+            <div className={styles.heroSection}>
+                <h1 className={styles.title}>{t("sellerOnboarding.title")}</h1>
+                <p className={styles.subtitle}>
+                    {t("sellerOnboarding.subtitle")}
+                </p>
+                <div className={styles.stepProgressBadge}>
+                    {t("sellerOnboarding.stepBadge", { current: activeStepIndex + 1, total: steps.length, label: steps[activeStepIndex]?.label })}
+                </div>
+            </div>
+
+            {/* Step Progress Stepper */}
             <SellerStepper
                 steps={steps}
                 currentStepIndex={activeStepIndex}
@@ -223,10 +272,12 @@ export default function SellerRegistrationPage() {
                 onStepClick={(index) => setUserSelectedStepIndex(index)}
             />
 
+            {/* Main Form Card Container */}
             <div className={styles.card}>
                 {renderStepContent()}
             </div>
 
+            {/* Change Type Confirmation Modal */}
             <SellerChangeTypeModal
                 isOpen={pendingChangeTypeId !== null}
                 onClose={() => setPendingChangeTypeId(null)}

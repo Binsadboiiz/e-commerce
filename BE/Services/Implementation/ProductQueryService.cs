@@ -270,6 +270,7 @@ namespace BE.Services.Implementation
 
                     Attributes = p.Variants
                         .SelectMany(v => v.VariantAttributes)
+                        .Where(va => va != null && va.AttributeValue != null && va.AttributeValue.AttributeType != null)
                         .GroupBy(va => new
                         {
                             va.AttributeValue.AttributeId,
@@ -301,7 +302,7 @@ namespace BE.Services.Implementation
 
                         AvailableStock = v.Inventory != null
                             ? v.Inventory.AvailableStock - v.Inventory.ReservedStock
-                            : 0,
+                            : (v.Stock ?? 0),
 
                         SKU = v.SKU ?? string.Empty,
 
@@ -309,16 +310,19 @@ namespace BE.Services.Implementation
                             .Select(i => i.ImageId)
                             .ToList(),
 
-                        IsAvailable = v.Inventory != null
-                            && (v.Inventory.AvailableStock - v.Inventory.ReservedStock) > 0,
+                        IsAvailable = (v.Inventory != null
+                            ? (v.Inventory.AvailableStock - v.Inventory.ReservedStock)
+                            : (v.Stock ?? 0)) > 0,
 
-                        Attributes = v.VariantAttributes.Select(va => new VariantAttributeDto
-                        {
-                            AttributeId = va.AttributeValue.AttributeId,
-                            AttributeName = va.AttributeValue.AttributeType.Name,
-                            ValueId = va.ValueId,
-                            Value = va.AttributeValue.Value,
-                        }).ToList(),
+                        Attributes = v.VariantAttributes
+                            .Where(va => va != null && va.AttributeValue != null && va.AttributeValue.AttributeType != null)
+                            .Select(va => new VariantAttributeDto
+                            {
+                                AttributeId = va.AttributeValue.AttributeId,
+                                AttributeName = va.AttributeValue.AttributeType.Name,
+                                ValueId = va.ValueId,
+                                Value = va.AttributeValue.Value,
+                            }).ToList(),
                     }).ToList(),
 
                     Shop = p.Shop == null ? null : new ShopInfoDto
@@ -340,19 +344,49 @@ namespace BE.Services.Implementation
                 })
                 .FirstOrDefaultAsync();
 
-
-
             if (product == null) return null;
 
-            product.VariantMap = product.Variants.ToDictionary(
-                variant =>
-                    string.Join("-",
-                        variant.Attributes
-                            .OrderBy(a => a.AttributeId)
-                            .Select(a => a.ValueId)
-                            ),
-                variant => variant.VariantId
-             );
+            // Ensure images fallback to main Product.Image if ProductImages collection is empty
+            if (product.Images == null || !product.Images.Any())
+            {
+                var mainImgUrl = await _context.Products
+                    .AsNoTracking()
+                    .Where(p => p.ProductId == product.ProductId)
+                    .Select(p => p.Image)
+                    .FirstOrDefaultAsync();
+
+                if (!string.IsNullOrWhiteSpace(mainImgUrl))
+                {
+                    product.Images = new List<ProductImageDto>
+                    {
+                        new ProductImageDto
+                        {
+                            ImageId = 0,
+                            ImageUrl = mainImgUrl,
+                            IsPrimary = true,
+                            SortOrder = 0
+                        }
+                    };
+                }
+            }
+
+            // Safely build VariantMap without throwing ArgumentException for duplicate or empty keys
+            var variantMap = new Dictionary<string, long>();
+            if (product.Variants != null)
+            {
+                foreach (var variant in product.Variants)
+                {
+                    if (variant.Attributes != null && variant.Attributes.Any())
+                    {
+                        var key = string.Join("-", variant.Attributes.OrderBy(a => a.AttributeId).Select(a => a.ValueId));
+                        if (!string.IsNullOrEmpty(key) && !variantMap.ContainsKey(key))
+                        {
+                            variantMap[key] = variant.VariantId;
+                        }
+                    }
+                }
+            }
+            product.VariantMap = variantMap;
 
             return product;
         }

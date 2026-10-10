@@ -1,4 +1,4 @@
-﻿namespace BE.Models.DTOs.Seller
+namespace BE.Models.DTOs.Seller
 {
     /// <summary>
     /// Basic seller information.
@@ -16,5 +16,7 @@
         public string SellerStatusCode { get; set; } = string.Empty;
 
         public int MaxShopLimit { get; set; }
+
+        public bool HasShop { get; set; }
     }
 }

@@ -34,6 +34,11 @@ namespace BE.Repositories.Implementations
                 .FirstOrDefaultAsync(x => x.SellerId == sellerId);
         }
 
+        public async Task<bool> HasShopAsync(string userId)
+        {
+            return await _context.Shops.AnyAsync(s => s.OwnerId == userId);
+        }
+
         public async Task AddSellerAsync(SellerAccount seller)
         {
             await _context.SellerAccounts.AddAsync(seller);

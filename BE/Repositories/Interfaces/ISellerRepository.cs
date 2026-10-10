@@ -12,6 +12,8 @@ namespace BE.Repositories.Interfaces
 
         Task<SellerAccount?> GetBySellerIdAsync(string sellerId);
 
+        Task<bool> HasShopAsync(string userId);
+
         Task AddSellerAsync(SellerAccount seller);
 
         // Master Data

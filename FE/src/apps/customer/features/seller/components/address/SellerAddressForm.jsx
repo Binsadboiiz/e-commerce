@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { FiUser, FiMapPin, FiArrowRight } from "react-icons/fi";
+import { useLanguage } from "@/shared/context/LanguageContext";
 import styles from "./SellerAddressForm.module.css";
 
 const defaultForm = {
@@ -15,6 +17,7 @@ export default function SellerAddressForm({
     initialValues,
     onSubmit
 }) {
+    const { t } = useLanguage();
     const [form, setForm] = useState(defaultForm);
 
     useEffect(() => {
@@ -42,21 +45,23 @@ export default function SellerAddressForm({
     }
 
     return (
-        <form
-            className={styles.form}
-            onSubmit={handleSubmit}
-        >
+        <form className={styles.form} onSubmit={handleSubmit}>
+            {/* Section 1: Contact Person */}
             <section className={styles.section}>
-                <h3>Contact Information</h3>
+                <div className={styles.sectionTitleRow}>
+                    <h3>{t("sellerAddress.contactTitle")}</h3>
+                </div>
 
                 <div className={styles.grid}>
                     <div className={styles.formGroup}>
-                        <label>Full Name <span style={{ color: "#ff4d4f", marginLeft: "4px" }}>*</span></label>
-
+                        <label className={styles.label}>
+                            {t("sellerAddress.fullName")} <span className={styles.required}>*</span>
+                        </label>
                         <input
                             type="text"
+                            className={styles.input}
                             value={form.fullName}
-                            placeholder="Enter your full name"
+                            placeholder={t("sellerAddress.fullNamePlaceholder")}
                             onChange={(e) =>
                                 handleChange("fullName", e.target.value)
                             }
@@ -65,34 +70,41 @@ export default function SellerAddressForm({
                     </div>
 
                     <div className={styles.formGroup}>
-                        <label>Phone Number <span style={{ color: "#ff4d4f", marginLeft: "4px" }}>*</span></label>
-
+                        <label className={styles.label}>
+                            {t("sellerAddress.phone")} <span className={styles.required}>*</span>
+                        </label>
                         <input
                             type="tel"
+                            className={styles.input}
                             value={form.phoneNumber}
-                            placeholder="Enter phone number"
+                            placeholder={t("sellerAddress.phonePlaceholder")}
                             onChange={(e) =>
                                 handleChange("phoneNumber", e.target.value)
                             }
                             pattern="[0-9]{9,11}"
-                            title="Phone number must contain 9 to 11 digits."
+                            title={t("sellerAddress.phoneTitle")}
                             required
                         />
                     </div>
                 </div>
             </section>
 
+            {/* Section 2: Warehouse Address */}
             <section className={styles.section}>
-                <h3>Address Information</h3>
+                <div className={styles.sectionTitleRow}>
+                    <h3>{t("sellerAddress.warehouseTitle")}</h3>
+                </div>
 
                 <div className={styles.grid}>
                     <div className={styles.formGroup}>
-                        <label>City / Province <span style={{ color: "#ff4d4f", marginLeft: "4px" }}>*</span></label>
-
+                        <label className={styles.label}>
+                            {t("sellerAddress.city")} <span className={styles.required}>*</span>
+                        </label>
                         <input
                             type="text"
+                            className={styles.input}
                             value={form.city}
-                            placeholder="City"
+                            placeholder={t("sellerAddress.city")}
                             onChange={(e) =>
                                 handleChange("city", e.target.value)
                             }
@@ -101,12 +113,14 @@ export default function SellerAddressForm({
                     </div>
 
                     <div className={styles.formGroup}>
-                        <label>District <span style={{ color: "#ff4d4f", marginLeft: "4px" }}>*</span></label>
-
+                        <label className={styles.label}>
+                            {t("sellerAddress.district")} <span className={styles.required}>*</span>
+                        </label>
                         <input
                             type="text"
+                            className={styles.input}
                             value={form.district}
-                            placeholder="District"
+                            placeholder={t("sellerAddress.district")}
                             onChange={(e) =>
                                 handleChange("district", e.target.value)
                             }
@@ -115,12 +129,14 @@ export default function SellerAddressForm({
                     </div>
 
                     <div className={styles.formGroup}>
-                        <label>Ward <span style={{ color: "#ff4d4f", marginLeft: "4px" }}>*</span></label>
-
+                        <label className={styles.label}>
+                            {t("sellerAddress.ward")} <span className={styles.required}>*</span>
+                        </label>
                         <input
                             type="text"
+                            className={styles.input}
                             value={form.ward}
-                            placeholder="Ward"
+                            placeholder={t("sellerAddress.ward")}
                             onChange={(e) =>
                                 handleChange("ward", e.target.value)
                             }
@@ -129,12 +145,12 @@ export default function SellerAddressForm({
                     </div>
 
                     <div className={styles.formGroup}>
-                        <label>Postal Code</label>
-
+                        <label className={styles.label}>{t("sellerAddress.postalCode")}</label>
                         <input
                             type="text"
+                            className={styles.input}
                             value={form.postalCode}
-                            placeholder="Postal code"
+                            placeholder={t("sellerAddress.postalCodePlaceholder")}
                             onChange={(e) =>
                                 handleChange("postalCode", e.target.value)
                             }
@@ -143,12 +159,14 @@ export default function SellerAddressForm({
                 </div>
 
                 <div className={styles.formGroup}>
-                    <label>Street Address <span style={{ color: "#ff4d4f", marginLeft: "4px" }}>*</span></label>
-
+                    <label className={styles.label}>
+                        {t("sellerAddress.streetAddress")} <span className={styles.required}>*</span>
+                    </label>
                     <textarea
-                        rows={4}
+                        rows={3}
+                        className={styles.textarea}
                         value={form.streetAddress}
-                        placeholder="Street address"
+                        placeholder={t("sellerAddress.streetAddressPlaceholder")}
                         onChange={(e) =>
                             handleChange("streetAddress", e.target.value)
                         }
@@ -162,9 +180,9 @@ export default function SellerAddressForm({
                     type="submit"
                     className={styles.primaryButton}
                 >
-                    Continue
+                    <span>{t("common.next")}</span>
                 </button>
             </div>
         </form>
     );
-}
+}

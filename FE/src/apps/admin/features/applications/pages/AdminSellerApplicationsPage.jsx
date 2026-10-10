@@ -2,9 +2,15 @@ import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import axiosClient from "@/shared/features/auth/api/axiosClient";
 import Button from "@/shared/components/ui/Button";
+import SEOHead from "@/shared/components/SEOHead";
 import styles from "./AdminSellerApplications.module.css";
 import { AdminTableSkeleton, AdminDetailModalSkeleton } from "@/apps/admin/components/AdminTableSkeleton";
 
+/**
+ * AdminSellerApplicationsPage Component
+ * Provides administrators with a management portal to inspect, approve, or reject pending seller applications.
+ * Handles fetching list of applications, inspecting seller documents/bank/address details, and executing approval/rejection actions.
+ */
 export const AdminSellerApplicationsPage = () => {
     const [applications, setApplications] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -109,7 +115,7 @@ export const AdminSellerApplicationsPage = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {applications.map((app) => (
+                    {applications.filter(app => app.status !== "DRAFT").map((app) => (
                         <tr key={app.id}>
                             <td>
                                 <div><strong>{app.representative}</strong></div>
@@ -154,9 +160,6 @@ export const AdminSellerApplicationsPage = () => {
                                                 Reject
                                             </Button>
                                         </>
-                                    )}
-                                    {app.status !== "PENDING" && (
-                                        <span style={{ color: "#94a3b8", fontSize: "13px" }}>—</span>
                                     )}
                                 </div>
                             </td>
