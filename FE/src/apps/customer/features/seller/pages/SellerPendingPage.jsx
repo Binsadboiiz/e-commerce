@@ -123,7 +123,7 @@ export default function SellerPendingPage({ registration, onReEdit }) {
                             className={styles.primaryButton}
                             onClick={() => navigate(ROUTES.SELLER_SETUP_SHOP || '/seller/setup-shop')}
                         >
-                            <span>{t("sellerPending.btnGoToPortal")}</span>
+                            <span>{t("sellerPending.btnSetupShop")}</span>
                         </button>
                     ) : null}
 

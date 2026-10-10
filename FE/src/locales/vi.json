@@ -286,6 +286,7 @@
     "stepReviewing": "Đang Thẩm Định",
     "stepActivate": "Kích Hoạt Gian Hàng",
     "btnGoToPortal": "Vào kênh người bán",
+    "btnSetupShop": "Thiết Lập Cửa Hàng",
     "btnEditResubmit": "Chỉnh sửa & gửi lại hồ sơ",
     "btnBackHome": "Về trang chủ",
     "btnHideDetails": "Ẩn chi tiết hồ sơ",
@@ -417,7 +418,7 @@
     "streetAddress": "Số Nhà, Tên Đường",
     "submitBtn": "Xác Nhận Mở Cửa Hàng",
     "submitting": "Đang Khởi Tạo...",
-    "successNotify": "🎉 Mở Cửa Hàng thành công! Đang chuyển hướng...",
+    "successNotify": "Mở Cửa Hàng thành công! Đang chuyển hướng...",
     "errorNotify": "Không thể khởi tạo Cửa Hàng. Vui lòng thử lại.",
     "enterShopNameNotify": "Vui lòng nhập tên Cửa Hàng!"
   },

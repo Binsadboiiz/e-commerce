@@ -37,22 +37,22 @@ export default function PublicRoutes() {
                 <Route path={ROUTES.PRODUCT_DETAIL} element={<ProductDetailPage />} />
 
                 <Route path={ROUTES.CART} 
-                    element={ <ProtectedRoute allowedRoles={[ROLES.CUSTOMER]}>
+                    element={ <ProtectedRoute allowedRoles={[ROLES.CUSTOMER, ROLES.SELLER, ROLES.ADMIN]}>
                         <CartPage />
                 </ProtectedRoute>} />
 
                 <Route path={ROUTES.CHECKOUT} 
-                    element={ <ProtectedRoute allowedRoles={[ROLES.CUSTOMER]}>
+                    element={ <ProtectedRoute allowedRoles={[ROLES.CUSTOMER, ROLES.SELLER, ROLES.ADMIN]}>
                         <CheckoutPage />
                     </ProtectedRoute>} />
 
                 <Route path={ROUTES.MY_ORDERS} 
-                    element={ <ProtectedRoute allowedRoles={[ROLES.CUSTOMER]}>
+                    element={ <ProtectedRoute allowedRoles={[ROLES.CUSTOMER, ROLES.SELLER, ROLES.ADMIN]}>
                     <MyOrdersPage />
                 </ProtectedRoute>} />
 
                 <Route path={ROUTES.ORDER_TRACKING} 
-                    element={ <ProtectedRoute allowedRoles={[ROLES.CUSTOMER]}>
+                    element={ <ProtectedRoute allowedRoles={[ROLES.CUSTOMER, ROLES.SELLER, ROLES.ADMIN]}>
                     <OrderTrackingPage />
                 </ProtectedRoute>} />
                 

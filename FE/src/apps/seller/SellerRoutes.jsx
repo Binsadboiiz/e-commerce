@@ -19,7 +19,7 @@ export default function SellerRoute() {
                 <Route 
                     path={ROUTES.SELLER_SETUP_SHOP} 
                     element={ 
-                        <ProtectedRoute allowedRoles={[ROLES.SELLER]}>
+                        <ProtectedRoute allowedRoles={[ROLES.SELLER, ROLES.CUSTOMER]}>
                             <SellerShopSetupPage />
                         </ProtectedRoute>
                     } 
@@ -28,22 +28,22 @@ export default function SellerRoute() {
 
             <Route element={<DashboardLayout />}>
                 <Route path={ROUTES.SELLER_DASHBOARD} 
-                    element={ <ProtectedRoute allowedRoles = {[ROLES.SELLER]}>
+                    element={ <ProtectedRoute allowedRoles = {[ROLES.SELLER, ROLES.CUSTOMER]}>
                         <SellerDashboard />
                     </ProtectedRoute>} />
 
                 <Route path={ROUTES.SELLER_PRODUCTS} 
-                    element={ <ProtectedRoute allowedRoles = {[ROLES.SELLER]}>
+                    element={ <ProtectedRoute allowedRoles = {[ROLES.SELLER, ROLES.CUSTOMER]}>
                         <SellerProducts />
                     </ProtectedRoute>} />
 
                 <Route path={ROUTES.SELLER_VOUCHERS} 
-                    element={ <ProtectedRoute allowedRoles = {[ROLES.SELLER]}>
+                    element={ <ProtectedRoute allowedRoles = {[ROLES.SELLER, ROLES.CUSTOMER]}>
                         <SellerVouchersPage />
                     </ProtectedRoute>} />
 
                 <Route path={ROUTES.SELLER_ORDERS} 
-                    element={ <ProtectedRoute allowedRoles = {[ROLES.SELLER]}>
+                    element={ <ProtectedRoute allowedRoles = {[ROLES.SELLER, ROLES.CUSTOMER]}>
                         <SellerOrdersPage />
                     </ProtectedRoute>} />
             </Route>

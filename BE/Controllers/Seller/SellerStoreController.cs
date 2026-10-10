@@ -13,7 +13,7 @@ namespace BE.Controllers.Seller
     /// Controller for seller store management operations (view, update, and initial onboarding setup).
     /// Secured with Seller role authorization and GeneralPolicy Rate Limiting.
     /// </summary>
-    [Authorize(Roles = "Seller,SELLER,seller")]
+    [Authorize(Roles = "Seller,SELLER,seller,Customer,CUSTOMER,customer")]
     [EnableRateLimiting("GeneralPolicy")]
     [ApiController]
     [Route("api/seller/store")]

@@ -18,6 +18,7 @@ import SellerBusinessForm from "../components/business/SellerBusinessForm";
 import SellerDocumentUpload from "../components/document/SellerDocumentUpload";
 import SellerReview from "../components/review/SellerReview";
 import SellerPendingPage from "./SellerPendingPage";
+import SellerRegistrationSkeleton from "../components/SellerRegistrationSkeleton";
 
 import { useLanguage } from "@/shared/context/LanguageContext";
 
@@ -54,16 +55,9 @@ export default function SellerRegistrationPage() {
 
     const activeStepIndex = userSelectedStepIndex !== null ? userSelectedStepIndex : currentStepIndex;
 
-    //Render loading spinner while fetching registration status
+    //Render loading skeleton while fetching registration status
     if (loading) {
-        return (
-            <div className={styles.loadingContainer}>
-                <div className={styles.spinner}></div>
-                <div className={styles.loadingText}>
-                    {t("common.loading")}
-                </div>
-            </div>
-        );
+        return <SellerRegistrationSkeleton />;
     }
 
     //Check if application has already been submitted for review

@@ -286,6 +286,7 @@
     "stepReviewing": "Under Review",
     "stepActivate": "Activate Shop",
     "btnGoToPortal": "Go to Seller Portal",
+    "btnSetupShop": "Set Up Shop",
     "btnEditResubmit": "Edit & Resubmit",
     "btnBackHome": "Back to Home",
     "btnHideDetails": "Hide Details",
@@ -417,7 +418,7 @@
     "streetAddress": "Street Address",
     "submitBtn": "Confirm & Open Store",
     "submitting": "Initializing...",
-    "successNotify": "🎉 Store opened successfully! Redirecting...",
+    "successNotify": "Store opened successfully! Redirecting...",
     "errorNotify": "Failed to initialize store. Please try again.",
     "enterShopNameNotify": "Please enter a Shop Name!"
   },
