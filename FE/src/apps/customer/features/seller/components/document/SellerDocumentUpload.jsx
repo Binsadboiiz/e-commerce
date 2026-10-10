@@ -1,26 +1,10 @@
 import React, { useState } from "react";
+import { FiFileText, FiInfo, FiArrowRight } from "react-icons/fi";
+import { useLanguage } from "@/shared/context/LanguageContext";
 import SellerDocumentItem from "./SellerDocumentItem";
 import sellerApi from "../../api/sellerApi";
 import { notify } from "@/shared/utils/Notify";
 import styles from "./SellerDocumentUpload.module.css";
-
-const REQUIRED_DOCUMENTS = [
-    {
-        type: "IDENTITY_FRONT",
-        title: "Identity Card (Front)",
-        description: "Upload the front side of your identity card."
-    },
-    {
-        type: "IDENTITY_BACK",
-        title: "Identity Card (Back)",
-        description: "Upload the back side of your identity card."
-    },
-    {
-        type: "BUSINESS_LICENSE",
-        title: "Business License",
-        description: "Required for Business Seller only."
-    }
-];
 
 export default function SellerDocumentUpload({
     value = [],
@@ -28,11 +12,30 @@ export default function SellerDocumentUpload({
     onRefresh,
     onContinue
 }) {
+    const { t } = useLanguage();
     const [uploadingType, setUploadingType] = useState(null);
 
     const isBusiness = sellerTypeCode === "BUSINESS";
 
-    const requirements = REQUIRED_DOCUMENTS.filter(doc => {
+    const requiredDocs = [
+        {
+            type: "IDENTITY_FRONT",
+            title: t("sellerDocument.idFrontTitle"),
+            description: t("sellerDocument.idFrontDesc")
+        },
+        {
+            type: "IDENTITY_BACK",
+            title: t("sellerDocument.idBackTitle"),
+            description: t("sellerDocument.idBackDesc")
+        },
+        {
+            type: "BUSINESS_LICENSE",
+            title: t("sellerDocument.licenseTitle"),
+            description: t("sellerDocument.licenseDesc")
+        }
+    ];
+
+    const requirements = requiredDocs.filter(doc => {
         if (doc.type === "BUSINESS_LICENSE" && !isBusiness) {
             return false;
         }
@@ -63,11 +66,11 @@ export default function SellerDocumentUpload({
                 fileUrl
             });
 
-            notify.success(`Uploaded ${type.replace('_', ' ').toLowerCase()} successfully`);
+            notify.success(t("sellerDocument.uploadSuccess"));
             if (onRefresh) await onRefresh();
         } catch (error) {
             console.error(error);
-            const msg = error.response?.data?.message || "Failed to upload document";
+            const msg = error.response?.data?.message || t("sellerDocument.uploadError");
             notify.error(msg);
         } finally {
             setUploadingType(null);
@@ -77,11 +80,11 @@ export default function SellerDocumentUpload({
     const handleRemove = async (documentId) => {
         try {
             await sellerApi.deleteDocument(documentId);
-            notify.success("Document removed successfully");
+            notify.success(t("sellerDocument.deleteSuccess"));
             if (onRefresh) await onRefresh();
         } catch (error) {
             console.error(error);
-            const msg = error.response?.data?.message || "Failed to delete document";
+            const msg = error.response?.data?.message || t("sellerDocument.deleteError");
             notify.error(msg);
         }
     };
@@ -89,12 +92,21 @@ export default function SellerDocumentUpload({
     return (
         <div className={styles.wrapper}>
             <div className={styles.header}>
-                <h3>Verification Documents</h3>
+                <div className={styles.sectionTitleRow}>
+                    <h3>{t("sellerDocument.title")}</h3>
+                </div>
 
-                <p>
-                    Upload clear images of the required verification
-                    documents before submitting your application.
-                </p>
+                <div className={styles.guideBox}>
+                    <div className={styles.guideHeader}>
+                        <FiInfo className={styles.guideIcon} size={18} />
+                        <span>{t("sellerDocument.reqTitle")}</span>
+                    </div>
+                    <ul className={styles.guideList}>
+                        <li>{t("sellerDocument.req1")}</li>
+                        <li>{t("sellerDocument.req2")}</li>
+                        <li>{t("sellerDocument.req3")}</li>
+                    </ul>
+                </div>
             </div>
 
             <div className={styles.list}>
@@ -121,9 +133,9 @@ export default function SellerDocumentUpload({
                     className={styles.primaryButton}
                     onClick={onContinue}
                 >
-                    Continue
+                    <span>{t("common.next")}</span>
                 </button>
             </div>
         </div>
     );
-}
+}

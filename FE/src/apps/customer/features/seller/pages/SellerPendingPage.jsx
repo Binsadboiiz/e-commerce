@@ -1,86 +1,167 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/config/route.config';
-import { FiCheckCircle } from 'react-icons/fi';
+import { FiCheckCircle, FiClock, FiHome, FiFileText, FiChevronDown, FiChevronUp, FiXCircle, FiEdit3, FiCheck, FiX } from 'react-icons/fi';
+import { sellerStoreApi } from '@/apps/seller/features/store/api/sellerStoreApi';
+import { useLanguage } from '@/shared/context/LanguageContext';
 import SellerReview from '../components/review/SellerReview';
+import styles from './SellerPendingPage.module.css';
 
-export default function SellerPendingPage({ registration }) {
+/**
+ * Component displaying seller registration approval status (Pending, Approved, or Rejected).
+ * Formatted as a clean, flat page layout. Auto-redirects to Seller Dashboard if shop is already created.
+ */
+export default function SellerPendingPage({ registration, onReEdit }) {
     const navigate = useNavigate();
+    const { t } = useLanguage();
     const [showDetails, setShowDetails] = useState(false);
+    const [shopCreated, setShopCreated] = useState(Boolean(registration?.summary?.hasShop));
+
+    const statusCode = registration?.summary?.sellerStatusCode || 'PENDING';
+
+    useEffect(() => {
+        const checkShopStatus = async () => {
+            try {
+                const res = await sellerStoreApi.getShopStatus();
+                const data = res?.data || res || {};
+                if (data.hasShop) {
+                    setShopCreated(true);
+                    // Automatically redirect to seller dashboard if shop is already activated
+                    navigate(ROUTES.SELLER_DASHBOARD || '/seller/dashboard', { replace: true });
+                }
+            } catch (err) {
+                console.error("Failed to fetch shop status in SellerPendingPage:", err);
+            }
+        };
+        checkShopStatus();
+    }, [navigate]);
+
+    const hasShop = shopCreated || Boolean(registration?.summary?.hasShop);
+    const isApproved = statusCode === 'APPROVED';
+    const isRejected = statusCode === 'REJECTED';
 
     return (
-        <div style={{
-            maxWidth: '800px',
-            margin: '40px auto',
-            padding: '20px',
-            boxSizing: 'border-box'
-        }}>
-            <div style={{
-                textAlign: 'center',
-                padding: '40px 20px',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
-                borderRadius: '12px',
-                backgroundColor: '#ffffff',
-                border: '1px solid #eaeaea',
-                marginBottom: '30px'
-            }}>
-                <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'center' }}>
-                    <FiCheckCircle size={48} color="#22c55e" />
+        <div className={styles.container}>
+            <div className={styles.statusCard}>
+                {/* Status Icon */}
+                <div className={`${styles.iconWrapper} ${hasShop || isApproved ? styles.iconApproved : isRejected ? styles.iconRejected : ''}`}>
+                    {hasShop || isApproved ? (
+                        <FiCheckCircle size={44} style={{ color: '#2563eb' }} />
+                    ) : isRejected ? (
+                        <FiXCircle size={44} style={{ color: '#ef4444' }} />
+                    ) : (
+                        <FiCheckCircle size={44} style={{ color: '#2563eb' }} />
+                    )}
                 </div>
-                <h2 style={{ color: '#000000', marginBottom: '16px', fontSize: '24px', fontWeight: '700' }}>
-                    Thank You for Your Application!
+
+                {/* Header Title */}
+                <h2 className={styles.title}>
+                    {hasShop && t("sellerPending.titleActivated")}
+                    {!hasShop && isApproved && t("sellerPending.titleApproved")}
+                    {isRejected && t("sellerPending.titleRejected")}
+                    {!isApproved && !isRejected && t("sellerPending.titleSubmitted")}
                 </h2>
-                <p style={{ fontSize: '16px', color: '#666666', lineHeight: '1.6', margin: '0 auto 12px', maxWidth: '500px' }}>
-                    Your seller registration has been submitted successfully and is currently under review by our administration team.
+
+                {/* Description */}
+                <p className={styles.description}>
+                    {hasShop && t("sellerPending.descActivated")}
+                    {!hasShop && isApproved && t("sellerPending.descApproved")}
+                    {isRejected && t("sellerPending.descRejected")}
+                    {!isApproved && !isRejected && t("sellerPending.descSubmitted")}
                 </p>
-                <p style={{ fontSize: '14px', color: '#999999', marginBottom: '24px' }}>
-                    We will notify you once the review is completed (usually within 24-48 business hours).
-                </p>
-                
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '16px' }}>
-                    <button 
-                        onClick={() => navigate(ROUTES.HOME)}
-                        style={{
-                            padding: '12px 24px',
-                            fontSize: '15px',
-                            fontWeight: '600',
-                            color: '#ffffff',
-                            backgroundColor: '#000000',
-                            border: 'none',
-                            borderRadius: '8px',
-                            cursor: 'pointer',
-                            transition: '0.2s'
-                        }}
-                    >
-                        Go to Homepage
-                    </button>
-                    <button 
-                        onClick={() => setShowDetails(!showDetails)}
-                        style={{
-                            padding: '12px 24px',
-                            fontSize: '15px',
-                            fontWeight: '600',
-                            color: '#000000',
-                            backgroundColor: '#ffffff',
-                            border: '1px solid #ddd',
-                            borderRadius: '8px',
-                            cursor: 'pointer',
-                            transition: '0.2s'
-                        }}
-                    >
-                        {showDetails ? 'Hide Application Details' : 'View Application Details'}
-                    </button>
+
+                {/* Status Badge Notice */}
+                {!isApproved && !isRejected && (
+                    <div className={styles.noticeTime}>
+                        <FiClock size={16} />
+                        <span>{t("sellerPending.estimatedTime")}</span>
+                    </div>
+                )}
+
+                {/* Timeline Status Node */}
+                <div className={styles.timeline}>
+                    <div className={styles.timelineLine} />
+                    <div
+                        className={`${styles.timelineProgress} ${hasShop || isApproved ? styles.progressFull : styles.progressHalf}`}
+                    />
+
+                    <div className={styles.timelineNode}>
+                        <div className={`${styles.timelineCircle} ${styles.completedCircle}`}>
+                            <FiCheck size={16} />
+                        </div>
+                        <span className={styles.timelineLabel}>{t("sellerPending.stepSubmitted")}</span>
+                    </div>
+
+                    <div className={styles.timelineNode}>
+                        <div className={`${styles.timelineCircle} ${isApproved || isRejected || hasShop ? styles.completedCircle : styles.activeCircle}`}>
+                            {isApproved || hasShop ? <FiCheck size={16} /> : isRejected ? <FiX size={16} /> : '2'}
+                        </div>
+                        <span className={styles.timelineLabel}>
+                            {isApproved || hasShop ? t("sellerPending.stepApproved") : isRejected ? t("sellerPending.stepRejected") : t("sellerPending.stepReviewing")}
+                        </span>
+                    </div>
+
+                    <div className={styles.timelineNode}>
+                        <div className={`${styles.timelineCircle} ${hasShop || isApproved ? styles.completedCircle : ''}`}>
+                            {hasShop || isApproved ? <FiCheck size={16} /> : '3'}
+                        </div>
+                        <span className={styles.timelineLabel}>{t("sellerPending.stepActivate")}</span>
+                    </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className={styles.actions}>
+                    {hasShop ? (
+                        <button
+                            className={styles.primaryButton}
+                            onClick={() => navigate(ROUTES.SELLER_DASHBOARD || '/seller/dashboard')}
+                        >
+                            <span>{t("sellerPending.btnGoToPortal")}</span>
+                        </button>
+                    ) : isApproved ? (
+                        <button
+                            className={styles.primaryButton}
+                            onClick={() => navigate(ROUTES.SELLER_SETUP_SHOP || '/seller/setup-shop')}
+                        >
+                            <span>{t("sellerPending.btnGoToPortal")}</span>
+                        </button>
+                    ) : null}
+
+                    {isRejected && (
+                        <button
+                            className={styles.primaryButton}
+                            onClick={onReEdit}
+                        >
+                            <FiEdit3 size={18} />
+                            <span>{t("sellerPending.btnEditResubmit")}</span>
+                        </button>
+                    )}
+
+                    {!isApproved && !isRejected && (
+                        <button
+                            className={styles.primaryButton}
+                            onClick={() => navigate(ROUTES.HOME)}
+                        >
+                            <FiHome size={18} />
+                            <span>{t("sellerPending.btnBackHome")}</span>
+                        </button>
+                    )}
+
+                    {!hasShop && (
+                        <button
+                            className={styles.secondaryButton}
+                            onClick={() => setShowDetails(!showDetails)}
+                        >
+                            <FiFileText size={18} />
+                            <span>{showDetails ? t("sellerPending.btnHideDetails") : t("sellerPending.btnReviewDetails")}</span>
+                            {showDetails ? <FiChevronUp size={16} /> : <FiChevronDown size={16} />}
+                        </button>
+                    )}
                 </div>
             </div>
 
-            {showDetails && (
-                <div style={{
-                    backgroundColor: '#ffffff',
-                    padding: '30px',
-                    borderRadius: '12px',
-                    border: '1px solid #eaeaea',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
-                }}>
+            {!hasShop && showDetails && (
+                <div className={styles.detailsWrapper}>
                     <SellerReview registration={registration} isReadOnly={true} />
                 </div>
             )}

@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { FiBriefcase, FiInfo, FiArrowRight } from "react-icons/fi";
+import { useLanguage } from "@/shared/context/LanguageContext";
 import styles from "./SellerBusinessForm.module.css";
 
 const defaultForm = {
@@ -13,6 +15,7 @@ export default function SellerBusinessForm({
     initialValues,
     onSubmit
 }) {
+    const { t } = useLanguage();
     const [form, setForm] = useState(defaultForm);
 
     useEffect(() => {
@@ -39,74 +42,97 @@ export default function SellerBusinessForm({
     return (
         <form className={styles.form} onSubmit={handleSubmit}>
             <section className={styles.section}>
-                <h3>Business Information</h3>
+                <div className={styles.sectionTitleRow}>
+                    <h3>{t("sellerBusiness.title")}</h3>
+                </div>
 
-                <div className={styles.formGroup}>
-                    <label>Company Name <span style={{ color: "#ff4d4f", marginLeft: "4px" }}>*</span></label>
-                    <input
-                        type="text"
-                        placeholder="Enter company name"
-                        value={form.companyName}
-                        onChange={(e) =>
-                            handleChange("companyName", e.target.value)
-                        }
-                        required
-                    />
+                <div className={styles.infoBox}>
+                    <FiInfo className={styles.infoIcon} size={18} />
+                    <span>
+                        {t("sellerBusiness.infoText")}
+                    </span>
+                </div>
+
+                <div className={styles.grid}>
+                    <div className={styles.formGroup}>
+                        <label className={styles.label}>
+                            {t("sellerBusiness.companyName")} <span className={styles.required}>*</span>
+                        </label>
+                        <input
+                            type="text"
+                            className={styles.input}
+                            placeholder={t("sellerBusiness.companyNamePlaceholder")}
+                            value={form.companyName}
+                            onChange={(e) =>
+                                handleChange("companyName", e.target.value)
+                            }
+                            required
+                        />
+                    </div>
+
+                    <div className={styles.formGroup}>
+                        <label className={styles.label}>
+                            {t("sellerBusiness.taxCode")} <span className={styles.required}>*</span>
+                        </label>
+                        <input
+                            type="text"
+                            className={styles.input}
+                            placeholder={t("sellerBusiness.taxCodePlaceholder")}
+                            value={form.taxCode}
+                            onChange={(e) =>
+                                handleChange("taxCode", e.target.value)
+                            }
+                            pattern="[0-9]{10}|[0-9]{13}"
+                            title={t("sellerBusiness.taxCodeTitle")}
+                            required
+                        />
+                    </div>
+
+                    <div className={styles.formGroup}>
+                        <label className={styles.label}>
+                            {t("sellerBusiness.businessLicenseNumber")} <span className={styles.required}>*</span>
+                        </label>
+                        <input
+                            type="text"
+                            className={styles.input}
+                            placeholder={t("sellerBusiness.businessLicenseNumberPlaceholder")}
+                            value={form.businessLicenseNumber}
+                            onChange={(e) =>
+                                handleChange(
+                                    "businessLicenseNumber",
+                                    e.target.value
+                                )
+                            }
+                            required
+                        />
+                    </div>
+
+                    <div className={styles.formGroup}>
+                        <label className={styles.label}>
+                            {t("sellerBusiness.representative")} <span className={styles.required}>*</span>
+                        </label>
+                        <input
+                            type="text"
+                            className={styles.input}
+                            placeholder={t("sellerBusiness.representativePlaceholder")}
+                            value={form.representative}
+                            onChange={(e) =>
+                                handleChange(
+                                    "representative",
+                                    e.target.value
+                                )
+                            }
+                            required
+                        />
+                    </div>
                 </div>
 
                 <div className={styles.formGroup}>
-                    <label>Tax Code <span style={{ color: "#ff4d4f", marginLeft: "4px" }}>*</span></label>
-                    <input
-                        type="text"
-                        placeholder="Enter tax code"
-                        value={form.taxCode}
-                        onChange={(e) =>
-                            handleChange("taxCode", e.target.value)
-                        }
-                        pattern="[0-9]{10}|[0-9]{13}"
-                        title="Tax code must contain 10 or 13 digits."
-                        required
-                    />
-                </div>
-
-                <div className={styles.formGroup}>
-                    <label>Business Registration Number <span style={{ color: "#ff4d4f", marginLeft: "4px" }}>*</span></label>
-                    <input
-                        type="text"
-                        placeholder="Business registration number"
-                        value={form.businessLicenseNumber}
-                        onChange={(e) =>
-                            handleChange(
-                                "businessLicenseNumber",
-                                e.target.value
-                            )
-                        }
-                        required
-                    />
-                </div>
-
-                <div className={styles.formGroup}>
-                    <label>Representative Name <span style={{ color: "#ff4d4f", marginLeft: "4px" }}>*</span></label>
-                    <input
-                        type="text"
-                        placeholder="Legal representative"
-                        value={form.representative}
-                        onChange={(e) =>
-                            handleChange(
-                                "representative",
-                                e.target.value
-                            )
-                        }
-                        required
-                    />
-                </div>
-
-                <div className={styles.formGroup}>
-                    <label>Business Address</label>
-
+                    <label className={styles.label}>{t("sellerBusiness.businessAddress")}</label>
                     <textarea
-                        rows={4}
-                        placeholder="Business address"
+                        rows={3}
+                        className={styles.textarea}
+                        placeholder={t("sellerBusiness.businessAddressPlaceholder")}
                         value={form.businessAddress}
                         onChange={(e) =>
                             handleChange(
@@ -119,13 +145,10 @@ export default function SellerBusinessForm({
             </section>
 
             <div className={styles.actions}>
-                <button
-                    type="submit"
-                    className={styles.primaryButton}
-                >
-                    Continue
+                <button type="submit" className={styles.primaryButton}>
+                    <span>{t("common.next")}</span>
                 </button>
             </div>
         </form>
     );
-}
+}

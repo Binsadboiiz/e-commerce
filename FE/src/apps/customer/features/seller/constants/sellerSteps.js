@@ -17,9 +17,15 @@ export const SELLER_STEPS_BUSINESS = [
     { key: "review", label: "Review & Submit" }
 ];
 
-export function getSellerSteps(typeCode) {
-    if (typeCode === SELLER_TYPE.BUSINESS) {
-        return SELLER_STEPS_BUSINESS;
+export function getSellerSteps(typeCode, t) {
+    const rawSteps = typeCode === SELLER_TYPE.BUSINESS ? SELLER_STEPS_BUSINESS : SELLER_STEPS_PERSONAL;
+    
+    if (typeof t === 'function') {
+        return rawSteps.map(step => ({
+            ...step,
+            label: t(`sellerOnboarding.steps.${step.key}`) || step.label
+        }));
     }
-    return SELLER_STEPS_PERSONAL;
+    
+    return rawSteps;
 }

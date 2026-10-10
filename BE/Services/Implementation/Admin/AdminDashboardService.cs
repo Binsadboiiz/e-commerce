@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BE.Constants;
+using BE.Constants.Seller;
 using BE.Data;
 using BE.Models.DTOs.Admin.Dashboard;
 using BE.Models.DTOs.Seller;
 using BE.Models.DTOs.Seller.Shared;
 using BE.Repositories.Interfaces;
 using BE.Services.Interface.Admin;
+using CloudinaryDotNet;
 using Microsoft.EntityFrameworkCore;
 
 namespace BE.Services.Implementation.Admin
@@ -40,7 +43,7 @@ namespace BE.Services.Implementation.Admin
         {
             var pendingSellers = await _context.SellerAccounts
                 .Include(x => x.SellerStatus)
-                .CountAsync(x => x.SellerStatus.Code == "PENDING");
+                .CountAsync(x => x.SellerStatus.Code == SellerStatusConstants.Pending);
 
             return new AdminDashboardOverviewDto
             {
@@ -56,6 +59,7 @@ namespace BE.Services.Implementation.Admin
                 .Include(x => x.SellerType)
                 .Include(x => x.SellerStatus)
                 .Include(x => x.Business)
+                .Where(x => x.SellerStatus.Code != SellerStatusConstants.Draft)
                 .OrderByDescending(x => x.CreatedAt)
                 .Select(x => new AdminSellerApplicationDto
                 {
@@ -80,87 +84,119 @@ namespace BE.Services.Implementation.Admin
             var seller = await _sellerRepository.GetBySellerIdAsync(sellerId);
             if (seller == null) return null;
 
-            var address   = await _sellerRepository.GetAddressAsync(seller.SellerId);
-            var bank      = await _sellerRepository.GetPrimaryBankAsync(seller.SellerId);
-            var business  = await _sellerRepository.GetBusinessAsync(seller.SellerId);
+            var address = await _sellerRepository.GetAddressAsync(seller.SellerId);
+            var bank = await _sellerRepository.GetPrimaryBankAsync(seller.SellerId);
+            var business = await _sellerRepository.GetBusinessAsync(seller.SellerId);
             var documents = await _sellerRepository.GetDocumentsAsync(seller.SellerId);
 
             return new SellerRegistrationDto
             {
                 Summary = new SellerSummaryDto
                 {
-                    SellerId         = seller.SellerId,
-                    SellerTypeId     = seller.SellerTypeId,
-                    SellerTypeCode   = seller.SellerType.Code,
-                    SellerStatusId   = seller.SellerStatusId,
+                    SellerId = seller.SellerId,
+                    SellerTypeId = seller.SellerTypeId,
+                    SellerTypeCode = seller.SellerType.Code,
+                    SellerStatusId = seller.SellerStatusId,
                     SellerStatusCode = seller.SellerStatus.Code,
-                    MaxShopLimit     = seller.MaxShopLimit
+                    MaxShopLimit = seller.MaxShopLimit
                 },
                 Address = address == null ? null : new SellerAddressDto
                 {
-                    FullName      = address.FullName,
-                    PhoneNumber   = address.PhoneNumber,
-                    City          = address.City,
-                    District      = address.District,
-                    Ward          = address.Ward,
+                    FullName = address.FullName,
+                    PhoneNumber = address.PhoneNumber,
+                    City = address.City,
+                    District = address.District,
+                    Ward = address.Ward,
                     StreetAddress = address.StreetAddress,
-                    PostalCode    = address.PostalCode,
-                    IsDefault     = address.IsDefault
+                    PostalCode = address.PostalCode,
+                    IsDefault = address.IsDefault
                 },
                 Bank = bank == null ? null : new SellerBankDto
                 {
-                    BankCode      = bank.BankCode,
+                    BankCode = bank.BankCode,
                     AccountNumber = bank.AccountNumber,
-                    AccountName   = bank.AccountName,
-                    IsPrimary     = bank.IsPrimary
+                    AccountName = bank.AccountName,
+                    IsPrimary = bank.IsPrimary
                 },
                 Business = business == null ? null : new SellerBusinessDto
                 {
-                    CompanyName           = business.CompanyName,
-                    TaxCode               = business.TaxCode,
+                    CompanyName = business.CompanyName,
+                    TaxCode = business.TaxCode,
                     BusinessLicenseNumber = business.BusinessLicenseNumber,
-                    Representative        = business.Representative
+                    Representative = business.Representative
                 },
                 Documents = documents.Select(d => new SellerDocumentDto
                 {
-                    DocumentId     = d.DocumentId,
+                    DocumentId = d.DocumentId,
                     DocumentTypeId = d.DocumentTypeId,
-                    DocumentType   = d.SellerDocumentType.Code,
-                    FileUrl        = d.FileUrl
+                    DocumentType = d.SellerDocumentType.Code,
+                    FileUrl = d.FileUrl
                 }).ToList(),
                 Progress = new SellerRegistrationProgressDto()
             };
         }
 
+        /// <summary>
+        /// Approves a pending seller application. Updates seller status to APPROVED and upgrades user account role to SELLER.
+        /// </summary>
+        /// <param name="id">The unique seller ID to approve.</param>
+        /// <returns>True if approval succeeds, false otherwise.</returns>
         public async Task<bool> ApproveSellerApplicationAsync(string id)
         {
+            // Fetch seller account with status relationship
             var seller = await _context.SellerAccounts
                 .Include(x => x.SellerStatus)
                 .FirstOrDefaultAsync(x => x.SellerId == id);
-            if (seller == null) return false;
-
+            if (seller == null) 
+                return false;
+            
+            //Fetch APPROVED status constant entity
             var approvedStatus = await _context.SellerStatuses
-                .FirstOrDefaultAsync(x => x.Code == "APPROVED");
-            if (approvedStatus == null) return false;
+                .FirstOrDefaultAsync(x => x.Code == SellerStatusConstants.Approved);
+            if (approvedStatus == null) 
+                return false;
 
+            //Prevent duplicate approvals
+            if (seller.SellerStatusId == approvedStatus.SellerStatusId) 
+                return false;
+            
+            //Fetch user account to upgrade system role
+            var account = await _context.Accounts
+                .FirstOrDefaultAsync(x => x.UserId == seller.UserId);
+
+            if (account == null) 
+                return false;
+            
+            //Update seller status to APPROVED
             seller.SellerStatusId = approvedStatus.SellerStatusId;
             seller.UpdatedAt = DateTime.UtcNow;
+
+            // Upgrade user role to SELLER
+            account.Role = RoleConstants.Seller;
 
             await _context.SaveChangesAsync();
             return true;
         }
 
+        /// <summary>
+        /// Rejects a pending seller application. Updates seller status to REJECTED.
+        /// </summary>
+        /// <param name="id">The unique seller ID to reject.</param>
+        /// <returns>True if rejection succeeds, false otherwise.</returns>
         public async Task<bool> RejectSellerApplicationAsync(string id)
         {
+            //Fetch seller account
             var seller = await _context.SellerAccounts
                 .Include(x => x.SellerStatus)
                 .FirstOrDefaultAsync(x => x.SellerId == id);
             if (seller == null) return false;
 
+            //Fetch REJECTED status constant entity
             var rejectedStatus = await _context.SellerStatuses
-                .FirstOrDefaultAsync(x => x.Code == "REJECTED");
+                .FirstOrDefaultAsync(x => x.Code == SellerStatusConstants.Rejected);
             if (rejectedStatus == null) return false;
 
+            //Update seller status to REJECTED
             seller.SellerStatusId = rejectedStatus.SellerStatusId;
             seller.UpdatedAt = DateTime.UtcNow;
 

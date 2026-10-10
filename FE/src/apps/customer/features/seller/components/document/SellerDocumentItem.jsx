@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
-import { FiFileText, FiTrash2, FiUploadCloud } from "react-icons/fi";
+import { FiFileText, FiTrash2, FiUploadCloud, FiEye, FiCheckCircle } from "react-icons/fi";
+import { useLanguage } from "@/shared/context/LanguageContext";
 import styles from "./SellerDocumentItem.module.css";
 
 export default function SellerDocumentItem({
@@ -10,6 +11,7 @@ export default function SellerDocumentItem({
     onRemove,
     disabled = false
 }) {
+    const { t } = useLanguage();
     const fileInputRef = useRef(null);
 
     const handleFileChange = (e) => {
@@ -20,48 +22,58 @@ export default function SellerDocumentItem({
     };
 
     return (
-        <div className={styles.item}>
+        <div className={`${styles.item} ${uploadedDoc ? styles.itemUploaded : ''}`}>
             <div className={styles.left}>
-                <div className={styles.icon}>
-                    <FiFileText size={22} />
+                <div className={`${styles.icon} ${uploadedDoc ? styles.iconSuccess : ''}`}>
+                    {uploadedDoc ? <FiCheckCircle size={20} /> : <FiFileText size={20} />}
                 </div>
 
                 <div className={styles.info}>
-                    <div className={styles.name}>
-                        {requirement.title}
+                    <div className={styles.titleRow}>
+                        <span className={styles.name}>{requirement.title}</span>
+                        {uploadedDoc ? (
+                            <span className={styles.badgeSuccess}>{t("sellerDocument.uploaded")}</span>
+                        ) : (
+                            <span className={styles.badgePending}>{t("sellerDocument.notUploaded")}</span>
+                        )}
                     </div>
 
-                    <div className={styles.type}>
-                        {uploadedDoc ? (
-                            <a 
-                                href={uploadedDoc.fileUrl} 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
-                                className={styles.viewLink}
-                            >
-                                View uploaded file
-                            </a>
-                        ) : (
-                            requirement.description
-                        )}
+                    <div className={styles.description}>
+                        {requirement.description}
                     </div>
                 </div>
             </div>
 
             <div className={styles.actions}>
                 {isUploading ? (
-                    <span className={styles.loadingText}>Uploading...</span>
+                    <div className={styles.loadingWrapper}>
+                        <div className={styles.miniSpinner}></div>
+                        <span className={styles.loadingText}>{t("sellerDocument.uploading")}</span>
+                    </div>
                 ) : uploadedDoc ? (
-                    !disabled && (
-                        <button
-                            type="button"
-                            className={styles.removeButton}
-                            onClick={onRemove}
+                    <div className={styles.uploadedActions}>
+                        <a 
+                            href={uploadedDoc.fileUrl} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className={styles.viewLink}
                         >
-                            <FiTrash2 />
-                            Remove
-                        </button>
-                    )
+                            <FiEye size={15} />
+                            <span>{t("sellerDocument.viewFile")}</span>
+                        </a>
+
+                        {!disabled && (
+                            <button
+                                type="button"
+                                className={styles.removeButton}
+                                onClick={onRemove}
+                                title={t("sellerDocument.delete")}
+                            >
+                                <FiTrash2 size={15} />
+                                <span>{t("sellerDocument.delete")}</span>
+                            </button>
+                        )}
+                    </div>
                 ) : (
                     !disabled && (
                         <>
@@ -78,7 +90,7 @@ export default function SellerDocumentItem({
                                 onClick={() => fileInputRef.current?.click()}
                             >
                                 <FiUploadCloud size={16} />
-                                Upload
+                                <span>{t("sellerDocument.upload")}</span>
                             </button>
                         </>
                     )
@@ -86,4 +98,4 @@ export default function SellerDocumentItem({
             </div>
         </div>
     );
-}
+}

@@ -157,12 +157,12 @@ export default function ProductDetail() {
     if (!product) {
         return (
             <div className={styles.notFound}>
-                <SEOHead 
-                    title="Sản Phẩm Không Tồn Tại" 
+                <SEOHead
+                    title="Sản Phẩm Không Tồn Tại"
                     description="Rất tiếc, sản phẩm bạn đang tìm kiếm không tồn tại hoặc đã ngưng kinh doanh."
-                    statusCode={404} 
-                    robots="noindex, nofollow" 
-                    isReady={true} 
+                    statusCode={404}
+                    robots="noindex, nofollow"
+                    isReady={true}
                 />
                 <span className={styles.notFoundIcon}>🔍</span>
                 <p>Product not found.</p>
@@ -219,7 +219,7 @@ export default function ProductDetail() {
 
     return (
         <div className={styles.page}>
-            <SEOHead 
+            <SEOHead
                 title={`${product.name} - Mua Ngay Giá Tốt`}
                 description={product.description?.substring(0, 160) || `Sản phẩm ${product.name} chính hãng, ưu đãi độc quyền tại PolarisX Mall.`}
                 ogImage={product.images?.[0]?.imageUrl || product.imageUrl || "/logo.png"}

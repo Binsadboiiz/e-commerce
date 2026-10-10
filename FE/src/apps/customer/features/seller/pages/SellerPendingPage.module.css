@@ -1,0 +1,200 @@
+.container {
+    max-width: 820px;
+    margin: 1.5rem auto 3rem;
+    padding: 0 1rem;
+    font-family: var(--font-family-base, 'Inter', sans-serif);
+    animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.statusCard {
+    text-align: center;
+    padding: 1.5rem 0 2rem;
+    margin-bottom: 2rem;
+}
+
+.iconWrapper {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background-color: #eff6ff;
+    color: var(--color-primary, #2563eb);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+    box-shadow: none;
+}
+
+.title {
+    color: var(--color-slate-900, #0f172a);
+    margin: 0 0 0.75rem;
+    font-size: 1.625rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.description {
+    font-size: 0.9375rem;
+    color: var(--color-slate-600, #475569);
+    line-height: 1.6;
+    margin: 0 auto 0.75rem;
+    max-width: 540px;
+}
+
+.noticeTime {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-primary-hover, #1d4ed8);
+    background-color: var(--color-primary-light, #dbeafe);
+    padding: 0.375rem 0.875rem;
+    border-radius: var(--radius-full, 9999px);
+    margin-bottom: 2rem;
+}
+
+.timeline {
+    display: flex;
+    position: relative;
+    max-width: 520px;
+    margin: 0 auto 2.5rem;
+    padding: 0;
+    width: 100%;
+}
+
+.timelineLine {
+    position: absolute;
+    top: 15px;
+    left: calc(100% / 6);
+    right: calc(100% / 6);
+    height: 3px;
+    background-color: var(--border-color, #e2e8f0);
+    z-index: 1;
+}
+
+.timelineProgress {
+    position: absolute;
+    top: 15px;
+    left: calc(100% / 6);
+    height: 3px;
+    background-color: var(--color-primary, #2563eb);
+    z-index: 2;
+    transition: width 0.3s ease;
+}
+
+.progressHalf {
+    width: calc(100% / 3);
+}
+
+.progressFull {
+    width: calc(100% * 2 / 3);
+}
+
+.timelineNode {
+    flex: 1;
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.375rem;
+    text-align: center;
+}
+
+.timelineCircle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2px solid var(--color-slate-300, #cbd5e1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-slate-500, #64748b);
+}
+
+.completedCircle {
+    border-color: var(--color-primary, #2563eb);
+    background-color: var(--color-primary, #2563eb);
+    color: #ffffff;
+    box-shadow: none;
+}
+
+.activeCircle {
+    border-color: var(--color-primary, #2563eb);
+    background-color: var(--color-primary, #2563eb);
+    color: #ffffff;
+    box-shadow: none;
+}
+
+.timelineLabel {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-slate-600, #475569);
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.primaryButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: #ffffff;
+    background-color: var(--color-primary, #2563eb);
+    border: none;
+    border-radius: var(--radius-md, 8px);
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+    transition: all 0.2s ease;
+}
+
+.primaryButton:hover {
+    background-color: var(--color-primary-hover, #1d4ed8);
+    box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+    transform: translateY(-1px);
+}
+
+.secondaryButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-slate-700, #334155);
+    background-color: #ffffff;
+    border: 1px solid var(--border-color, #cbd5e1);
+    border-radius: var(--radius-md, 8px);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.secondaryButton:hover {
+    background-color: var(--color-slate-100, #f1f5f9);
+    color: var(--color-slate-900, #0f172a);
+}
+
+.detailsWrapper {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: var(--radius-xl, 16px);
+    border: 1px solid var(--border-color, #e2e8f0);
+    box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.05));
+    animation: fadeIn 0.3s ease-out;
+}

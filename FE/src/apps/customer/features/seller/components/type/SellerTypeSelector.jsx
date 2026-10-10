@@ -1,36 +1,46 @@
 import React from "react";
-import { FiUser, FiBriefcase } from "react-icons/fi";
+import { FiCheck } from "react-icons/fi";
+import { useLanguage } from "@/shared/context/LanguageContext";
 import styles from "./SellerTypeSelector.module.css";
 
 export default function SellerTypeSelector({
     value,
+    code,
     sellerStatus,
     onCreate,
     onChangeType
 }) {
+    const { t, lang } = useLanguage();
 
-    const isPersonalSelected = value === 1 || value === "PERSONAL";
+    const isPersonalSelected =
+        value === 1 ||
+        String(value) === "1" ||
+        code === "PERSONAL" ||
+        value === "PERSONAL";
 
-    const isBusinessSelected = value === 2 || value === "BUSINESS";
+    const isBusinessSelected =
+        value === 2 ||
+        String(value) === "2" ||
+        code === "BUSINESS" ||
+        value === "BUSINESS";
 
-    const isCreated = value !== undefined && value !== null;
-
-    const canChange = isCreated && sellerStatus === "DRAFT";
+    const isCreated = value !== undefined && value !== null && value !== "";
+    const canChange = isCreated && (sellerStatus === "DRAFT" || !sellerStatus);
 
     function handleSelect(typeId) {
-
-        // Tạo mới
         if (!isCreated) {
             onCreate?.(typeId);
             return;
         }
 
-        // Đổi sang cùng loại
-        if (value === typeId) {
+        const isCurrentSelection =
+            (typeId === 1 && isPersonalSelected) ||
+            (typeId === 2 && isBusinessSelected);
+
+        if (isCurrentSelection) {
             return;
         }
 
-        // Đổi loại hình
         if (canChange) {
             onChangeType?.(typeId);
         }
@@ -38,20 +48,23 @@ export default function SellerTypeSelector({
 
     return (
         <div className={styles.container}>
-
-            <p className={styles.description}>
-                Select the type of shop that best matches your business operations.
-            </p>
+            <div className={styles.headerArea}>
+                <h3 className={styles.headingTitle}>{t("sellerOnboarding.selectTypeTitle")}</h3>
+                <p className={styles.description}>
+                    {t("sellerOnboarding.selectTypeDesc")}
+                </p>
+            </div>
 
             {canChange && (
                 <div className={styles.notice}>
-                    Changing seller type will permanently remove all
-                    registration information and uploaded documents.
+                    <span>
+                        <strong>{lang === 'vi' ? 'Lưu ý:' : 'Note:'}</strong> {t("sellerOnboarding.selectTypeNotice")}
+                    </span>
                 </div>
             )}
 
             <div className={styles.grid}>
-
+                {/* Personal / Individual Card */}
                 <div
                     className={`
                         ${styles.card}
@@ -60,21 +73,31 @@ export default function SellerTypeSelector({
                     `}
                     onClick={() => handleSelect(1)}
                 >
-                    <div className={styles.iconWrapper}>
-                        <FiUser size={32} />
-                    </div>
-
                     <h3 className={styles.cardTitle}>
-                        Individual Seller
+                        {t("sellerOnboarding.personalTitle")}
                     </h3>
 
                     <p className={styles.cardText}>
-                        For individual sellers, household businesses,
-                        or personal shops with no registered enterprise
-                        license.
+                        {t("sellerOnboarding.personalDesc")}
                     </p>
+
+                    <ul className={styles.featureList}>
+                        <li>
+                            <FiCheck className={styles.featureCheck} size={15} />
+                            <span>{t("sellerOnboarding.personalFeature1")}</span>
+                        </li>
+                        <li>
+                            <FiCheck className={styles.featureCheck} size={15} />
+                            <span>{t("sellerOnboarding.personalFeature2")}</span>
+                        </li>
+                        <li>
+                            <FiCheck className={styles.featureCheck} size={15} />
+                            <span>{t("sellerOnboarding.personalFeature3")}</span>
+                        </li>
+                    </ul>
                 </div>
 
+                {/* Business Card */}
                 <div
                     className={`
                         ${styles.card}
@@ -83,23 +106,30 @@ export default function SellerTypeSelector({
                     `}
                     onClick={() => handleSelect(2)}
                 >
-                    <div className={styles.iconWrapper}>
-                        <FiBriefcase size={32} />
-                    </div>
-
                     <h3 className={styles.cardTitle}>
-                        Business Seller
+                        {t("sellerOnboarding.businessTitle")}
                     </h3>
 
                     <p className={styles.cardText}>
-                        For registered corporations, organizations,
-                        brands, or official retail business license
-                        holders.
+                        {t("sellerOnboarding.businessDesc")}
                     </p>
+
+                    <ul className={styles.featureList}>
+                        <li>
+                            <FiCheck className={styles.featureCheck} size={15} />
+                            <span>{t("sellerOnboarding.businessFeature1")}</span>
+                        </li>
+                        <li>
+                            <FiCheck className={styles.featureCheck} size={15} />
+                            <span>{t("sellerOnboarding.businessFeature2")}</span>
+                        </li>
+                        <li>
+                            <FiCheck className={styles.featureCheck} size={15} />
+                            <span>{t("sellerOnboarding.businessFeature3")}</span>
+                        </li>
+                    </ul>
                 </div>
-
             </div>
-
         </div>
     );
 }
