@@ -32,6 +32,20 @@ export const sellerStoreApi = {
      */
     async updateStoreProfile(data) {
         return axiosClient.put(`${SELLER_STORE_URL}/profile`, data);
+    },
+
+    /**
+     * Retrieves warehouse/pickup address for authenticated seller.
+     */
+    async getWarehouseAddress() {
+        return axiosClient.get(`${SELLER_STORE_URL}/address`);
+    },
+
+    /**
+     * Updates warehouse/pickup address for authenticated seller.
+     */
+    async updateWarehouseAddress(data) {
+        return axiosClient.put(`${SELLER_STORE_URL}/address`, data);
     }
 };
 

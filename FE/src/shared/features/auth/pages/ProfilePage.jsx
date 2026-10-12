@@ -1,13 +1,16 @@
+import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
-import { User, Mail, Shield, Camera, CalendarDays } from "lucide-react";
+import { User, Mail, Shield, Camera, CalendarDays, MapPin } from "lucide-react";
 import SEOHead from "@/shared/components/SEOHead";
 import styles from "./ProfilePage.module.css";
 import { useLanguage } from "@/shared/context/LanguageContext";
 import ProfileSkeleton from "../components/ProfileSkeleton";
+import CustomerAddressManager from "@/apps/customer/features/address/components/CustomerAddressManager";
 
 export default function ProfilePage() {
     const { t } = useLanguage();
     const { user } = useAuth();
+    const [activeTab, setActiveTab] = useState("profile"); // 'profile' | 'addresses'
 
     if (!user) {
         return <ProfileSkeleton />;
@@ -24,10 +27,36 @@ export default function ProfilePage() {
                     <h2 className={styles.title}>{t('profile.myProfile')}</h2>
                     <p className={styles.subtitle}>{t('profile.profileSubtitle')}</p>
                 </div>
+
+                {/* Tab Navigation */}
+                <div className={styles.tabsNav}>
+                    <button
+                        type="button"
+                        className={`${styles.tabButton} ${activeTab === "profile" ? styles.tabButtonActive : ""}`}
+                        onClick={() => setActiveTab("profile")}
+                    >
+                        <User size={16} />
+                        <span>Hồ sơ tài khoản</span>
+                    </button>
+                    <button
+                        type="button"
+                        className={`${styles.tabButton} ${activeTab === "addresses" ? styles.tabButtonActive : ""}`}
+                        onClick={() => setActiveTab("addresses")}
+                    >
+                        <MapPin size={16} />
+                        <span>Sổ địa chỉ nhận hàng</span>
+                    </button>
+                </div>
                 
                 <div className={styles.card}>
-                    <div className={styles.banner}></div>
-                    <div className={styles.profileContent}>
+                    {activeTab === "addresses" ? (
+                        <div className={styles.addressWrapper}>
+                            <CustomerAddressManager />
+                        </div>
+                    ) : (
+                        <>
+                            <div className={styles.banner}></div>
+                            <div className={styles.profileContent}>
                         <div className={styles.avatarWrapper}>
                             <div className={styles.avatarContainer}>
                                 <div className={styles.avatar}>
@@ -91,6 +120,8 @@ export default function ProfilePage() {
                             </button>
                         </div>
                     </div>
+                </>
+            )}
                 </div>
             </div>
         </div>

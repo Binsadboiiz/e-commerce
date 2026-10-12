@@ -6,6 +6,7 @@ import SellerProducts from "@/apps/seller/features/products/pages/SellerProducts
 import SellerVouchersPage from "@/apps/seller/features/vouchers/pages/SellerVouchersPage";
 import SellerOrdersPage from "@/apps/seller/features/orders/pages/SellerOrdersPage";
 import SellerShopSetupPage from "@/apps/seller/features/store/pages/SellerShopSetupPage";
+import SellerWarehouseAddressPage from "@/apps/seller/features/store/pages/SellerWarehouseAddressPage";
 import DashboardLayout from "@/apps/seller/layouts/DashboardLayout";
 import ProtectedRoute from "@/shared/components/ProtectedRoute.jsx";
 import { ROLES } from "@/shared/constants/roles";
@@ -45,6 +46,11 @@ export default function SellerRoute() {
                 <Route path={ROUTES.SELLER_ORDERS} 
                     element={ <ProtectedRoute allowedRoles = {[ROLES.SELLER, ROLES.CUSTOMER]}>
                         <SellerOrdersPage />
+                    </ProtectedRoute>} />
+
+                <Route path={ROUTES.SELLER_ADDRESS} 
+                    element={ <ProtectedRoute allowedRoles = {[ROLES.SELLER, ROLES.CUSTOMER]}>
+                        <SellerWarehouseAddressPage />
                     </ProtectedRoute>} />
             </Route>
         </>

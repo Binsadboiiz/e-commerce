@@ -8,6 +8,7 @@ import Button from "@/shared/components/ui/Button";
 import SEOHead from "@/shared/components/SEOHead";
 import "./CheckoutPage.css";
 import { notify } from "@/shared/utils/Notify";
+import AddressModal from "@/apps/customer/features/address/components/AddressModal";
 
 const currency = new Intl.NumberFormat("vi-VN", {
     style: "currency",
@@ -23,6 +24,7 @@ export default function CheckoutPage() {
     const [paymentMethods, setPaymentMethods] = useState([]);
     const [selectedAddressId, setSelectedAddressId] = useState(null);
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("cod");
+    const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
     const [preview, setPreview] = useState(null);
     const [loading, setLoading] = useState(true);
     const [previewLoading, setPreviewLoading] = useState(false);
@@ -299,19 +301,37 @@ export default function CheckoutPage() {
                             </div>
                         </div>
 
-                        <div className="checkout-address-actions">
+                        <div className="checkout-address-actions" style={{ display: "flex", gap: "8px", alignItems: "center" }}>
                             <select
                                 value={selectedAddressId ?? ""}
                                 onChange={(event) => setSelectedAddressId(Number(event.target.value))}
                                 className="checkout-select"
                             >
-                                <option value="" disabled>Select address</option>
+                                <option value="" disabled>Chọn địa chỉ nhận hàng</option>
                                 {addresses.map(address => (
                                     <option key={address.id} value={address.id}>
-                                        {address.fullName} - {address.city}
+                                        {address.fullName} - {address.city} {address.isDefault ? "(Mặc định)" : ""}
                                     </option>
                                 ))}
                             </select>
+
+                            <button
+                                type="button"
+                                onClick={() => setIsAddressModalOpen(true)}
+                                style={{
+                                    padding: "8px 12px",
+                                    fontSize: "13px",
+                                    fontWeight: "600",
+                                    backgroundColor: "#2563eb",
+                                    color: "#ffffff",
+                                    border: "none",
+                                    borderRadius: "6px",
+                                    cursor: "pointer",
+                                    whiteSpace: "nowrap"
+                                }}
+                            >
+                                + Thêm mới
+                            </button>
                         </div>
                     </div>
                 </section>
@@ -592,6 +612,26 @@ export default function CheckoutPage() {
                     </div>
                 </div>
             )}
+
+            {/* Address Modal for adding address during checkout */}
+            <AddressModal
+                isOpen={isAddressModalOpen}
+                onClose={() => setIsAddressModalOpen(false)}
+                onSuccess={async (newAddr) => {
+                    try {
+                        const res = await checkoutApi.getAddresses();
+                        const list = res?.data || [];
+                        setAddresses(list);
+                        if (newAddr?.id) {
+                            setSelectedAddressId(newAddr.id);
+                        } else if (list.length > 0) {
+                            setSelectedAddressId(list[0].id);
+                        }
+                    } catch (e) {
+                        console.error("Refresh addresses error:", e);
+                    }
+                }}
+            />
         </div>
     );
 }

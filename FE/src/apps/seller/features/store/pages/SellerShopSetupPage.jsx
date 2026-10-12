@@ -5,6 +5,7 @@ import SEOHead from "@/shared/components/SEOHead";
 import { notify } from "@/shared/utils/Notify";
 import { ROUTES } from "@/config/route.config";
 import { useLanguage } from "@/shared/context/LanguageContext";
+import VietnamAddressSelector from "@/shared/components/address/VietnamAddressSelector";
 import styles from "./SellerShopSetupPage.module.css";
 
 /**
@@ -186,53 +187,22 @@ export function SellerShopSetupPage() {
                                 placeholder="0988888888"
                             />
                         </div>
-
-                        <div className={styles.formGroup}>
-                            <label className={styles.label}>
-                                {t("sellerShopSetup.city")} <span className={styles.requiredStar}>*</span>
-                            </label>
-                            <input
-                                required
-                                type="text"
-                                name="city"
-                                value={formData.city}
-                                onChange={handleChange}
-                                className={styles.inputField}
-                                placeholder="Hồ Chí Minh"
-                            />
-                        </div>
                     </div>
 
-                    <div className={styles.gridTwoCols}>
-                        <div className={styles.formGroup}>
-                            <label className={styles.label}>
-                                {t("sellerShopSetup.district")} <span className={styles.requiredStar}>*</span>
-                            </label>
-                            <input
-                                required
-                                type="text"
-                                name="district"
-                                value={formData.district}
-                                onChange={handleChange}
-                                className={styles.inputField}
-                                placeholder="Quận 1"
-                            />
-                        </div>
-
-                        <div className={styles.formGroup}>
-                            <label className={styles.label}>
-                                {t("sellerShopSetup.ward")} <span className={styles.requiredStar}>*</span>
-                            </label>
-                            <input
-                                required
-                                type="text"
-                                name="ward"
-                                value={formData.ward}
-                                onChange={handleChange}
-                                className={styles.inputField}
-                                placeholder="Phường Bến Nghé"
-                            />
-                        </div>
+                    <div style={{ marginBottom: "1rem" }}>
+                        <VietnamAddressSelector
+                            city={formData.city}
+                            district={formData.district}
+                            ward={formData.ward}
+                            onChange={({ city, district, ward }) => {
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    city,
+                                    district,
+                                    ward
+                                }));
+                            }}
+                        />
                     </div>
 
                     <div className={styles.formGroup}>

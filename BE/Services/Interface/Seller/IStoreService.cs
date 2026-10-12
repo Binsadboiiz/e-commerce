@@ -32,5 +32,15 @@ namespace BE.Services.Interface.Seller
         /// Creates a new Shop for first-time onboarding seller.
         /// </summary>
         Task<StoreDetailResponse> SetupShopAsync(string userId, SetupShopRequest request);
+
+        /// <summary>
+        /// Retrieves warehouse/pickup address for the authenticated seller.
+        /// </summary>
+        Task<SellerAddressDto?> GetSellerAddressAsync(string userId);
+
+        /// <summary>
+        /// Updates warehouse/pickup address for the authenticated seller.
+        /// </summary>
+        Task<SellerAddressDto> UpdateSellerAddressAsync(string userId, SellerAddressDto request);
     }
 }

@@ -246,3 +246,44 @@
 .buttonPrimary:active {
     transform: scale(0.98);
 }
+
+.tabsNav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #f1f5f9;
+    padding: 6px;
+    border-radius: 12px;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.tabButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #64748b;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tabButton:hover {
+    color: #0f172a;
+}
+
+.tabButtonActive {
+    background-color: #ffffff;
+    color: #0f172a;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.addressWrapper {
+    padding: 32px 32px 40px;
+}
+

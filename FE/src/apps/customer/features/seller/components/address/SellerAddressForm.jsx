@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { FiUser, FiMapPin, FiArrowRight } from "react-icons/fi";
 import { useLanguage } from "@/shared/context/LanguageContext";
+import VietnamAddressSelector from "@/shared/components/address/VietnamAddressSelector";
 import styles from "./SellerAddressForm.module.css";
 
 const defaultForm = {
@@ -95,54 +96,23 @@ export default function SellerAddressForm({
                     <h3>{t("sellerAddress.warehouseTitle")}</h3>
                 </div>
 
+                <div className={styles.addressSelectGroup} style={{ marginBottom: "1rem" }}>
+                    <VietnamAddressSelector
+                        city={form.city}
+                        district={form.district}
+                        ward={form.ward}
+                        onChange={({ city, district, ward }) => {
+                            setForm((prev) => ({
+                                ...prev,
+                                city,
+                                district,
+                                ward
+                            }));
+                        }}
+                    />
+                </div>
+
                 <div className={styles.grid}>
-                    <div className={styles.formGroup}>
-                        <label className={styles.label}>
-                            {t("sellerAddress.city")} <span className={styles.required}>*</span>
-                        </label>
-                        <input
-                            type="text"
-                            className={styles.input}
-                            value={form.city}
-                            placeholder={t("sellerAddress.city")}
-                            onChange={(e) =>
-                                handleChange("city", e.target.value)
-                            }
-                            required
-                        />
-                    </div>
-
-                    <div className={styles.formGroup}>
-                        <label className={styles.label}>
-                            {t("sellerAddress.district")} <span className={styles.required}>*</span>
-                        </label>
-                        <input
-                            type="text"
-                            className={styles.input}
-                            value={form.district}
-                            placeholder={t("sellerAddress.district")}
-                            onChange={(e) =>
-                                handleChange("district", e.target.value)
-                            }
-                            required
-                        />
-                    </div>
-
-                    <div className={styles.formGroup}>
-                        <label className={styles.label}>
-                            {t("sellerAddress.ward")} <span className={styles.required}>*</span>
-                        </label>
-                        <input
-                            type="text"
-                            className={styles.input}
-                            value={form.ward}
-                            placeholder={t("sellerAddress.ward")}
-                            onChange={(e) =>
-                                handleChange("ward", e.target.value)
-                            }
-                            required
-                        />
-                    </div>
 
                     <div className={styles.formGroup}>
                         <label className={styles.label}>{t("sellerAddress.postalCode")}</label>

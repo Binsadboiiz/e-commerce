@@ -83,5 +83,32 @@ namespace BE.Controllers.Seller
 
             return Ok(ApiResponse<StoreDetailResponse>.SuccessResponse(result, "Store profile updated successfully."));
         }
+
+        /// <summary>
+        /// Retrieves warehouse/pickup address for current seller.
+        /// </summary>
+        [HttpGet("address")]
+        public async Task<IActionResult> GetWarehouseAddress()
+        {
+            string userId = UserClaimsHelper.GetUserId(User);
+            var result = await _storeService.GetSellerAddressAsync(userId);
+            return Ok(ApiResponse<SellerAddressDto?>.SuccessResponse(result));
+        }
+
+        /// <summary>
+        /// Updates warehouse/pickup address for current seller.
+        /// </summary>
+        [HttpPut("address")]
+        public async Task<IActionResult> UpdateWarehouseAddress([FromBody] SellerAddressDto request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ApiResponse<object>.FailureResponse("Validation failed for address payload."));
+            }
+
+            string userId = UserClaimsHelper.GetUserId(User);
+            var result = await _storeService.UpdateSellerAddressAsync(userId, request);
+            return Ok(ApiResponse<SellerAddressDto>.SuccessResponse(result, "Warehouse address updated successfully!"));
+        }
     }
 }

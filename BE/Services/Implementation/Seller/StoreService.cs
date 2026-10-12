@@ -170,5 +170,125 @@ namespace BE.Services.Implementation.Seller
                 Status = shop.Status
             };
         }
+
+        /// <inheritdoc />
+        public async Task<SellerAddressDto?> GetSellerAddressAsync(string userId)
+        {
+            var seller = await _context.SellerAccounts
+                .Include(s => s.User)
+                .FirstOrDefaultAsync(s => s.UserId == userId);
+
+            if (seller == null)
+            {
+                throw new AppException("The seller account does not exist.", 404);
+            }
+
+            var address = await _sellerRepository.GetAddressAsync(seller.SellerId);
+            if (address == null)
+            {
+                return new SellerAddressDto
+                {
+                    FullName = seller.User?.FullName ?? "",
+                    PhoneNumber = seller.User?.Phone ?? "",
+                    City = "",
+                    District = "",
+                    Ward = "",
+                    StreetAddress = "",
+                    PostalCode = "",
+                    IsDefault = true
+                };
+            }
+
+            return new SellerAddressDto
+            {
+                FullName = address.FullName,
+                PhoneNumber = address.PhoneNumber,
+                City = address.City,
+                District = address.District,
+                Ward = address.Ward,
+                StreetAddress = address.StreetAddress,
+                PostalCode = address.PostalCode,
+                IsDefault = address.IsDefault
+            };
+        }
+
+        /// <inheritdoc />
+        public async Task<SellerAddressDto> UpdateSellerAddressAsync(string userId, SellerAddressDto request)
+        {
+            var seller = await _context.SellerAccounts
+                .FirstOrDefaultAsync(s => s.UserId == userId);
+
+            if (seller == null)
+            {
+                throw new AppException("The seller account does not exist.", 404);
+            }
+
+            var address = await _sellerRepository.GetAddressAsync(seller.SellerId);
+            if (address == null)
+            {
+                address = new SellerAddress
+                {
+                    SellerId = seller.SellerId,
+                    FullName = request.FullName?.Trim() ?? "",
+                    PhoneNumber = request.PhoneNumber?.Trim() ?? "",
+                    City = request.City?.Trim(),
+                    District = request.District?.Trim(),
+                    Ward = request.Ward?.Trim(),
+                    StreetAddress = request.StreetAddress?.Trim(),
+                    PostalCode = request.PostalCode?.Trim(),
+                    IsDefault = true,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
+                };
+                await _sellerRepository.AddAddressAsync(address);
+            }
+            else
+            {
+                address.FullName = request.FullName?.Trim() ?? address.FullName;
+                address.PhoneNumber = request.PhoneNumber?.Trim() ?? address.PhoneNumber;
+                address.City = request.City?.Trim();
+                address.District = request.District?.Trim();
+                address.Ward = request.Ward?.Trim();
+                address.StreetAddress = request.StreetAddress?.Trim();
+                address.PostalCode = request.PostalCode?.Trim();
+                address.UpdatedAt = DateTime.UtcNow;
+            }
+
+            await _context.SaveChangesAsync();
+
+            // Đồng bộ sang StoreDetail nếu có shop
+            try
+            {
+                var shop = await _context.Shops.FirstOrDefaultAsync(s => s.OwnerId == userId);
+                if (shop != null)
+                {
+                    var storeDetail = await _context.StoreDetails.FirstOrDefaultAsync(sd => sd.ShopId == shop.ShopId);
+                    var fullAddress = string.Join(", ", new[] { address.StreetAddress, address.Ward, address.District }.Where(s => !string.IsNullOrWhiteSpace(s)));
+                    if (storeDetail != null)
+                    {
+                        storeDetail.StorePhone = address.PhoneNumber;
+                        storeDetail.StoreCity = address.City ?? "";
+                        storeDetail.StoreAddress = fullAddress;
+                        await _context.SaveChangesAsync();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[StoreService] Notice: Could not sync address to StoreDetails: {ex.Message}");
+            }
+
+            return new SellerAddressDto
+            {
+                FullName = address.FullName,
+                PhoneNumber = address.PhoneNumber,
+                City = address.City,
+                District = address.District,
+                Ward = address.Ward,
+                StreetAddress = address.StreetAddress,
+                PostalCode = address.PostalCode,
+                IsDefault = address.IsDefault
+            };
+        }
     }
 }

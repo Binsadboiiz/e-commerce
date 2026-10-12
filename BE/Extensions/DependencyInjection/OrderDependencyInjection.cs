@@ -13,6 +13,7 @@ public static class OrderDependencyInjection
     {
         services.AddScoped<IOrderService, OrderService>();
         services.AddScoped<IOrderTrackingService, OrderTrackingService>();
+        services.AddScoped<IUserAddressService, UserAddressService>();
 
         return services;
     }
