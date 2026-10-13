@@ -50,18 +50,24 @@ namespace BE.Services.Implementation
                 }
             }
 
-            long.TryParse(new string(request.PhoneNumber.Where(char.IsDigit).ToArray()), out long parsedPhone);
+            long.TryParse(new string((request.PhoneNumber ?? "").Where(char.IsDigit).ToArray()), out long parsedPhone);
 
-            string combinedStreetName = FormatCombinedStreetName(request.Ward, request.District);
+            string combinedStreetName = !string.IsNullOrWhiteSpace(request.StreetName)
+                ? request.StreetName.Trim()
+                : FormatCombinedStreetName(request.Ward, request.District);
+
+            string effectiveHouseNo = !string.IsNullOrWhiteSpace(request.StreetAddress)
+                ? request.StreetAddress.Trim()
+                : (request.HouseNo?.Trim() ?? string.Empty);
 
             var address = new UserAddresses
             {
                 UserId = userId,
-                FullName = request.FullName.Trim(),
+                FullName = request.FullName?.Trim() ?? string.Empty,
                 PhoneNumber = parsedPhone,
-                City = request.City.Trim(),
+                City = request.City?.Trim() ?? string.Empty,
                 StreetName = combinedStreetName,
-                HouseNo = request.StreetAddress.Trim(),
+                HouseNo = effectiveHouseNo,
                 IsDefault = shouldBeDefault
             };
 
@@ -106,14 +112,21 @@ namespace BE.Services.Implementation
                 }
             }
 
-            long.TryParse(new string(request.PhoneNumber.Where(char.IsDigit).ToArray()), out long parsedPhone);
-            string combinedStreetName = FormatCombinedStreetName(request.Ward, request.District);
+            long.TryParse(new string((request.PhoneNumber ?? "").Where(char.IsDigit).ToArray()), out long parsedPhone);
 
-            address.FullName = request.FullName.Trim();
-            address.PhoneNumber = parsedPhone;
-            address.City = request.City.Trim();
-            address.StreetName = combinedStreetName;
-            address.HouseNo = request.StreetAddress.Trim();
+            string combinedStreetName = !string.IsNullOrWhiteSpace(request.StreetName)
+                ? request.StreetName.Trim()
+                : FormatCombinedStreetName(request.Ward, request.District);
+
+            string effectiveHouseNo = !string.IsNullOrWhiteSpace(request.StreetAddress)
+                ? request.StreetAddress.Trim()
+                : (request.HouseNo?.Trim() ?? string.Empty);
+
+            address.FullName = request.FullName?.Trim() ?? address.FullName;
+            address.PhoneNumber = parsedPhone != 0 ? parsedPhone : address.PhoneNumber;
+            address.City = request.City?.Trim() ?? address.City;
+            address.StreetName = !string.IsNullOrWhiteSpace(combinedStreetName) ? combinedStreetName : address.StreetName;
+            address.HouseNo = !string.IsNullOrWhiteSpace(effectiveHouseNo) ? effectiveHouseNo : address.HouseNo;
 
             await _context.SaveChangesAsync();
             return MapToDto(address);

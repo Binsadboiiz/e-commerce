@@ -1,23 +1,66 @@
 import { statusToLabel } from "../utils/orderFormat";
 
-const STATUS_CLASS = {
-    pending: "bg-amber-100 text-amber-700",
-    confirmed: "bg-blue-100 text-blue-700",
-    preparing: "bg-indigo-100 text-indigo-700",
-    shipped: "bg-cyan-100 text-cyan-700",
-    in_transit: "bg-sky-100 text-sky-700",
-    out_for_delivery: "bg-violet-100 text-violet-700",
-    delivered: "bg-emerald-100 text-emerald-700",
-    delivery_failed: "bg-rose-100 text-rose-700",
-    cancelled: "bg-zinc-200 text-zinc-700"
+const STATUS_CONFIG = {
+    pending: {
+        badge: "bg-amber-50 text-amber-800 border-amber-300",
+        dot: "bg-amber-500"
+    },
+    confirmed: {
+        badge: "bg-blue-50 text-blue-800 border-blue-300",
+        dot: "bg-blue-500"
+    },
+    preparing: {
+        badge: "bg-indigo-50 text-indigo-800 border-indigo-300",
+        dot: "bg-indigo-500"
+    },
+    shipped: {
+        badge: "bg-cyan-50 text-cyan-800 border-cyan-300",
+        dot: "bg-cyan-500"
+    },
+    in_transit: {
+        badge: "bg-sky-50 text-sky-800 border-sky-300",
+        dot: "bg-sky-500"
+    },
+    out_for_delivery: {
+        badge: "bg-purple-50 text-purple-800 border-purple-300",
+        dot: "bg-purple-500"
+    },
+    delivered: {
+        badge: "bg-emerald-50 text-emerald-800 border-emerald-300",
+        dot: "bg-emerald-500"
+    },
+    completed: {
+        badge: "bg-emerald-50 text-emerald-800 border-emerald-300",
+        dot: "bg-emerald-500"
+    },
+    processing: {
+        badge: "bg-indigo-50 text-indigo-800 border-indigo-300",
+        dot: "bg-indigo-500"
+    },
+    delivery_failed: {
+        badge: "bg-rose-50 text-rose-800 border-rose-300",
+        dot: "bg-rose-500"
+    },
+    cancelled: {
+        badge: "bg-zinc-100 text-zinc-800 border-zinc-300",
+        dot: "bg-zinc-500"
+    }
+};
+
+const DEFAULT_CONFIG = {
+    badge: "bg-slate-100 text-slate-800 border-slate-300",
+    dot: "bg-slate-500"
 };
 
 export default function OrderStatusBadge({ status, label }) {
-    const styleClass = STATUS_CLASS[status] ?? "bg-zinc-100 text-zinc-700";
+    const config = STATUS_CONFIG[status] ?? DEFAULT_CONFIG;
 
     return (
-        <span className={`inline-flex rounded-full px-5 py-1 text-xs font-semibold ${styleClass}`}>
-            {label || statusToLabel(status)}
+        <span
+            className={`inline-flex items-center px-3.5 py-1.5 text-sm font-semibold rounded-[4px] border shadow-xs tracking-wide transition-colors ${config.badge}`}
+        >
+            <span className={`w-2 h-2 rounded-full mr-2 shrink-0 ${config.dot}`} />
+            <span>{label || statusToLabel(status)}</span>
         </span>
     );
 }

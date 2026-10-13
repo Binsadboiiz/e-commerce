@@ -1,9 +1,12 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ROUTES } from "@/config/route.config";
 import { ArrowLeft, RotateCw, AlertTriangle, Package } from "lucide-react";
+import SEOHead from "@/shared/components/SEOHead";
+import { useLanguage } from "@/shared/context/LanguageContext";
 import useOrderTracking from "../hooks/useOrderTracking";
 import { formatDateTime, statusToLabel } from "../utils/orderFormat";
 import OrderStatusBadge from "../components/OrderStatusBadge";
+import OrderStepsTracker from "../components/OrderStepsTracker";
 import TrackingTimeline from "../components/TrackingTimeline";
 import ShippingInfoPanel from "../components/ShippingInfoPanel";
 import OrderSummaryPanel from "../components/OrderSummaryPanel";
@@ -21,6 +24,7 @@ function LoadingSkeleton() {
 export default function OrderTrackingPage() {
     const navigate = useNavigate();
     const { orderId } = useParams();
+    const { t, lang } = useLanguage();
     const { tracking, loading, error, refreshTracking } = useOrderTracking(orderId);
 
     const timeline = tracking?.timeline ?? [];
@@ -28,6 +32,10 @@ export default function OrderTrackingPage() {
 
     return (
         <div className={styles.page}>
+            <SEOHead 
+                title={`${t("orders.orderTracking")} #${orderId}`}
+                description="Theo dõi chi tiết tiến trình giao hàng và lộ trình đơn hàng thời gian thực."
+            />
             <div className={styles.container}>
                 <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                     <button
@@ -36,7 +44,7 @@ export default function OrderTrackingPage() {
                         className={styles.buttonBack}
                     >
                         <ArrowLeft size={14} />
-                        Back
+                        <span>{t("orders.back")}</span>
                     </button>
                     <button
                         type="button"
@@ -44,7 +52,7 @@ export default function OrderTrackingPage() {
                         className="customerBtnTextAction"
                     >
                         <RotateCw size={14} className={loading ? "animate-spin" : ""} />
-                        <span>Refresh Tracking</span>
+                        <span>{t("orders.refreshTracking")}</span>
                     </button>
                 </div>
 
@@ -56,7 +64,7 @@ export default function OrderTrackingPage() {
                         <p className="mb-4 text-sm font-medium text-slate-600">{error}</p>
                         <Link to={ROUTES.MY_ORDERS} className={styles.buttonPrimary}>
                             <ArrowLeft size={14} className="mr-1.5" />
-                            Back to Order List
+                            <span>{t("orders.backToOrderList")}</span>
                         </Link>
                     </div>
                 )}
@@ -68,29 +76,44 @@ export default function OrderTrackingPage() {
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-2">
                                         <Package className="w-5 h-5 text-white/80" />
-                                        <span className={styles.heroLabel}>Order Tracking</span>
+                                        <span className={styles.heroLabel}>{t("orders.orderTracking")}</span>
                                     </div>
                                     <h1 className={styles.heroId}>#{tracking.orderId}</h1>
                                     <p className={styles.heroMeta}>
-                                        Placed at: {formatDateTime(tracking.orderDate)}
+                                        {t("orders.placedAt")} {formatDateTime(tracking.orderDate, lang)}
                                     </p>
                                 </div>
                                 <div className="flex flex-col items-start md:items-end gap-2 shrink-0">
                                     <OrderStatusBadge
                                         status={tracking.currentStatus}
-                                        label={statusToLabel(tracking.currentStatus)}
+                                        label={statusToLabel(tracking.currentStatus, lang)}
                                     />
                                     <p className="text-xs text-white/85 font-medium mt-1">
-                                        Est. Delivery: {formatDateTime(tracking.estimatedDeliveryDate)}
+                                        {t("orders.estDelivery")} {formatDateTime(tracking.estimatedDeliveryDate, lang)}
                                     </p>
                                 </div>
                             </div>
                         </header>
 
+                        <div className="mt-5">
+                            <OrderStepsTracker 
+                                currentStatus={tracking.currentStatus}
+                                estimatedDeliveryDate={tracking.estimatedDeliveryDate}
+                            />
+                        </div>
+
                         <div className={styles.contentGrid}>
                             <section className={styles.panel}>
-                                <h2 className={styles.panelTitle}>Status History</h2>
-                                <TrackingTimeline timeline={timeline} />
+                                <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+                                    <h2 className={styles.panelTitle}>{t("orders.statusHistory")}</h2>
+                                    <span className="text-xs text-slate-400 font-medium">
+                                        {t("orders.updatesCount", { count: timeline.length })}
+                                    </span>
+                                </div>
+                                <TrackingTimeline 
+                                    timeline={timeline} 
+                                    currentStatus={tracking.currentStatus}
+                                />
                             </section>
 
                             <div className="space-y-4">

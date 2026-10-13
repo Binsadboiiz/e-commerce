@@ -213,9 +213,9 @@
 /* Status Badges */
 .order-status-badge {
     display: inline-block;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 7px;
+    font-size: 13px;
     font-weight: 600;
     white-space: nowrap;
 }

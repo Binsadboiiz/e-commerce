@@ -22,8 +22,13 @@ namespace BE.Models.DTOs.User
         public string FullName { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Phone is required")]
-        [RegularExpression(@"^\d{9,11}$", ErrorMessage = "The phone number must be between 9 and 11 digits long.")]
         public string PhoneNumber { get; set; } = string.Empty;
+
+        public string? Phone
+        {
+            get => PhoneNumber;
+            set { if (!string.IsNullOrWhiteSpace(value)) PhoneNumber = value; }
+        }
 
         [Required(ErrorMessage = "Province/City is required.")]
         [MaxLength(100)]
@@ -35,9 +40,16 @@ namespace BE.Models.DTOs.User
         [MaxLength(100)]
         public string? Ward { get; set; }
 
-        [Required(ErrorMessage = "A detailed address (house number, street name) is required.")]
         [MaxLength(255)]
+        public string? StreetName { get; set; }
+
         public string StreetAddress { get; set; } = string.Empty;
+
+        public string? HouseNo
+        {
+            get => StreetAddress;
+            set { if (!string.IsNullOrWhiteSpace(value)) StreetAddress = value; }
+        }
 
         public bool IsDefault { get; set; } = false;
     }
@@ -49,8 +61,13 @@ namespace BE.Models.DTOs.User
         public string FullName { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "The phone number is required")]
-        [RegularExpression(@"^\d{9,11}$", ErrorMessage = "The phone number is must be between 9 and 11")]
         public string PhoneNumber { get; set; } = string.Empty;
+
+        public string? Phone
+        {
+            get => PhoneNumber;
+            set { if (!string.IsNullOrWhiteSpace(value)) PhoneNumber = value; }
+        }
 
         [Required(ErrorMessage = "Province/City is required.")]
         [MaxLength(100)]
@@ -62,9 +79,16 @@ namespace BE.Models.DTOs.User
         [MaxLength(100)]
         public string? Ward { get; set; }
 
-        [Required(ErrorMessage = "A detailed address (house number, street name) is required.")]
         [MaxLength(255)]
+        public string? StreetName { get; set; }
+
         public string StreetAddress { get; set; } = string.Empty;
+
+        public string? HouseNo
+        {
+            get => StreetAddress;
+            set { if (!string.IsNullOrWhiteSpace(value)) StreetAddress = value; }
+        }
 
         public bool IsDefault { get; set; } = false;
     }

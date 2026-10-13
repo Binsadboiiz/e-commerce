@@ -1,0 +1,118 @@
+.miniTracker {
+    position: relative;
+    padding: 10px 4px 4px;
+    width: 100%;
+}
+
+.trackLineBg {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    right: 20px;
+    height: 2px;
+    background-color: #e2e8f0;
+    z-index: 0;
+}
+
+.trackLineFill {
+    height: 100%;
+    background-color: #2563eb;
+    transition: width 0.3s ease;
+}
+
+.stepsRow {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    z-index: 1;
+}
+
+.stepCol {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60px;
+}
+
+.dot {
+    position: relative;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2px solid #cbd5e1;
+    transition: all 0.2s ease;
+}
+
+.dotCompleted {
+    background: #2563eb;
+    border-color: #2563eb;
+}
+
+.dotCurrent {
+    background: #ffffff;
+    border-color: #2563eb;
+    border-width: 2.5px;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.pulse {
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    border-radius: 50%;
+    border: 1.5px solid #2563eb;
+    animation: miniPulse 1.8s infinite;
+}
+
+@keyframes miniPulse {
+    0% {
+        transform: scale(0.9);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1.6);
+        opacity: 0;
+    }
+}
+
+.label {
+    margin-top: 6px;
+    font-size: 11px;
+    color: #94a3b8;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.labelCompleted {
+    color: #475569;
+    font-weight: 500;
+}
+
+.labelCurrent {
+    color: #2563eb;
+    font-weight: 700;
+}
+
+.abnormalBox {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: #fef2f2;
+    border: 1px solid #fee2e2;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #dc2626;
+}
+
+.abnormalDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #dc2626;
+}

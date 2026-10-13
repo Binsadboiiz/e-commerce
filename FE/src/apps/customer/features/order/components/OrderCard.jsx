@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { useLanguage } from "@/shared/context/LanguageContext";
 import { currency, formatDateTime } from "../utils/orderFormat";
 import OrderStatusBadge from "./OrderStatusBadge";
+import OrderMiniTracker from "./OrderMiniTracker";
 import styles from "./OrderCard.module.css";
 
 function buildTrackingPath(orderId) {
@@ -11,7 +12,7 @@ function buildTrackingPath(orderId) {
 }
 
 export default function OrderCard({ order }) {
-    const { t } = useLanguage();
+    const { t, lang } = useLanguage();
 
     return (
         <article className={styles.card}>
@@ -20,7 +21,10 @@ export default function OrderCard({ order }) {
                     <p className="text-xs font-medium text-slate-500">{t('orders.orderId')}</p>
                     <h3 className="text-lg font-bold text-slate-900">#{order.orderId}</h3>
                 </div>
-                <OrderStatusBadge status={order.status} label={order.statusLabel} />
+                <OrderStatusBadge 
+                    status={order.status} 
+                    label={order.statusLabel || statusToLabel(order.status, lang)} 
+                />
             </div>
 
             <div className="mt-4 flex gap-4">
@@ -38,14 +42,19 @@ export default function OrderCard({ order }) {
                 </div>
             </div>
 
+            {/* Visual Timeline Bar */}
+            <div className="mt-4 pt-3 border-t border-slate-100">
+                <OrderMiniTracker status={order.status} />
+            </div>
+
             <div className={styles.metaGrid}>
                 <div>
                     <p className={styles.metaLabel}>{t('orders.orderDate')}</p>
-                    <p className={styles.metaValue}>{formatDateTime(order.orderDate)}</p>
+                    <p className={styles.metaValue}>{formatDateTime(order.orderDate, lang)}</p>
                 </div>
                 <div>
                     <p className={styles.metaLabel}>{t('orders.estimatedDelivery')}</p>
-                    <p className={styles.metaValue}>{formatDateTime(order.estimatedDeliveryDate)}</p>
+                    <p className={styles.metaValue}>{formatDateTime(order.estimatedDeliveryDate, lang)}</p>
                 </div>
                 <div>
                     <p className={styles.metaLabel}>{t('orders.payment')}</p>

@@ -1,76 +1,228 @@
+.timelineWrapper {
+    width: 100%;
+    position: relative;
+}
+
+.emptyCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    border-radius: 12px;
+    border: 1px dashed #cbd5e1;
+    background: #f8fafc;
+    text-align: center;
+}
+
 .timeline {
     position: relative;
+    padding-top: 6px;
+    padding-bottom: 6px;
 }
 
 .timelineItem {
     position: relative;
-    padding-left: 32px;
-    padding-bottom: 24px;
+    display: flex;
+    gap: 18px;
+    padding-bottom: 28px;
 }
 
 .timelineItem:last-child {
-    padding-bottom: 0;
+    padding-bottom: 4px;
 }
 
-.timelineItem::before {
-    content: "";
+/* Vertical track line */
+.line {
     position: absolute;
-    left: 7px;
-    top: 16px;
+    left: 17px;
+    top: 36px;
+    bottom: -4px;
     width: 2px;
-    height: calc(100% - 8px);
-    background: #e2e8f0;
+    background-color: #e2e8f0;
+    transition: background-color 0.2s ease;
 }
 
-.timelineItem:last-child::before {
+.lineActive {
+    background: linear-gradient(180deg, #2563eb 0%, #cbd5e1 100%);
+}
+
+.timelineItem:last-child .line {
     display: none;
 }
 
-.dot {
-    position: absolute;
-    left: 0;
-    top: 2px;
-    width: 16px;
-    height: 16px;
-    border-radius: 999px;
+/* Node icon wrapper */
+.nodeIconWrapper {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    z-index: 2;
+    transition: all 0.25s ease;
+}
+
+.badgeDefault {
+    background: #f1f5f9;
     border: 2px solid #cbd5e1;
-    background-color: #fff;
-}
-
-.dotCompleted {
-    border-color: var(--color-primary);
-    background-color: var(--color-primary);
-}
-
-.dotCurrent {
-    border-color: var(--color-primary);
-    background-color: var(--color-primary);
-    box-shadow: 0 0 0 5px rgba(37, 99, 235, 0.14);
-}
-
-.time {
     color: #64748b;
-    font-size: 12px;
 }
 
-.title {
+.badgeCompleted {
+    background: #eff6ff;
+    border: 2px solid #93c5fd;
+    color: #2563eb;
+}
+
+.badgeActive {
+    background: #2563eb;
+    border: 2px solid #1d4ed8;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
+
+.badgeDelivered {
+    background: #ecfdf5;
+    border: 2px solid #34d399;
+    color: #059669;
+}
+
+.badgeCancelled {
+    background: #fef2f2;
+    border: 2px solid #f87171;
+    color: #dc2626;
+}
+
+.badgeFailed {
+    background: #fffbeb;
+    border: 2px solid #fbbf24;
+    color: #d97706;
+}
+
+/* Pulsing radar ripple around current status node */
+.rippleEffect {
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border-radius: 50%;
+    border: 2px solid #2563eb;
+    animation: rippleAnim 2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    pointer-events: none;
+}
+
+@keyframes rippleAnim {
+    0% {
+        transform: scale(0.9);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1.6);
+        opacity: 0;
+    }
+}
+
+/* Content Card */
+.contentCard {
+    flex: 1;
+    min-width: 0;
+    background: #ffffff;
+    border: 1px solid #f1f5f9;
+    border-radius: 12px;
+    padding: 14px 16px;
+    box-shadow: 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+    transition: all 0.2s ease;
+}
+
+.itemCurrent .contentCard {
+    border-color: #bfdbfe;
+    background: #f8faff;
+    box-shadow: 0 4px 14px -2px rgba(37, 99, 235, 0.08);
+}
+
+.headerRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.eventTitle {
     font-size: 14px;
     font-weight: 700;
     color: #0f172a;
+    letter-spacing: -0.01em;
 }
 
-.titleMuted {
+.itemCurrent .eventTitle {
+    color: #1e40af;
+}
+
+.currentPill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #eff6ff;
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.timeTag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
     color: #64748b;
+    font-weight: 500;
 }
 
 .description {
-    margin-top: 4px;
-    color: #334155;
+    margin-top: 6px;
     font-size: 13px;
+    line-height: 1.5;
+    color: #334155;
 }
 
-.location {
-    margin-top: 4px;
-    color: #475569;
+.metaBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 8px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 3px 8px;
     font-size: 12px;
+    color: #475569;
+    font-weight: 500;
+}
+
+@media (max-width: 640px) {
+    .timelineItem {
+        gap: 12px;
+        padding-bottom: 22px;
+    }
+
+    .line {
+        left: 15px;
+        top: 32px;
+    }
+
+    .nodeIconWrapper {
+        width: 32px;
+        height: 32px;
+    }
+
+    .contentCard {
+        padding: 12px 14px;
+    }
 }
