@@ -1,4 +1,4 @@
-﻿using BE.Constants;
+using BE.Constants;
 
 namespace BE.Validators
 {
@@ -88,16 +88,19 @@ namespace BE.Validators
 
 
         public static bool IsValidTransition(
-            string currentStatus,
-            string nextStatus)
+            string? currentStatus,
+            string? nextStatus)
         {
-            if(!AllowedTransitions.ContainsKey(
-                currentStatus))
+            if (string.IsNullOrWhiteSpace(currentStatus) || string.IsNullOrWhiteSpace(nextStatus))
                 return false;
 
-            return AllowedTransitions[
-                currentStatus]
-                .Contains(nextStatus);
+            var current = currentStatus.ToLower().Trim();
+            var next = nextStatus.ToLower().Trim();
+
+            if (!AllowedTransitions.ContainsKey(current))
+                return false;
+
+            return AllowedTransitions[current].Contains(next);
         }
         
         public static class TrackingStatusValidator
@@ -112,13 +115,15 @@ namespace BE.Validators
                     TrackingStatus.InTransit,
                     TrackingStatus.OutForDelivery,
                     TrackingStatus.Delivered,
+                    TrackingStatus.DeliveryFailed,
                     TrackingStatus.Cancelled
                 };
 
             public static bool IsValidStatus(
-                string status)
+                string? status)
             {
-                return ValidStatuses.Contains(status);
+                if (string.IsNullOrWhiteSpace(status)) return false;
+                return ValidStatuses.Contains(status.ToLower().Trim());
             }
         }
     }

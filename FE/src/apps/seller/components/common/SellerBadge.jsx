@@ -8,13 +8,15 @@ export default function SellerBadge({
     children,
     variant = "neutral",
     showDot = true,
+    dot = undefined,
     className = ""
 }) {
     const variantClass = `seller-badge-${variant}`;
+    const hasDot = dot !== undefined ? dot : showDot;
 
     return (
         <span className={`seller-badge ${variantClass} ${className}`.trim()}>
-            {showDot && <span className="seller-badge-dot" />}
+            {hasDot && <span className="seller-badge-dot" />}
             {children}
         </span>
     );
