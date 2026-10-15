@@ -1,49 +1,68 @@
-import { X, Trash2 } from "lucide-react";
-import Button from "@/shared/components/ui/Button";
-import styles from "./ProductFormModal.module.css";
+import React from "react";
+import { Trash2 } from "lucide-react";
+import { SellerModal, SellerButton } from "@/apps/seller/components/common";
 
-export default function DeleteConfirmModal({ isOpen, onClose, onConfirm, product, isSubmitting }) {
+/**
+ * Standardized Delete Confirmation Modal for Seller Products.
+ * Uses shared SellerModal and SellerButton design system components.
+ */
+export default function DeleteConfirmModal({
+    isOpen,
+    onClose,
+    onConfirm,
+    product,
+    isSubmitting
+}) {
     if (!isOpen || !product) return null;
 
     return (
-        <div className={styles.modalOverlay} onClick={onClose}>
-            <div className={styles.modalContent} style={{ maxWidth: '400px' }} onClick={e => e.stopPropagation()}>
-                <div className={styles.modalHeader}>
-                    <h2 className={styles.modalTitle}>Confirm Deletion</h2>
-                    <button className={styles.closeBtn} onClick={onClose} aria-label="Close">
-                        <X size={20} />
-                    </button>
-                </div>
-
-                <div className={styles.modalBody}>
-                    <div className={styles.deleteIconWrapper}>
-                        <Trash2 size={28} />
-                    </div>
-                    <p className={styles.deleteText}>
-                        Are you sure you want to delete product <strong>"{product.name}"</strong>? 
-                        <br/><br/>
-                        The product will be moved to deleted status and will no longer be visible on the store.
-                    </p>
-                </div>
-
-                <div className={styles.modalFooter} style={{ justifyContent: 'center' }}>
-                    <Button 
-                        variant="outline" 
-                        onClick={onClose} 
+        <SellerModal
+            isOpen={isOpen}
+            onClose={onClose}
+            title="Confirm Deletion"
+            maxWidth="440px"
+            footer={
+                <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end", width: "100%" }}>
+                    <SellerButton
+                        variant="outline"
+                        onClick={onClose}
                         disabled={isSubmitting}
                     >
                         Cancel
-                    </Button>
-                    <Button 
-                        variant="danger" 
-                        onClick={onConfirm} 
-                        isLoading={isSubmitting}
-                        icon={<Trash2 size={18} />}
+                    </SellerButton>
+                    <SellerButton
+                        variant="danger"
+                        onClick={onConfirm}
+                        loading={isSubmitting}
+                        icon={<Trash2 size={16} />}
                     >
                         Delete Product
-                    </Button>
+                    </SellerButton>
                 </div>
+            }
+        >
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", padding: "12px 0" }}>
+                <div
+                    style={{
+                        width: "56px",
+                        height: "56px",
+                        borderRadius: "50%",
+                        backgroundColor: "var(--seller-danger-bg)",
+                        color: "var(--seller-danger)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginBottom: "16px",
+                    }}
+                >
+                    <Trash2 size={26} />
+                </div>
+                <p style={{ fontSize: "14px", color: "var(--seller-text-secondary)", lineHeight: 1.6, margin: 0 }}>
+                    Are you sure you want to delete product <strong style={{ color: "var(--seller-text-main)" }}>"{product.name}"</strong>?
+                    <br /><br />
+                    The product will be moved to deleted status and will no longer be visible on your store.
+                </p>
             </div>
-        </div>
+        </SellerModal>
     );
 }

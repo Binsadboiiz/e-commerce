@@ -1,16 +1,26 @@
 import { useState, useMemo } from "react";
-import { Search, Plus, Package, ChevronLeft, ChevronRight, SlidersHorizontal, Edit2, Trash2 } from "lucide-react";
+import { Search, Plus, Package, SlidersHorizontal, Edit2, Trash2 } from "lucide-react";
 import useSellerProducts from "../hooks/useSellerProducts";
 import { sellerProductApi } from "../api/sellerProductApi";
 import ProductFormModal from "../components/ProductFormModal";
 import DeleteConfirmModal from "../components/DeleteConfirmModal";
 import SEOHead from "@/shared/components/SEOHead";
-import styles from "./SellerProducts.module.css";
 import { notify } from "@/shared/utils/Notify";
+import {
+    SellerPageHeader,
+    SellerButton,
+    SellerBadge,
+    SellerCard,
+    SellerInput,
+    SellerSelect,
+    SellerTable,
+    SellerEmptyState,
+    SellerPagination
+} from "@/apps/seller/components/common";
+import styles from "./SellerProducts.module.css";
 
-// Cấu hình filter options
 const STATUS_OPTIONS = [
-    { value: "all", label: "All" },
+    { value: "all", label: "All Statuses" },
     { value: "ACTIVE", label: "Active" },
     { value: "INACTIVE", label: "Inactive" },
     { value: "OUT_OF_STOCK", label: "Out of Stock" },
@@ -29,6 +39,18 @@ const SORT_OPTIONS = [
     { value: "name_desc", label: "Name: Z → A" },
 ];
 
+const TABLE_HEADERS = [
+    "",
+    "Product Name",
+    "Category",
+    "Price",
+    "Stock",
+    "Sold",
+    "Status",
+    "Created At",
+    "Actions"
+];
+
 export default function SellerProducts() {
     // Filter states
     const [searchInput, setSearchInput] = useState("");
@@ -38,7 +60,7 @@ export default function SellerProducts() {
     const [page, setPage] = useState(1);
     const pageSize = 20;
 
-    // API call params
+    // API params
     const params = useMemo(() => ({
         page,
         pageSize,
@@ -61,14 +83,22 @@ export default function SellerProducts() {
         setIsFormModalOpen(true);
     };
 
-    const handleOpenUpdate = (product) => {
-        if (product.status === "DELETED") return; // Prevent editing deleted items
-        setSelectedProduct(product);
-        setIsFormModalOpen(true);
+    const handleOpenUpdate = async (product) => {
+        if (product.status === "DELETED") return;
+        try {
+            const res = await sellerProductApi.getProductById(product.id || product.productId);
+            const fullProduct = res?.data || res;
+            setSelectedProduct(fullProduct);
+            setIsFormModalOpen(true);
+        } catch (err) {
+            console.error("Failed to load product details:", err);
+            setSelectedProduct(product);
+            setIsFormModalOpen(true);
+        }
     };
 
     const handleOpenDelete = (product) => {
-        if (product.status === "DELETED") return; // Prevent deleting already deleted items
+        if (product.status === "DELETED") return;
         setSelectedProduct(product);
         setIsDeleteModalOpen(true);
     };
@@ -77,14 +107,15 @@ export default function SellerProducts() {
         try {
             setIsSubmitting(true);
             if (selectedProduct) {
-                await sellerProductApi.updateProduct(selectedProduct.id, data);
+                const targetId = selectedProduct.productId || selectedProduct.id;
+                await sellerProductApi.updateProduct(targetId, data);
                 notify.success("Product updated successfully!");
             } else {
                 await sellerProductApi.createProduct(data);
                 notify.success("Product created successfully!");
             }
             setIsFormModalOpen(false);
-            refetch(); // Refresh list
+            refetch();
         } catch (err) {
             console.error("Error saving product:", err);
             const msg = err?.response?.data?.message || err?.message || "An error occurred, please try again.";
@@ -111,25 +142,20 @@ export default function SellerProducts() {
         }
     };
 
-    // Search submit
     const handleSearch = (e) => {
         e.preventDefault();
         setSearch(searchInput);
         setPage(1);
     };
 
-    // Filter change
-    const handleStatusChange = (val) => {
-        setStatus(val);
+    const handleClearFilters = () => {
+        setSearchInput("");
+        setSearch("");
+        setStatus("all");
+        setSortBy("newest");
         setPage(1);
     };
 
-    const handleSortChange = (val) => {
-        setSortBy(val);
-        setPage(1);
-    };
-
-    // Format tiền
     const formatPrice = (price) => {
         return new Intl.NumberFormat("vi-VN", {
             style: "currency",
@@ -137,7 +163,6 @@ export default function SellerProducts() {
         }).format(price);
     };
 
-    // Format ngày
     const formatDate = (dateStr) => {
         if (!dateStr) return "—";
         return new Intl.DateTimeFormat("en-US", {
@@ -147,269 +172,206 @@ export default function SellerProducts() {
         }).format(new Date(dateStr));
     };
 
-    // Status badge
-    const getStatusBadge = (productStatus) => {
-        const map = {
-            ACTIVE: { class: styles.badgeActive, label: "Active" },
-            INACTIVE: { class: styles.badgeInactive, label: "Inactive" },
-            DELETED: { class: styles.badgeDeleted, label: "Deleted" },
-            OUT_OF_STOCK: { class: styles.badgeInactive, label: "Out of Stock" },
-        };
-        const info = map[productStatus] || map.ACTIVE;
-        return <span className={`${styles.badge} ${info.class}`}>{info.label}</span>;
+    const renderStatusBadge = (productStatus) => {
+        switch (productStatus) {
+            case "ACTIVE":
+                return <SellerBadge variant="success">Active</SellerBadge>;
+            case "INACTIVE":
+                return <SellerBadge variant="warning">Inactive</SellerBadge>;
+            case "OUT_OF_STOCK":
+                return <SellerBadge variant="danger">Out of Stock</SellerBadge>;
+            case "DELETED":
+                return <SellerBadge variant="neutral">Deleted</SellerBadge>;
+            default:
+                return <SellerBadge variant="neutral">{productStatus || "Unknown"}</SellerBadge>;
+        }
     };
 
     return (
-        <div className={styles.container}>
-            <SEOHead 
-                title="Quản Lý Sản Phẩm - Kênh Người Bán" 
-                robots="noindex, nofollow" 
-                description="Bảng điều khiển quản lý danh sách sản phẩm, kho hàng và giá bán dành cho người bán."
+        <div className="seller-page-container">
+            <SEOHead
+                title="Product Management - Seller Center"
+                robots="noindex, nofollow"
+                description="Dashboard for managing product listings, inventory, and pricing for sellers."
             />
-            {/* Page Header */}
-            <div className={styles.pageHeader}>
-                <div>
-                    <h1 className={styles.pageTitle}>My Products</h1>
-                    <p className={styles.pageSubtitle}>
-                        Manage all products in your store
-                        {pagination.total > 0 && (
-                            <span className={styles.totalCount}>
-                                &nbsp;· {pagination.total} products
-                            </span>
-                        )}
-                    </p>
-                </div>
-                <button className={styles.addBtn} id="btn-add-product" onClick={handleOpenCreate}>
-                    <Plus size={18} />
-                    Add Product
-                </button>
-            </div>
+
+            {/* Standard Page Header */}
+            <SellerPageHeader
+                title="My Products"
+                subtitle="Manage all products in your store"
+                count={pagination.total > 0 ? pagination.total : null}
+                actions={
+                    <SellerButton
+                        id="btn-add-product"
+                        icon={<Plus size={18} />}
+                        onClick={handleOpenCreate}
+                    >
+                        Add Product
+                    </SellerButton>
+                }
+            />
 
             {/* Filter Bar */}
-            <div className={styles.filterBar}>
-                {/* Search */}
+            <SellerCard className={styles.filterCard}>
                 <form className={styles.searchForm} onSubmit={handleSearch}>
-                    <Search size={16} className={styles.searchIcon} />
-                    <input
-                        className={styles.searchInput}
-                        type="text"
-                        placeholder="Search products..."
+                    <SellerInput
+                        id="input-search-products"
+                        icon={<Search size={16} />}
+                        placeholder="Search products by name..."
                         value={searchInput}
                         onChange={(e) => setSearchInput(e.target.value)}
-                        id="input-search-products"
                     />
                 </form>
 
-                {/* Filters */}
-                <div className={styles.filters}>
-                    <SlidersHorizontal size={16} className={styles.filterIcon} />
+                <div className={styles.filterActions}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        <SlidersHorizontal size={16} color="var(--seller-text-muted)" />
+                        <SellerSelect
+                            id="select-filter-status"
+                            value={status}
+                            onChange={(e) => {
+                                setStatus(e.target.value);
+                                setPage(1);
+                            }}
+                            options={STATUS_OPTIONS}
+                        />
+                    </div>
 
-                    <select
-                        className={styles.filterSelect}
-                        value={status}
-                        onChange={(e) => handleStatusChange(e.target.value)}
-                        id="select-filter-status"
-                    >
-                        {STATUS_OPTIONS.map((opt) => (
-                            <option key={opt.value} value={opt.value}>
-                                {opt.label}
-                            </option>
-                        ))}
-                    </select>
-
-                    <select
-                        className={styles.filterSelect}
-                        value={sortBy}
-                        onChange={(e) => handleSortChange(e.target.value)}
+                    <SellerSelect
                         id="select-sort-products"
-                    >
-                        {SORT_OPTIONS.map((opt) => (
-                            <option key={opt.value} value={opt.value}>
-                                {opt.label}
-                            </option>
-                        ))}
-                    </select>
+                        value={sortBy}
+                        onChange={(e) => {
+                            setSortBy(e.target.value);
+                            setPage(1);
+                        }}
+                        options={SORT_OPTIONS}
+                    />
                 </div>
-            </div>
+            </SellerCard>
 
             {/* Table */}
-            <div className={styles.tableWrapper}>
-                {loading ? (
-                    <div className={styles.loadingState}>
-                        {[...Array(5)].map((_, i) => (
-                            <div key={i} className={styles.skeletonRow}>
-                                <div className={styles.skeletonCell} style={{ width: "48px", height: "48px", borderRadius: "8px" }} />
-                                <div className={styles.skeletonCell} style={{ flex: 1 }} />
-                                <div className={styles.skeletonCell} style={{ width: "80px" }} />
-                                <div className={styles.skeletonCell} style={{ width: "100px" }} />
-                                <div className={styles.skeletonCell} style={{ width: "60px" }} />
-                                <div className={styles.skeletonCell} style={{ width: "70px" }} />
-                            </div>
-                        ))}
-                    </div>
-                ) : error ? (
-                    <div className={styles.errorState}>
-                        <p>An error occurred: {error}</p>
-                    </div>
-                ) : products.length === 0 ? (
-                    <div className={styles.emptyState}>
-                        <Package size={48} strokeWidth={1} />
-                        <h3>No products found</h3>
-                        <p>Start adding products to your store</p>
-                    </div>
-                ) : (
-                    <table className={styles.table}>
-                        <thead>
-                            <tr>
-                                <th className={styles.thImage}></th>
-                                <th>Product Name</th>
-                                <th>Category</th>
-                                <th>Price</th>
-                                <th>Stock</th>
-                                <th>Sold</th>
-                                <th>Status</th>
-                                <th>Created At</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {products.map((product) => (
-                                <tr
-                                    key={product.id}
-                                    className={`${styles.row} ${product.status === "DELETED" ? styles.rowDeleted : ""}`}
-                                >
-                                    <td className={styles.cellImage}>
-                                        {product.imageUrl ? (
-                                            <img
-                                                src={product.imageUrl}
-                                                alt={product.name}
-                                                className={styles.productImage}
-                                            />
-                                        ) : (
-                                            <div className={styles.imagePlaceholder}>
-                                                <Package size={20} strokeWidth={1.5} />
-                                            </div>
-                                        )}
-                                    </td>
-                                    <td className={styles.cellName}>
-                                        <span className={styles.productName}>{product.name}</span>
-                                        {product.brandName && (
-                                            <span className={styles.productBrand}>{product.brandName}</span>
-                                        )}
-                                    </td>
-                                    <td className={styles.cellCategory}>
-                                        {product.categoryName || "—"}
-                                    </td>
-                                    <td className={styles.cellPrice}>
-                                        {product.discountPrice ? (
-                                            <>
-                                                <span className={styles.priceOriginal}>
-                                                    {formatPrice(product.price)}
-                                                </span>
-                                                <span className={styles.priceFinal}>
-                                                    {formatPrice(product.discountPrice)}
-                                                </span>
-                                            </>
-                                        ) : (
-                                            <span className={styles.priceFinal}>
-                                                {formatPrice(product.price)}
-                                            </span>
-                                        )}
-                                    </td>
-                                    <td className={styles.cellStock}>
-                                        <span className={product.stock <= 5 ? styles.stockLow : ""}>
-                                            {product.stock}
-                                        </span>
-                                    </td>
-                                    <td className={styles.cellSold}>
-                                        {product.soldCount || 0}
-                                    </td>
-                                    <td className={styles.cellStatus}>
-                                        {getStatusBadge(product.status)}
-                                    </td>
-                                    <td className={styles.cellDate}>
-                                        {formatDate(product.createdAt)}
-                                    </td>
-                                    <td className={styles.cellActions}>
-                                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                                            <button 
-                                                className={styles.actionBtn} 
-                                                onClick={() => handleOpenUpdate(product)}
-                                                disabled={product.status === "DELETED"}
-                                                title="Edit"
-                                            >
-                                                <Edit2 size={16} />
-                                            </button>
-                                            <button 
-                                                className={`${styles.actionBtn} ${styles.actionBtnDanger}`}
-                                                onClick={() => handleOpenDelete(product)}
-                                                disabled={product.status === "DELETED"}
-                                                title="Delete"
-                                            >
-                                                <Trash2 size={16} />
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                )}
-            </div>
-
-            {/* Pagination */}
-            {pagination.totalPages > 1 && (
-                <div className={styles.pagination}>
-                    <span className={styles.pageInfo}>
-                        Page {pagination.page} / {pagination.totalPages}
-                    </span>
-
-                    <div className={styles.pageButtons}>
-                        <button
-                            className={styles.pageBtn}
-                            disabled={page <= 1}
-                            onClick={() => setPage((p) => Math.max(1, p - 1))}
-                            id="btn-prev-page"
-                        >
-                            <ChevronLeft size={16} />
-                            Prev
-                        </button>
-
-                        {/* Page numbers */}
-                        {Array.from({ length: Math.min(5, pagination.totalPages) }, (_, i) => {
-                            let pageNum;
-                            if (pagination.totalPages <= 5) {
-                                pageNum = i + 1;
-                            } else if (page <= 3) {
-                                pageNum = i + 1;
-                            } else if (page >= pagination.totalPages - 2) {
-                                pageNum = pagination.totalPages - 4 + i;
-                            } else {
-                                pageNum = page - 2 + i;
+            <SellerTable
+                headers={TABLE_HEADERS}
+                emptyState={
+                    !loading && products.length === 0 ? (
+                        <SellerEmptyState
+                            title="No products found"
+                            description={
+                                search || status !== "all"
+                                    ? "No products matched your search criteria."
+                                    : "Start adding products to your store to start selling."
                             }
-                            return (
-                                <button
-                                    key={pageNum}
-                                    className={`${styles.pageNumBtn} ${page === pageNum ? styles.pageNumActive : ""}`}
-                                    onClick={() => setPage(pageNum)}
-                                >
-                                    {pageNum}
-                                </button>
-                            );
-                        })}
-
-                        <button
-                            className={styles.pageBtn}
-                            disabled={page >= pagination.totalPages}
-                            onClick={() => setPage((p) => Math.min(pagination.totalPages, p + 1))}
-                            id="btn-next-page"
+                            action={
+                                search || status !== "all" ? (
+                                    <SellerButton variant="outline" size="sm" onClick={handleClearFilters}>
+                                        Clear Filters
+                                    </SellerButton>
+                                ) : (
+                                    <SellerButton size="sm" icon={<Plus size={16} />} onClick={handleOpenCreate}>
+                                        Add First Product
+                                    </SellerButton>
+                                )
+                            }
+                        />
+                    ) : null
+                }
+                footer={
+                    <SellerPagination
+                        page={pagination.page}
+                        pageSize={pagination.pageSize}
+                        total={pagination.total}
+                        totalPages={pagination.totalPages}
+                        onPageChange={setPage}
+                    />
+                }
+            >
+                {loading ? (
+                    <tr>
+                        <td colSpan={9} style={{ padding: "40px 16px", textAlign: "center" }}>
+                            <div className="seller-flex-center" style={{ gap: "10px" }}>
+                                <span className="seller-spinner" />
+                                <span style={{ color: "var(--seller-text-secondary)", fontSize: "14px" }}>
+                                    Loading products...
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                ) : (
+                    products.map((product) => (
+                        <tr
+                            key={product.id}
+                            className={product.status === "DELETED" ? styles.rowDeleted : ""}
                         >
-                            Next
-                            <ChevronRight size={16} />
-                        </button>
-                    </div>
-                </div>
-            )}
+                            <td className={styles.cellImage}>
+                                {product.imageUrl ? (
+                                    <img
+                                        src={product.imageUrl}
+                                        alt={product.name}
+                                        className={styles.productThumbnail}
+                                    />
+                                ) : (
+                                    <div className={styles.imagePlaceholder}>
+                                        <Package size={20} strokeWidth={1.5} />
+                                    </div>
+                                )}
+                            </td>
+                            <td className={styles.cellName}>
+                                <span className={styles.productName}>{product.name}</span>
+                                {product.brandName && (
+                                    <span className={styles.productBrand}>{product.brandName}</span>
+                                )}
+                            </td>
+                            <td>{product.categoryName || "—"}</td>
+                            <td>
+                                {product.discountPrice ? (
+                                    <div style={{ display: "flex", flexDirection: "column" }}>
+                                        <span className={styles.priceOriginal}>
+                                            {formatPrice(product.price)}
+                                        </span>
+                                        <span className={styles.priceFinal}>
+                                            {formatPrice(product.discountPrice)}
+                                        </span>
+                                    </div>
+                                ) : (
+                                    <span className={styles.priceFinal}>
+                                        {formatPrice(product.price)}
+                                    </span>
+                                )}
+                            </td>
+                            <td>
+                                <span className={product.stock <= 5 ? styles.stockLow : ""}>
+                                    {product.stock}
+                                </span>
+                            </td>
+                            <td>{product.soldCount || 0}</td>
+                            <td>{renderStatusBadge(product.status)}</td>
+                            <td>{formatDate(product.createdAt)}</td>
+                            <td>
+                                <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
+                                    <button
+                                        type="button"
+                                        className="seller-icon-btn"
+                                        onClick={() => handleOpenUpdate(product)}
+                                        disabled={product.status === "DELETED"}
+                                        title="Edit Product"
+                                    >
+                                        <Edit2 size={15} />
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="seller-icon-btn seller-icon-btn-danger"
+                                        onClick={() => handleOpenDelete(product)}
+                                        disabled={product.status === "DELETED"}
+                                        title="Delete Product"
+                                    >
+                                        <Trash2 size={15} />
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    ))
+                )}
+            </SellerTable>
 
             {/* Modals */}
             <ProductFormModal

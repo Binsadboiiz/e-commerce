@@ -25,6 +25,10 @@ export const sellerProductApi = {
         return axiosClient.get(`${SELLER_PRODUCTS_URL}?${queryParams.toString()}`);
     },
 
+    async getProductById(id) {
+        return axiosClient.get(`${SELLER_PRODUCTS_URL}/${id}`);
+    },
+
     async createProduct(data) {
         return axiosClient.post(SELLER_PRODUCTS_URL, data);
     },

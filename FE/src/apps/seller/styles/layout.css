@@ -1,0 +1,128 @@
+/* ==========================================================================
+   SELLER DESIGN SYSTEM — LAYOUT
+   Standard containers, headers, cards, grids, and responsive wrappers.
+   ========================================================================== */
+
+.seller-page-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--seller-space-6);
+    max-width: 100%;
+    animation: sellerFadeIn 0.25s ease-out;
+}
+
+@keyframes sellerFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Page Header */
+.seller-page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--seller-space-4);
+    flex-wrap: wrap;
+}
+
+.seller-page-header-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--seller-space-1);
+}
+
+.seller-page-title {
+    font-size: var(--seller-font-size-2xl);
+    font-weight: 700;
+    color: var(--seller-text-main);
+    letter-spacing: -0.025em;
+    line-height: 1.25;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--seller-space-3);
+}
+
+.seller-page-subtitle {
+    font-size: var(--seller-font-size-base);
+    color: var(--seller-text-secondary);
+    margin: 0;
+}
+
+.seller-page-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--seller-space-3);
+    flex-wrap: wrap;
+}
+
+/* Card Container */
+.seller-card {
+    background: var(--seller-surface);
+    border: 1px solid var(--seller-border);
+    border-radius: var(--seller-radius-xl);
+    padding: var(--seller-space-5);
+    box-shadow: var(--seller-shadow-xs);
+    transition: border-color var(--seller-transition-fast), box-shadow var(--seller-transition-fast);
+}
+
+.seller-card:hover {
+    border-color: var(--seller-border-hover);
+}
+
+.seller-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: var(--seller-space-4);
+    margin-bottom: var(--seller-space-4);
+    border-bottom: 1px solid var(--seller-border);
+}
+
+.seller-card-title {
+    font-size: var(--seller-font-size-lg);
+    font-weight: 600;
+    color: var(--seller-text-main);
+    margin: 0;
+}
+
+/* Filter Card */
+.seller-filter-card {
+    background: var(--seller-surface);
+    border: 1px solid var(--seller-border);
+    border-radius: var(--seller-radius-xl);
+    padding: var(--seller-space-4) var(--seller-space-5);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--seller-space-4);
+    flex-wrap: wrap;
+    box-shadow: var(--seller-shadow-xs);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .seller-page-container {
+        gap: var(--seller-space-4);
+    }
+
+    .seller-page-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .seller-page-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .seller-card {
+        padding: var(--seller-space-4);
+    }
+}

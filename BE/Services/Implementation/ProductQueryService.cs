@@ -1,4 +1,6 @@
+using BE.Constants;
 using BE.Data;
+using BE.Extensions;
 using BE.Models.DTOs;
 using BE.Models.DTOs.Products;
 using BE.Models.DTOs.Products.ProductDetail;
@@ -14,7 +16,7 @@ namespace BE.Services.Implementation
     /// Query side of Product (CQRS Read Model)
     /// - Read-only optimized queries
     /// - Filtering / pagination / sorting
-    /// - Product detail projection
+    /// - Product detail projection via ProductMappingExtensions
     /// - Filter metadata (faceted search)
     /// </summary>
     public class ProductQueryService : IProductQueryService
@@ -40,6 +42,11 @@ namespace BE.Services.Implementation
 
             if (product == null) return null;
 
+            var stock = product.Variants
+                .Sum(v => v.Inventory != null
+                    ? (v.Inventory.AvailableStock - v.Inventory.ReservedStock)
+                    : 0);
+
             return new ProductListDto
             {
                 Id = product.ProductId,
@@ -48,19 +55,13 @@ namespace BE.Services.Implementation
                 Price = product.Price,
                 DiscountPrice = product.DiscountPrice,
                 FinalPrice = product.DiscountPrice ?? product.Price,
-                AvailableStock = product.Variants
-                    .Sum(v => v.Inventory != null
-                        ? v.Inventory.AvailableStock - v.Inventory.ReservedStock
-                        : 0),
-                Stock = product.Variants
-                    .Sum(v => v.Inventory != null
-                        ? v.Inventory.AvailableStock - v.Inventory.ReservedStock
-                        : 0),
+                AvailableStock = stock,
+                Stock = stock,
                 ImageUrl = product.Image,
                 RatingAvg = product.RatingAvg,
                 RatingCount = product.RatingCount,
-                CategoryName = product.Category != null ? product.Category.Type : null,
-                BrandName = product.Brand != null ? product.Brand.Name : null,
+                CategoryName = product.Category?.Type,
+                BrandName = product.Brand?.Name,
                 Description = product.Description
             };
         }
@@ -85,10 +86,7 @@ namespace BE.Services.Implementation
             if (filter.AttributeValueIds?.Any() == true)
             {
                 var ids = filter.AttributeValueIds;
-
-                query = query.Where(p =>
-                    p.ProductAttributes.Any(pa => ids.Contains(pa.ValueId))
-                );
+                query = query.Where(p => p.ProductAttributes.Any(pa => ids.Contains(pa.ValueId)));
             }
 
             // RATING
@@ -106,12 +104,10 @@ namespace BE.Services.Implementation
             var projected = query.Select(p => new
             {
                 Product = p,
-
                 AvailableStock = p.Variants
                     .Sum(v => v.Inventory != null
                         ? v.Inventory.AvailableStock - v.Inventory.ReservedStock
                         : 0),
-
                 FinalPrice = p.Variants.Any()
                     ? p.Variants.Min(v => v.Price ?? p.Price)
                     : (p.DiscountPrice ?? p.Price)
@@ -120,9 +116,9 @@ namespace BE.Services.Implementation
             // SORT
             projected = filter.SortBy switch
             {
-                "price_asc" => projected.OrderBy(x => x.FinalPrice),
-                "price_desc" => projected.OrderByDescending(x => x.FinalPrice),
-                "rating" => projected.OrderByDescending(x => x.Product.RatingAvg),
+                ProductSortConstants.PriceAsc => projected.OrderBy(x => x.FinalPrice),
+                ProductSortConstants.PriceDesc => projected.OrderByDescending(x => x.FinalPrice),
+                ProductSortConstants.Rating => projected.OrderByDescending(x => x.Product.RatingAvg),
                 _ => projected.OrderByDescending(x => x.Product.CreatedAt)
             };
 
@@ -130,14 +126,11 @@ namespace BE.Services.Implementation
             var pageSize = filter.PageSize <= 0 ? 20 : filter.PageSize;
             pageSize = Math.Min(pageSize, 100);
 
-            var skip = (page - 1) * pageSize;
-
             var total = await projected.CountAsync();
 
             var items = await projected
-                .Skip((filter.Page - 1) * filter.PageSize)
-                .Take(filter.PageSize)
-
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .Select(x => new ProductListDto
                 {
                     Id = x.Product.ProductId,
@@ -151,8 +144,8 @@ namespace BE.Services.Implementation
                     ImageUrl = x.Product.Image,
                     RatingAvg = x.Product.RatingAvg,
                     RatingCount = x.Product.RatingCount,
-                    CategoryName = x.Product.Category!.Type,
-                    BrandName = x.Product.Brand!.Name,
+                    CategoryName = x.Product.Category != null ? x.Product.Category.Type : null,
+                    BrandName = x.Product.Brand != null ? x.Product.Brand.Name : null,
                     Description = x.Product.Description
                 })
                 .ToListAsync();
@@ -231,9 +224,9 @@ namespace BE.Services.Implementation
             {
                 Categories = categories,
                 Brands = brands,
-                Colors = allAttributes.Where(a => a.AttributeTypeName == "Color").Select(a => a.Option).ToList(),
-                Sizes = allAttributes.Where(a => a.AttributeTypeName == "Size").Select(a => a.Option).ToList(),
-                Materials = allAttributes.Where(a => a.AttributeTypeName == "Material").Select(a => a.Option).ToList()
+                Colors = allAttributes.Where(a => a.AttributeTypeName == ProductAttributeConstants.Color).Select(a => a.Option).ToList(),
+                Sizes = allAttributes.Where(a => a.AttributeTypeName == ProductAttributeConstants.Size).Select(a => a.Option).ToList(),
+                Materials = allAttributes.Where(a => a.AttributeTypeName == ProductAttributeConstants.Material).Select(a => a.Option).ToList()
             };
         }
 
@@ -244,151 +237,45 @@ namespace BE.Services.Implementation
             var product = await _context.Products
                 .AsNoTracking()
                 .Include(p => p.Shop)
-                .Where(p => p.Slug == slug && p.Status == BE.Constants.ProductConstants.ProductStatusActive)
-                .Select(p => new ProductDetailDto
-                {
-                    ProductId = p.ProductId,
-                    Name = p.Name,
-                    Slug = p.Slug,
-                    Description = p.Description,
-                    Price = p.Price,
-                    DiscountPrice = p.DiscountPrice,
-                    RatingAvg = p.RatingAvg,
-                    RatingCount = p.RatingCount,
-                    BrandName = p.Brand != null ? p.Brand.Name : null,
-                    CategoryName = p.Category != null ? p.Category.Type : null,
-                    HasVariants = p.Variants.Any(),
-
-                    Images = p.Images.Select(i => new ProductImageDto
-                    {
-                        ImageId = i.ImageId,
-                        ImageUrl = i.ImageUrl,
-                        IsPrimary = i.IsPrimary,
-                        SortOrder = i.SortOrder,
-                        VariantId = i.VariantId
-                    }).ToList(),
-
-                    Attributes = p.Variants
-                        .SelectMany(v => v.VariantAttributes)
-                        .Where(va => va != null && va.AttributeValue != null && va.AttributeValue.AttributeType != null)
-                        .GroupBy(va => new
-                        {
-                            va.AttributeValue.AttributeId,
-                            va.AttributeValue.AttributeType.Name
-                        })
-                        .Select(g => new ProductAttributeGroupDto
-                        {
-                            AttributeId = g.Key.AttributeId,
-                            AttributeName = g.Key.Name,
-
-                            AttributeValues = g 
-                                .GroupBy(x => new
-                                {
-                                    x.ValueId,
-                                    x.AttributeValue.Value
-                                })
-                                .Select(x => new ProductAttributeValueDto
-                                {
-                                    ValueId = x.Key.ValueId,
-                                    Value = x.Key.Value
-                                }).ToList(),
-                        }).ToList(),
-
-                    Variants = p.Variants.Select(v => new ProductVariantDto
-                    {
-                        VariantId = v.VariantId,
-
-                        Price = v.Price ?? (p.DiscountPrice ?? p.Price),
-
-                        AvailableStock = v.Inventory != null
-                            ? v.Inventory.AvailableStock - v.Inventory.ReservedStock
-                            : (v.Stock ?? 0),
-
-                        SKU = v.SKU ?? string.Empty,
-
-                        ImageIds = v.Images
-                            .Select(i => i.ImageId)
-                            .ToList(),
-
-                        IsAvailable = (v.Inventory != null
-                            ? (v.Inventory.AvailableStock - v.Inventory.ReservedStock)
-                            : (v.Stock ?? 0)) > 0,
-
-                        Attributes = v.VariantAttributes
-                            .Where(va => va != null && va.AttributeValue != null && va.AttributeValue.AttributeType != null)
-                            .Select(va => new VariantAttributeDto
-                            {
-                                AttributeId = va.AttributeValue.AttributeId,
-                                AttributeName = va.AttributeValue.AttributeType.Name,
-                                ValueId = va.ValueId,
-                                Value = va.AttributeValue.Value,
-                            }).ToList(),
-                    }).ToList(),
-
-                    Shop = p.Shop == null ? null : new ShopInfoDto
-                    {
-                        ShopId = p.Shop.ShopId,
-                        ShopName = p.Shop.Name,
-                        ShopAvatar = p.Shop.Logo,
-                        Status = p.Shop.Status,
-                        IsOnline = p.Shop.IsActive,
-                        JoinedAt = p.Shop.Create_At,
-                        Rating = p.Shop.Products.Any() ? (float)p.Shop.Products.Average(x => x.RatingAvg)
-                                           : 0f,
-                        ProductCount = p.Shop.Products.Count(),
-                        Followers = 0,
-                        ResponseRate = 0,
-                        ResponseTime = "--"
-                    }
-
-                })
+                .Include(p => p.Category)
+                .Include(p => p.Brand)
+                .Include(p => p.Images)
+                .Include(p => p.Variants)
+                    .ThenInclude(v => v.Inventory)
+                .Include(p => p.Variants)
+                    .ThenInclude(v => v.VariantAttributes)
+                        .ThenInclude(va => va.AttributeValue)
+                            .ThenInclude(av => av.AttributeType)
+                .Include(p => p.Variants)
+                    .ThenInclude(v => v.Images)
+                .Where(p => p.Slug == slug && (p.Status == ProductConstants.ProductStatusActive || p.Status == ProductConstants.ProductStatusOutOfStock))
                 .FirstOrDefaultAsync();
 
             if (product == null) return null;
 
-            // Ensure images fallback to main Product.Image if ProductImages collection is empty
-            if (product.Images == null || !product.Images.Any())
+            var detail = product.ToDetailDto();
+
+            if (detail.Shop != null)
             {
-                var mainImgUrl = await _context.Products
+                var shopStats = await _context.Products
                     .AsNoTracking()
-                    .Where(p => p.ProductId == product.ProductId)
-                    .Select(p => p.Image)
+                    .Where(p => p.ShopId == detail.Shop.ShopId)
+                    .GroupBy(p => p.ShopId)
+                    .Select(g => new
+                    {
+                        Count = g.Count(),
+                        RatingAvg = g.Average(x => x.RatingAvg)
+                    })
                     .FirstOrDefaultAsync();
 
-                if (!string.IsNullOrWhiteSpace(mainImgUrl))
+                if (shopStats != null)
                 {
-                    product.Images = new List<ProductImageDto>
-                    {
-                        new ProductImageDto
-                        {
-                            ImageId = 0,
-                            ImageUrl = mainImgUrl,
-                            IsPrimary = true,
-                            SortOrder = 0
-                        }
-                    };
+                    detail.Shop.ProductCount = shopStats.Count;
+                    detail.Shop.Rating = (float)shopStats.RatingAvg;
                 }
             }
 
-            // Safely build VariantMap without throwing ArgumentException for duplicate or empty keys
-            var variantMap = new Dictionary<string, long>();
-            if (product.Variants != null)
-            {
-                foreach (var variant in product.Variants)
-                {
-                    if (variant.Attributes != null && variant.Attributes.Any())
-                    {
-                        var key = string.Join("-", variant.Attributes.OrderBy(a => a.AttributeId).Select(a => a.ValueId));
-                        if (!string.IsNullOrEmpty(key) && !variantMap.ContainsKey(key))
-                        {
-                            variantMap[key] = variant.VariantId;
-                        }
-                    }
-                }
-            }
-            product.VariantMap = variantMap;
-
-            return product;
+            return detail;
         }
     }
 }

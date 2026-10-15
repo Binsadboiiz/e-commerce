@@ -4,6 +4,7 @@ import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 import { sellerStoreApi } from "@/apps/seller/features/store/api/sellerStoreApi";
 import { ROUTES } from "@/config/route.config";
+import "@/apps/seller/styles/index.css";
 import styles from "./DashboardLayout.module.css";
 
 function DashboardLayout() {

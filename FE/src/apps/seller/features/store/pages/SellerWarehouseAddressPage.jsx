@@ -1,9 +1,16 @@
 import { useState, useEffect } from "react";
-import { MapPin, Save, Loader2 } from "lucide-react";
+import { Save } from "lucide-react";
 import { sellerStoreApi } from "../api/sellerStoreApi";
 import VietnamAddressSelector from "@/shared/components/address/VietnamAddressSelector";
 import SEOHead from "@/shared/components/SEOHead";
 import { notify } from "@/shared/utils/Notify";
+import {
+    SellerPageHeader,
+    SellerCard,
+    SellerFormField,
+    SellerInput,
+    SellerButton
+} from "@/apps/seller/components/common";
 import styles from "./SellerWarehouseAddressPage.module.css";
 
 const defaultAddress = {
@@ -111,59 +118,48 @@ export default function SellerWarehouseAddressPage() {
     };
 
     return (
-        <div className={styles.page}>
+        <div className="seller-page-container">
             <SEOHead 
                 title="Địa chỉ kho hàng | Kênh người bán" 
                 description="Quản lý địa chỉ kho hàng lấy hàng cho đơn vị vận chuyển."
             />
 
-            <div className={styles.header}>
-                <h1 className={styles.title}>Địa chỉ kho hàng & Lấy hàng</h1>
-                <p className={styles.subtitle}>
-                    Địa chỉ này được sử dụng để đơn vị vận chuyển đến nhận đơn hàng và làm địa chỉ hoàn hàng.
-                </p>
-            </div>
+            <SellerPageHeader
+                title="Địa chỉ kho hàng & Lấy hàng"
+                subtitle="Địa chỉ này được sử dụng để đơn vị vận chuyển đến nhận đơn hàng và làm địa chỉ hoàn hàng."
+            />
 
-            <div className={styles.card}>
+            <SellerCard style={{ maxWidth: "860px" }}>
                 {loading ? (
                     <div style={{ display: "flex", justifyContent: "center", padding: "3rem" }}>
-                        <Loader2 size={32} className="animate-spin text-blue-500" />
+                        <div className="seller-spinner" />
                     </div>
                 ) : (
-                    <form className={styles.form} onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
                         {/* Section 1: Contact */}
                         <div className={styles.sectionBlock}>
                             <h2 className={styles.sectionTitle}>Thông tin người phụ trách kho</h2>
                             <div className={styles.gridTwoCols}>
-                                <div className={styles.formGroup}>
-                                    <label className={styles.label}>
-                                        Họ và tên người liên hệ <span className={styles.requiredStar}>*</span>
-                                    </label>
-                                    <input
+                                <SellerFormField label="Họ và tên người liên hệ" required>
+                                    <SellerInput
                                         required
-                                        type="text"
                                         name="fullName"
                                         value={formData.fullName}
                                         onChange={handleChange}
-                                        className={styles.inputField}
                                         placeholder="Ví dụ: Nguyễn Văn Quản Kho"
                                     />
-                                </div>
+                                </SellerFormField>
 
-                                <div className={styles.formGroup}>
-                                    <label className={styles.label}>
-                                        Số điện thoại liên hệ <span className={styles.requiredStar}>*</span>
-                                    </label>
-                                    <input
+                                <SellerFormField label="Số điện thoại liên hệ" required>
+                                    <SellerInput
                                         required
                                         type="tel"
                                         name="phoneNumber"
                                         value={formData.phoneNumber}
                                         onChange={handleChange}
-                                        className={styles.inputField}
                                         placeholder="0988888888"
                                     />
-                                </div>
+                                </SellerFormField>
                             </div>
                         </div>
 
@@ -186,52 +182,40 @@ export default function SellerWarehouseAddressPage() {
                             />
 
                             <div className={styles.gridTwoCols} style={{ marginTop: "1rem" }}>
-                                <div className={styles.formGroup}>
-                                    <label className={styles.label}>
-                                        Số nhà, tên đường, tên kho <span className={styles.requiredStar}>*</span>
-                                    </label>
-                                    <input
+                                <SellerFormField label="Số nhà, tên đường, tên kho" required>
+                                    <SellerInput
                                         required
-                                        type="text"
                                         name="streetAddress"
                                         value={formData.streetAddress}
                                         onChange={handleChange}
-                                        className={styles.inputField}
                                         placeholder="Số 45, Đường Lê Duẩn, Kho A"
                                     />
-                                </div>
+                                </SellerFormField>
 
-                                <div className={styles.formGroup}>
-                                    <label className={styles.label}>Mã bưu chính (Postal Code)</label>
-                                    <input
-                                        type="text"
+                                <SellerFormField label="Mã bưu chính (Postal Code)">
+                                    <SellerInput
                                         name="postalCode"
                                         value={formData.postalCode}
                                         onChange={handleChange}
-                                        className={styles.inputField}
                                         placeholder="700000"
                                     />
-                                </div>
+                                </SellerFormField>
                             </div>
                         </div>
 
-                        <div className={styles.actions}>
-                            <button
+                        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "12px" }}>
+                            <SellerButton
                                 type="submit"
-                                className={styles.submitBtn}
-                                disabled={saving}
+                                variant="primary"
+                                icon={Save}
+                                loading={saving}
                             >
-                                {saving ? (
-                                    <Loader2 size={16} className="animate-spin" />
-                                ) : (
-                                    <Save size={16} />
-                                )}
-                                <span>{saving ? "Đang lưu..." : "Lưu thay đổi"}</span>
-                            </button>
+                                Lưu thay đổi
+                            </SellerButton>
                         </div>
                     </form>
                 )}
-            </div>
+            </SellerCard>
         </div>
     );
 }

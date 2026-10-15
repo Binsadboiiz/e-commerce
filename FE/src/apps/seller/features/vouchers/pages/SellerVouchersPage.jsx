@@ -1,11 +1,22 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
-import { Search, Plus, Tag, ChevronLeft, ChevronRight, Edit2, Trash2, Calendar, ShoppingBag, Eye, EyeOff } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { Plus, Tag, Edit2, Trash2, Eye, EyeOff } from "lucide-react";
 import axiosClient from "@/shared/features/auth/api/axiosClient.js";
 import { sellerVoucherApi } from "../api/sellerVoucherApi.js";
 import { notify } from "@/shared/utils/Notify.js";
-import Button from "@/shared/components/ui/Button.jsx";
 import SEOHead from "@/shared/components/SEOHead.jsx";
 import SellerVouchersSkeleton from "../components/SellerVouchersSkeleton.jsx";
+import {
+    SellerPageHeader,
+    SellerButton,
+    SellerCard,
+    SellerInput,
+    SellerSelect,
+    SellerFormField,
+    SellerBadge,
+    SellerPagination,
+    SellerEmptyState,
+    SellerModal
+} from "@/apps/seller/components/common";
 import "./SellerVouchersPage.css";
 
 const currencyFormatter = new Intl.NumberFormat("vi-VN", {
@@ -17,7 +28,7 @@ export default function SellerVouchersPage() {
     const [vouchers, setVouchers] = useState([]);
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [categoriesLoading, setCategoriesLoading] = useState(false);
+    const [, setCategoriesLoading] = useState(false);
     const [total, setTotal] = useState(0);
     const [page, setPage] = useState(1);
     const pageSize = 10;
@@ -100,14 +111,14 @@ export default function SellerVouchersPage() {
             ...prev,
             [name]: value
         }));
-        // Clear error for this field
         if (formErrors[name]) {
             setFormErrors(prev => ({ ...prev, [name]: null }));
         }
     };
 
-    // Open create modal
     const handleOpenCreate = () => {
+        setModalMode("create");
+        setSelectedVoucherId(null);
         setFormData({
             code: "",
             discountType: "percent",
@@ -120,62 +131,67 @@ export default function SellerVouchersPage() {
             usageLimit: ""
         });
         setFormErrors({});
-        setModalMode("create");
-        setSelectedVoucherId(null);
         setIsModalOpen(true);
     };
 
-    // Open edit modal
     const handleOpenEdit = (voucher) => {
+        setModalMode("edit");
+        setSelectedVoucherId(voucher.id);
+        
+        let formattedExpiredAt = "";
+        if (voucher.expiredAt) {
+            const d = new Date(voucher.expiredAt);
+            formattedExpiredAt = new Date(d.getTime() - d.getTimezoneOffset() * 60000)
+                .toISOString()
+                .slice(0, 16);
+        }
+
         setFormData({
             code: voucher.code,
             discountType: voucher.discountType.toLowerCase(),
             value: voucher.value,
             maxDiscount: voucher.maxDiscount || "",
             minOrderValue: voucher.minOrderValue || "",
-            expiredAt: voucher.expiredAt ? voucher.expiredAt.substring(0, 16) : "",
+            expiredAt: formattedExpiredAt,
             voucherType: voucher.voucherType,
             categoryId: voucher.categoryId || "",
             usageLimit: voucher.usageLimit || ""
         });
         setFormErrors({});
-        setModalMode("edit");
-        setSelectedVoucherId(voucher.id);
         setIsModalOpen(true);
     };
 
-    // Validate form
     const validateForm = () => {
         const errors = {};
         if (modalMode === "create") {
             if (!formData.code.trim()) {
-                errors.code = "Voucher code is required.";
-            } else if (!/^[a-zA-Z0-9_-]+$/.test(formData.code)) {
-                errors.code = "Code can only contain alphanumeric characters, underscores, or hyphens.";
+                errors.code = "Voucher code is required";
+            } else if (!/^[A-Za-z0-9_-]{3,20}$/.test(formData.code.trim())) {
+                errors.code = "Code must be 3-20 characters long and contain only letters, numbers, hyphens or underscores";
             }
         }
 
-        if (!formData.value || formData.value <= 0) {
-            errors.value = "Discount value must be greater than 0.";
-        } else if (formData.discountType === "percent" && formData.value > 100) {
-            errors.value = "Percentage discount cannot exceed 100%.";
-        }
-
         if (formData.voucherType === "Category" && !formData.categoryId) {
-            errors.categoryId = "Please select a product category.";
+            errors.categoryId = "Category selection is required";
         }
 
-        if (formData.usageLimit && formData.usageLimit <= 0) {
-            errors.usageLimit = "Usage limit must be greater than 0.";
+        const numericValue = parseFloat(formData.value);
+        if (isNaN(numericValue) || numericValue <= 0) {
+            errors.value = "Discount value must be greater than 0";
+        } else if (formData.discountType === "percent" && numericValue > 100) {
+            errors.value = "Percentage discount cannot exceed 100%";
+        }
+
+        if (formData.usageLimit && parseInt(formData.usageLimit, 10) <= 0) {
+            errors.usageLimit = "Usage limit must be at least 1";
         }
 
         setFormErrors(errors);
         return Object.keys(errors).length === 0;
     };
 
-    // Handle submit form
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        if (e) e.preventDefault();
         if (!validateForm()) return;
 
         try {
@@ -186,15 +202,14 @@ export default function SellerVouchersPage() {
                 maxDiscount: formData.maxDiscount ? parseFloat(formData.maxDiscount) : null,
                 minOrderValue: formData.minOrderValue ? parseFloat(formData.minOrderValue) : null,
                 expiredAt: formData.expiredAt ? new Date(formData.expiredAt).toISOString() : null,
-                usageLimit: formData.usageLimit ? parseInt(formData.usageLimit) : null
+                usageLimit: formData.usageLimit ? parseInt(formData.usageLimit, 10) : null
             };
 
             if (modalMode === "create") {
                 payload.code = formData.code.trim().toUpperCase();
                 payload.voucherType = formData.voucherType;
-                if (formData.voucherType === "Category") {
-                    payload.categoryId = parseInt(formData.categoryId);
-                }
+                payload.categoryId = formData.voucherType === "Category" ? parseInt(formData.categoryId, 10) : null;
+                
                 await sellerVoucherApi.createVoucher(payload);
                 notify.success("Voucher created successfully!");
             } else {
@@ -205,98 +220,94 @@ export default function SellerVouchersPage() {
             setIsModalOpen(false);
             fetchVouchers();
         } catch (err) {
-            const message = err?.response?.data?.message || err?.message || "An error occurred";
+            const message = err?.response?.data?.message || err?.message || "Failed to save voucher";
             notify.error(message);
         } finally {
             setSubmitLoading(false);
         }
     };
 
-    // Toggle Voucher Active/Inactive
     const handleToggleActive = async (voucher) => {
         try {
-            const payload = {
-                discountType: voucher.discountType,
-                value: voucher.value,
-                maxDiscount: voucher.maxDiscount,
-                minOrderValue: voucher.minOrderValue,
-                expiredAt: voucher.expiredAt,
-                usageLimit: voucher.usageLimit,
-                isActive: !voucher.isActive
-            };
-            await sellerVoucherApi.updateVoucher(voucher.id, payload);
-            notify.success(`Voucher ${voucher.isActive ? "deactivated" : "activated"} successfully!`);
-            fetchVouchers();
+            await sellerVoucherApi.toggleVoucherActive(voucher.id);
+            notify.success(`Voucher ${voucher.isActive ? "deactivated" : "activated"} successfully`);
+            setVouchers(prev =>
+                prev.map(v => (v.id === voucher.id ? { ...v, isActive: !v.isActive } : v))
+            );
         } catch (err) {
-            notify.error(err?.message || "Failed to toggle status");
+            const message = err?.message || "Failed to toggle status";
+            notify.error(message);
         }
     };
 
-    // Delete Voucher
-    const handleDeleteVoucher = async (id) => {
-        if (!window.confirm("Are you sure you want to delete/deactivate this voucher? If it has orders, it will be deactivated instead.")) {
-            return;
-        }
-
+    const handleDeleteVoucher = async (voucherId) => {
+        if (!window.confirm("Are you sure you want to delete this voucher?")) return;
         try {
-            await sellerVoucherApi.deleteVoucher(id);
-            notify.success("Voucher deleted or deactivated successfully!");
+            await sellerVoucherApi.deleteVoucher(voucherId);
+            notify.success("Voucher deleted successfully");
             fetchVouchers();
         } catch (err) {
-            notify.error(err?.message || "Failed to delete voucher");
+            const message = err?.message || "Failed to delete voucher";
+            notify.error(message);
         }
     };
 
     const totalPages = Math.ceil(total / pageSize);
 
     return (
-        <div className="seller-vouchers-container">
+        <div className="seller-page-container">
             <SEOHead 
                 title="Quản Lý Mã Giảm Giá - Kênh Người Bán" 
                 robots="noindex, nofollow" 
                 description="Tạo và quản lý các chương trình khuyến mãi, voucher giảm giá cho shop."
             />
-            <header className="vouchers-header">
-                <div>
-                    <h1 className="vouchers-title">Voucher Management</h1>
-                    <p className="vouchers-subtitle">Create and manage discounts to boost your shop sales</p>
-                </div>
-                <Button variant="primary" icon={<Plus size={18} />} onClick={handleOpenCreate}>
+            
+            <SellerPageHeader
+                title="Voucher Management"
+                subtitle="Create and manage discounts to boost your shop sales"
+                count={total}
+            >
+                <SellerButton
+                    variant="primary"
+                    icon={Plus}
+                    onClick={handleOpenCreate}
+                >
                     Create Voucher
-                </Button>
-            </header>
+                </SellerButton>
+            </SellerPageHeader>
 
             {/* Filter and search */}
-            <div className="vouchers-filter-bar">
-                <form onSubmit={handleSearchSubmit} className="search-form">
-                    <Search className="search-icon" size={18} />
-                    <input
-                        type="text"
-                        placeholder="Search by code..."
-                        value={searchInput}
-                        onChange={(e) => setSearchInput(e.target.value)}
-                        className="search-input"
-                    />
-                    <Button type="submit" variant="secondary">Search</Button>
+            <div className="seller-filter-card">
+                <form onSubmit={handleSearchSubmit} style={{ display: "flex", gap: "10px", maxWidth: "500px", width: "100%" }}>
+                    <div style={{ flex: 1 }}>
+                        <SellerInput
+                            search
+                            placeholder="Search by code..."
+                            value={searchInput}
+                            onChange={(e) => setSearchInput(e.target.value)}
+                        />
+                    </div>
+                    <SellerButton type="submit" variant="secondary">
+                        Search
+                    </SellerButton>
                 </form>
             </div>
 
             {/* Voucher list */}
-            <div className="vouchers-list-card">
+            <div className="seller-card" style={{ padding: 0, overflow: "hidden" }}>
                 {loading ? (
                     <SellerVouchersSkeleton />
                 ) : vouchers.length === 0 ? (
-                    <div className="vouchers-empty">
-                        <Tag size={48} className="empty-icon" />
-                        <h3>No Vouchers Found</h3>
-                        <p>Start creating vouchers to attract more customers!</p>
-                        <button className="create-first-btn" onClick={handleOpenCreate}>
-                            Create your first voucher
-                        </button>
-                    </div>
+                    <SellerEmptyState
+                        icon={Tag}
+                        title="No Vouchers Found"
+                        description="Start creating vouchers to attract more customers!"
+                        actionLabel="Create your first voucher"
+                        onAction={handleOpenCreate}
+                    />
                 ) : (
-                    <div className="vouchers-table-wrapper">
-                        <table className="vouchers-table">
+                    <div className="seller-table-container" style={{ border: "none", borderRadius: 0 }}>
+                        <table className="seller-table">
                             <thead>
                                 <tr>
                                     <th>Code</th>
@@ -319,9 +330,9 @@ export default function SellerVouchersPage() {
                                             </td>
                                             <td>
                                                 <div className="voucher-type-cell">
-                                                    <span className={`v-type-badge ${voucher.voucherType.toLowerCase()}`}>
+                                                    <SellerBadge variant="neutral" size="sm">
                                                         {voucher.voucherType === "AllItems" ? "All Items" : voucher.voucherType}
-                                                    </span>
+                                                    </SellerBadge>
                                                     {voucher.voucherType === "Category" && voucher.categoryName && (
                                                         <span className="v-category-name">
                                                             {voucher.categoryName}
@@ -349,11 +360,7 @@ export default function SellerVouchersPage() {
                                             <td>
                                                 <div className="usage-cell">
                                                     <span className="usage-count">{voucher.usageCount}</span>
-                                                    {voucher.usageLimit ? (
-                                                        <span className="usage-limit"> / {voucher.usageLimit}</span>
-                                                    ) : (
-                                                        <span className="usage-limit"> / ∞</span>
-                                                    )}
+                                                    <span className="usage-limit"> / {voucher.usageLimit || "∞"}</span>
                                                 </div>
                                             </td>
                                             <td>
@@ -370,30 +377,34 @@ export default function SellerVouchersPage() {
                                                 )}
                                             </td>
                                             <td>
-                                                <button
+                                                <SellerButton
+                                                    size="sm"
+                                                    variant={voucher.isActive ? "outline" : "ghost"}
+                                                    icon={voucher.isActive ? Eye : EyeOff}
                                                     onClick={() => handleToggleActive(voucher)}
-                                                    className={`status-toggle-btn ${voucher.isActive ? "active" : "inactive"}`}
                                                     title={voucher.isActive ? "Deactivate Voucher" : "Activate Voucher"}
                                                 >
-                                                    {voucher.isActive ? <Eye size={16} /> : <EyeOff size={16} />}
-                                                    <span>{voucher.isActive ? "Active" : "Inactive"}</span>
-                                                </button>
+                                                    {voucher.isActive ? "Active" : "Inactive"}
+                                                </SellerButton>
                                             </td>
-                                            <td className="text-right actions-cell">
-                                                <button 
-                                                    className="action-btn edit-btn" 
-                                                    onClick={() => handleOpenEdit(voucher)}
-                                                    title="Edit Voucher"
-                                                >
-                                                    <Edit2 size={16} />
-                                                </button>
-                                                <button 
-                                                    className="action-btn delete-btn" 
-                                                    onClick={() => handleDeleteVoucher(voucher.id)}
-                                                    title="Delete Voucher"
-                                                >
-                                                    <Trash2 size={16} />
-                                                </button>
+                                            <td className="text-right">
+                                                <div style={{ display: "inline-flex", gap: "6px" }}>
+                                                    <SellerButton
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        icon={Edit2}
+                                                        onClick={() => handleOpenEdit(voucher)}
+                                                        title="Edit Voucher"
+                                                    />
+                                                    <SellerButton
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        icon={Trash2}
+                                                        onClick={() => handleDeleteVoucher(voucher.id)}
+                                                        title="Delete Voucher"
+                                                        style={{ color: "var(--seller-danger, #ef4444)" }}
+                                                    />
+                                                </div>
                                             </td>
                                         </tr>
                                     );
@@ -405,203 +416,175 @@ export default function SellerVouchersPage() {
 
                 {/* Pagination */}
                 {totalPages > 1 && (
-                    <div className="vouchers-pagination">
-                        <button
-                            disabled={page === 1}
-                            onClick={() => setPage(prev => Math.max(prev - 1, 1))}
-                            className="pagination-arrow"
-                        >
-                            <ChevronLeft size={16} />
-                        </button>
-                        <span className="pagination-info">
-                            Page {page} of {totalPages}
-                        </span>
-                        <button
-                            disabled={page === totalPages}
-                            onClick={() => setPage(prev => Math.min(prev + 1, totalPages))}
-                            className="pagination-arrow"
-                        >
-                            <ChevronRight size={16} />
-                        </button>
-                    </div>
+                    <SellerPagination
+                        currentPage={page}
+                        totalPages={totalPages}
+                        onPageChange={setPage}
+                    />
                 )}
             </div>
 
-            {/* Create/Edit Modal */}
-            {isModalOpen && (
-                <div className="modal-backdrop">
-                    <div className="modal-content-card">
-                        <div className="modal-header">
-                            <h2>{modalMode === "create" ? "Create New Voucher" : "Edit Voucher"}</h2>
-                            <button className="close-modal-btn" onClick={() => setIsModalOpen(false)}>×</button>
+            {/* Create/Edit Modal with SellerModal */}
+            <SellerModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                title={modalMode === "create" ? "Create New Voucher" : "Edit Voucher"}
+                subtitle={modalMode === "edit" ? `Editing code: ${formData.code}` : "Configure discounts and eligibility"}
+                size="lg"
+                footer={
+                    <>
+                        <SellerButton
+                            variant="outline"
+                            onClick={() => setIsModalOpen(false)}
+                            disabled={submitLoading}
+                        >
+                            Cancel
+                        </SellerButton>
+                        <SellerButton
+                            variant="primary"
+                            onClick={handleSubmit}
+                            loading={submitLoading}
+                        >
+                            Save Voucher
+                        </SellerButton>
+                    </>
+                }
+            >
+                <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                        {/* Code - Readonly in Edit Mode */}
+                        <div style={{ gridColumn: "1 / -1" }}>
+                            <SellerFormField
+                                label="Voucher Code"
+                                required
+                                error={formErrors.code}
+                                helper="Alphanumeric, underscores, hyphens. Uppercase will be auto-applied."
+                            >
+                                <SellerInput
+                                    id="code"
+                                    name="code"
+                                    value={formData.code}
+                                    onChange={handleInputChange}
+                                    placeholder="e.g. SUMMER50, VIPMALL"
+                                    disabled={modalMode === "edit"}
+                                    error={Boolean(formErrors.code)}
+                                />
+                            </SellerFormField>
                         </div>
-                        <form onSubmit={handleSubmit} className="voucher-form">
-                            <div className="form-grid">
-                                {/* Code - Readonly in Edit Mode */}
-                                <div className="form-field full-width">
-                                    <label htmlFor="code">Voucher Code <span className="req">*</span></label>
-                                    <input
-                                        type="text"
-                                        id="code"
-                                        name="code"
-                                        value={formData.code}
-                                        onChange={handleInputChange}
-                                        placeholder="e.g. SUMMER50, VIPMALL"
-                                        disabled={modalMode === "edit"}
-                                        className={formErrors.code ? "error" : ""}
-                                    />
-                                    {formErrors.code && <span className="field-error-msg">{formErrors.code}</span>}
-                                    <small className="help-text">Alphanumeric, underscores, hyphens. Uppercase will be auto-applied.</small>
-                                </div>
 
-                                {/* Voucher Type - Readonly in Edit Mode */}
-                                <div className="form-field">
-                                    <label htmlFor="voucherType">Voucher Type</label>
-                                    <select
-                                        id="voucherType"
-                                        name="voucherType"
-                                        value={formData.voucherType}
-                                        onChange={handleInputChange}
-                                        disabled={modalMode === "edit"}
-                                    >
-                                        <option value="AllItems">All Items (Product discount)</option>
-                                        <option value="Shipping">Shipping Fee (Shipping discount)</option>
-                                        <option value="Category">Specific Category (Category discount)</option>
-                                    </select>
-                                </div>
+                        {/* Voucher Type */}
+                        <SellerFormField label="Voucher Type">
+                            <SellerSelect
+                                id="voucherType"
+                                name="voucherType"
+                                value={formData.voucherType}
+                                onChange={handleInputChange}
+                                disabled={modalMode === "edit"}
+                            >
+                                <option value="AllItems">All Items (Product discount)</option>
+                                <option value="Shipping">Shipping Fee (Shipping discount)</option>
+                                <option value="Category">Specific Category (Category discount)</option>
+                            </SellerSelect>
+                        </SellerFormField>
 
-                                {/* Category Selection - Show only if Type is Category */}
-                                {formData.voucherType === "Category" && (
-                                    <div className="form-field">
-                                        <label htmlFor="categoryId">Product Category <span className="req">*</span></label>
-                                        <select
-                                            id="categoryId"
-                                            name="categoryId"
-                                            value={formData.categoryId}
-                                            onChange={handleInputChange}
-                                            disabled={modalMode === "edit"}
-                                            className={formErrors.categoryId ? "error" : ""}
-                                        >
-                                            <option value="">Select Category</option>
-                                            {categories.map(c => (
-                                                <option key={c.categoryId} value={c.categoryId}>
-                                                    {c.type}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        {formErrors.categoryId && <span className="field-error-msg">{formErrors.categoryId}</span>}
-                                    </div>
-                                )}
-
-                                {/* Discount Type */}
-                                <div className="form-field">
-                                    <label htmlFor="discountType">Discount Type</label>
-                                    <select
-                                        id="discountType"
-                                        name="discountType"
-                                        value={formData.discountType}
-                                        onChange={handleInputChange}
-                                    >
-                                        <option value="percent">Percentage (%)</option>
-                                        <option value="fixed">Fixed Amount (VND)</option>
-                                    </select>
-                                </div>
-
-                                {/* Discount Value */}
-                                <div className="form-field">
-                                    <label htmlFor="value">Discount Value <span className="req">*</span></label>
-                                    <input
-                                        type="number"
-                                        id="value"
-                                        name="value"
-                                        value={formData.value}
-                                        onChange={handleInputChange}
-                                        step="any"
-                                        min="0.01"
-                                        className={formErrors.value ? "error" : ""}
-                                    />
-                                    {formErrors.value && <span className="field-error-msg">{formErrors.value}</span>}
-                                </div>
-
-                                {/* Max Discount */}
-                                <div className="form-field">
-                                    <label htmlFor="maxDiscount">Max Discount Cap (VND)</label>
-                                    <input
-                                        type="number"
-                                        id="maxDiscount"
-                                        name="maxDiscount"
-                                        value={formData.maxDiscount}
-                                        onChange={handleInputChange}
-                                        placeholder="e.g. 50000"
-                                    />
-                                    <small className="help-text">Leave blank for no discount cap.</small>
-                                </div>
-
-                                {/* Minimum Order Value */}
-                                <div className="form-field">
-                                    <label htmlFor="minOrderValue">Min Order Value (VND)</label>
-                                    <input
-                                        type="number"
-                                        id="minOrderValue"
-                                        name="minOrderValue"
-                                        value={formData.minOrderValue}
-                                        onChange={handleInputChange}
-                                        placeholder="e.g. 150000"
-                                    />
-                                    <small className="help-text">Leave blank for no minimum order condition.</small>
-                                </div>
-
-                                {/* Usage Limit */}
-                                <div className="form-field">
-                                    <label htmlFor="usageLimit">Total Usage Limit</label>
-                                    <input
-                                        type="number"
-                                        id="usageLimit"
-                                        name="usageLimit"
-                                        value={formData.usageLimit}
-                                        onChange={handleInputChange}
-                                        placeholder="e.g. 100"
-                                        className={formErrors.usageLimit ? "error" : ""}
-                                    />
-                                    {formErrors.usageLimit && <span className="field-error-msg">{formErrors.usageLimit}</span>}
-                                    <small className="help-text">Leave blank for unlimited usage.</small>
-                                </div>
-
-                                {/* Expiration Date */}
-                                <div className="form-field">
-                                    <label htmlFor="expiredAt">Expiration Date</label>
-                                    <input
-                                        type="datetime-local"
-                                        id="expiredAt"
-                                        name="expiredAt"
-                                        value={formData.expiredAt}
-                                        onChange={handleInputChange}
-                                    />
-                                    <small className="help-text">Leave blank for no expiration date.</small>
-                                </div>
-                            </div>
-
-                            <div className="modal-actions">
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    onClick={() => setIsModalOpen(false)}
-                                    disabled={submitLoading}
+                        {/* Category Selection */}
+                        {formData.voucherType === "Category" && (
+                            <SellerFormField label="Product Category" required error={formErrors.categoryId}>
+                                <SellerSelect
+                                    id="categoryId"
+                                    name="categoryId"
+                                    value={formData.categoryId}
+                                    onChange={handleInputChange}
+                                    disabled={modalMode === "edit"}
+                                    error={Boolean(formErrors.categoryId)}
                                 >
-                                    Cancel
-                                </Button>
-                                <Button
-                                    type="submit"
-                                    variant="primary"
-                                    isLoading={submitLoading}
-                                >
-                                    Save Voucher
-                                </Button>
-                            </div>
-                        </form>
+                                    <option value="">Select Category</option>
+                                    {categories.map(c => (
+                                        <option key={c.categoryId} value={c.categoryId}>
+                                            {c.type}
+                                        </option>
+                                    ))}
+                                </SellerSelect>
+                            </SellerFormField>
+                        )}
+
+                        {/* Discount Type */}
+                        <SellerFormField label="Discount Type">
+                            <SellerSelect
+                                id="discountType"
+                                name="discountType"
+                                value={formData.discountType}
+                                onChange={handleInputChange}
+                            >
+                                <option value="percent">Percentage (%)</option>
+                                <option value="fixed">Fixed Amount (VND)</option>
+                            </SellerSelect>
+                        </SellerFormField>
+
+                        {/* Discount Value */}
+                        <SellerFormField label="Discount Value" required error={formErrors.value}>
+                            <SellerInput
+                                type="number"
+                                id="value"
+                                name="value"
+                                value={formData.value}
+                                onChange={handleInputChange}
+                                step="any"
+                                min="0.01"
+                                error={Boolean(formErrors.value)}
+                            />
+                        </SellerFormField>
+
+                        {/* Max Discount */}
+                        <SellerFormField label="Max Discount Cap (VND)" helper="Leave blank for no discount cap.">
+                            <SellerInput
+                                type="number"
+                                id="maxDiscount"
+                                name="maxDiscount"
+                                value={formData.maxDiscount}
+                                onChange={handleInputChange}
+                                placeholder="e.g. 50000"
+                            />
+                        </SellerFormField>
+
+                        {/* Minimum Order Value */}
+                        <SellerFormField label="Min Order Value (VND)" helper="Leave blank for no minimum order condition.">
+                            <SellerInput
+                                type="number"
+                                id="minOrderValue"
+                                name="minOrderValue"
+                                value={formData.minOrderValue}
+                                onChange={handleInputChange}
+                                placeholder="e.g. 150000"
+                            />
+                        </SellerFormField>
+
+                        {/* Usage Limit */}
+                        <SellerFormField label="Total Usage Limit" error={formErrors.usageLimit} helper="Leave blank for unlimited usage.">
+                            <SellerInput
+                                type="number"
+                                id="usageLimit"
+                                name="usageLimit"
+                                value={formData.usageLimit}
+                                onChange={handleInputChange}
+                                placeholder="e.g. 100"
+                                error={Boolean(formErrors.usageLimit)}
+                            />
+                        </SellerFormField>
+
+                        {/* Expiration Date */}
+                        <SellerFormField label="Expiration Date" helper="Leave blank for no expiration date.">
+                            <SellerInput
+                                type="datetime-local"
+                                id="expiredAt"
+                                name="expiredAt"
+                                value={formData.expiredAt}
+                                onChange={handleInputChange}
+                            />
+                        </SellerFormField>
                     </div>
-                </div>
-            )}
+                </form>
+            </SellerModal>
         </div>
     );
 }

@@ -54,6 +54,18 @@ namespace BE.Controllers.Seller
 
             return Ok(ApiResponse<object>.SuccessResponse(data));
         }
+
+        [HttpGet("{productId}")]
+        public async Task<IActionResult> GetProductById(long productId)
+        {
+            string userId = UserClaimsHelper.GetUserId(User);
+            var product = await _productService.GetSellerProductByIdAsync(productId, userId);
+            if (product == null)
+            {
+                return NotFound(ApiResponse<object>.FailureResponse("Product not found or access denied."));
+            }
+            return Ok(ApiResponse<object>.SuccessResponse(product));
+        }
         
         [HttpPost("")]
         public async Task<IActionResult> CreateProduct(
@@ -65,7 +77,7 @@ namespace BE.Controllers.Seller
 
             if (errors.Any())
             {
-                return BadRequest(ApiResponse<object>.FailureResponse("Validation failed."));
+                return BadRequest(ApiResponse<object>.FailureResponse(string.Join("; ", errors)));
             }
             string userId = UserClaimsHelper.GetUserId(User);
 
