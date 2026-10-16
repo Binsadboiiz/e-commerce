@@ -22,7 +22,7 @@ const CheckoutPage = lazy(() => import('@/apps/customer/features/checkout/pages/
 const MyOrdersPage = lazy(() => import('@/apps/customer/features/order/pages/MyOrdersPage'));
 const OrderTrackingPage = lazy(() => import('@/apps/customer/features/order/pages/OrderTrackingPage'));
 const ProfilePage = lazy(() => import('@/shared/features/auth/pages/ProfilePage'));
-const SellerRegistrationPage = lazy(() => import('@/apps/customer/features/seller').then(m => ({ default: m.SellerRegistrationPage })));
+const SellerRegistrationPage = lazy(() => import('@/apps/customer/features/seller-register').then(m => ({ default: m.SellerRegistrationPage })));
 
 export default function PublicRoutes() {
     return (
