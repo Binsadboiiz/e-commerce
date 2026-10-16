@@ -14,7 +14,8 @@ export function mapSellerRegistration(data) {
             sellerTypeCode: data.summary?.sellerTypeCode,
             sellerStatusId: data.summary?.sellerStatusId,
             sellerStatusCode: data.summary?.sellerStatusCode,
-            maxShopLimit: data.summary?.maxShopLimit
+            maxShopLimit: data.summary?.maxShopLimit,
+            rejectionReason: data.summary?.rejectionReason || data.rejectionReason || null
         },
 
         address: data.address

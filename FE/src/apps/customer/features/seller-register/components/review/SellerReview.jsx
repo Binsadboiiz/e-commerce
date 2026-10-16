@@ -3,6 +3,7 @@ import { FiEdit3, FiEye } from "react-icons/fi";
 import { useLanguage } from "@/shared/context/LanguageContext";
 import Badge from "@/shared/components/ui/Badge";
 import SellerStatusBadge from "../common/SellerStatusBadge";
+import { SELLER_STATUS } from "@/shared/constants/sellerStatus";
 import styles from "./SellerReview.module.css";
 
 export default function SellerReview({
@@ -67,6 +68,18 @@ export default function SellerReview({
                     {t("sellerReview.subtitle")}
                 </p>
             </div>
+
+            {/* Rejection Notice */}
+            {summary?.sellerStatusCode === SELLER_STATUS.REJECTED && (
+                <div className={styles.rejectionNotice} role="alert">
+                    <span className={styles.rejectionLabel}>
+                        {t("sellerReview.rejectionReasonLabel")}:
+                    </span>
+                    <p className={styles.rejectionText}>
+                        {summary?.rejectionReason || t("sellerReview.defaultRejectionReason")}
+                    </p>
+                </div>
+            )}
 
             {/* Section 1: Seller Type */}
             <section className={styles.section}>

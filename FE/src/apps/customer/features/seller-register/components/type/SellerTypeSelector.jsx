@@ -63,15 +63,25 @@ export default function SellerTypeSelector({
                 </div>
             )}
 
-            <div className={styles.grid}>
+            <div className={styles.grid} role="radiogroup" aria-label={t("sellerOnboarding.selectTypeTitle")}>
                 {/* Personal / Individual Card */}
                 <div
+                    role="radio"
+                    aria-checked={isPersonalSelected}
+                    aria-disabled={isCreated && !canChange}
+                    tabIndex={isCreated && !canChange ? -1 : 0}
                     className={`
                         ${styles.card}
                         ${isPersonalSelected ? styles.selectedCard : ""}
                         ${isCreated && !canChange ? styles.disabledCard : ""}
                     `}
                     onClick={() => handleSelect(1)}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            handleSelect(1);
+                        }
+                    }}
                 >
                     <h3 className={styles.cardTitle}>
                         {t("sellerOnboarding.personalTitle")}
@@ -83,15 +93,15 @@ export default function SellerTypeSelector({
 
                     <ul className={styles.featureList}>
                         <li>
-                            <FiCheck className={styles.featureCheck} size={15} />
+                            <FiCheck className={styles.featureCheck} size={14} />
                             <span>{t("sellerOnboarding.personalFeature1")}</span>
                         </li>
                         <li>
-                            <FiCheck className={styles.featureCheck} size={15} />
+                            <FiCheck className={styles.featureCheck} size={14} />
                             <span>{t("sellerOnboarding.personalFeature2")}</span>
                         </li>
                         <li>
-                            <FiCheck className={styles.featureCheck} size={15} />
+                            <FiCheck className={styles.featureCheck} size={14} />
                             <span>{t("sellerOnboarding.personalFeature3")}</span>
                         </li>
                     </ul>
@@ -99,12 +109,22 @@ export default function SellerTypeSelector({
 
                 {/* Business Card */}
                 <div
+                    role="radio"
+                    aria-checked={isBusinessSelected}
+                    aria-disabled={isCreated && !canChange}
+                    tabIndex={isCreated && !canChange ? -1 : 0}
                     className={`
                         ${styles.card}
                         ${isBusinessSelected ? styles.selectedCard : ""}
                         ${isCreated && !canChange ? styles.disabledCard : ""}
                     `}
                     onClick={() => handleSelect(2)}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            handleSelect(2);
+                        }
+                    }}
                 >
                     <h3 className={styles.cardTitle}>
                         {t("sellerOnboarding.businessTitle")}
@@ -116,15 +136,15 @@ export default function SellerTypeSelector({
 
                     <ul className={styles.featureList}>
                         <li>
-                            <FiCheck className={styles.featureCheck} size={15} />
+                            <FiCheck className={styles.featureCheck} size={14} />
                             <span>{t("sellerOnboarding.businessFeature1")}</span>
                         </li>
                         <li>
-                            <FiCheck className={styles.featureCheck} size={15} />
+                            <FiCheck className={styles.featureCheck} size={14} />
                             <span>{t("sellerOnboarding.businessFeature2")}</span>
                         </li>
                         <li>
-                            <FiCheck className={styles.featureCheck} size={15} />
+                            <FiCheck className={styles.featureCheck} size={14} />
                             <span>{t("sellerOnboarding.businessFeature3")}</span>
                         </li>
                     </ul>

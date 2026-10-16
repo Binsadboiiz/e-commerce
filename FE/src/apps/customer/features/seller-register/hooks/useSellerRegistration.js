@@ -2,11 +2,14 @@ import { useCallback, useEffect, useState } from "react";
 import sellerApi from "../api/sellerApi";
 import { mapSellerRegistration } from "../services/sellerMapper";
 
-export default function useSellerRegistration() {
+export default function useSellerRegistration(options = {}) {
+    const { enabled = true } = options;
     const [registration, setRegistration] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(enabled);
 
     const loadRegistration = useCallback(async function () {
+        if (!enabled) return;
+
         try {
             setLoading(true);
 
@@ -18,7 +21,7 @@ export default function useSellerRegistration() {
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [enabled]);
 
     const createRegistration = async function (payload) {
         await sellerApi.createRegistration(payload);
@@ -47,8 +50,12 @@ export default function useSellerRegistration() {
     }
 
     useEffect(function () {
-        loadRegistration();
-    }, [loadRegistration]);
+        if (enabled) {
+            loadRegistration();
+        } else {
+            setLoading(false);
+        }
+    }, [enabled, loadRegistration]);
 
     return {
         registration,

@@ -5,6 +5,8 @@ import { FiCheckCircle, FiClock, FiHome, FiFileText, FiChevronDown, FiChevronUp,
 import { sellerStoreApi } from '@/apps/seller/features/store/api/sellerStoreApi';
 import { useLanguage } from '@/shared/context/LanguageContext';
 import SellerReview from '../components/review/SellerReview';
+import SellerStepper from '../components/common/SellerStepper';
+import { getSellerStatusTimeline } from '../constants/sellerSteps';
 import styles from './SellerPendingPage.module.css';
 
 /**
@@ -70,6 +72,7 @@ export default function SellerPendingPage({ registration, onReEdit }) {
                     {!isApproved && !isRejected && t("sellerPending.descSubmitted")}
                 </p>
 
+
                 {/* Status Badge Notice */}
                 {!isApproved && !isRejected && (
                     <div className={styles.noticeTime}>
@@ -78,36 +81,15 @@ export default function SellerPendingPage({ registration, onReEdit }) {
                     </div>
                 )}
 
-                {/* Timeline Status Node */}
-                <div className={styles.timeline}>
-                    <div className={styles.timelineLine} />
-                    <div
-                        className={`${styles.timelineProgress} ${hasShop || isApproved ? styles.progressFull : styles.progressHalf}`}
+                {/* Step Progress Timeline (hidden on rejection) */}
+                {!isRejected && (
+                    <SellerStepper
+                        steps={getSellerStatusTimeline({ statusCode, hasShop, t }).steps}
+                        currentStepIndex={getSellerStatusTimeline({ statusCode, hasShop, t }).currentStepIndex}
+                        maxWidth="520px"
+                        className={styles.timelineStepper}
                     />
-
-                    <div className={styles.timelineNode}>
-                        <div className={`${styles.timelineCircle} ${styles.completedCircle}`}>
-                            <FiCheck size={16} />
-                        </div>
-                        <span className={styles.timelineLabel}>{t("sellerPending.stepSubmitted")}</span>
-                    </div>
-
-                    <div className={styles.timelineNode}>
-                        <div className={`${styles.timelineCircle} ${isApproved || isRejected || hasShop ? styles.completedCircle : styles.activeCircle}`}>
-                            {isApproved || hasShop ? <FiCheck size={16} /> : isRejected ? <FiX size={16} /> : '2'}
-                        </div>
-                        <span className={styles.timelineLabel}>
-                            {isApproved || hasShop ? t("sellerPending.stepApproved") : isRejected ? t("sellerPending.stepRejected") : t("sellerPending.stepReviewing")}
-                        </span>
-                    </div>
-
-                    <div className={styles.timelineNode}>
-                        <div className={`${styles.timelineCircle} ${hasShop || isApproved ? styles.completedCircle : ''}`}>
-                            {hasShop || isApproved ? <FiCheck size={16} /> : '3'}
-                        </div>
-                        <span className={styles.timelineLabel}>{t("sellerPending.stepActivate")}</span>
-                    </div>
-                </div>
+                )}
 
                 {/* Action Buttons */}
                 <div className={styles.actions}>
@@ -127,15 +109,6 @@ export default function SellerPendingPage({ registration, onReEdit }) {
                         </button>
                     ) : null}
 
-                    {isRejected && (
-                        <button
-                            className={styles.primaryButton}
-                            onClick={onReEdit}
-                        >
-                            <FiEdit3 size={18} />
-                            <span>{t("sellerPending.btnEditResubmit")}</span>
-                        </button>
-                    )}
 
                     {!isApproved && !isRejected && (
                         <button

@@ -88,7 +88,9 @@ namespace BE.Services.Implementation.Seller
                 UserId = userId,
                 SellerTypeId = sellerType.SellerTypeId,
                 SellerStatusId = draftStatus.SellerStatusId,
-                MaxShopLimit = 1
+                MaxShopLimit = 1,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             };
 
             await _repository.AddSellerAsync(seller);
@@ -250,6 +252,8 @@ namespace BE.Services.Implementation.Seller
                 throw new AppException("Pending status is not configured.");
 
             seller.SellerStatusId = pendingStatus.SellerStatusId;
+            seller.RejectionReason = null;
+            seller.UpdatedAt = DateTime.UtcNow;
 
             await _repository.SaveChangesAsync();
         }
@@ -265,7 +269,8 @@ namespace BE.Services.Implementation.Seller
                 SellerStatusId = seller.SellerStatusId,
                 SellerStatusCode = seller.SellerStatus.Code,
                 MaxShopLimit = seller.MaxShopLimit,
-                HasShop = hasShop
+                HasShop = hasShop,
+                RejectionReason = seller.RejectionReason
             };
         }
 

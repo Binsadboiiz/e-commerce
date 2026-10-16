@@ -136,3 +136,56 @@
     }
 }
 
+/* ── Admin Restricted State (Flat Section, No Card) ── */
+.adminNoticeContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 5rem 1rem;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    max-width: 480px;
+    margin: 1rem auto;
+}
+
+.adminNoticeIcon {
+    color: var(--color-slate-400, #94a3b8);
+    margin-bottom: 1.25rem;
+}
+
+.adminNoticeTitle {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-slate-900, #0f172a);
+    margin: 0 0 1.5rem 0;
+    line-height: 1.4;
+}
+
+.adminNoticeActions {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.adminBtnPrimary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.625rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: var(--color-primary, #2563eb);
+    border: 1px solid var(--color-primary, #2563eb);
+    border-radius: var(--radius-md, 8px);
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.adminBtnPrimary:hover {
+    background-color: var(--color-primary-hover, #1d4ed8);
+}
+

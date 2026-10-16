@@ -1,0 +1,105 @@
+.dialogOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(2px);
+    z-index: 1200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.dialogBox {
+    background: #ffffff;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    animation: fadeIn 0.15s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.dialogHeader {
+    padding: 18px 24px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.dialogTitle {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.dialogBody {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.dialogMessage {
+    margin: 0;
+    font-size: 14px;
+    color: #475569;
+    line-height: 1.5;
+}
+
+.reasonLabel {
+    font-size: 13px;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.requiredStar {
+    color: #ef4444;
+}
+
+.reasonTextarea {
+    width: 100%;
+    min-height: 90px;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: inherit;
+    color: #0f172a;
+    resize: vertical;
+    outline: none;
+    box-sizing: border-box;
+    transition: border 0.15s ease;
+}
+
+.reasonTextarea:focus {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.errorText {
+    color: #ef4444;
+    font-size: 12px;
+    margin-top: -8px;
+}
+
+.dialogActions {
+    padding: 14px 24px 18px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    border-top: 1px solid #f1f5f9;
+    background-color: #fafafa;
+}

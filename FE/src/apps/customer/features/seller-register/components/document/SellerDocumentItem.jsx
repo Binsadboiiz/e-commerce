@@ -3,6 +3,12 @@ import { FiFileText, FiTrash2, FiUploadCloud, FiEye, FiCheckCircle } from "react
 import { useLanguage } from "@/shared/context/LanguageContext";
 import styles from "./SellerDocumentItem.module.css";
 
+/**
+ * SellerDocumentItem Component
+ * Minimal, clean, production-quality document row.
+ * Eliminates aggressive card backgrounds and prominent colored borders in favor of
+ * a clean white layout, subtle dividers, compact icons, and restrained actions.
+ */
 export default function SellerDocumentItem({
     requirement,
     uploadedDoc,
@@ -22,19 +28,23 @@ export default function SellerDocumentItem({
     };
 
     return (
-        <div className={`${styles.item} ${uploadedDoc ? styles.itemUploaded : ''}`}>
+        <div className={styles.item}>
             <div className={styles.left}>
-                <div className={`${styles.icon} ${uploadedDoc ? styles.iconSuccess : ''}`}>
-                    {uploadedDoc ? <FiCheckCircle size={20} /> : <FiFileText size={20} />}
+                <div
+                    className={`${styles.icon} ${uploadedDoc ? styles.iconUploaded : ''}`}
+                    aria-hidden="true"
+                >
+                    {uploadedDoc ? <FiCheckCircle size={18} /> : <FiFileText size={18} />}
                 </div>
 
                 <div className={styles.info}>
                     <div className={styles.titleRow}>
                         <span className={styles.name}>{requirement.title}</span>
-                        {uploadedDoc ? (
-                            <span className={styles.badgeSuccess}>{t("sellerDocument.uploaded")}</span>
-                        ) : (
-                            <span className={styles.badgePending}>{t("sellerDocument.notUploaded")}</span>
+                        {uploadedDoc && (
+                            <span className={styles.statusSuccess}>
+                                <FiCheckCircle size={12} aria-hidden="true" />
+                                <span>{t("sellerDocument.uploaded")}</span>
+                            </span>
                         )}
                     </div>
 
@@ -46,8 +56,8 @@ export default function SellerDocumentItem({
 
             <div className={styles.actions}>
                 {isUploading ? (
-                    <div className={styles.loadingWrapper}>
-                        <div className={styles.miniSpinner}></div>
+                    <div className={styles.loadingWrapper} role="status" aria-live="polite">
+                        <div className={styles.miniSpinner} aria-hidden="true"></div>
                         <span className={styles.loadingText}>{t("sellerDocument.uploading")}</span>
                     </div>
                 ) : uploadedDoc ? (
@@ -56,20 +66,21 @@ export default function SellerDocumentItem({
                             href={uploadedDoc.fileUrl} 
                             target="_blank" 
                             rel="noopener noreferrer" 
-                            className={styles.viewLink}
+                            className={styles.actionView}
+                            aria-label={`${t("sellerDocument.viewFile")}: ${requirement.title}`}
                         >
-                            <FiEye size={15} />
+                            <FiEye size={14} aria-hidden="true" />
                             <span>{t("sellerDocument.viewFile")}</span>
                         </a>
 
                         {!disabled && (
                             <button
                                 type="button"
-                                className={styles.removeButton}
+                                className={styles.actionDelete}
                                 onClick={onRemove}
-                                title={t("sellerDocument.delete")}
+                                aria-label={`${t("sellerDocument.delete")}: ${requirement.title}`}
                             >
-                                <FiTrash2 size={15} />
+                                <FiTrash2 size={14} aria-hidden="true" />
                                 <span>{t("sellerDocument.delete")}</span>
                             </button>
                         )}
@@ -83,13 +94,15 @@ export default function SellerDocumentItem({
                                 ref={fileInputRef}
                                 style={{ display: "none" }}
                                 onChange={handleFileChange}
+                                aria-label={`Upload ${requirement.title}`}
                             />
                             <button
                                 type="button"
                                 className={styles.uploadButton}
                                 onClick={() => fileInputRef.current?.click()}
+                                aria-label={`${t("sellerDocument.upload")}: ${requirement.title}`}
                             >
-                                <FiUploadCloud size={16} />
+                                <FiUploadCloud size={14} aria-hidden="true" />
                                 <span>{t("sellerDocument.upload")}</span>
                             </button>
                         </>
@@ -98,4 +111,4 @@ export default function SellerDocumentItem({
             </div>
         </div>
     );
-}
+}

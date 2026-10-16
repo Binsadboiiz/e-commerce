@@ -1,10 +1,1 @@
-export const SELLER_STATUS = {
-    DRAFT: "DRAFT",
-    PENDING: "PENDING",
-    UNDER_REVIEW: "UNDER_REVIEW",
-    APPROVED: "APPROVED",
-    REJECTED: "REJECTED",
-    SUSPENDED: "SUSPENDED",
-    BANNED: "BANNED",
-    CLOSED: "CLOSED"
-};
+export { SELLER_STATUS, default } from "@/shared/constants/sellerStatus";

@@ -46,81 +46,61 @@
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-    gap: 1.5rem;
+    gap: 1.25rem;
     width: 100%;
     max-width: 680px;
 }
 
 .card {
     position: relative;
-    background: #ffffff;
+    background-color: #ffffff;
     border: 1.5px solid var(--border-color, #e2e8f0);
-    border-radius: var(--radius-xl, 16px);
-    padding: 1.75rem 1.5rem;
+    border-radius: var(--radius-lg, 12px);
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     text-align: left;
     cursor: pointer;
-    transition: all 0.2s ease;
+    outline: none;
+    transition: border-color 0.15s ease;
+    user-select: none;
 }
 
-.card:hover {
-    border-color: var(--color-primary-hover, #3b82f6);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+.card:hover:not(.disabledCard):not(.selectedCard) {
+    border-color: var(--color-slate-300, #cbd5e1);
+}
+
+.card:focus-visible {
+    outline: none;
+    border-color: var(--color-primary, #2563eb);
 }
 
 .selectedCard {
-    border-color: var(--color-primary, #2563eb) !important;
-    background-color: #ffffff !important;
-    box-shadow: 0 0 0 3px var(--color-primary-focus, rgba(37, 99, 235, 0.2)) !important;
-}
-
-.checkBadge {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background-color: var(--color-primary, #2563eb);
-    color: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.iconWrapper {
-    width: 52px;
-    height: 52px;
-    border-radius: var(--radius-lg, 12px);
-    background-color: var(--color-primary-light, #dbeafe);
-    color: var(--color-primary, #2563eb);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1.25rem;
+    border-color: var(--color-primary, #2563eb);
+    background-color: #ffffff;
 }
 
 .disabledCard {
     cursor: default;
     pointer-events: none;
-    opacity: 0.6;
+    opacity: 0.55;
 }
 
 .cardTitle {
     font-size: 1.125rem;
-    font-weight: 700;
+    font-weight: 600;
     color: var(--color-slate-900, #0f172a);
     margin: 0 0 0.5rem 0;
+    line-height: 1.35;
 }
 
 .cardText {
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
     color: var(--color-slate-600, #475569);
     line-height: 1.5;
     margin: 0 0 1.25rem 0;
+    flex-grow: 1;
 }
 
 .featureList {
@@ -129,21 +109,23 @@
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.625rem;
     width: 100%;
 }
 
 .featureList li {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.5rem;
     font-size: 0.8125rem;
     color: var(--color-slate-700, #334155);
+    line-height: 1.45;
 }
 
 .featureCheck {
     color: var(--color-primary, #2563eb);
     flex-shrink: 0;
+    margin-top: 0.125rem;
 }
 
 

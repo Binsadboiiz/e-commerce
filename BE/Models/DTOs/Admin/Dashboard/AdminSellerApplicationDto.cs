@@ -14,5 +14,8 @@ namespace BE.Models.DTOs.Admin.Dashboard
         public string TaxCode { get; set; } = string.Empty;
         public string LicenseNumber { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+        public DateTime? SubmittedAt { get; set; }
+        public string? RejectionReason { get; set; }
     }
 }

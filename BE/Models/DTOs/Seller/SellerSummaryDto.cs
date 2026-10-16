@@ -18,5 +18,7 @@ namespace BE.Models.DTOs.Seller
         public int MaxShopLimit { get; set; }
 
         public bool HasShop { get; set; }
+
+        public string? RejectionReason { get; set; }
     }
 }

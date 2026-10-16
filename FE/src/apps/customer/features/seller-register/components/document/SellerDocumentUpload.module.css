@@ -71,7 +71,9 @@
 .list {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    background: transparent;
+    border: none;
+    border-radius: 0;
 }
 
 .actions {

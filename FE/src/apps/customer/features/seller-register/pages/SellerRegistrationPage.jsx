@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FiShoppingBag } from "react-icons/fi";
+import { FiShoppingBag, FiAlertCircle } from "react-icons/fi";
 import useSellerRegistration from "../hooks/useSellerRegistration";
 import { calculateSellerProgress } from "../utils/sellerProgress";
 import { getSellerSteps } from "../constants/sellerSteps";
 import { notify } from "@/shared/utils/Notify";
 import SEOHead from "@/shared/components/SEOHead";
 import { ROUTES } from "@/config/route.config";
+import { ROLES } from "@/shared/constants/roles";
+import { useAuth } from "@/shared/features/auth/hooks/useAuth";
+import { useRole } from "@/shared/features/auth/hooks/useRole";
 import styles from "./SellerRegistrationPage.module.css";
 
 import SellerStepper from "../components/common/SellerStepper";
@@ -29,7 +32,15 @@ import { useLanguage } from "@/shared/context/LanguageContext";
  */
 export default function SellerRegistrationPage() {
     const navigate = useNavigate();
-    const { t } = useLanguage();
+    const { t, lang } = useLanguage();
+    const { user, loading: authLoading } = useAuth();
+    const { role } = useRole();
+
+    const isAdmin =
+        role === ROLES.ADMIN ||
+        role?.toLowerCase() === "admin" ||
+        user?.role?.toLowerCase() === "admin";
+
     const {
         registration,
         loading,
@@ -38,7 +49,7 @@ export default function SellerRegistrationPage() {
         submitRegistration,
         changeSellerType,
         reload
-    } = useSellerRegistration();
+    } = useSellerRegistration({ enabled: !isAdmin && !authLoading });
 
     //Calculate active progress step from submitted API profile data
     const { currentStepIndex } = calculateSellerProgress(registration);
@@ -53,11 +64,36 @@ export default function SellerRegistrationPage() {
         }
     }, [hasShop, navigate]);
 
-    const activeStepIndex = userSelectedStepIndex !== null ? userSelectedStepIndex : currentStepIndex;
-
-    //Render loading skeleton while fetching registration status
-    if (loading) {
+    //Render loading skeleton while fetching auth or registration status
+    if (authLoading || (loading && !isAdmin)) {
         return <SellerRegistrationSkeleton />;
+    }
+
+    //If role is Admin, seller registration is not available
+    if (isAdmin) {
+        return (
+            <div className={styles.container}>
+                <SEOHead
+                    title="Sorry, this feature is not available - PolarisX Mall"
+                    description="Sorry, this feature is not available"
+                />
+                <div className={styles.adminNoticeContainer} role="alert">
+                    <FiAlertCircle size={44} className={styles.adminNoticeIcon} />
+                    <h2 className={styles.adminNoticeTitle}>
+                        Sorry, this feature is not available
+                    </h2>
+                    <div className={styles.adminNoticeActions}>
+                        <button
+                            type="button"
+                            className={styles.adminBtnPrimary}
+                            onClick={() => navigate(ROUTES.HOME || '/')}
+                        >
+                            <span>{t("sellerOnboarding.adminRestricted.btnHome")}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     //Check if application has already been submitted for review
@@ -76,6 +112,7 @@ export default function SellerRegistrationPage() {
         );
     }
 
+    const activeStepIndex = userSelectedStepIndex !== null ? userSelectedStepIndex : currentStepIndex;
     const typeCode = registration?.summary?.sellerTypeCode;
     const steps = getSellerSteps(typeCode, t);
 

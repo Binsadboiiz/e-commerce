@@ -280,6 +280,10 @@
     "updateStatus": "Cập Nhật Trạng Thái"
   },
   "sellerOnboarding": {
+    "adminRestricted": {
+      "title": "Sorry, this feature is not available",
+      "btnHome": "Về trang chủ"
+    },
     "title": "Đăng Ký Người Bán PolarisX Mall",
     "subtitle": "Hoàn tất các bước đăng ký dưới đây để kích hoạt gian hàng và tiếp cận triệu người dùng toàn quốc.",
     "onboardingHeader": "Đăng Ký Bán Hàng",
@@ -304,6 +308,18 @@
       "business": "Thông tin doanh nghiệp",
       "document": "Tải chứng từ",
       "review": "Xem lại & Gửi"
+    },
+    "changeTypeModal": {
+      "title": "Xác nhận thay đổi loại gian hàng",
+      "message": "Thao tác này sẽ thực hiện xóa bỏ:",
+      "itemAddress": "Thông tin địa chỉ kho hàng đã nhập",
+      "itemBank": "Tài khoản ngân hàng nhận thanh toán",
+      "itemBusiness": "Thông tin pháp lý doanh nghiệp (nếu có)",
+      "itemDocuments": "Toàn bộ chứng từ hình ảnh đã tải lên",
+      "warning": "Thao tác này không thể hoàn tác. Bạn có chắc chắn muốn thay đổi không?",
+      "btnCancel": "Hủy bỏ",
+      "btnConfirm": "Đồng ý thay đổi",
+      "btnProcessing": "Đang xử lý..."
     }
   },
   "sellerPending": {
@@ -313,7 +329,7 @@
     "titleSubmitted": "Hồ Sơ Đăng Ký Đã Được Nộp Thành Công!",
     "descActivated": "Chúc mừng bạn! Cửa hàng của bạn tại PolarisX Mall đã được khởi tạo và kích hoạt thành công. Bạn đã có thể bắt đầu đăng bán sản phẩm và quản lý đơn hàng.",
     "descApproved": "Chúc mừng bạn! Hồ sơ bán hàng tại PolarisX Mall đã hoàn tất thẩm định và phê duyệt. Bạn đã sẵn sàng mở Cửa hàng và đăng bán sản phẩm.",
-    "descRejected": "Rất tiếc, hồ sơ của bạn chưa đủ điều kiện thẩm định hoặc thông tin chứng từ chưa hợp lệ. Vui lòng chỉnh sửa lại thông tin để gửi kiểm duyệt lại.",
+    "descRejected": "Rất tiếc, hồ sơ của bạn chưa đủ điều kiện thẩm định hoặc thông tin chứng từ chưa hợp lệ. Mọi thắc mắc xin vui lòng liên hệ polarixstudio@gmail.com",
     "descSubmitted": "Cảm ơn bạn đã đăng ký mở gian hàng tại PolarisX Mall. Hồ sơ của bạn đã được ghi nhận và đang được ban quản trị hệ thống thẩm định.",
     "estimatedTime": "Thời gian xét duyệt dự kiến: 24 - 48 giờ làm việc",
     "stepSubmitted": "Đã Nộp Hồ Sơ",
@@ -323,7 +339,6 @@
     "stepActivate": "Kích Hoạt Gian Hàng",
     "btnGoToPortal": "Vào kênh người bán",
     "btnSetupShop": "Thiết Lập Cửa Hàng",
-    "btnEditResubmit": "Chỉnh sửa & gửi lại hồ sơ",
     "btnBackHome": "Về trang chủ",
     "btnHideDetails": "Ẩn chi tiết hồ sơ",
     "btnReviewDetails": "Xem lại thông tin đã nộp"
@@ -367,8 +382,11 @@
     "businessLicense": "Giấy Phép Đăng Ký Kinh Doanh",
     "termsCommitment": "Tôi cam kết toàn bộ thông tin khai báo là hoàn toàn chính xác và đồng ý với",
     "sellerTerms": "Điều khoản Dịch vụ Người bán PolarisX Mall",
-    "submitting": "Đang nộp hồ sơ...",
-    "btnSubmit": "Gửi Hồ Sơ Đăng Ký"
+    "btnSubmit": "Gửi Hồ Sơ Đăng Ký",
+    "rejectionNoticeTitle": "Hồ Sơ Bị Từ Chối",
+    "rejectionNoticeDesc": "Hồ sơ đăng ký của bạn chưa được phê duyệt. Vui lòng xem lý do bên dưới, chỉnh sửa lại thông tin tương ứng và nộp lại hồ sơ.",
+    "rejectionReasonLabel": "Lý do từ chối",
+    "defaultRejectionReason": "Hồ sơ chưa đáp ứng yêu cầu thẩm định. Vui lòng kiểm tra lại thông tin và nộp lại."
   },
   "sellerAddress": {
     "contactTitle": "Thông Tin Người Liên Hệ",

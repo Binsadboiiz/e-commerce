@@ -16,9 +16,8 @@ export const AdminDashboardPage = () => {
         const fetchDashboardData = async () => {
             try {
                 setLoading(true);
-                const res = await axiosClient.get("/admin/dashboard/seller-applications");
-                const pending = res.filter(app => app.status === "PENDING").length;
-                setPendingCount(pending);
+                const res = await axiosClient.get("/admin/dashboard/overview");
+                setPendingCount(res.pendingSellerApplications ?? 0);
             } catch (error) {
                 console.error("Lỗi khi tải dữ liệu dashboard:", error);
                 toast.error("Không thể tải số liệu thống kê.");

@@ -280,6 +280,10 @@
     "updateStatus": "Update Status"
   },
   "sellerOnboarding": {
+    "adminRestricted": {
+      "title": "Sorry, this feature is not available",
+      "btnHome": "Back to Home"
+    },
     "title": "PolarisX Mall Seller Registration",
     "subtitle": "Complete the steps below to activate your store and reach millions of customers nationwide.",
     "onboardingHeader": "Seller Onboarding",
@@ -304,6 +308,18 @@
       "business": "Business Info",
       "document": "Upload Documents",
       "review": "Review & Submit"
+    },
+    "changeTypeModal": {
+      "title": "Confirm Store Type Change",
+      "message": "This action will permanently delete:",
+      "itemAddress": "Entered warehouse address information",
+      "itemBank": "Payout bank account details",
+      "itemBusiness": "Business legal details (if applicable)",
+      "itemDocuments": "All uploaded verification documents",
+      "warning": "This action cannot be undone. Are you sure you want to proceed?",
+      "btnCancel": "Cancel",
+      "btnConfirm": "Confirm Change",
+      "btnProcessing": "Processing..."
     }
   },
   "sellerPending": {
@@ -313,7 +329,7 @@
     "titleSubmitted": "Application Submitted Successfully!",
     "descActivated": "Congratulations! Your shop at PolarisX Mall has been created and activated successfully. You can now start listing products and managing orders.",
     "descApproved": "Congratulations! Your seller application at PolarisX Mall has passed review and approval. You are ready to setup your Shop and start selling.",
-    "descRejected": "Unfortunately, your application did not meet the review criteria or documents were invalid. Please edit your information and resubmit.",
+    "descRejected": "Unfortunately, your application did not meet the review criteria or documents were invalid. If you have any questions, please feel free to contact polarixstudio@gmail.com ",
     "descSubmitted": "Thank you for registering a store on PolarisX Mall. Your application has been recorded and is currently under review by our team.",
     "estimatedTime": "Estimated review time: 24 - 48 business hours",
     "stepSubmitted": "Submitted",
@@ -323,7 +339,6 @@
     "stepActivate": "Activate Shop",
     "btnGoToPortal": "Go to Seller Portal",
     "btnSetupShop": "Set Up Shop",
-    "btnEditResubmit": "Edit & Resubmit",
     "btnBackHome": "Back to Home",
     "btnHideDetails": "Hide Details",
     "btnReviewDetails": "Review Submitted Information"
@@ -368,7 +383,11 @@
     "termsCommitment": "I confirm all provided information is accurate and agree to the",
     "sellerTerms": "PolarisX Mall Seller Terms of Service",
     "submitting": "Submitting application...",
-    "btnSubmit": "Submit Application"
+    "btnSubmit": "Submit Application",
+    "rejectionNoticeTitle": "Application Rejected",
+    "rejectionNoticeDesc": "Your application was not approved. Please review the feedback below, update the required sections, and resubmit.",
+    "rejectionReasonLabel": "Reason for Rejection",
+    "defaultRejectionReason": "Your application did not satisfy verification criteria. Please check your information and resubmit."
   },
   "sellerAddress": {
     "contactTitle": "Contact Information",
