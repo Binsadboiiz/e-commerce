@@ -106,8 +106,21 @@ export default function SellerRegistrationPage() {
             ? ["IDENTITY_FRONT", "IDENTITY_BACK", "BUSINESS_LICENSE"]
             : ["IDENTITY_FRONT", "IDENTITY_BACK"];
 
+        const docs = registration?.documents || [];
         const hasAllDocs = requiredTypes.every(type =>
-            (registration?.documents || []).some(doc => doc.documentType === type)
+            docs.some(doc => {
+                const docType = (doc.documentType || "").toUpperCase();
+                if (type === "IDENTITY_FRONT") {
+                    return docType === "IDENTITY_FRONT" || docType === "CCCD_FRONT" || doc.documentTypeId === 1;
+                }
+                if (type === "IDENTITY_BACK") {
+                    return docType === "IDENTITY_BACK" || docType === "CCCD_BACK" || doc.documentTypeId === 2;
+                }
+                if (type === "BUSINESS_LICENSE") {
+                    return docType === "BUSINESS_LICENSE" || doc.documentTypeId === 4;
+                }
+                return docType === type;
+            })
         );
 
         if (!hasAllDocs) {
@@ -115,7 +128,12 @@ export default function SellerRegistrationPage() {
             return;
         }
 
-        setUserSelectedStepIndex(null);
+        const nextIndex = activeStepIndex + 1;
+        if (nextIndex < steps.length) {
+            setUserSelectedStepIndex(nextIndex);
+        } else {
+            setUserSelectedStepIndex(null);
+        }
     };
 
     const handleChangeSellerType = (typeId) => {

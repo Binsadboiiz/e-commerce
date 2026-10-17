@@ -48,12 +48,26 @@ export function mapSellerRegistration(data) {
               }
             : null,
 
-        documents: (data.documents ?? []).map(document => ({
-            documentId: document.documentId,
-            documentTypeId: document.documentTypeId,
-            documentType: document.documentType,
-            fileUrl: document.fileUrl
-        })),
+        documents: (data.documents ?? []).map(document => {
+            const rawType = (document.documentType || "").toUpperCase();
+            let normalizedType = rawType;
+            if (rawType === "CCCD_FRONT" || rawType === "IDENTIFY_DOC" || document.documentTypeId === 1) {
+                normalizedType = "IDENTITY_FRONT";
+            } else if (rawType === "CCCD_BACK" || document.documentTypeId === 2) {
+                normalizedType = "IDENTITY_BACK";
+            } else if (rawType === "SELFIE" || document.documentTypeId === 3) {
+                normalizedType = "SELFIE";
+            } else if (rawType === "BUSINESS_LICENSE" || document.documentTypeId === 4) {
+                normalizedType = "BUSINESS_LICENSE";
+            }
+
+            return {
+                documentId: document.documentId,
+                documentTypeId: document.documentTypeId,
+                documentType: normalizedType,
+                fileUrl: document.fileUrl
+            };
+        }),
 
         progress: {
             currentStep: data.progress?.currentStep ?? 1,

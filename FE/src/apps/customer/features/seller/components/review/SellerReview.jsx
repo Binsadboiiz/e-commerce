@@ -55,8 +55,10 @@ export default function SellerReview({
     const mapDocTypeToName = (type) => {
         switch (type) {
             case "IDENTITY_FRONT":
+            case "CCCD_FRONT":
                 return t("sellerReview.identityFront");
             case "IDENTITY_BACK":
+            case "CCCD_BACK":
                 return t("sellerReview.identityBack");
             case "BUSINESS_LICENSE":
                 return t("sellerReview.businessLicense");

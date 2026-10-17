@@ -26,8 +26,8 @@ namespace BE.Helpers
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, userId), // Định danh duy nhất của người dùng
-                new Claim(ClaimTypes.Email, email)          // Email người dùng
-                //new Claim(ClaimTypes.Role, role)             // Vai trò (Phân quyền)
+                new Claim(ClaimTypes.Email, email),          // Email người dùng
+                new Claim(ClaimTypes.Role, roles)             // Vai trò (Phân quyền)
             };
 
             if (!string.IsNullOrWhiteSpace(roles))

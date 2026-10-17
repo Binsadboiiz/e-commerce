@@ -19,20 +19,45 @@ export default function SellerDocumentItem({
         if (file) {
             onUpload(file);
         }
+        if (e.target) {
+            e.target.value = "";
+        }
     };
 
     return (
         <div className={`${styles.item} ${uploadedDoc ? styles.itemUploaded : ''}`}>
             <div className={styles.left}>
-                <div className={`${styles.icon} ${uploadedDoc ? styles.iconSuccess : ''}`}>
-                    {uploadedDoc ? <FiCheckCircle size={20} /> : <FiFileText size={20} />}
-                </div>
+                {uploadedDoc?.fileUrl ? (
+                    <a
+                        href={uploadedDoc.fileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.thumbnailWrapper}
+                        title={t("sellerDocument.viewFile")}
+                    >
+                        <img
+                            src={uploadedDoc.fileUrl}
+                            alt={requirement.title}
+                            className={styles.thumbnail}
+                            onError={(e) => {
+                                e.currentTarget.style.display = "none";
+                            }}
+                        />
+                    </a>
+                ) : (
+                    <div className={styles.icon}>
+                        <FiFileText size={20} />
+                    </div>
+                )}
 
                 <div className={styles.info}>
                     <div className={styles.titleRow}>
                         <span className={styles.name}>{requirement.title}</span>
                         {uploadedDoc ? (
-                            <span className={styles.badgeSuccess}>{t("sellerDocument.uploaded")}</span>
+                            <span className={styles.badgeSuccess}>
+                                <FiCheckCircle size={13} style={{ marginRight: 4, verticalAlign: "-1px" }} />
+                                {t("sellerDocument.uploaded")}
+                            </span>
                         ) : (
                             <span className={styles.badgePending}>{t("sellerDocument.notUploaded")}</span>
                         )}
@@ -63,15 +88,33 @@ export default function SellerDocumentItem({
                         </a>
 
                         {!disabled && (
-                            <button
-                                type="button"
-                                className={styles.removeButton}
-                                onClick={onRemove}
-                                title={t("sellerDocument.delete")}
-                            >
-                                <FiTrash2 size={15} />
-                                <span>{t("sellerDocument.delete")}</span>
-                            </button>
+                            <>
+                                <input
+                                    type="file"
+                                    accept="image/*,.pdf"
+                                    ref={fileInputRef}
+                                    style={{ display: "none" }}
+                                    onChange={handleFileChange}
+                                />
+                                <button
+                                    type="button"
+                                    className={styles.reUploadButton}
+                                    onClick={() => fileInputRef.current?.click()}
+                                    title={t("sellerDocument.upload")}
+                                >
+                                    <FiUploadCloud size={14} />
+                                    <span>{t("sellerDocument.upload")}</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    className={styles.removeButton}
+                                    onClick={onRemove}
+                                    title={t("sellerDocument.delete")}
+                                >
+                                    <FiTrash2 size={15} />
+                                    <span>{t("sellerDocument.delete")}</span>
+                                </button>
+                            </>
                         )}
                     </div>
                 ) : (
