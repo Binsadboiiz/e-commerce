@@ -1,0 +1,88 @@
+/* ==========================================================================
+   SELLER DESIGN SYSTEM — UTILITIES
+   Common reusable helper classes and state animations.
+   ========================================================================== */
+
+.seller-flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.seller-flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.seller-text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Empty State */
+.seller-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--seller-space-10) var(--seller-space-6);
+    text-align: center;
+    background: var(--seller-surface);
+}
+
+.seller-empty-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: var(--seller-radius-2xl);
+    background: var(--seller-surface-subtle);
+    color: var(--seller-text-muted);
+    margin-bottom: var(--seller-space-4);
+}
+
+.seller-empty-title {
+    font-size: var(--seller-font-size-lg);
+    font-weight: 600;
+    color: var(--seller-text-main);
+    margin: 0 0 var(--seller-space-2) 0;
+}
+
+.seller-empty-desc {
+    font-size: var(--seller-font-size-base);
+    color: var(--seller-text-secondary);
+    max-width: 400px;
+    margin: 0 0 var(--seller-space-5) 0;
+    line-height: 1.5;
+}
+
+/* Skeleton Loading */
+.seller-skeleton {
+    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+    background-size: 200% 100%;
+    animation: sellerSkeletonShimmer 1.5s infinite;
+    border-radius: var(--seller-radius-md);
+}
+
+@keyframes sellerSkeletonShimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Spinner */
+.seller-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--seller-border);
+    border-top-color: var(--seller-primary);
+    border-radius: 50%;
+    animation: sellerSpin 0.6s linear infinite;
+}
+
+@keyframes sellerSpin {
+    to { transform: rotate(360deg); }
+}

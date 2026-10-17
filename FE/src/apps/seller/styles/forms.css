@@ -1,0 +1,145 @@
+/* ==========================================================================
+   SELLER DESIGN SYSTEM — FORMS
+   Input fields, selects, textareas, labels, validation & search wrappers.
+   ========================================================================== */
+
+.seller-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--seller-space-1);
+    margin-bottom: var(--seller-space-4);
+}
+
+.seller-label {
+    font-size: var(--seller-font-size-sm);
+    font-weight: 600;
+    color: var(--seller-text-main);
+    display: flex;
+    align-items: center;
+    gap: var(--seller-space-1);
+}
+
+.seller-label-required {
+    color: var(--seller-danger);
+    font-weight: 700;
+}
+
+.seller-input,
+.seller-select,
+.seller-textarea {
+    width: 100%;
+    font-family: var(--seller-font);
+    font-size: var(--seller-font-size-base);
+    color: var(--seller-text-main);
+    background-color: var(--seller-surface);
+    border: 1px solid var(--seller-border);
+    border-radius: var(--seller-radius-lg);
+    box-sizing: border-box;
+    transition: border-color var(--seller-transition-fast), box-shadow var(--seller-transition-fast);
+}
+
+.seller-input {
+    height: var(--seller-input-height);
+    padding: 0 var(--seller-space-3);
+}
+
+.seller-input-sm {
+    height: var(--seller-input-height-sm);
+    padding: 0 var(--seller-space-2);
+    font-size: var(--seller-font-size-sm);
+    border-radius: var(--seller-radius-md);
+}
+
+.seller-select {
+    height: var(--seller-input-height);
+    padding: 0 var(--seller-space-3);
+    cursor: pointer;
+}
+
+.seller-textarea {
+    padding: var(--seller-space-3);
+    min-height: 88px;
+    resize: vertical;
+    line-height: 1.5;
+}
+
+.seller-input:focus,
+.seller-select:focus,
+.seller-textarea:focus {
+    outline: none;
+    border-color: var(--seller-border-focus);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.seller-input::placeholder,
+.seller-textarea::placeholder {
+    color: var(--seller-text-muted);
+}
+
+.seller-input:disabled,
+.seller-select:disabled,
+.seller-textarea:disabled {
+    background-color: var(--seller-surface-subtle);
+    color: var(--seller-text-muted);
+    cursor: not-allowed;
+}
+
+/* Error State */
+.seller-input-error,
+.seller-select-error,
+.seller-textarea-error {
+    border-color: var(--seller-danger);
+}
+
+.seller-input-error:focus,
+.seller-select-error:focus,
+.seller-textarea-error:focus {
+    border-color: var(--seller-danger);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+}
+
+.seller-error-msg {
+    font-size: var(--seller-font-size-xs);
+    color: var(--seller-danger);
+    margin-top: 2px;
+}
+
+.seller-helper-text {
+    font-size: var(--seller-font-size-xs);
+    color: var(--seller-text-muted);
+    margin-top: 2px;
+}
+
+/* Search Wrapper with Icon */
+.seller-search-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+}
+
+.seller-search-icon {
+    position: absolute;
+    left: var(--seller-space-3);
+    color: var(--seller-text-muted);
+    pointer-events: none;
+}
+
+.seller-search-input {
+    width: 100%;
+    height: var(--seller-input-height);
+    padding-left: 38px;
+    padding-right: var(--seller-space-3);
+    font-size: var(--seller-font-size-base);
+    color: var(--seller-text-main);
+    background: var(--seller-surface);
+    border: 1px solid var(--seller-border);
+    border-radius: var(--seller-radius-lg);
+    transition: all var(--seller-transition-fast);
+}
+
+.seller-search-input:focus {
+    outline: none;
+    border-color: var(--seller-border-focus);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}

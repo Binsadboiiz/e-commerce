@@ -19,12 +19,9 @@ namespace BE.Validators
             }
 
             var targetStatus = request.Status.ToLower().Trim();
-            if (targetStatus != TrackingStatus.Confirmed &&
-                targetStatus != TrackingStatus.Preparing &&
-                targetStatus != TrackingStatus.Shipped &&
-                targetStatus != TrackingStatus.Cancelled)
+            if (!TrackingStatusTransitionValidator.TrackingStatusValidator.IsValidStatus(targetStatus))
             {
-                throw new AppException($"Invalid status update. Sellers can only update status to: '{TrackingStatus.Confirmed}', '{TrackingStatus.Preparing}', '{TrackingStatus.Shipped}', or '{TrackingStatus.Cancelled}'.", 400);
+                throw new AppException($"Invalid status update: '{request.Status}'.", 400);
             }
         }
     }

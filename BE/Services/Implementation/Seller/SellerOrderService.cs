@@ -91,7 +91,7 @@ namespace BE.Services.Implementation.Seller
                     VariantValue = item.VariantValue,
                     Price = item.Price,
                     Quantity = item.Quantity,
-                    Status = item.SellerStatus
+                    Status = string.IsNullOrWhiteSpace(item.SellerStatus) ? TrackingStatus.Pending : item.SellerStatus
                 }).ToList()
             };
         }
@@ -127,14 +127,18 @@ namespace BE.Services.Implementation.Seller
             // 5. Validate the transition status logic for each item
             foreach (var item in sellerItems)
             {
-                if (item.SellerStatus == targetStatus)
+                var currentItemStatus = string.IsNullOrWhiteSpace(item.SellerStatus)
+                    ? TrackingStatus.Pending
+                    : item.SellerStatus.ToLower().Trim();
+
+                if (currentItemStatus == targetStatus)
                 {
                     continue; // Skip if already in target status
                 }
 
-                if (!TrackingStatusTransitionValidator.IsValidTransition(item.SellerStatus, targetStatus))
+                if (!TrackingStatusTransitionValidator.IsValidTransition(currentItemStatus, targetStatus))
                 {
-                    throw new AppException($"Invalid status transition for item '{item.ProductName}': {item.SellerStatus} -> {targetStatus}", 400);
+                    throw new AppException($"Invalid status transition for item '{item.ProductName}': {currentItemStatus} -> {targetStatus}", 400);
                 }
             }
 
@@ -142,7 +146,11 @@ namespace BE.Services.Implementation.Seller
             var updatedShopIds = new HashSet<long>();
             foreach (var item in sellerItems)
             {
-                if (item.SellerStatus != targetStatus)
+                var currentItemStatus = string.IsNullOrWhiteSpace(item.SellerStatus)
+                    ? TrackingStatus.Pending
+                    : item.SellerStatus.ToLower().Trim();
+
+                if (currentItemStatus != targetStatus)
                 {
                     item.SellerStatus = targetStatus;
                     updatedShopIds.Add(item.ShopId);
@@ -178,7 +186,9 @@ namespace BE.Services.Implementation.Seller
         {
             if (!items.Any()) return TrackingStatus.Pending;
 
-            var activeItems = items.Where(i => i.SellerStatus != TrackingStatus.Cancelled).ToList();
+            var activeItems = items.Where(i => 
+                (string.IsNullOrWhiteSpace(i.SellerStatus) ? TrackingStatus.Pending : i.SellerStatus.ToLower().Trim()) != TrackingStatus.Cancelled
+            ).ToList();
             if (!activeItems.Any()) return TrackingStatus.Cancelled;
 
             var statusRanks = new Dictionary<string, int>
@@ -194,7 +204,7 @@ namespace BE.Services.Implementation.Seller
             };
 
             var minRank = activeItems
-                .Select(i => statusRanks.TryGetValue(i.SellerStatus, out var rank) ? rank : 0)
+                .Select(i => statusRanks.TryGetValue(string.IsNullOrWhiteSpace(i.SellerStatus) ? TrackingStatus.Pending : i.SellerStatus.ToLower().Trim(), out var rank) ? rank : 0)
                 .Min();
 
             return statusRanks.FirstOrDefault(x => x.Value == minRank).Key ?? TrackingStatus.Pending;
@@ -205,7 +215,15 @@ namespace BE.Services.Implementation.Seller
             var allItems = order.OrderItems.ToList();
             if (!allItems.Any()) return;
 
-            var activeItems = allItems.Where(i => i.SellerStatus != TrackingStatus.Cancelled).ToList();
+            if (order.OrderTrackings == null)
+            {
+                order.OrderTrackings = new List<OrderTracking>();
+            }
+
+            var activeItems = allItems.Where(i => 
+                (string.IsNullOrWhiteSpace(i.SellerStatus) ? TrackingStatus.Pending : i.SellerStatus.ToLower().Trim()) != TrackingStatus.Cancelled
+            ).ToList();
+
             if (!activeItems.Any())
             {
                 if (order.Status != TrackingStatus.Cancelled)
@@ -241,7 +259,7 @@ namespace BE.Services.Implementation.Seller
             };
 
             var minRank = activeItems
-                .Select(i => statusRanks.TryGetValue(i.SellerStatus, out var rank) ? rank : 0)
+                .Select(i => statusRanks.TryGetValue(string.IsNullOrWhiteSpace(i.SellerStatus) ? TrackingStatus.Pending : i.SellerStatus.ToLower().Trim(), out var rank) ? rank : 0)
                 .Min();
 
             var resolvedStatus = statusRanks.FirstOrDefault(x => x.Value == minRank).Key ?? TrackingStatus.Pending;

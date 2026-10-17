@@ -1,23 +1,27 @@
 import { useState, useEffect, useCallback } from "react";
 import {
     ShoppingCart,
-    Search,
-    ChevronLeft,
-    ChevronRight,
     Eye,
     RefreshCw,
     Clock,
     CheckCircle,
     Truck,
     PackageCheck,
-    XCircle,
-    Filter
+    XCircle
 } from "lucide-react";
 import { sellerOrderApi } from "../api/sellerOrderApi";
 import SellerOrderDetailModal from "../components/SellerOrderDetailModal";
 import UpdateOrderStatusModal from "../components/UpdateOrderStatusModal";
 import SEOHead from "@/shared/components/SEOHead";
 import { SellerOrdersSkeleton } from "../components/SellerOrdersSkeleton";
+import { notify } from "@/shared/utils/Notify";
+import {
+    SellerPageHeader,
+    SellerBadge,
+    SellerButton,
+    SellerPagination,
+    SellerEmptyState
+} from "@/apps/seller/components/common";
 import "./SellerOrdersPage.css";
 
 const currencyFormatter = new Intl.NumberFormat("vi-VN", {
@@ -36,15 +40,15 @@ const STATUS_TABS = [
 ];
 
 const STATUS_CONFIG = {
-    pending: { label: "Pending", class: "status-pending" },
-    confirmed: { label: "Confirmed", class: "status-confirmed" },
-    preparing: { label: "Preparing", class: "status-preparing" },
-    shipped: { label: "Shipped", class: "status-shipped" },
-    in_transit: { label: "In Transit", class: "status-in-transit" },
-    out_for_delivery: { label: "Out for Delivery", class: "status-out-delivery" },
-    delivery_failed: { label: "Delivery Failed", class: "status-failed" },
-    delivered: { label: "Delivered", class: "status-delivered" },
-    cancelled: { label: "Cancelled", class: "status-cancelled" }
+    pending: { label: "Pending", variant: "warning" },
+    confirmed: { label: "Confirmed", variant: "info" },
+    preparing: { label: "Preparing", variant: "info" },
+    shipped: { label: "Shipped", variant: "primary" },
+    in_transit: { label: "In Transit", variant: "primary" },
+    out_for_delivery: { label: "Out for Delivery", variant: "primary" },
+    delivery_failed: { label: "Delivery Failed", variant: "danger" },
+    delivered: { label: "Delivered", variant: "success" },
+    cancelled: { label: "Cancelled", variant: "danger" }
 };
 
 export default function SellerOrdersPage() {
@@ -104,21 +108,21 @@ export default function SellerOrdersPage() {
     const totalPages = Math.ceil(total / pageSize);
 
     return (
-        <div className="seller-orders-container">
+        <div className="seller-page-container">
             <SEOHead 
                 title="Quản Lý Đơn Hàng - Kênh Người Bán" 
                 robots="noindex, nofollow" 
                 description="Bảng quản lý và xử lý đơn hàng của shop từ khách hàng."
             />
+            
             {/* Page Header */}
-            <header className="orders-header">
-                <div>
-                    <h1 className="orders-title">Order Management</h1>
-                    <p className="orders-subtitle">Track and process customer orders for your shop</p>
-                </div>
-            </header>
+            <SellerPageHeader
+                title="Order Management"
+                subtitle="Track and process customer orders for your shop"
+                count={total}
+            />
 
-            {/* Filter Tabs */}
+            {/* Filter Tabs Card */}
             <div className="orders-tabs-card">
                 <div className="status-tabs-scroll">
                     {STATUS_TABS.map((tab) => {
@@ -139,18 +143,18 @@ export default function SellerOrdersPage() {
             </div>
 
             {/* Orders Table Container */}
-            <div className="orders-list-card">
+            <div className="seller-card" style={{ padding: 0, overflow: "hidden" }}>
                 {loading ? (
                     <SellerOrdersSkeleton />
                 ) : orders.length === 0 ? (
-                    <div className="orders-empty">
-                        <ShoppingCart size={48} className="empty-icon" />
-                        <h3>No Orders Found</h3>
-                        <p>There are currently no orders under the selected status filter.</p>
-                    </div>
+                    <SellerEmptyState
+                        icon={ShoppingCart}
+                        title="No Orders Found"
+                        description="There are currently no orders under the selected status filter."
+                    />
                 ) : (
-                    <div className="orders-table-wrapper">
-                        <table className="orders-table">
+                    <div className="seller-table-container" style={{ border: "none", borderRadius: 0 }}>
+                        <table className="seller-table">
                             <thead>
                                 <tr>
                                     <th>Order ID</th>
@@ -168,7 +172,7 @@ export default function SellerOrdersPage() {
                                     const statusKey = order.status?.toLowerCase() || "pending";
                                     const statusObj = STATUS_CONFIG[statusKey] || {
                                         label: order.status,
-                                        class: "status-default"
+                                        variant: "neutral"
                                     };
 
                                     return (
@@ -194,15 +198,18 @@ export default function SellerOrdersPage() {
                                             <td>
                                                 <div className="payment-cell">
                                                     <span className="pay-method">{order.paymentMethod || "COD"}</span>
-                                                    <span className={`pay-status-pill ${order.paymentStatus?.toLowerCase()}`}>
+                                                    <SellerBadge
+                                                        variant={order.paymentStatus?.toLowerCase() === "paid" ? "success" : "neutral"}
+                                                        size="sm"
+                                                    >
                                                         {order.paymentStatus || "Unpaid"}
-                                                    </span>
+                                                    </SellerBadge>
                                                 </div>
                                             </td>
                                             <td>
-                                                <span className={`order-status-badge ${statusObj.class}`}>
+                                                <SellerBadge variant={statusObj.variant} dot>
                                                     {statusObj.label}
-                                                </span>
+                                                </SellerBadge>
                                             </td>
                                             <td>
                                                 <span className="created-at-text">
@@ -217,23 +224,27 @@ export default function SellerOrdersPage() {
                                                         : "N/A"}
                                                 </span>
                                             </td>
-                                            <td className="text-right actions-cell">
-                                                <button
-                                                    className="action-btn view-btn"
-                                                    onClick={() => handleOpenDetail(order.orderId)}
-                                                    title="View Details"
-                                                >
-                                                    <Eye size={16} />
-                                                    <span>Details</span>
-                                                </button>
-                                                <button
-                                                    className="action-btn update-btn"
-                                                    onClick={() => handleOpenUpdate(order)}
-                                                    title="Update Status"
-                                                >
-                                                    <RefreshCw size={16} />
-                                                    <span>Update</span>
-                                                </button>
+                                            <td className="text-right">
+                                                <div style={{ display: "inline-flex", gap: "6px" }}>
+                                                    <SellerButton
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        icon={Eye}
+                                                        onClick={() => handleOpenDetail(order.orderId)}
+                                                        title="View Details"
+                                                    >
+                                                        Details
+                                                    </SellerButton>
+                                                    <SellerButton
+                                                        variant="outline"
+                                                        size="sm"
+                                                        icon={RefreshCw}
+                                                        onClick={() => handleOpenUpdate(order)}
+                                                        title="Update Status"
+                                                    >
+                                                        Update
+                                                    </SellerButton>
+                                                </div>
                                             </td>
                                         </tr>
                                     );
@@ -243,27 +254,13 @@ export default function SellerOrdersPage() {
                     </div>
                 )}
 
-                {/* Pagination */}
+                {/* Shared Pagination */}
                 {totalPages > 1 && (
-                    <div className="orders-pagination">
-                        <button
-                            disabled={page === 1}
-                            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-                            className="pagination-arrow"
-                        >
-                            <ChevronLeft size={16} />
-                        </button>
-                        <span className="pagination-info">
-                            Page {page} of {totalPages}
-                        </span>
-                        <button
-                            disabled={page === totalPages}
-                            onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-                            className="pagination-arrow"
-                        >
-                            <ChevronRight size={16} />
-                        </button>
-                    </div>
+                    <SellerPagination
+                        currentPage={page}
+                        totalPages={totalPages}
+                        onPageChange={setPage}
+                    />
                 )}
             </div>
 

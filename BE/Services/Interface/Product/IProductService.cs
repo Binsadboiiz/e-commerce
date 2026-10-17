@@ -1,4 +1,5 @@
 using BE.Models.DTOs;
+using BE.Models.DTOs.Products.ProductDetail;
 
 namespace BE.Services.Interface.Product
 {
@@ -18,6 +19,10 @@ namespace BE.Services.Interface.Product
             long productId,
             string sellerUserId,
             UpdateProductRequest request);
+
+        Task<ProductDetailDto?> GetSellerProductByIdAsync(
+            long productId,
+            string sellerUserId);
 
         Task DeleteProductAsync(
             long productId,

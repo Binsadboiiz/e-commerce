@@ -1,0 +1,151 @@
+/* ==========================================================================
+   SELLER DESIGN SYSTEM — BUTTONS
+   Standard button variants, sizes, icon-only buttons and state styling.
+   ========================================================================== */
+
+.seller-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--seller-space-2);
+    font-family: var(--seller-font);
+    font-size: var(--seller-font-size-base);
+    font-weight: 600;
+    line-height: 1;
+    border-radius: var(--seller-radius-lg);
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all var(--seller-transition-fast);
+    user-select: none;
+}
+
+.seller-btn:disabled,
+.seller-btn[aria-disabled="true"] {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Sizes */
+.seller-btn-sm {
+    height: var(--seller-button-height-sm);
+    padding: 0 var(--seller-space-3);
+    font-size: var(--seller-font-size-sm);
+    border-radius: var(--seller-radius-md);
+}
+
+.seller-btn-md {
+    height: var(--seller-button-height);
+    padding: 0 var(--seller-space-4);
+    font-size: var(--seller-font-size-base);
+    border-radius: var(--seller-radius-lg);
+}
+
+.seller-btn-lg {
+    height: 44px;
+    padding: 0 var(--seller-space-6);
+    font-size: var(--seller-font-size-md);
+    border-radius: var(--seller-radius-xl);
+}
+
+/* Variants */
+.seller-btn-primary {
+    background: var(--seller-primary);
+    color: var(--seller-text-white);
+    border-color: var(--seller-primary);
+    box-shadow: 0 1px 2px rgba(37, 99, 235, 0.2);
+}
+
+.seller-btn-primary:hover:not(:disabled) {
+    background: var(--seller-primary-hover);
+    border-color: var(--seller-primary-hover);
+    box-shadow: 0 3px 6px rgba(37, 99, 235, 0.3);
+}
+
+.seller-btn-primary:active:not(:disabled) {
+    background: var(--seller-primary-active);
+    transform: translateY(1px);
+}
+
+.seller-btn-secondary {
+    background: var(--seller-text-main);
+    color: var(--seller-text-white);
+    border-color: var(--seller-text-main);
+}
+
+.seller-btn-secondary:hover:not(:disabled) {
+    background: #1e293b;
+    border-color: #1e293b;
+}
+
+.seller-btn-outline {
+    background: var(--seller-surface);
+    color: var(--seller-text-main);
+    border-color: var(--seller-border);
+}
+
+.seller-btn-outline:hover:not(:disabled) {
+    background: var(--seller-surface-subtle);
+    border-color: var(--seller-border-hover);
+}
+
+.seller-btn-ghost {
+    background: transparent;
+    color: var(--seller-text-secondary);
+    border-color: transparent;
+}
+
+.seller-btn-ghost:hover:not(:disabled) {
+    background: var(--seller-surface-subtle);
+    color: var(--seller-text-main);
+}
+
+.seller-btn-danger {
+    background: var(--seller-danger);
+    color: var(--seller-text-white);
+    border-color: var(--seller-danger);
+}
+
+.seller-btn-danger:hover:not(:disabled) {
+    background: var(--seller-danger-hover);
+    border-color: var(--seller-danger-hover);
+}
+
+.seller-btn-danger-outline {
+    background: var(--seller-surface);
+    color: var(--seller-danger);
+    border-color: var(--seller-danger-border);
+}
+
+.seller-btn-danger-outline:hover:not(:disabled) {
+    background: var(--seller-danger-bg);
+}
+
+/* Icon Buttons */
+.seller-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--seller-radius-md);
+    border: 1px solid var(--seller-border);
+    background: var(--seller-surface);
+    color: var(--seller-text-secondary);
+    cursor: pointer;
+    transition: all var(--seller-transition-fast);
+}
+
+.seller-icon-btn:hover:not(:disabled) {
+    background: var(--seller-surface-subtle);
+    color: var(--seller-text-main);
+    border-color: var(--seller-border-hover);
+}
+
+.seller-icon-btn-danger:hover:not(:disabled) {
+    background: var(--seller-danger-bg);
+    color: var(--seller-danger);
+    border-color: var(--seller-danger-border);
+}

@@ -497,7 +497,8 @@ namespace BE.Services.Implementation
                     VariantName = item.VariantName,
                     VariantValue = item.VariantValue,
                     Price = item.UnitPrice,
-                    Quantity = item.Quantity
+                    Quantity = item.Quantity,
+                    SellerStatus = TrackingStatus.Pending
                 });
             }
 

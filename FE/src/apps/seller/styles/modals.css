@@ -1,0 +1,100 @@
+/* ==========================================================================
+   SELLER DESIGN SYSTEM — MODALS
+   Modal backdrop overlay, dialog container, header, body & action footer.
+   ========================================================================== */
+
+.seller-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: var(--seller-space-4);
+    animation: sellerModalFadeIn 0.2s ease-out;
+}
+
+@keyframes sellerModalFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.seller-modal-container {
+    background: var(--seller-surface);
+    border-radius: var(--seller-radius-2xl);
+    border: 1px solid var(--seller-border);
+    box-shadow: var(--seller-shadow-modal);
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: sellerModalZoomIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes sellerModalZoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.97) translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.seller-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--seller-space-5) var(--seller-space-6);
+    border-bottom: 1px solid var(--seller-border);
+    background: var(--seller-surface);
+}
+
+.seller-modal-title {
+    font-size: var(--seller-font-size-xl);
+    font-weight: 700;
+    color: var(--seller-text-main);
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
+.seller-modal-close-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--seller-radius-md);
+    border: none;
+    background: transparent;
+    color: var(--seller-text-muted);
+    cursor: pointer;
+    transition: all var(--seller-transition-fast);
+}
+
+.seller-modal-close-btn:hover {
+    background: var(--seller-surface-subtle);
+    color: var(--seller-text-main);
+}
+
+.seller-modal-body {
+    padding: var(--seller-space-6);
+    overflow-y: auto;
+    flex: 1;
+    color: var(--seller-text-main);
+}
+
+.seller-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--seller-space-3);
+    padding: var(--seller-space-4) var(--seller-space-6);
+    border-top: 1px solid var(--seller-border);
+    background: var(--seller-surface-muted);
+}
