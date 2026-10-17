@@ -4,18 +4,20 @@ import { useCart } from '../hooks/useCart';
 import styles from '../pages/CartPage.module.css';
 
 export default function CartShopGroup({ shopGroup }) {
-    const { toggleSelectShop, isShopAllSelected } = useCart();
+    const { toggleSelectShop, isShopAllSelected, isItemAvailable } = useCart();
     const allSelected = isShopAllSelected(shopGroup.shopId);
+    const hasAvailableItems = shopGroup.items.some(isItemAvailable);
 
     return (
         <div className={styles.shopCard}>
             {/* Shop Header */}
             <div className={styles.shopHeader}>
                 {/* Shop Checkbox */}
-                <label className={styles.checkboxContainer}>
+                <label className={`${styles.checkboxContainer} ${!hasAvailableItems ? styles.checkboxDisabled : ''}`}>
                     <input
                         type="checkbox"
                         checked={allSelected}
+                        disabled={!hasAvailableItems}
                         onChange={() => toggleSelectShop(shopGroup.shopId)}
                         className={styles.checkboxInput}
                     />

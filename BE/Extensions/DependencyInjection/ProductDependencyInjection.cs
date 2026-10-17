@@ -1,7 +1,10 @@
-using BE.Repositories.Implementations;
-using BE.Repositories.Interfaces;
-using BE.Services.Implementation;
-using BE.Services.Interface;
+using BE.Repositories.Implementations.Categories;
+using BE.Repositories.Implementations.Products;
+using BE.Repositories.Interfaces.Categories;
+using BE.Repositories.Interfaces.Products;
+using BE.Services.Implementation.Categories;
+using BE.Services.Implementation.Products;
+using BE.Services.Interface.Category;
 using BE.Services.Interface.Product;
 
 namespace BE.Extensions.DependencyInjection
@@ -18,9 +21,10 @@ namespace BE.Extensions.DependencyInjection
             services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             // services
-            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IProductCreationService, ProductCreationService>();
+            services.AddScoped<IProductUpdateService, ProductUpdateService>();
+            services.AddScoped<ISellerProductService, SellerProductService>();
             services.AddScoped<IProductQueryService, ProductQueryService>();
-            services.AddScoped<IProductDomainService, ProductDomainService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ISearchSuggestionService, SearchSuggestionService>();
 

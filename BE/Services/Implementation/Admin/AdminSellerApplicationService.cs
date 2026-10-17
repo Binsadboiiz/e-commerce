@@ -8,7 +8,7 @@ using BE.Data;
 using BE.Models.DTOs.Admin.Dashboard;
 using BE.Models.DTOs.Seller;
 using BE.Models.DTOs.Seller.Shared;
-using BE.Repositories.Interfaces;
+using BE.Repositories.Interfaces.Seller;
 using BE.Services.Interface.Admin;
 using Microsoft.EntityFrameworkCore;
 

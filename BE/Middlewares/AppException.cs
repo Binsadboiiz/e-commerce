@@ -1,4 +1,4 @@
-﻿namespace BE.Middlewares
+namespace BE.Middlewares
 {
     public class AppException : Exception
     {

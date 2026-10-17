@@ -161,6 +161,10 @@
     "quantity": "Quantity",
     "subtotal": "Subtotal",
     "actions": "Actions",
+    "outOfStock": "Out of stock",
+    "unavailableNotice": "Sorry, this item is no longer available and will be excluded from your order.",
+    "removeFromCart": "Remove from Cart",
+    "stockReduced": "Only {{count}} left. Please adjust the quantity.",
     "deleteConfirm": "Are you sure you want to remove this item?"
   },
   "checkout": {

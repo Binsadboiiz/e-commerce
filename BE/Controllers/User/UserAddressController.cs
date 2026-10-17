@@ -1,7 +1,7 @@
 using BE.Helpers;
 using BE.Models.DTOs;
 using BE.Models.DTOs.User;
-using BE.Services.Interface;
+using BE.Services.Interface.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;

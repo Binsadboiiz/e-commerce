@@ -1,6 +1,6 @@
 using BE.Middlewares;
-using BE.Services.Implementation;
-using BE.Services.Interface;
+using BE.Services.Implementation.Media;
+using BE.Services.Interface.Image;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;

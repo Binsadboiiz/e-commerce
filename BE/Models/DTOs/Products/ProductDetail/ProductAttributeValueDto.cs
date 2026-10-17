@@ -1,4 +1,4 @@
-﻿namespace BE.Models.DTOs.Products.ProductDetail
+namespace BE.Models.DTOs.Products.ProductDetail
 {
     public class ProductAttributeValueDto
     {

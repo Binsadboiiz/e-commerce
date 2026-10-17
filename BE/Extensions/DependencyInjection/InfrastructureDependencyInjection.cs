@@ -1,6 +1,6 @@
 using BE.Data;
-using BE.Services.Implementation;
-using BE.Services.Interface;
+using BE.Services.Implementation.Media;
+using BE.Services.Interface.Image;
 using Microsoft.EntityFrameworkCore;
 
 namespace BE.Extensions.DependencyInjection;

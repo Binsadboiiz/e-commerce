@@ -57,7 +57,6 @@ export default function CartPage() {
                             <div className="w-[18px] flex-shrink-0"></div>
                             <div className="w-20 flex-shrink-0"></div>
                             <div className="flex-1 text-sm text-text-secondary font-semibold">{t('cart.shopGroup')} / {t('cart.actions')}</div>
-                            <div className="w-28 text-center text-sm text-text-secondary font-semibold flex-shrink-0">{t('cart.itemPrice')}</div>
                             <div className="w-[88px] text-center text-sm text-text-secondary font-semibold flex-shrink-0">{t('cart.quantity')}</div>
                             <div className="w-28 text-right text-sm text-text-secondary font-semibold flex-shrink-0">{t('cart.subtotal')}</div>
                             <div className="w-10 flex-shrink-0"></div>
@@ -92,11 +91,11 @@ function CartSkeleton() {
             </div>
 
             {/* Table header */}
-            <div className={`h-12 rounded-lg ${skeletonStyles.skeleton}`} />
+            <div className={`h-12 ${skeletonStyles.skeleton}`} />
 
             {/* Shop groups */}
             {[1, 2].map(i => (
-                <div key={i} className="bg-white rounded-lg overflow-hidden border border-gray-100">
+                <div key={i} className="border-b border-gray-200">
                     <div className={`h-12 border-b border-gray-100 ${skeletonStyles.skeleton}`} />
                     {[1, 2].map(j => (
                         <div key={j} className="flex items-center gap-4 px-5 py-4 border-b border-gray-50">

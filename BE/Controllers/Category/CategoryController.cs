@@ -1,5 +1,5 @@
 using BE.Models.DTOs;
-using BE.Services.Interface;
+using BE.Services.Interface.Category;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;

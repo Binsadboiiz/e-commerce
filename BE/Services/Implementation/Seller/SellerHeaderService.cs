@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using BE.Constants.Seller;
 using BE.Models.DTOs.Seller;
-using BE.Repositories.Interfaces;
+using BE.Repositories.Interfaces.Seller;
 using BE.Services.Interface.Seller;
 
 namespace BE.Services.Implementation.Seller

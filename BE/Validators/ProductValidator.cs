@@ -1,4 +1,4 @@
-﻿namespace BE.Validators
+namespace BE.Validators
 {
     public class ProductValidator
     {

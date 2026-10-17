@@ -1,17 +1,31 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace BE.Models.DTOs
 {
     // ── Request DTOs ──
     public class AddToCartRequest
     {
+        [Range(1, long.MaxValue)]
         public long ProductId { get; set; }
+
+        [Required]
+        [Range(1, long.MaxValue)]
         public long? VariantId { get; set; }
+
+        [Range(1, int.MaxValue)]
         public int Quantity { get; set; }
     }
 
     public class UpdateCartRequest
     {
+        [Range(1, long.MaxValue)]
         public long ProductId { get; set; }
+
+        [Required]
+        [Range(1, long.MaxValue)]
         public long? VariantId { get; set; }
+
+        [Range(1, int.MaxValue)]
         public int Quantity { get; set; }
     }
 

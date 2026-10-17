@@ -321,13 +321,13 @@ CREATE INDEX idx_order_vouchers_voucher ON Order_Vouchers(VoucherId);
 -- =========================================================================
 CREATE TABLE Order_Tracking (
     OrderTrackingId BIGINT AUTO_INCREMENT PRIMARY KEY,
-    OrderId         BIGINT       NOT NULL,
-    ShopId          BIGINT       NULL,
-    Status          VARCHAR(50)  NOT NULL,
-    Location        VARCHAR(255) NULL,
-    Description     VARCHAR(500) NULL,
-    UpdatedBy       VARCHAR(50)  NULL,
-    CreatedAt       DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    OrderId BIGINT NOT NULL,
+    ShopId BIGINT NULL,
+    Status VARCHAR(50) NOT NULL,
+    Location VARCHAR(255) NULL,
+    Description VARCHAR(500) NULL,
+    UpdatedBy VARCHAR(50)  NULL,
+    CreatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (OrderId) REFERENCES Orders(OrderId) ON DELETE CASCADE,
     FOREIGN KEY (ShopId) REFERENCES Shops(ShopId)
@@ -342,15 +342,15 @@ CREATE INDEX idx_tracking_shop_order ON Order_Tracking(ShopId, OrderId);
 -- 18. SHIPPING DETAILS
 -- =========================================================================
 CREATE TABLE Shipping_Details (
-    Id                    BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    OrderId               BIGINT       NOT NULL,
-    Carrier               VARCHAR(100) NULL,
-    TrackingCode          VARCHAR(100) NULL,
-    CurrentLocation       VARCHAR(255) NULL,
-    Status                VARCHAR(50)  NULL,
-    ShipperId             VARCHAR(50)  NULL,
-    EstimatedDeliveryDate DATETIME     NULL,
-    UpdatedAt             DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    Id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    OrderId BIGINT NOT NULL,
+    Carrier VARCHAR(100) NULL,
+    TrackingCode VARCHAR(100) NULL,
+    CurrentLocation VARCHAR(255) NULL,
+    Status VARCHAR(50)  NULL,
+    ShipperId  VARCHAR(50)  NULL,
+    EstimatedDeliveryDate DATETIME NULL,
+    UpdatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
     UNIQUE KEY uq_shipping_order (OrderId),
     FOREIGN KEY (OrderId) REFERENCES Orders(OrderId) ON DELETE CASCADE

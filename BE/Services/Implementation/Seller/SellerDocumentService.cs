@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using BE.Middlewares;
 using BE.Models.DTOs.Seller;
 using BE.Models.Entities;
-using BE.Repositories.Interfaces;
+using BE.Repositories.Interfaces.Seller;
 using BE.Services.Interface.Seller;
 using BE.Validators;
 
@@ -42,15 +42,27 @@ namespace BE.Services.Implementation.Seller
                 throw new AppException("Document type is invalid or inactive.");
             }
 
-            var document = new SellerDocument
-            {
-                SellerId = seller.SellerId,
-                DocumentTypeId = request.DocumentTypeId,
-                FileUrl = request.FileUrl,
-                CreatedAt = DateTime.UtcNow
-            };
+            var existingDocs = await _repository.GetDocumentsAsync(seller.SellerId);
+            var existingDoc = existingDocs.FirstOrDefault(x => x.DocumentTypeId == request.DocumentTypeId);
 
-            await _repository.AddDocumentAsync(document);
+            if (existingDoc != null)
+            {
+                existingDoc.FileUrl = request.FileUrl;
+                existingDoc.CreatedAt = DateTime.UtcNow;
+            }
+            else
+            {
+                var document = new SellerDocument
+                {
+                    SellerId = seller.SellerId,
+                    DocumentTypeId = request.DocumentTypeId,
+                    FileUrl = request.FileUrl,
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                await _repository.AddDocumentAsync(document);
+            }
+
             await _repository.SaveChangesAsync();
         }
 

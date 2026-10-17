@@ -161,6 +161,10 @@
     "quantity": "Số Lượng",
     "subtotal": "Thành Tiền",
     "actions": "Thao Tác",
+    "outOfStock": "Sản phẩm đã hết hàng",
+    "unavailableNotice": "Sản phẩm này hiện không còn hàng và sẽ được loại khỏi đơn hàng.",
+    "removeFromCart": "Xóa khỏi giỏ",
+    "stockReduced": "Chỉ còn {{count}} sản phẩm. Hãy điều chỉnh số lượng.",
     "deleteConfirm": "Bạn có chắc muốn xóa sản phẩm này?"
   },
   "checkout": {

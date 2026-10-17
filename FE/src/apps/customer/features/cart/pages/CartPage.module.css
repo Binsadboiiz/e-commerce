@@ -23,15 +23,13 @@
 }
 
 .tableHeader {
-    background-color: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 14px 24px;
-    margin-bottom: 16px;
+    background-color: transparent;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 14px 0;
+    margin-bottom: 4px;
     display: none;
     align-items: center;
     gap: 16px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
 @media (min-width: 768px) {
@@ -41,26 +39,19 @@
 }
 
 .shopCard {
-    background-color: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 16px;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-    margin-bottom: 20px;
-    padding: 20px 24px;
-    transition: all 0.3s ease;
-}
-
-.shopCard:hover {
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08);
+    background-color: transparent;
+    border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 8px;
+    padding: 0 0 8px;
 }
 
 .shopHeader {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding-bottom: 16px;
+    padding: 16px 0;
     border-bottom: 1px solid #f1f5f9;
-    margin-bottom: 4px;
+    margin-bottom: 0;
 }
 
 .cartItem {
@@ -76,20 +67,113 @@
     padding-bottom: 8px;
 }
 
+.cartItemUnavailable {
+    display: grid;
+    grid-template-columns: 20px 80px minmax(0, 1fr);
+    grid-template-areas:
+        "select image product"
+        "warning warning warning";
+    column-gap: 16px;
+    row-gap: 12px;
+}
+
+.cartItemUnavailable > :first-child {
+    grid-area: select;
+}
+
+.cartItemUnavailable .productImage {
+    grid-area: image;
+}
+
+.cartItemUnavailable .productInfo {
+    grid-area: product;
+}
+
+.cartItemUnavailable .stockWarning {
+    grid-area: warning;
+    margin-top: 0;
+}
+
+.saleBadge {
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.productInfo {
+    min-width: 0;
+}
+
+.stockWarning {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin-top: 8px;
+    padding: 8px 10px;
+    border-left: 3px solid #c74747;
+    border-radius: 3px;
+    background: #fff0e8;
+    color: #4b5563;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.stockWarning svg {
+    flex: 0 0 auto;
+    width: 17px;
+    height: 17px;
+    margin-top: 2px;
+    color: #c74747;
+}
+
+.stockWarningContent {
+    min-width: 0;
+}
+
+.stockWarning button {
+    display: inline;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+}
+
 .footerSticky {
     position: sticky;
     bottom: 16px;
     z-index: 10;
     background-color: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 16px;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
-    padding: 16px 24px;
+    border-top: 1px solid #e2e8f0;
+    padding: 16px 0;
     margin-top: 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
+}
+
+.footerActions {
+    flex-shrink: 0;
+}
+
+.totalAmount {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.totalAmountLabel {
+    margin-right: 8px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.totalAmountValue {
+    color: #e11d48;
+    font-size: 20px;
+    font-weight: 700;
 }
 
 /* Custom Checkbox Design */
@@ -125,6 +209,11 @@
 
 .checkboxContainer:hover .checkboxCustom {
     border-color: #94a3b8;
+}
+
+.checkboxDisabled {
+    cursor: not-allowed;
+    opacity: 0.5;
 }
 
 .checkboxInput:checked ~ .checkboxCustom {
@@ -196,4 +285,136 @@
 
 .buttonSecondary:active {
     transform: scale(0.98);
+}
+
+@media (max-width: 767px) {
+    .footerSticky {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 12px;
+        padding: 12px 0;
+    }
+
+    .footerActions {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 12px !important;
+        width: 100%;
+    }
+
+    .totalAmount {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 5px;
+        min-width: 0;
+        white-space: normal;
+    }
+
+    .totalAmountLabel {
+        margin-right: 0;
+        font-size: 13px;
+        line-height: 1.3;
+    }
+
+    .totalAmountValue {
+        font-size: 19px;
+        line-height: 1.25;
+        white-space: nowrap;
+    }
+
+    .buttonPrimary {
+        min-width: 112px;
+        white-space: nowrap;
+    }
+
+    .cartItem {
+        display: grid;
+        grid-template-columns: 20px 72px minmax(0, 1fr) auto;
+        grid-template-areas:
+            "select image title remove"
+            "select image variant quantity"
+            "select image price price";
+        align-items: center;
+        column-gap: 10px;
+        row-gap: 9px;
+        padding: 16px 0;
+    }
+
+    .cartItemUnavailable {
+        grid-template-areas:
+            "select image title title"
+            "select image variant variant"
+            "warning warning warning warning";
+        grid-template-columns: 20px 72px minmax(0, 1fr) auto;
+        row-gap: 12px;
+    }
+
+    .cartItem > :first-child {
+        grid-area: select;
+        align-self: start;
+        padding-top: 3px;
+    }
+
+    .productImage {
+        grid-area: image;
+        width: 72px;
+        height: 72px;
+        align-self: start;
+    }
+
+    .productInfo {
+        display: contents;
+    }
+
+    .productName {
+        grid-area: title;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+        padding-right: 0;
+        align-self: start;
+    }
+
+    .variantInfo {
+        grid-area: variant;
+        min-width: 0;
+        margin-top: 0 !important;
+    }
+
+    .variantInfo span {
+        max-width: 100%;
+        white-space: normal;
+    }
+
+    .stockWarning {
+        align-self: start;
+        padding: 8px 10px;
+        gap: 8px;
+    }
+
+    .quantityCell {
+        grid-area: quantity;
+        justify-self: end;
+    }
+
+    .subtotalCell {
+        grid-area: price;
+        width: auto !important;
+        text-align: left;
+        justify-self: start;
+    }
+
+    .saleBadge {
+        display: flex;
+        width: fit-content;
+        margin-left: 0;
+        margin-top: 4px;
+    }
+
+    .removeCell {
+        grid-area: remove;
+        justify-self: end;
+    }
 }

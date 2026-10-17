@@ -1,4 +1,4 @@
-﻿namespace BE.Models.DTOs.Products.ProductFilter
+namespace BE.Models.DTOs.Products.ProductFilter
 {
     public class FilterOptionDto
     {

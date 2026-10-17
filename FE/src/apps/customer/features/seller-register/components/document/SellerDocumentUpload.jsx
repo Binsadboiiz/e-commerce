@@ -59,7 +59,11 @@ export default function SellerDocumentUpload({
             const formData = new FormData();
             formData.append("file", file);
             const uploadRes = await sellerApi.uploadImage(formData);
-            const fileUrl = uploadRes.url;
+            const fileUrl = uploadRes?.url || uploadRes?.data?.url || (typeof uploadRes === "string" ? uploadRes : "");
+
+            if (!fileUrl) {
+                throw new Error("Không nhận được URL ảnh từ hệ thống.");
+            }
 
             await sellerApi.uploadDocument({
                 documentTypeId,
@@ -70,7 +74,7 @@ export default function SellerDocumentUpload({
             if (onRefresh) await onRefresh();
         } catch (error) {
             console.error(error);
-            const msg = error.response?.data?.message || t("sellerDocument.uploadError");
+            const msg = error.response?.data?.message || error.message || t("sellerDocument.uploadError");
             notify.error(msg);
         } finally {
             setUploadingType(null);
@@ -111,9 +115,15 @@ export default function SellerDocumentUpload({
 
             <div className={styles.list}>
                 {requirements.map(req => {
-                    const uploadedDoc = value.find(
-                        item => item.documentType === req.type
-                    );
+                    const uploadedDoc = value.find(item => {
+                        const itemType = (item.documentType || "").toUpperCase();
+                        const reqType = (req.type || "").toUpperCase();
+                        if (itemType === reqType) return true;
+                        if (item.documentTypeId && item.documentTypeId === MAP_TYPE_TO_ID[reqType]) return true;
+                        if ((reqType === "IDENTITY_FRONT" && itemType === "CCCD_FRONT") ||
+                            (reqType === "IDENTITY_BACK" && itemType === "CCCD_BACK")) return true;
+                        return false;
+                    });
                     return (
                         <SellerDocumentItem
                             key={req.type}

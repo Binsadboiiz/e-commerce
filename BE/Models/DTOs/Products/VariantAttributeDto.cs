@@ -1,4 +1,4 @@
-﻿namespace BE.Models.DTOs.Products
+namespace BE.Models.DTOs.Products
 {
     public class VariantAttributeDto
     {

@@ -6,7 +6,6 @@ using BE.Data;
 using BE.Middlewares;
 using BE.Models.Entities;
 using BE.Models.DTOs.Seller;
-using BE.Repositories.Interfaces;
 using BE.Repositories.Interfaces.Seller;
 using BE.Services.Interface.Seller;
 using Microsoft.EntityFrameworkCore;

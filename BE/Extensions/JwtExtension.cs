@@ -14,7 +14,7 @@ namespace BE.Extensions
             this IServiceCollection services, IConfiguration configuration)
         {
             var secretKey = configuration["JWT:Secret"];
-            if (string.IsNullOrWhiteSpace(secretKey))
+            if (string.IsNullOrWhiteSpace(secretKey) || Encoding.UTF8.GetByteCount(secretKey) < 32)
             {
                 throw new InvalidOperationException("JWT:Secret configuration key is missing or empty. Please set it in appsettings or Environment Variables.");
             }

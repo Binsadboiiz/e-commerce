@@ -1,6 +1,6 @@
 using BE.Models.DTOs.Auth;
 using BE.Models.DTOs;
-using BE.Services.Interface;
+using BE.Services.Interface.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.RateLimiting;

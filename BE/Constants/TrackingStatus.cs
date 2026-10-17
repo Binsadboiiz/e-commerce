@@ -1,4 +1,4 @@
-﻿namespace BE.Constants
+namespace BE.Constants
 {
     public static class TrackingStatus
     {

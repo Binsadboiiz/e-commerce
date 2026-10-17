@@ -59,13 +59,13 @@ export default function CartFooter() {
             </div>
 
             {/* Right: Total & Checkout */}
-            <div className="flex items-center gap-6">
+            <div className={`${styles.footerActions} flex items-center gap-6`}>
                 {/* Total Price */}
-                <div className="text-right">
-                    <span className="text-sm text-slate-500 mr-2">
+                <div className={styles.totalAmount}>
+                    <span className={styles.totalAmountLabel}>
                         {t('cart.totalAmount')} ({selectedCount}):
                     </span>
-                    <span className="text-xl font-bold text-rose-600">
+                    <span className={styles.totalAmountValue}>
                         {formatPrice(total)}
                     </span>
                 </div>

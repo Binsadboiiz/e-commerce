@@ -1,7 +1,7 @@
-using BE.Repositories.Interfaces;
-using BE.Repositories.Implementations;
-using BE.Services.Interface;
-using BE.Services.Implementation;
+using BE.Repositories.Interfaces.Auth;
+using BE.Repositories.Implementations.Auth;
+using BE.Services.Interface.Auth;
+using BE.Services.Implementation.Auth;
 using BE.Helpers;
 
 

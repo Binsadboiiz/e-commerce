@@ -276,7 +276,7 @@ export default function CheckoutPage() {
                     </div>
                 )}
 
-                <section className="checkout-card">
+                <section className="checkout-card checkout-address-section">
                     <div className="checkout-address-layout">
                         <div className="checkout-section-header">
                             <div className="checkout-icon-badge">
@@ -301,7 +301,7 @@ export default function CheckoutPage() {
                             </div>
                         </div>
 
-                        <div className="checkout-address-actions" style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                        <div className="checkout-address-actions">
                             <select
                                 value={selectedAddressId ?? ""}
                                 onChange={(event) => setSelectedAddressId(Number(event.target.value))}
@@ -315,27 +315,21 @@ export default function CheckoutPage() {
                                 ))}
                             </select>
 
-                            <button
+                            <Button
                                 type="button"
+                                variant="outline"
+                                size="md"
+                                className="checkout-address-add-button"
                                 onClick={() => setIsAddressModalOpen(true)}
-                                style={{
-                                    padding: "8px 12px",
-                                    fontSize: "13px",
-                                    fontWeight: "600",
-                                    backgroundColor: "#2563eb",
-                                    color: "#ffffff",
-                                    border: "none",
-                                    borderRadius: "6px",
-                                    cursor: "pointer",
-                                    whiteSpace: "nowrap"
-                                }}
                             >
                                 + Thêm mới
-                            </button>
+                            </Button>
                         </div>
                     </div>
                 </section>
 
+                <div className="checkout-content-grid">
+                    <div className="checkout-products-column">
                 <section className="checkout-card">
                     <div className="checkout-block-heading">
                         <div className="checkout-icon-badge checkout-icon-badge-dark">
@@ -447,66 +441,70 @@ export default function CheckoutPage() {
                     </div>
                 </section>
 
-                <section className="checkout-card">
-                    <div className="checkout-bottom-grid">
-                        <div className="checkout-payment-panel">
-                            <h2 className="checkout-section-title">Payment Method</h2>
-                            <div className="checkout-method-grid">
-                                {paymentMethods.map(method => {
-                                    const isActive = selectedPaymentMethod === method.code;
-                                    const isDisabled = !method.isEnabled;
+                    </div>
 
-                                    return (
-                                        <button
-                                            key={method.code}
-                                            type="button"
-                                            disabled={isDisabled}
-                                            onClick={() => setSelectedPaymentMethod(method.code)}
-                                            className={[
-                                                "checkout-method-button",
-                                                isActive ? "checkout-method-button-active" : "",
-                                                isDisabled ? "checkout-method-button-disabled" : ""
-                                            ].join(" ").trim()}
-                                        >
-                                            {method.label}
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                            <p className="checkout-payment-note">
-                                Only COD is enabled right now. Other payment methods remain visible for future expansion.
-                            </p>
+                    <div className="checkout-payment-column">
+                <section className="checkout-card checkout-payment-section">
+                    <div className="checkout-payment-panel">
+                        <h2 className="checkout-section-title">Payment Method</h2>
+                        <div className="checkout-method-grid">
+                            {paymentMethods.map(method => {
+                                const isActive = selectedPaymentMethod === method.code;
+                                const isDisabled = !method.isEnabled;
+
+                                return (
+                                    <button
+                                        key={method.code}
+                                        type="button"
+                                        disabled={isDisabled}
+                                        onClick={() => setSelectedPaymentMethod(method.code)}
+                                        className={[
+                                            "checkout-method-button",
+                                            isActive ? "checkout-method-button-active" : "",
+                                            isDisabled ? "checkout-method-button-disabled" : ""
+                                        ].join(" ").trim()}
+                                    >
+                                        {method.label}
+                                    </button>
+                                );
+                            })}
                         </div>
-
-                        <div className="checkout-summary-panel">
-                            <div className="checkout-summary-rows">
-                                <SummaryRow label="Merchandise Subtotal" value={preview?.merchandiseSubtotal} />
-                                <SummaryRow label="Shipping Fee" value={preview?.shippingFee} />
-                                <SummaryRow label="Discount" value={-(preview?.discountAmount ?? 0)} highlight="checkout-success-text" />
-                                <div className="checkout-summary-total">
-                                    <SummaryRow
-                                        label="Total Payment"
-                                        value={preview?.finalAmount}
-                                        emphasis
-                                        highlight="checkout-total-text"
-                                    />
-                                </div>
-                            </div>
-
-                            <Button
-                                type="button"
-                                variant="primary"
-                                size="lg"
-                                fullWidth
-                                onClick={handlePlaceOrder}
-                                isLoading={placingOrder}
-                                disabled={!preview || previewLoading || !selectedAddress} replace
-                            >
-                                Place Order
-                            </Button>
-                        </div>
+                        <p className="checkout-payment-note">
+                            Only COD is enabled right now. Other payment methods remain visible for future expansion.
+                        </p>
                     </div>
                 </section>
+
+                <aside className="checkout-summary-panel">
+                        <div className="checkout-summary-rows">
+                            <SummaryRow label="Merchandise Subtotal" value={preview?.merchandiseSubtotal} />
+                            <SummaryRow label="Shipping Fee" value={preview?.shippingFee} />
+                            <SummaryRow label="Discount" value={-(preview?.discountAmount ?? 0)} highlight="checkout-success-text" />
+                            <div className="checkout-summary-total">
+                                <SummaryRow
+                                    label="Total Payment"
+                                    value={preview?.finalAmount}
+                                    emphasis
+                                    highlight="checkout-total-text"
+                                />
+                            </div>
+                        </div>
+
+                        <Button
+                            type="button"
+                            variant="primary"
+                            size="md"
+                            fullWidth
+                            className="checkout-place-order"
+                            onClick={handlePlaceOrder}
+                            isLoading={placingOrder}
+                            disabled={!preview || previewLoading || !selectedAddress}
+                        >
+                            Place Order
+                        </Button>
+                </aside>
+                    </div>
+                </div>
             </div>
 
             {showVoucherModal && (

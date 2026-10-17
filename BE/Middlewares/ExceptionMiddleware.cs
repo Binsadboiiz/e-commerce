@@ -36,21 +36,21 @@ namespace BE.Middlewares
             }
             catch (Exception ex)
             {
+                var traceId = context.TraceIdentifier;
                 // Log unhandled server errors internally
-                _logger.LogError(ex, "An unhandled exception occurred: {Message}", ex.Message);
+                _logger.LogError(ex, "Unhandled exception. TraceId: {TraceId}", traceId);
 
-                context.Response.StatusCode = 500;
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 context.Response.ContentType = "application/json";
 
                 // Expose internal exception details ONLY in Development environment to prevent Information Disclosure
-                var response = new
+                await context.Response.WriteAsJsonAsync(new
                 {
                     status = false,
-                    message = "An unexpected error occurred on the server. Please try again later.",
+                    message = "An unexpected error occurred",
+                    traceId,
                     detail = _env.IsDevelopment() ? ex.Message : null
-                };
-
-                await context.Response.WriteAsJsonAsync(response);
+                });
             }
         }
     }

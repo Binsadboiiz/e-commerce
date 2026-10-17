@@ -1,4 +1,4 @@
-﻿namespace BE.Models.DTOs.Seller
+namespace BE.Models.DTOs.Seller
 {
     /// <summary>
     /// Request to change seller type while registration is still in Draft.

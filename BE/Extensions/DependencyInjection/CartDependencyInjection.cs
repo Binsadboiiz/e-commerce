@@ -1,5 +1,6 @@
-using BE.Services.Implementation;
-using BE.Services.Interface;
+using BE.Services.Implementation.Carts;
+using BE.Services.Interface.Cart;
+using BE.Services.Interface.Inventory;
 
 namespace BE.Extensions.DependencyInjection;
 

@@ -3,7 +3,7 @@ using BE.Middlewares;
 using BE.Models.DTOs.Seller;
 using BE.Models.DTOs.Seller.Shared;
 using BE.Models.Entities;
-using BE.Repositories.Interfaces;
+using BE.Repositories.Interfaces.Seller;
 using BE.Services.Interface.Seller;
 using BE.Validators;
 
