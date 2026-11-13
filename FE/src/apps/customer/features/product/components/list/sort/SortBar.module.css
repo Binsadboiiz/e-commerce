@@ -11,6 +11,8 @@
 }
 
 .label {
+    white-space: nowrap;
+    flex-shrink: 0;
     font-size: 14px;
     color: #666;
     margin-right: 6px;
@@ -46,3 +48,8 @@
 .active:hover {
     background: #000;
 }
+
+.sortBar { border-radius: 12px; border-color: var(--border-color, #e2e8f0); margin-bottom: 0; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+.sortBar button { border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
+.sortBar button.active,
+.sortBar button.active:hover { background: var(--color-primary, #2563eb); border-color: var(--color-primary, #2563eb); color: #fff; }

@@ -90,3 +90,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+@media (max-width: 560px) {
+    .topResearchItem { min-width: 140px; }
+}

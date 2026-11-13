@@ -44,3 +44,10 @@
   background: #f1f1f1;
   border-radius: 8px;
 }
+
+@media (max-width: 768px) {
+  .productContainer { padding: 0 12px; }
+  .productSection { padding: 16px 0; }
+  .productGrid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .sectionTitle { font-size: 18px; }
+}

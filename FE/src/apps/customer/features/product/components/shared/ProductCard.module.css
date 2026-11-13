@@ -196,3 +196,16 @@
     text-decoration: line-through;
     font-weight: 400;
 }
+
+@media (max-width: 480px) {
+    .content { padding: 8px; }
+    .name { font-size: 13px; }
+    .currentPrice { font-size: 15px; }
+    .brandTag { font-size: 10px; }
+    .ratingRow { flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+    .topBadge, .discountBadge { top: 6px; font-size: 10px; }
+    .topBadge { left: 6px; }
+    .discountBadge { right: 6px; }
+}
+
+.productCard:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(15, 23, 42, 0.1); border-color: #bfdbfe; }

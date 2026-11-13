@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { SlidersHorizontal } from 'lucide-react';
 import styles from './ProductList.module.css';
 
 import { useSearchParams } from 'react-router-dom';
@@ -16,6 +18,7 @@ import { useLanguage } from "@/shared/context/LanguageContext";
 export default function ProductList() {
     const { t } = useLanguage();
     const [searchParams, setSearchParams] = useSearchParams();
+    const [showFilter, setShowFilter] = useState(false);
 
     const page = Number(searchParams.get("page") || 1);
     const pageSize = Number(searchParams.get("pageSize") || 20);
@@ -91,7 +94,10 @@ export default function ProductList() {
             />
 
             {/* SIDEBAR */}
-            <div className={styles.sidebar}>
+            <button type="button" className={styles.filterToggle} onClick={() => setShowFilter(v => !v)} aria-expanded={showFilter}>
+                <SlidersHorizontal size={16} /> {t('product.filter')}
+            </button>
+            <div className={`${styles.sidebar} ${showFilter ? styles.sidebarOpen : ''}`}>
                 <SidebarFilter filterMeta={meta} />
             </div>
 
