@@ -1,0 +1,93 @@
+.stepperContainer {
+    width: 100%;
+    margin-bottom: 48px;
+    padding: 0 40px;
+    box-sizing: border-box;
+}
+
+.stepper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;
+    width: 100%;
+}
+
+.progressLine {
+    position: absolute;
+    top: 20px;
+    left: 40px;
+    right: 40px;
+    height: 2px;
+    background: #e5e7eb;
+    z-index: 1;
+}
+
+.progressLineActive {
+    position: absolute;
+    top: 20px;
+    left: 40px;
+    height: 2px;
+    background: #4b5563;
+    z-index: 1;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stepNode {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    width: 80px;
+}
+
+.circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    border: 2px solid #d1d5db;
+    background: #ffffff;
+    color: #4b5563;
+}
+
+.activeCircle {
+    border-color: #000000;
+    background: #000000;
+    color: #ffffff;
+}
+
+.completedCircle {
+    border-color: #4b5563;
+    background: #4b5563;
+    color: #ffffff;
+}
+
+.stepLabel {
+    font-size: 12px;
+    font-weight: 500;
+    margin-top: 8px;
+    color: #6b7280;
+    transition: color 0.3s ease;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.activeLabel {
+    color: #000000;
+    font-weight: 600;
+}
+
+.completedLabel {
+    color: #4b5563;
+}
+
+.clickable {
+    cursor: pointer;
+}

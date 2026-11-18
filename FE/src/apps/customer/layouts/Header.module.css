@@ -1,0 +1,316 @@
+/* ── Customer Modern Header Styles ── */
+
+.headerWrapper {
+  width: 100%;
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-xs);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* ── Top Bar ── */
+.topBar {
+  background-color: var(--color-slate-900);
+  color: var(--color-slate-300);
+  font-size: 0.75rem;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.topBarInner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.topBarLeft,
+.topBarRight {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.topBarLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--color-slate-300);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+.topBarLink:hover {
+  color: #ffffff;
+}
+
+.topBarText {
+  color: var(--color-slate-400);
+}
+
+.divider {
+  color: var(--color-slate-600);
+}
+
+.authLinks {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.topBarAuthLink {
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+.topBarAuthLink:hover {
+  color: var(--color-primary);
+}
+
+/* ── Main Header ── */
+.mainHeader {
+  padding: 0.875rem 0;
+  background-color: #ffffff;
+}
+
+.mainHeaderInner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+/* ── Logo & Brand Name (PolarisX Mall) ── */
+.brandLogoLink {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.logoImage {
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+}
+
+.brandTextWrapper {
+  display: flex;
+  align-items: baseline;
+  line-height: 1;
+  font-family: var(--font-sans);
+}
+
+.brandNamePrimary {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--color-slate-900);
+  letter-spacing: -0.02em;
+}
+
+/* Nổi bật chữ X bằng màu xanh dương (#2563eb) */
+.brandNameHighlight {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #2563eb;
+  margin: 0 1px;
+}
+
+.brandNameSub {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-left: 0.25rem;
+}
+
+/* ── Central Search Section ── */
+.searchSection {
+  flex: 1;
+  max-width: 650px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.popularTags {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--color-slate-500);
+  padding-left: 0.5rem;
+  overflow-x: auto;
+}
+
+.tagLink {
+  color: var(--color-slate-600);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+.tagLink:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+/* ── Right Actions Section ── */
+.actionsSection {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-shrink: 0;
+}
+
+/* Cart Widget */
+.cartWidget {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast);
+}
+.cartWidget:hover {
+  background-color: var(--color-slate-100);
+}
+
+.cartIconWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: var(--color-slate-800);
+}
+
+.cartBadge {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border-radius: var(--radius-full);
+  line-height: 1;
+  box-shadow: 0 2px 4px rgba(238, 77, 45, 0.3);
+}
+
+.cartLabel {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-slate-800);
+}
+
+/* User Profile Dropdown Widget */
+.userDropdownWrapper {
+  position: relative;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.375rem 0.625rem;
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast);
+  border: 1px solid var(--border-color);
+}
+.userInfo:hover {
+  background-color: var(--color-slate-100);
+}
+
+.userAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  border: 1.5px solid var(--color-primary);
+}
+
+.userName {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-slate-800);
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chevron {
+  color: var(--color-slate-500);
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background-color: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  min-width: 180px;
+  z-index: 100;
+  overflow: hidden;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-slate-800);
+  text-decoration: none;
+  transition: background-color var(--transition-fast);
+}
+.dropdownItem:hover {
+  background-color: var(--color-slate-100);
+  color: var(--color-primary);
+}
+
+.logoutBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-danger);
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-top: 1px solid var(--border-light);
+  transition: background-color var(--transition-fast);
+}
+.logoutBtn:hover {
+  background-color: var(--color-danger-light);
+}
+
+/* ── Responsive Header ── */
+@media (max-width: 900px) {
+  .topBar {
+    display: none;
+  }
+  .mainHeaderInner {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .searchSection {
+    order: 3;
+    max-width: 100%;
+    width: 100%;
+  }
+}

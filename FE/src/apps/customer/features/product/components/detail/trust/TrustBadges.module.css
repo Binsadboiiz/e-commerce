@@ -1,0 +1,73 @@
+/* ================================================================
+   Trust badges row — horizontal strip of 3 signals
+   ================================================================ */
+.wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+/* Individual badge card */
+.badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background: #f9fafb;
+    border: 1px solid #f1f1f1;
+    border-radius: 10px;
+    transition: border-color 0.18s ease;
+}
+
+.badge:hover {
+    border-color: #d1d5db;
+}
+
+/* Icon */
+.icon {
+    font-size: 22px;
+    color: #374151;
+    flex-shrink: 0;
+}
+
+/* Text group */
+.text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #111827;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sub {
+    font-size: 11px;
+    color: #9ca3af;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ================================================================
+   Responsive — Mobile (< 640px): stack vertically
+   ================================================================ */
+@media (max-width: 640px) {
+
+    .wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .badge {
+        padding: 10px 12px;
+    }
+
+}

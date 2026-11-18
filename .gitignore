@@ -20,7 +20,6 @@ BE/Properties/launchSettings.json
 BE/appsettings.Development.json
 **/appsettings.json
 
-
 # testing
 /coverage
 

@@ -1,0 +1,137 @@
+/* ================================================================
+   Sticky navigation bar
+   Sits directly below the global header when visible.
+   ================================================================ */
+.nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 90;
+
+    /* Smooth fade + slide on visibility change */
+    transition:
+        opacity 0.28s ease,
+        transform 0.28s ease,
+        visibility 0.28s;
+
+    background: #ffffff;
+    border-bottom: 1px solid var(--pd-color-border, #ebebeb);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+}
+
+/* Inner wrapper — constrains tabs to max page width */
+.inner {
+    max-width: var(--pd-max-w, 1280px);
+    margin: 0 auto;
+    padding: 0 var(--pd-page-px, 24px);
+
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    height: var(--pd-nav-h, 56px);
+}
+
+/* ================================================================
+   Hidden state — slides up, invisible, non-interactive
+   ================================================================ */
+.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-100%);
+}
+
+/* ================================================================
+   Visible state — slides in, fully interactive
+   ================================================================ */
+.visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+/* ================================================================
+   Tab item — base state
+   ================================================================ */
+.tab {
+    position: relative;
+
+    padding: 8px 20px;
+    height: 100%;
+
+    border: none;
+    background: transparent;
+    border-radius: 0;
+
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--pd-color-text-muted, #6b7280);
+    letter-spacing: 0.01em;
+
+    cursor: pointer;
+    white-space: nowrap;
+
+    /* Smooth color + indicator transitions */
+    transition:
+        color 0.2s ease,
+        background 0.2s ease;
+}
+
+/* Hover state — subtle background tint */
+.tab:hover {
+    color: var(--pd-color-text-primary, #111827);
+    background: #f3f4f6;
+}
+
+/* ================================================================
+   Active tab — bottom border indicator
+   ================================================================ */
+.active {
+    color: var(--pd-color-text-primary, #111827);
+    font-weight: 600;
+}
+
+/* Animated bottom indicator line */
+.active::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 12px;
+    right: 12px;
+    height: 2px;
+    background: var(--pd-color-text-primary, #111827);
+    border-radius: 2px 2px 0 0;
+    transition: background 0.2s ease;
+}
+
+/* ================================================================
+   Responsive — Mobile (< 768px)
+   Tabs scroll horizontally if they don't fit
+   ================================================================ */
+@media (max-width: 768px) {
+
+    .inner {
+        gap: 0;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .inner::-webkit-scrollbar {
+        display: none;
+    }
+
+    .tab {
+        padding: 8px 16px;
+        font-size: 13px;
+        flex-shrink: 0;
+    }
+
+    .active::after {
+        left: 8px;
+        right: 8px;
+    }
+
+}

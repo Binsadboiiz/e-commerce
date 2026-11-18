@@ -1,0 +1,25 @@
+.categorySection {
+    padding: 32px 0;
+    background: #fff;
+}
+
+.categoryContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.categoryGrid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
+}
+
+.categoryItem {
+    height: 100px;
+    background: #f1f1f1;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}

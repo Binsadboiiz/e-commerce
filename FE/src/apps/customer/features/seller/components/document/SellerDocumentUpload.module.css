@@ -1,0 +1,102 @@
+.wrapper{
+    display:flex;
+    flex-direction:column;
+    gap:24px;
+}
+
+.header h3{
+    margin:0;
+    font-size:22px;
+    font-weight:600;
+}
+
+.header p{
+    margin-top:6px;
+    color:#666;
+}
+
+.list{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+.card{
+    border:1px solid #e5e7eb;
+    border-radius:12px;
+    padding:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:24px;
+}
+
+.info{
+    flex:1;
+}
+
+.info h4{
+    margin:0;
+    font-size:16px;
+}
+
+.info p{
+    margin-top:6px;
+    color:#666;
+    font-size:14px;
+}
+
+.uploadButton{
+    padding:10px 18px;
+    background:#000000;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+}
+
+.uploadButton:hover{
+    background:#374151;
+}
+
+.uploaded{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.uploaded span{
+    max-width:260px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.uploaded button{
+    background:none;
+    border:none;
+    color:#374151;
+    cursor:pointer;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 12px;
+}
+
+.primaryButton {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 8px;
+    background: #000000;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.primaryButton:hover {
+    background: #374151;
+}

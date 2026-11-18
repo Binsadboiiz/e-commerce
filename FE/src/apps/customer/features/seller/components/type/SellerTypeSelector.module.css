@@ -1,0 +1,87 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.description {
+    font-size: 15px;
+    color: #64748b;
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    width: 100%;
+    max-width: 640px;
+}
+
+.card {
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.card:hover {
+    border-color: #000000;
+}
+
+.selectedCard {
+    border-color: #000000;
+    border-width: 2px;
+    background: #f9fafb;
+}
+
+.iconWrapper {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    color: #1f2937;
+    transition: all 0.2s ease;
+}
+
+.card:hover .iconWrapper {
+    background: #e5e7eb;
+    color: #000000;
+}
+
+.selectedCard .iconWrapper {
+    background: #e5e7eb;
+    color: #000000;
+}
+
+.disabledCard {
+    cursor: default;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.cardTitle {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 10px 0;
+}
+
+.cardText {
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.5;
+    margin: 0;
+}

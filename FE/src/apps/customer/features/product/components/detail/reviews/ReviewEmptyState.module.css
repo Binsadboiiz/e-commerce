@@ -1,0 +1,33 @@
+/* ================================================================
+   Review empty state — centered icon + message
+   ================================================================ */
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 48px 24px;
+    text-align: center;
+}
+
+/* Main icon */
+.icon {
+    font-size: 48px;
+    color: #d1d5db;
+}
+
+.title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #374151;
+    margin: 0;
+}
+
+.sub {
+    font-size: 14px;
+    color: #9ca3af;
+    margin: 0;
+    max-width: 300px;
+    line-height: 1.5;
+}

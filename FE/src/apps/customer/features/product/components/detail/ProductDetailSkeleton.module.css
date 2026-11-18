@@ -1,0 +1,198 @@
+/* ================================================================
+   ProductDetailSkeleton
+   Matches the new 2-column overview layout of ProductDetailPage.
+   ================================================================ */
+
+/* Shimmer animation */
+@keyframes shimmer {
+    0%   { background-position: -600px 0; }
+    100% { background-position:  600px 0; }
+}
+
+/* Shimmer mixin — applied to all skeleton blocks */
+.mainImage,
+.thumb,
+.title,
+.titleShort,
+.price,
+.rating,
+.variantLabel,
+.variantChip,
+.qtyBox,
+.btnPrimary,
+.btnSecondary {
+    background: linear-gradient(
+        90deg,
+        #f0f0f0 25%,
+        #e8e8e8 37%,
+        #f0f0f0 63%
+    );
+    background-size: 800px 100%;
+    animation: shimmer 1.5s ease infinite;
+    border-radius: 8px;
+}
+
+/* ================================================================
+   Layout — two-column overview (matches new .overview grid)
+   ================================================================ */
+.container {
+    max-width: 1280px;
+    margin: 32px auto;
+    padding: 32px 24px;
+
+    display: grid;
+    grid-template-columns: minmax(0, 520px) minmax(0, 1fr);
+    gap: 48px;
+    align-items: start;
+}
+
+/* ================================================================
+   Left column — gallery placeholder
+   ================================================================ */
+.left {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: sticky;
+    top: 80px;
+}
+
+.mainImage {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 16px;
+}
+
+.thumbRow {
+    display: flex;
+    gap: 8px;
+}
+
+.thumb {
+    width: 72px;
+    height: 72px;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+/* ================================================================
+   Right column — product info placeholder
+   ================================================================ */
+.right {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-top: 4px;
+}
+
+.title {
+    height: 28px;
+    width: 85%;
+    border-radius: 6px;
+}
+
+.titleShort {
+    height: 20px;
+    width: 55%;
+    border-radius: 6px;
+}
+
+.price {
+    height: 40px;
+    width: 40%;
+    border-radius: 6px;
+}
+
+.rating {
+    height: 16px;
+    width: 36%;
+    border-radius: 6px;
+}
+
+/* Static divider — no shimmer */
+.divider {
+    height: 1px;
+    background: #f0f0f0;
+    border-radius: 0;
+    animation: none;
+}
+
+/* Variant chips */
+.variantLabel {
+    height: 12px;
+    width: 28%;
+    border-radius: 4px;
+}
+
+.variantRow {
+    display: flex;
+    gap: 8px;
+}
+
+.variantChip {
+    width: 56px;
+    height: 34px;
+    border-radius: 8px;
+}
+
+/* Quantity + button row */
+.qtyRow {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.qtyBox {
+    width: 120px;
+    height: 48px;
+    border-radius: 999px;
+}
+
+.btnPrimary {
+    flex: 1;
+    height: 48px;
+    border-radius: 999px;
+}
+
+.btnSecondary {
+    flex: 1;
+    height: 48px;
+    border-radius: 999px;
+}
+
+/* ================================================================
+   Responsive — Tablet (< 900px)
+   ================================================================ */
+@media (max-width: 900px) {
+
+    .container {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .left {
+        position: static;
+    }
+
+}
+
+/* ================================================================
+   Responsive — Mobile (< 768px)
+   ================================================================ */
+@media (max-width: 768px) {
+
+    .container {
+        padding: 16px;
+        gap: 20px;
+    }
+
+    .thumb {
+        width: 60px;
+        height: 60px;
+    }
+
+    .title {
+        height: 22px;
+    }
+
+}

@@ -1,0 +1,27 @@
+.sidebar {
+    width: 260px;
+
+    position: sticky;
+    top: 12px;
+
+    align-self: flex-start;
+}
+
+.title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+/* mỗi section filter */
+.section {
+    margin-bottom: 16px;
+}
+
+/* option item */
+.option {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-size: 14px;
+}

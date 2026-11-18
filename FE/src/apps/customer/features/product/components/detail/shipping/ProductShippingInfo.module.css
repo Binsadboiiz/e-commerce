@@ -1,0 +1,38 @@
+/* ================================================================
+   Shipping info row group
+   ================================================================ */
+.wrapper {
+    border-top: 1px solid #f1f1f1;
+    border-bottom: 1px solid #f1f1f1;
+    padding: 16px 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* ================================================================
+   Individual shipping item — label + content in a row
+   ================================================================ */
+.item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+/* Label column — fixed width for vertical alignment */
+.label {
+    flex-shrink: 0;
+    width: 140px;
+    font-size: 13px;
+    color: #9ca3af;
+    padding-top: 1px;
+}
+
+/* Content value */
+.content {
+    font-size: 14px;
+    font-weight: 500;
+    color: #111827;
+    line-height: 1.5;
+}

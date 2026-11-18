@@ -1,29 +1,26 @@
-import { Routes, Route } from "react-router-dom";
-import ErrorPage from "../pages/ErrorPage";
-import Login from "../pages/auth/Login";
-import Register from "../pages/auth/Register";
-import MainLayout from "../components/layout/MainLayout";
-import HomePage from "../pages/Home";
-import ProductList from "../pages/ProductList";
+/**
+ * <summary>
+ * Root router. Replaces the original AppRoutes.jsx entirely
+ * </summary>
+ */
 
-const AppRoutes = () => {
+import { Routes } from 'react-router-dom'
+import PublicRoutes from '@/apps/customer/CustomerRoutes'
+import DashboardRoutes from '@/apps/admin/AdminRoutes'
+import StandaloneRoutes from './StandaloneRoutes'
+import SellerRoute from '@/apps/seller/SellerRoutes'
+import ScrollToTop from '@/shared/components/ScrollToTop'
+
+export default function AppRouter() {
   return (
-    <Routes>
-
-      {/* Layout chung */}
-      <Route element={<MainLayout />}>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/product" element={<ProductList />} />
-      </Route>
-
-      {/* Route không dùng layout */}
-      <Route path="/error" element={<ErrorPage />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-
-    </Routes>
-  );
-};
-
-export default AppRoutes;
+    <>
+      <ScrollToTop />
+      <Routes>
+        {PublicRoutes()}
+        {DashboardRoutes()}
+        {StandaloneRoutes()}
+        {SellerRoute()}
+      </Routes>
+    </>
+  )
+}

@@ -1,0 +1,158 @@
+/* ================================================================
+   Main image slider wrapper
+   ================================================================ */
+.wrapper {
+    position: relative;
+    width: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #f8f8f8;
+}
+
+/* ================================================================
+   Scrollable slide container
+   ================================================================ */
+.container {
+    display: flex;
+
+    /* Mandatory snap — one image at a time */
+    scroll-snap-type: x mandatory;
+    scroll-snap-stop: always;
+    scroll-behavior: auto;
+
+    overflow-x: auto;
+
+    width: 100%;
+    height: 480px;
+
+    cursor: grab;
+}
+
+.container:active {
+    cursor: grabbing;
+}
+
+/* Hide scrollbar across browsers */
+.container::-webkit-scrollbar {
+    display: none;
+}
+
+.container {
+    scrollbar-width: none;
+}
+
+/* ================================================================
+   Individual slide
+   ================================================================ */
+.slide {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    scroll-snap-align: center;
+}
+
+/* ================================================================
+   Product image
+   ================================================================ */
+.image {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    /* Prevent browser drag ghost */
+    user-select: none;
+    pointer-events: none;
+}
+
+/* ================================================================
+   Navigation buttons (prev / next)
+   ================================================================ */
+.btnPrev,
+.btnNext {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 40px;
+    height: 40px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.88);
+    color: #111827;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 18px;
+
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.14);
+
+    /* Fade in on wrapper hover */
+    opacity: 0;
+    transition:
+        opacity 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+
+    z-index: 2;
+}
+
+/* Show buttons on wrapper hover */
+.wrapper:hover .btnPrev,
+.wrapper:hover .btnNext {
+    opacity: 1;
+}
+
+.btnPrev:hover,
+.btnNext:hover {
+    background: #ffffff;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+}
+
+/* Position */
+.btnPrev {
+    left: 12px;
+    transform: translateY(-50%) translateX(0);
+}
+
+.btnNext {
+    right: 12px;
+    transform: translateY(-50%) translateX(0);
+}
+
+/* ================================================================
+   Responsive — Mobile (< 768px)
+   ================================================================ */
+@media (max-width: 768px) {
+
+    .container {
+        height: 320px;
+    }
+
+    /* Always show buttons on touch devices */
+    .btnPrev,
+    .btnNext {
+        opacity: 0.85;
+        width: 36px;
+        height: 36px;
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .container {
+        height: 260px;
+    }
+
+}

@@ -1,0 +1,75 @@
+.loading {
+    padding: 20px;
+    text-align: center;
+    color: #64748b;
+}
+
+.container {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.title {
+    font-size: 24px;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #0f172a;
+}
+
+.subtitle {
+    color: #64748b;
+    margin-bottom: 24px;
+}
+
+.cardGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 350px));
+    gap: 20px;
+}
+
+.card {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.cardHeader {
+    font-size: 14px;
+    font-weight: 600;
+    color: #64748b;
+}
+
+.cardValue {
+    font-size: 48px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.cardFooter {
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+.actionBtn {
+    margin-top: 8px;
+    padding: 8px 16px;
+    background-color: #0f172a;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    text-align: center;
+}
+
+.actionBtn:hover {
+    background-color: #1e293b;
+}

@@ -1,0 +1,48 @@
+CREATE TABLE Reviews (
+    ReviewId BIGINT AUTO_INCREMENT PRIMARY KEY,
+
+    ProductId BIGINT NOT NULL,
+    UserId VARCHAR(50) NOT NULL,
+    OrderItemId BIGINT NULL,
+
+    Rating TINYINT NOT NULL CHECK (Rating BETWEEN 1 AND 5),
+
+    Content TEXT NOT NULL,
+
+    IsHidden TINYINT DEFAULT 0,
+
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (ProductId) REFERENCES Products(ProductId) ON DELETE CASCADE,
+    FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE
+);
+
+CREATE TABLE Review_Images (
+    ReviewImageId BIGINT AUTO_INCREMENT PRIMARY KEY,
+
+    ReviewId BIGINT NOT NULL,
+    ImageUrl LONGTEXT NOT NULL,
+    SortOrder INT DEFAULT 0,
+
+    FOREIGN KEY (ReviewId) REFERENCES Reviews(ReviewId) ON DELETE CASCADE
+);
+
+CREATE TABLE Review_Replies (
+    ReplyId BIGINT AUTO_INCREMENT PRIMARY KEY,
+
+    ReviewId BIGINT NOT NULL UNIQUE,
+    ShopId BIGINT NOT NULL,
+
+    Content TEXT NOT NULL,
+
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (ReviewId) REFERENCES Reviews(ReviewId) ON DELETE CASCADE,
+    FOREIGN KEY (ShopId) REFERENCES Shops(ShopId) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_reviews_product ON Reviews(ProductId);
+CREATE INDEX idx_reviews_user ON Reviews(UserId);
+CREATE INDEX idx_reviews_rating ON Reviews(ProductId, Rating);
+CREATE INDEX idx_reviews_created ON Reviews(ProductId, CreatedAt);

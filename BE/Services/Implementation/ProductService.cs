@@ -1,0 +1,356 @@
+using BE.Constants;
+using BE.Data;
+using BE.Models.DTOs;
+using BE.Models.Entities;
+using BE.Repositories.Interfaces;
+using BE.Services.Interface.Product;
+using BE.Utils;
+using Microsoft.EntityFrameworkCore;
+
+namespace BE.Services.Implementation
+{
+    /// <summary>
+    /// Handles product write operations (command side),
+    /// including create, update and soft delete.
+    ///
+    /// Responsibilities:
+    /// - Manage product lifecycle mutations
+    /// - Create variants and initialize inventory
+    /// - Enforce seller ownership checks
+    /// - Coordinate transactional consistency
+    ///
+    /// </summary>
+    public class ProductService : IProductService
+    {
+        private readonly IProductRepository _productRepository;
+
+
+        private readonly ApplicationDbContext _context;
+
+        public ProductService(IProductRepository productRepository, ApplicationDbContext context)
+        {
+            _productRepository = productRepository;
+            _context = context;
+        }
+
+        /// <summary>
+        /// Creates a new product with variants and initializes inventory
+        /// in a single database transaction.
+        ///
+        /// Includes:
+        /// - Product creation
+        /// - Variant creation
+        /// - Inventory bootstrap
+        ///
+        /// Rolls back all changes if any step fails.
+        /// </summary>
+        public async Task<ProductResponse> CreateProductAsync(
+            string sellerUserId,
+            CreateProductRequest request)
+        {
+            using var tx = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                var shop = await _context.Shops
+                    .FirstOrDefaultAsync(x => x.OwnerId == sellerUserId);
+                if (shop == null)
+                    throw new Exception("Shop not found");
+
+                var baseSlug = SlugHelper.GenerateSlug(request.Name);
+                var slug = await GenerateUniqueSlugAsync(baseSlug);
+
+                var product = new Product
+                {
+                    Name = request.Name,
+                    Slug = slug,
+                    Description = request.Description,
+                    ShopId = shop.ShopId,
+                    RetailerId = sellerUserId,
+                    CategoryId = request.CategoryId,
+                    BrandId = request.BrandId,
+                    Status = ProductConstants.ProductStatusActive,
+                    Image = request.ImageUrl,
+                    CreatedAt = DateTime.UtcNow,
+                };
+
+                _context.Products.Add(product);
+                await _context.SaveChangesAsync();
+
+                int totalStock = 0;
+
+                foreach (var variantRequest in request.Variants)
+                {
+                    if (variantRequest.InitialStock < 0)
+                        throw new Exception("Initial stock must be >= 0.");
+
+                    var variant = new ProductVariant
+                    {
+                        ProductId = product.ProductId,
+                        Price = variantRequest.Price,
+                        Stock = variantRequest.InitialStock
+                    };
+
+                    _context.ProductVariants.Add(variant);
+                    await _context.SaveChangesAsync();
+
+                    // Create Inventory record for each variant
+                    var inventory = new Inventory
+                    {
+                        ProductVariantId = variant.VariantId,
+                        AvailableStock = variantRequest.InitialStock,
+                        ReservedStock = 0,
+                        SoldStock = 0,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow
+                    };
+                    _context.Inventories.Add(inventory);
+
+                    totalStock += variantRequest.InitialStock;
+                }
+
+                // Auto set OUT_OF_STOCK if total stock = 0
+                if (totalStock == 0)
+                {
+                    product.Status = ProductConstants.ProductStatusOutOfStock;
+                }
+
+                await _context.SaveChangesAsync();
+                await tx.CommitAsync();
+
+                return new ProductResponse
+                {
+                    ProductId = product.ProductId,
+                    Name = product.Name,
+                    Status = product.Status,
+                };
+            }
+            catch (Exception ex)
+            {
+                await tx.RollbackAsync();
+                throw new Exception(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Updates mutable product information
+        /// after validating seller ownership.
+        ///
+        /// </summary>
+        public async Task<ProductResponse> UpdateProductAsync(
+            long productId,
+            string sellerUserId,
+            UpdateProductRequest request)
+        {
+            var product = await _context.Products
+                .Include(x => x.Shop)
+                .FirstOrDefaultAsync(x => x.ProductId == productId);
+
+            if (product == null)
+                throw new Exception("Product not found");
+
+            if (product.Shop.OwnerId != sellerUserId)
+                throw new UnauthorizedAccessException();
+
+            if (!string.IsNullOrWhiteSpace(request.Name)
+                && request.Name != product.Name)
+            {
+                var baseSlug = SlugHelper.GenerateSlug(request.Name);
+                product.Slug = await GenerateUniqueSlugAsync(baseSlug);
+            }
+
+            product.Name = request.Name;
+            product.Description = request.Description;
+            product.Status = request.Status;
+            product.Price = request.Price;
+            
+            if (request.ImageUrl != null)
+            {
+                product.Image = request.ImageUrl;
+            }
+
+            // Auto update status based on stock
+            if (request.Stock == 0)
+            {
+                product.Status = ProductConstants.ProductStatusOutOfStock;
+            }
+            else if (product.Status == ProductConstants.ProductStatusOutOfStock && request.Stock > 0)
+            {
+                product.Status = ProductConstants.ProductStatusActive;
+            }
+
+            // Update default variant & inventory
+            var variant = await _context.ProductVariants
+                .Include(v => v.Inventory)
+                .FirstOrDefaultAsync(v => v.ProductId == productId);
+            if (variant != null)
+            {
+                variant.Price = request.Price;
+                variant.Stock = request.Stock;
+                if (variant.Inventory != null)
+                {
+                    variant.Inventory.AvailableStock = request.Stock;
+                    variant.Inventory.UpdatedAt = DateTime.UtcNow;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            return new ProductResponse
+            {
+                ProductId = product.ProductId,
+                Name = product.Name,
+                Status = product.Status,
+            };
+        }
+
+        /// <summary>
+        /// Soft deletes a product by marking status as deleted,
+        /// preserving historical order/cart references.
+        ///
+        /// Only product owner can perform this action.
+        /// </summary>
+        public async Task DeleteProductAsync(
+            long productId,
+            string sellerUserId)
+        {
+            var product = await _context.Products
+                .Include(x => x.Shop)
+                .FirstOrDefaultAsync(x => x.ProductId == productId);
+            if (product == null)
+                throw new Exception("Product not found");
+
+            if (product.Shop.OwnerId != sellerUserId)
+                throw new UnauthorizedAccessException();
+
+            // Soft delete
+            product.Status = ProductConstants.ProductStatusDeleted;
+
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task<string> GenerateUniqueSlugAsync(string baseSlug)
+        {
+            var slug = baseSlug;
+            var index = 1;
+
+            while (await _context.Products.AnyAsync(p => p.Slug == slug))
+            {
+                slug = $"{baseSlug}-{index}";
+                index++;
+            }
+
+            return slug;
+        }
+
+        /// <summary>
+        /// Lấy toàn bộ sản phẩm của seller (bao gồm deleted).
+        /// Hỗ trợ search theo tên, filter theo status, sort theo nhiều tiêu chí, pagination.
+        /// </summary>
+        public async Task<(IEnumerable<ProductListDto> items, int total)> GetProductsBySellerAsync(
+            string sellerUserId,
+            int page,
+            int pageSize,
+            string? search,
+            string? status,
+            string? sortBy)
+        {
+            // Tìm shop của seller
+            var shop = await _context.Shops
+                .AsNoTracking()
+                .FirstOrDefaultAsync(s => s.OwnerId == sellerUserId);
+
+            if (shop == null)
+                return (Enumerable.Empty<ProductListDto>(), 0);
+
+            // Query toàn bộ products (bao gồm deleted vì soft delete)
+            var query = _context.Products
+                .AsNoTracking()
+                .Include(p => p.Category)
+                .Include(p => p.Brand)
+                .Include(p => p.Variants)
+                    .ThenInclude(v => v.Inventory)
+                .Include(p => p.Images)
+                .Where(p => p.ShopId == shop.ShopId);
+
+            // SEARCH theo tên
+            if (!string.IsNullOrWhiteSpace(search))
+                query = query.Where(p => p.Name.Contains(search));
+
+            // FILTER theo status (nếu không truyền thì lấy tất cả)
+            if (!string.IsNullOrWhiteSpace(status) && status.ToLower() != "all")
+                query = query.Where(p => p.Status == status.ToLower());
+
+            // PROJECT — tính stock/sold từ Inventory
+            var projected = query.Select(p => new
+            {
+                Product = p,
+
+                AvailableStock = p.Variants
+                    .Sum(v => v.Inventory != null
+                        ? v.Inventory.AvailableStock - v.Inventory.ReservedStock
+                        : 0),
+
+                SoldCount = p.Variants
+                    .Sum(v => v.Inventory != null ? v.Inventory.SoldStock : 0),
+
+                FinalPrice = p.Variants.Any()
+                    ? p.Variants.Min(v =>
+                        (p.DiscountPrice ?? p.Price) + (v.Price ?? 0))
+                    : (p.DiscountPrice ?? p.Price)
+            });
+
+            // SORT
+            projected = sortBy?.ToLower() switch
+            {
+                "price_asc" => projected.OrderBy(x => x.FinalPrice),
+                "price_desc" => projected.OrderByDescending(x => x.FinalPrice),
+                "sold" => projected.OrderByDescending(x => x.SoldCount),
+                "stock_asc" => projected.OrderBy(x => x.AvailableStock),
+                "stock_desc" => projected.OrderByDescending(x => x.AvailableStock),
+                "oldest" => projected.OrderBy(x => x.Product.CreatedAt),
+                "name_asc" => projected.OrderBy(x => x.Product.Name),
+                "name_desc" => projected.OrderByDescending(x => x.Product.Name),
+                _ => projected.OrderByDescending(x => x.Product.CreatedAt) // mặc định: mới nhất
+            };
+
+            // Pagination
+            page = page <= 0 ? 1 : page;
+            pageSize = pageSize <= 0 ? 20 : pageSize;
+            pageSize = Math.Min(pageSize, 100);
+
+            var total = await projected.CountAsync();
+
+            var items = await projected
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(x => new ProductListDto
+                {
+
+                    Id = x.Product.ProductId,
+                    Name = x.Product.Name,
+                    Slug = x.Product.Slug,
+                    Price = x.Product.Price,
+                    DiscountPrice = x.Product.DiscountPrice,
+                    FinalPrice = x.FinalPrice,
+                    AvailableStock = x.AvailableStock,
+                    Stock = x.AvailableStock,
+                    ImageUrl = x.Product.Images
+                        .Where(i => i.IsPrimary)
+                        .Select(i => i.ImageUrl)
+                        .FirstOrDefault() ?? x.Product.Image,
+                    RatingAvg = x.Product.RatingAvg,
+                    RatingCount = x.Product.RatingCount,
+                    CategoryName = x.Product.Category != null ? x.Product.Category.Type : null,
+                    BrandName = x.Product.Brand != null ? x.Product.Brand.Name : null,
+                    Status = x.Product.Status,
+                    CreatedAt = x.Product.CreatedAt,
+                    SoldCount = x.SoldCount,
+                    Description = x.Product.Description
+                })
+                .ToListAsync();
+
+            return (items, total);
+        }
+
+    }
+}
