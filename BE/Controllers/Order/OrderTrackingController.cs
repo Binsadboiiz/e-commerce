@@ -1,3 +1,4 @@
+using BE.Constants;
 using BE.Helpers;
 using BE.Models.DTOs;
 using BE.Services.Interface.Order;
@@ -48,6 +49,7 @@ namespace BE.Controllers.Order
         /// <summary>
         /// Updates tracking status for an order.
         /// </summary>
+        [Authorize(Roles = RoleConstants.Seller)]
         [HttpPut("Order:{orderId}/status")]
         public async Task<IActionResult> UpdateStatus(long orderId, UpdateTrackingStatusRequest request)
         {
