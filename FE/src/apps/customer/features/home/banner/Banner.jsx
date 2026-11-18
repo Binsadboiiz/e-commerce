@@ -1,4 +1,5 @@
-import styles from "./Banner.module.css"
+import styles from "./Banner.module.css";
+import { banners } from "./bannerConfig";
 
 export default function Banner() {
     return (
@@ -8,12 +9,17 @@ export default function Banner() {
 
                     {/* left banners */}
                     <div className={styles.bannerLeft}>
-                        <div className={styles.bannerItem}>
-                            <img src="/banner-left-1.jpg" alt="banner" />
-                        </div>
-                        <div className={styles.bannerItem}>
-                            <img src="/banner-left-2.jpg" alt="banner" />
-                        </div>
+                        {banners.left.map(banner => (
+                            <div key={banner.id} className={styles.bannerItem}>
+                                {banner.linkTo ? (
+                                    <a href={banner.linkTo}>
+                                        <img src={banner.imageUrl} alt="banner left" width="350" height="120" loading="lazy" decoding="async" />
+                                    </a>
+                                ) : (
+                                    <img src={banner.imageUrl} alt="banner left" width="350" height="120" loading="lazy" decoding="async" />
+                                )}
+                            </div>
+                        ))}
                     </div>
 
                     {/* center banner */}
@@ -21,37 +27,61 @@ export default function Banner() {
                         <div className={styles.bannerSlider}>
 
                             <div className={styles.bannerTrack}>
-                                <div className={styles.bannerSlide}>
-                                    <img src="/banner1.jpg" alt="banner" />
-                                </div>
-                                <div className={styles.bannerSlide}>
-                                    <img src="/banner2.jpg" alt="banner" />
-                                </div>
-                                <div className={styles.bannerSlide}>
-                                    <img src="/banner3.jpg" alt="banner" />
-                                </div>
+                                {banners.main.map((banner, index) => (
+                                    <div key={banner.id} className={styles.bannerSlide}>
+                                        {banner.linkTo ? (
+                                            <a href={banner.linkTo}>
+                                                <img 
+                                                    src={banner.imageUrl} 
+                                                    alt="banner main" 
+                                                    width="800" 
+                                                    height="400" 
+                                                    loading={index === 0 ? "eager" : "lazy"} 
+                                                    fetchPriority={index === 0 ? "high" : "auto"}
+                                                    decoding="async" 
+                                                />
+                                            </a>
+                                        ) : (
+                                            <img 
+                                                src={banner.imageUrl} 
+                                                alt="banner main" 
+                                                width="800" 
+                                                height="400" 
+                                                loading={index === 0 ? "eager" : "lazy"} 
+                                                fetchPriority={index === 0 ? "high" : "auto"}
+                                                decoding="async" 
+                                            />
+                                        )}
+                                    </div>
+                                ))}
                             </div>
 
                             {/* dots */}
                             <div className={styles.bannerDots}>
-                                <span className={`${styles.dot} ${styles.active}`}></span>
-                                <span className={styles.dot}></span>
-                                <span className={styles.dot}></span>
+                                {banners.main.map((banner, index) => (
+                                    <span 
+                                        key={banner.id} 
+                                        className={`${styles.dot} ${index === 0 ? styles.active : ''}`}
+                                    ></span>
+                                ))}
                             </div>
 
                         </div>
                     </div>
 
-
-
                     {/* right banners */}
                     <div className={styles.bannerRight}>
-                        <div className={styles.bannerItem}>
-                            <img src="/banner-right-1.jpg" alt="banner" />
-                        </div>
-                        <div className={styles.bannerItem}>
-                            <img src="/banner-right-2.jpg" alt="banner" />
-                        </div>
+                        {banners.right.map(banner => (
+                            <div key={banner.id} className={styles.bannerItem}>
+                                {banner.linkTo ? (
+                                    <a href={banner.linkTo}>
+                                        <img src={banner.imageUrl} alt="banner right" width="350" height="120" loading="lazy" decoding="async" />
+                                    </a>
+                                ) : (
+                                    <img src={banner.imageUrl} alt="banner right" width="350" height="120" loading="lazy" decoding="async" />
+                                )}
+                            </div>
+                        ))}
                     </div>
 
                 </div>

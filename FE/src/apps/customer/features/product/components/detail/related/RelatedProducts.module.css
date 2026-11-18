@@ -144,51 +144,7 @@
     text-decoration: line-through;
 }
 
-/* ================================================================
-   Skeleton shimmer
-   ================================================================ */
-@keyframes shimmer {
-    0%   { background-position: -400px 0; }
-    100% { background-position:  400px 0; }
-}
 
-.skeletonCard {
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid #f3f4f6;
-    background: #ffffff;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding-bottom: 12px;
-}
-
-.skeletonImg,
-.skeletonLine,
-.skeletonLineShort {
-    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 37%, #f0f0f0 63%);
-    background-size: 800px 100%;
-    animation: shimmer 1.5s ease infinite;
-}
-
-.skeletonImg {
-    width: 100%;
-    aspect-ratio: 1;
-}
-
-.skeletonLine {
-    height: 13px;
-    border-radius: 4px;
-    width: 85%;
-    margin: 0 12px;
-}
-
-.skeletonLineShort {
-    height: 13px;
-    border-radius: 4px;
-    width: 50%;
-    margin: 0 12px;
-}
 
 /* ================================================================
    Responsive — Mobile (< 480px)

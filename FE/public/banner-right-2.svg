@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 150" width="100%" height="100%">
+  <defs>
+    <linearGradient id="br2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c3aed" />
+      <stop offset="100%" stop-color="#5b21b6" />
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#br2)" rx="12" />
+  <text x="24" y="60" font-family="Inter, -apple-system, sans-serif" font-weight="700" font-size="20" fill="#ffffff">Đặc Quyền Thành Viên</text>
+  <text x="24" y="90" font-family="Inter, -apple-system, sans-serif" font-weight="400" font-size="14" fill="#ede9fe">Tích điểm đổi quà không giới hạn</text>
+  <rect x="24" y="105" width="90" height="26" rx="6" fill="#ffffff" />
+  <text x="69" y="122" font-family="Inter, -apple-system, sans-serif" font-weight="700" font-size="12" fill="#5b21b6" text-anchor="middle">XEM NGAY</text>
+</svg>

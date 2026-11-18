@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 150" width="100%" height="100%">
+  <defs>
+    <linearGradient id="br1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#059669" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#br1)" rx="12" />
+  <text x="24" y="60" font-family="Inter, -apple-system, sans-serif" font-weight="700" font-size="20" fill="#ffffff">Freeship Extra</text>
+  <text x="24" y="90" font-family="Inter, -apple-system, sans-serif" font-weight="400" font-size="14" fill="#d1fae5">Tối đa 70k cho đơn từ 0đ</text>
+  <rect x="24" y="105" width="90" height="26" rx="6" fill="#facc15" />
+  <text x="69" y="122" font-family="Inter, -apple-system, sans-serif" font-weight="700" font-size="12" fill="#047857" text-anchor="middle">LẤY MÃ</text>
+</svg>

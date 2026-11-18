@@ -14,34 +14,38 @@
 .quantity {
     display: flex;
     align-items: center;
-    border: 1.5px solid #e5e7eb;
-    border-radius: 999px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: var(--radius-md, 8px);
     overflow: hidden;
-    height: 48px;
+    height: 44px;
+    box-sizing: border-box;
     flex-shrink: 0;
     background: #ffffff;
     transition: border-color 0.2s ease;
 }
 
 .quantity:focus-within {
-    border-color: #9ca3af;
+    border-color: var(--color-primary, #2563eb);
 }
 
 /* Stepper buttons */
 .quantity button {
-    width: 44px;
-    height: 48px;
+    width: 31px;
+    height: 100%;
     border: none;
     background: transparent;
-    font-size: 18px;
-    font-weight: 400;
+    font-size: 15px;
+    font-weight: 500;
     color: #374151;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: background 0.15s ease;
 }
 
 .quantity button:hover:not(:disabled) {
-    background: #f3f4f6;
+    background: #f1f5f9;
 }
 
 .quantity button:disabled {
@@ -51,16 +55,16 @@
 
 /* Quantity display input */
 .quantity input {
-    width: 48px;
-    height: 48px;
+    width: 38px;
+    height: 100%;
     border: none;
     outline: none;
     text-align: center;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     background: transparent;
-    color: #111827;
-    pointer-events: none;
+    color: #0f172a;
+    cursor: text;
 }
 
 /* Hide number input spinners */
@@ -85,12 +89,13 @@
     align-items: center;
     gap: 8px;
 
-    height: 48px;
+    height: 44px;
+    box-sizing: border-box;
     flex: 1;
     min-width: 0;
 
-    border-radius: 999px;
-    font-size: 15px;
+    border-radius: var(--radius-md, 8px);
+    font-size: 14px;
     font-weight: 600;
     letter-spacing: 0.01em;
     cursor: pointer;
@@ -108,22 +113,22 @@
 }
 
 /* ================================================================
-   Add to Cart — outlined button
+   Add to Cart — outlined primary button
    ================================================================ */
 .addCartBtn {
     background: #ffffff;
-    color: #111827;
-    border: 1.5px solid #111827;
+    color: var(--color-primary, #2563eb);
+    border: 1.5px solid var(--color-primary, #2563eb);
 }
 
 .addCartBtn:hover:not(:disabled) {
-    background: #f9fafb;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: var(--color-primary-light, #dbeafe);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
 }
 
 /* Cart icon sizing */
 .addCartBtn svg {
-    font-size: 19px;
+    font-size: 18px;
     flex-shrink: 0;
 }
 
@@ -131,14 +136,15 @@
    Buy Now — solid primary button
    ================================================================ */
 .buyBtn {
-    background: #111827;
-    color: #ffffff;
-    border: 1.5px solid #111827;
+    background: var(--color-primary, #2563eb);
+    color: #ffffff !important;
+    border: 1.5px solid var(--color-primary, #2563eb);
 }
 
 .buyBtn:hover:not(:disabled) {
-    background: #1f2937;
-    box-shadow: 0 4px 16px rgba(17, 24, 39, 0.28);
+    background: var(--color-primary-active, #1d4ed8);
+    border-color: var(--color-primary-active, #1d4ed8);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
 }
 
 /* ================================================================

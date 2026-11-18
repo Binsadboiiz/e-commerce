@@ -1,4 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt; 
+using System.IdentityModel.Tokens.Jwt; 
 using System.Security.Claims; 
 using System.Text; 
 using BE.Models.Entities; 
@@ -26,8 +26,8 @@ namespace BE.Helpers
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, userId), // Định danh duy nhất của người dùng
-                new Claim(ClaimTypes.Email, email)          // Email người dùng
-                //new Claim(ClaimTypes.Role, role)             // Vai trò (Phân quyền)
+                new Claim(ClaimTypes.Email, email),          // Email người dùng
+                new Claim(ClaimTypes.Role, roles)             // Vai trò (Phân quyền)
             };
 
             if (!string.IsNullOrWhiteSpace(roles))
@@ -50,7 +50,7 @@ namespace BE.Helpers
             // 4. Cấu hình các thành phần chính của JWT
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(30),
+                expires: DateTime.UtcNow.AddMinutes(60),
                 signingCredentials: creds
             );
 

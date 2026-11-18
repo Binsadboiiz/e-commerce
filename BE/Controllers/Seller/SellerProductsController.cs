@@ -19,10 +19,18 @@ namespace BE.Controllers.Seller
     [Route("api/seller/products")]
     public class SellerProductsController : ControllerBase
     {
-        private readonly IProductService _productService;
-        public SellerProductsController(IProductService productService)
+        private readonly IProductCreationService _productCreationService;
+        private readonly IProductUpdateService _productUpdateService;
+        private readonly ISellerProductService _sellerProductService;
+
+        public SellerProductsController(
+            IProductCreationService productCreationService,
+            IProductUpdateService productUpdateService,
+            ISellerProductService sellerProductService)
         {
-            _productService = productService;
+            _productCreationService = productCreationService;
+            _productUpdateService = productUpdateService;
+            _sellerProductService = sellerProductService;
         }
         
         /// <summary>
@@ -40,7 +48,7 @@ namespace BE.Controllers.Seller
         {
             string userId = UserClaimsHelper.GetUserId(User);
 
-            var (items, total) = await _productService
+            var (items, total) = await _sellerProductService
                 .GetProductsBySellerAsync(userId, page, pageSize, search, status, sortBy);
 
             var data = new
@@ -54,6 +62,18 @@ namespace BE.Controllers.Seller
 
             return Ok(ApiResponse<object>.SuccessResponse(data));
         }
+
+        [HttpGet("{productId}")]
+        public async Task<IActionResult> GetProductById(long productId)
+        {
+            string userId = UserClaimsHelper.GetUserId(User);
+            var product = await _sellerProductService.GetSellerProductByIdAsync(productId, userId);
+            if (product == null)
+            {
+                return NotFound(ApiResponse<object>.FailureResponse("Product not found or access denied."));
+            }
+            return Ok(ApiResponse<object>.SuccessResponse(product));
+        }
         
         [HttpPost("")]
         public async Task<IActionResult> CreateProduct(
@@ -65,11 +85,11 @@ namespace BE.Controllers.Seller
 
             if (errors.Any())
             {
-                return BadRequest(ApiResponse<object>.FailureResponse("Validation failed."));
+                return BadRequest(ApiResponse<object>.FailureResponse(string.Join("; ", errors)));
             }
             string userId = UserClaimsHelper.GetUserId(User);
 
-            var result = await _productService
+            var result = await _productCreationService
                 .CreateProductAsync(userId, request);
 
             return Ok(ApiResponse<ProductResponse>.SuccessResponse(result, "Product created successfully."));
@@ -80,9 +100,15 @@ namespace BE.Controllers.Seller
             long productId,
             UpdateProductRequest request)
         {
+            var errors = new ProductValidator().ValidateStatus(request.Status);
+            if (errors.Any())
+            {
+                return BadRequest(ApiResponse<object>.FailureResponse(string.Join(" ", errors)));
+            }
+
             string userId = UserClaimsHelper.GetUserId(User);
 
-            var result = await _productService
+            var result = await _productUpdateService
                 .UpdateProductAsync(
                     productId,
                     userId,
@@ -97,7 +123,7 @@ namespace BE.Controllers.Seller
         {
             string userId = UserClaimsHelper.GetUserId(User);
 
-            await _productService.DeleteProductAsync(
+            await _sellerProductService.DeleteProductAsync(
                 productId,
                 userId);
 

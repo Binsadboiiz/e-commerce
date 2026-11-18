@@ -32,6 +32,7 @@ import {
 import toast from "react-hot-toast";
 import styles from "./SellerDashboard.module.css";
 import { sellerDashboardApi } from "../api/sellerDashboardApi";
+import SellerDashboardSkeleton from "../components/SellerDashboardSkeleton";
 
 /**
  * SellerDashboard Component
@@ -243,14 +244,7 @@ export const SellerDashboard = () => {
     // Render loading skeletons
     // ----------------------------------------------------
     if (isLoading && !stats) {
-        return (
-            <div className={styles.container} style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "400px" }}>
-                <div className="d-flex flex-column align-items-center gap-3">
-                    <RefreshCw size={40} className="animate-spin text-primary" />
-                    <p className="text-secondary font-semibold">Loading dashboard stats...</p>
-                </div>
-            </div>
-        );
+        return <SellerDashboardSkeleton />;
     }
 
     return (
@@ -263,12 +257,12 @@ export const SellerDashboard = () => {
                 </div>
                 <div className={styles.filterActions}>
                     <div className="d-flex align-items-center gap-2">
-                        
+                        <Calendar size={18} className="text-secondary" />
                         <select 
                             className={styles.select} 
                             value={timeRange} 
                             onChange={(e) => setTimeRange(e.target.value)}
-                        > <Calendar size={18} className="text-secondary" />
+                        >
                             <option value="today">Today</option>
                             <option value="7d">Last 7 days</option>
                             <option value="30d">Last 30 days</option>
@@ -534,6 +528,7 @@ export const SellerDashboard = () => {
                                 <th>Order ID</th>
                                 <th>Product</th>
                                 <th>Customer</th>
+                                <th>Email</th>
                                 <th>Date</th>
                                 <th>Amount</th>
                                 <th>Payment</th>
@@ -565,7 +560,10 @@ export const SellerDashboard = () => {
                                         </td>
                                         <td>
                                             <div className="d-flex flex-column">
-                                                <span className="font-semibold">{order.customer}</span>
+                                                <span className="font-semibold">{order.customer}</span>                                            </div>
+                                        </td>
+                                        <td>
+                                            <div className="d-flex flex-column">
                                                 <span className="text-secondary text-xs">{order.email}</span>
                                             </div>
                                         </td>

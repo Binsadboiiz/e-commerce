@@ -1,6 +1,6 @@
 using BE.Models.DTOs;
 using BE.Models.DTOs.Reviews;
-using BE.Services.Interface;
+using BE.Services.Interface.Review;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;

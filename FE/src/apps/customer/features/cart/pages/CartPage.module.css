@@ -1,15 +1,11 @@
 .page {
     min-height: calc(100vh - 120px);
-    background:
-        radial-gradient(circle at 0% 0%, rgba(238, 77, 45, 0.08) 0, transparent 28%),
-        radial-gradient(circle at 100% 100%, rgba(238, 77, 45, 0.04) 0, transparent 24%),
-        var(--color-bg-page);
 }
 
 .container {
-    width: min(1100px, 100%);
+    width: 100%;
+    max-width: 1280px;
     margin: 0 auto;
-    padding: 32px 16px 44px;
 }
 
 .header {
@@ -27,15 +23,13 @@
 }
 
 .tableHeader {
-    background-color: #ffffff;
-    border: 1px solid #eceef2;
-    border-radius: 12px;
-    padding: 14px 24px;
-    margin-bottom: 16px;
+    background-color: transparent;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 14px 0;
+    margin-bottom: 4px;
     display: none;
     align-items: center;
     gap: 16px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
 }
 
 @media (min-width: 768px) {
@@ -45,26 +39,19 @@
 }
 
 .shopCard {
-    background: linear-gradient(180deg, #ffffff 0%, #fffdfb 100%);
-    border: 1px solid #eceef2;
-    border-radius: 16px;
-    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
-    margin-bottom: 20px;
-    padding: 20px 24px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.shopCard:hover {
-    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+    background-color: transparent;
+    border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 8px;
+    padding: 0 0 8px;
 }
 
 .shopHeader {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding-bottom: 16px;
+    padding: 16px 0;
     border-bottom: 1px solid #f1f5f9;
-    margin-bottom: 4px;
+    margin-bottom: 0;
 }
 
 .cartItem {
@@ -80,15 +67,87 @@
     padding-bottom: 8px;
 }
 
+.cartItemUnavailable {
+    display: grid;
+    grid-template-columns: 20px 80px minmax(0, 1fr);
+    grid-template-areas:
+        "select image product"
+        "warning warning warning";
+    column-gap: 16px;
+    row-gap: 12px;
+}
+
+.cartItemUnavailable > :first-child {
+    grid-area: select;
+}
+
+.cartItemUnavailable .productImage {
+    grid-area: image;
+}
+
+.cartItemUnavailable .productInfo {
+    grid-area: product;
+}
+
+.cartItemUnavailable .stockWarning {
+    grid-area: warning;
+    margin-top: 0;
+}
+
+.saleBadge {
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.productInfo {
+    min-width: 0;
+}
+
+.stockWarning {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin-top: 8px;
+    padding: 8px 10px;
+    border-left: 3px solid #c74747;
+    border-radius: 3px;
+    background: #fff0e8;
+    color: #4b5563;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.stockWarning svg {
+    flex: 0 0 auto;
+    width: 17px;
+    height: 17px;
+    margin-top: 2px;
+    color: #c74747;
+}
+
+.stockWarningContent {
+    min-width: 0;
+}
+
+.stockWarning button {
+    display: inline;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+}
+
 .footerSticky {
     position: sticky;
     bottom: 16px;
     z-index: 10;
     background-color: #ffffff;
-    border: 1px solid #eceef2;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-    padding: 16px 24px;
+    border-top: 1px solid #e2e8f0;
+    padding: 16px 0;
     margin-top: 24px;
     display: flex;
     align-items: center;
@@ -96,11 +155,33 @@
     gap: 16px;
 }
 
+.footerActions {
+    flex-shrink: 0;
+}
+
+.totalAmount {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.totalAmountLabel {
+    margin-right: 8px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.totalAmountValue {
+    color: #e11d48;
+    font-size: 20px;
+    font-weight: 700;
+}
+
 /* Custom Checkbox Design */
 .checkboxContainer {
     position: relative;
-    display: flex;
+    display: inline-flex;
     align-items: center;
+    gap: 10px;
     cursor: pointer;
     user-select: none;
 }
@@ -130,9 +211,14 @@
     border-color: #94a3b8;
 }
 
+.checkboxDisabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
 .checkboxInput:checked ~ .checkboxCustom {
-    background-color: #ee4d2d;
-    border-color: #ee4d2d;
+    background-color: var(--color-primary, #2563eb);
+    border-color: var(--color-primary, #2563eb);
 }
 
 .checkboxCheckmark {
@@ -147,26 +233,22 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background-color: #111827;
+    background-color: var(--color-primary, #2563eb);
     color: #ffffff !important;
-    border: 1.5px solid #111827;
+    border: none;
     border-radius: 8px;
-    padding: 12px 28px;
+    padding: 10px 24px;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
     text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    box-shadow: 0 2px 4px rgba(17, 24, 39, 0.08);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .buttonPrimary:hover:not(:disabled) {
-    background-color: #1f2937;
-    border-color: #1f2937;
-    box-shadow: 0 4px 12px rgba(17, 24, 39, 0.15);
-    transform: translateY(-1px);
+    background-color: var(--color-primary-active, #1d4ed8);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
 }
 
 .buttonPrimary:active:not(:disabled) {
@@ -174,7 +256,7 @@
 }
 
 .buttonPrimary:disabled {
-    opacity: 0.4;
+    opacity: 0.5;
     cursor: not-allowed;
 }
 
@@ -203,4 +285,136 @@
 
 .buttonSecondary:active {
     transform: scale(0.98);
+}
+
+@media (max-width: 767px) {
+    .footerSticky {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 12px;
+        padding: 12px 0;
+    }
+
+    .footerActions {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 12px !important;
+        width: 100%;
+    }
+
+    .totalAmount {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 5px;
+        min-width: 0;
+        white-space: normal;
+    }
+
+    .totalAmountLabel {
+        margin-right: 0;
+        font-size: 13px;
+        line-height: 1.3;
+    }
+
+    .totalAmountValue {
+        font-size: 19px;
+        line-height: 1.25;
+        white-space: nowrap;
+    }
+
+    .buttonPrimary {
+        min-width: 112px;
+        white-space: nowrap;
+    }
+
+    .cartItem {
+        display: grid;
+        grid-template-columns: 20px 72px minmax(0, 1fr) auto;
+        grid-template-areas:
+            "select image title remove"
+            "select image variant quantity"
+            "select image price price";
+        align-items: center;
+        column-gap: 10px;
+        row-gap: 9px;
+        padding: 16px 0;
+    }
+
+    .cartItemUnavailable {
+        grid-template-areas:
+            "select image title title"
+            "select image variant variant"
+            "warning warning warning warning";
+        grid-template-columns: 20px 72px minmax(0, 1fr) auto;
+        row-gap: 12px;
+    }
+
+    .cartItem > :first-child {
+        grid-area: select;
+        align-self: start;
+        padding-top: 3px;
+    }
+
+    .productImage {
+        grid-area: image;
+        width: 72px;
+        height: 72px;
+        align-self: start;
+    }
+
+    .productInfo {
+        display: contents;
+    }
+
+    .productName {
+        grid-area: title;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+        padding-right: 0;
+        align-self: start;
+    }
+
+    .variantInfo {
+        grid-area: variant;
+        min-width: 0;
+        margin-top: 0 !important;
+    }
+
+    .variantInfo span {
+        max-width: 100%;
+        white-space: normal;
+    }
+
+    .stockWarning {
+        align-self: start;
+        padding: 8px 10px;
+        gap: 8px;
+    }
+
+    .quantityCell {
+        grid-area: quantity;
+        justify-self: end;
+    }
+
+    .subtotalCell {
+        grid-area: price;
+        width: auto !important;
+        text-align: left;
+        justify-self: start;
+    }
+
+    .saleBadge {
+        display: flex;
+        width: fit-content;
+        margin-left: 0;
+        margin-top: 4px;
+    }
+
+    .removeCell {
+        grid-area: remove;
+        justify-self: end;
+    }
 }

@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import { ROUTES } from "@/config/route.config";
 import { ArrowRight } from "lucide-react";
+import { useLanguage } from "@/shared/context/LanguageContext";
 import { currency, formatDateTime } from "../utils/orderFormat";
 import OrderStatusBadge from "./OrderStatusBadge";
+import OrderMiniTracker from "./OrderMiniTracker";
 import styles from "./OrderCard.module.css";
 
 function buildTrackingPath(orderId) {
@@ -10,14 +12,19 @@ function buildTrackingPath(orderId) {
 }
 
 export default function OrderCard({ order }) {
+    const { t, lang } = useLanguage();
+
     return (
         <article className={styles.card}>
             <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="space-y-1">
-                    <p className="text-xs font-medium text-slate-500">Order ID</p>
+                    <p className="text-xs font-medium text-slate-500">{t('orders.orderId')}</p>
                     <h3 className="text-lg font-bold text-slate-900">#{order.orderId}</h3>
                 </div>
-                <OrderStatusBadge status={order.status} label={order.statusLabel} />
+                <OrderStatusBadge 
+                    status={order.status} 
+                    label={order.statusLabel || statusToLabel(order.status, lang)} 
+                />
             </div>
 
             <div className="mt-4 flex gap-4">
@@ -31,22 +38,27 @@ export default function OrderCard({ order }) {
                     <p className="line-clamp-2 text-sm font-semibold text-slate-800">
                         {order.firstItemName || "Your order"}
                     </p>
-                    <p className="mt-1 text-sm text-slate-500">Total items: {order.itemCount}</p>
+                    <p className="mt-1 text-sm text-slate-500">{t('orders.totalItems')} {order.itemCount}</p>
                 </div>
+            </div>
+
+            {/* Visual Timeline Bar */}
+            <div className="mt-4 pt-3 border-t border-slate-100">
+                <OrderMiniTracker status={order.status} />
             </div>
 
             <div className={styles.metaGrid}>
                 <div>
-                    <p className={styles.metaLabel}>Order date</p>
-                    <p className={styles.metaValue}>{formatDateTime(order.orderDate)}</p>
+                    <p className={styles.metaLabel}>{t('orders.orderDate')}</p>
+                    <p className={styles.metaValue}>{formatDateTime(order.orderDate, lang)}</p>
                 </div>
                 <div>
-                    <p className={styles.metaLabel}>Est. delivery</p>
-                    <p className={styles.metaValue}>{formatDateTime(order.estimatedDeliveryDate)}</p>
+                    <p className={styles.metaLabel}>{t('orders.estimatedDelivery')}</p>
+                    <p className={styles.metaValue}>{formatDateTime(order.estimatedDeliveryDate, lang)}</p>
                 </div>
                 <div>
-                    <p className={styles.metaLabel}>Payment</p>
-                    <p className={`${styles.metaValue} text-[#ee4d2d]`}>{currency.format(order.finalAmount || 0)}</p>
+                    <p className={styles.metaLabel}>{t('orders.payment')}</p>
+                    <p className={`${styles.metaValue} text-[#2563EB]`}>{currency.format(order.finalAmount || 0)}</p>
                 </div>
             </div>
 
@@ -55,10 +67,11 @@ export default function OrderCard({ order }) {
                     to={buildTrackingPath(order.orderId)}
                     className={styles.buttonPrimary}
                 >
-                    Track Order
+                    <span>{t('orders.trackOrder')}</span>
                     <ArrowRight size={14} />
                 </Link>
             </div>
         </article>
     );
 }
+

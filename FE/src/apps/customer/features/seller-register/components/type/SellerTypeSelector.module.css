@@ -1,0 +1,131 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.headerArea {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.headingTitle {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-slate-900, #0f172a);
+    margin: 0 0 0.35rem 0;
+}
+
+.description {
+    font-size: 0.875rem;
+    color: var(--color-slate-500, #64748b);
+    margin: 0;
+}
+
+.notice {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 680px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: var(--color-warning-hover, #d97706);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    box-sizing: border-box;
+}
+
+.noticeIcon {
+    flex-shrink: 0;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 1.25rem;
+    width: 100%;
+    max-width: 680px;
+}
+
+.card {
+    position: relative;
+    background-color: #ffffff;
+    border: 1.5px solid var(--border-color, #e2e8f0);
+    border-radius: var(--radius-lg, 12px);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.15s ease;
+    user-select: none;
+}
+
+.card:hover:not(.disabledCard):not(.selectedCard) {
+    border-color: var(--color-slate-300, #cbd5e1);
+}
+
+.card:focus-visible {
+    outline: none;
+    border-color: var(--color-primary, #2563eb);
+}
+
+.selectedCard {
+    border-color: var(--color-primary, #2563eb);
+    background-color: #ffffff;
+}
+
+.disabledCard {
+    cursor: default;
+    pointer-events: none;
+    opacity: 0.55;
+}
+
+.cardTitle {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-slate-900, #0f172a);
+    margin: 0 0 0.5rem 0;
+    line-height: 1.35;
+}
+
+.cardText {
+    font-size: 0.875rem;
+    color: var(--color-slate-600, #475569);
+    line-height: 1.5;
+    margin: 0 0 1.25rem 0;
+    flex-grow: 1;
+}
+
+.featureList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    width: 100%;
+}
+
+.featureList li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    color: var(--color-slate-700, #334155);
+    line-height: 1.45;
+}
+
+.featureCheck {
+    color: var(--color-primary, #2563eb);
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+}
+
+

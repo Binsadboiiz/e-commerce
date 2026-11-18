@@ -1,0 +1,83 @@
+/* ==========================================================================
+   SELLER DESIGN SYSTEM — BADGES
+   Status badges, pill tags, and semantic indicators.
+   ========================================================================== */
+
+.seller-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: var(--seller-radius-full);
+    font-size: var(--seller-font-size-xs);
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: nowrap;
+    border: 1px solid transparent;
+}
+
+.seller-badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+/* Success (Active, Delivered, Completed) */
+.seller-badge-success {
+    background-color: var(--seller-success-bg);
+    color: var(--seller-success-text);
+    border-color: var(--seller-success-border);
+}
+.seller-badge-success .seller-badge-dot {
+    background-color: var(--seller-success);
+}
+
+/* Warning (Pending, Processing, Inactive) */
+.seller-badge-warning {
+    background-color: var(--seller-warning-bg);
+    color: var(--seller-warning-text);
+    border-color: var(--seller-warning-border);
+}
+.seller-badge-warning .seller-badge-dot {
+    background-color: var(--seller-warning);
+}
+
+/* Danger (Out of stock, Cancelled, Deleted) */
+.seller-badge-danger {
+    background-color: var(--seller-danger-bg);
+    color: var(--seller-danger-text);
+    border-color: var(--seller-danger-border);
+}
+.seller-badge-danger .seller-badge-dot {
+    background-color: var(--seller-danger);
+}
+
+/* Info (Shipped, Confirmed, Reviewing) */
+.seller-badge-info {
+    background-color: var(--seller-info-bg);
+    color: var(--seller-info-text);
+    border-color: var(--seller-info-border);
+}
+.seller-badge-info .seller-badge-dot {
+    background-color: var(--seller-info);
+}
+
+/* Neutral (Draft, Standard, All) */
+.seller-badge-neutral {
+    background-color: var(--seller-surface-subtle);
+    color: var(--seller-text-secondary);
+    border-color: var(--seller-border);
+}
+.seller-badge-neutral .seller-badge-dot {
+    background-color: var(--seller-text-muted);
+}
+
+/* Primary Brand */
+.seller-badge-primary {
+    background-color: var(--seller-primary-light);
+    color: var(--seller-primary);
+    border-color: var(--seller-primary-border);
+}
+.seller-badge-primary .seller-badge-dot {
+    background-color: var(--seller-primary);
+}

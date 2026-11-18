@@ -13,6 +13,13 @@ namespace BE.Data.Configurations
                 .WithMany()
                 .HasForeignKey(ci => ci.VariantId)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            builder.HasIndex(item => new
+            {
+                item.CartId,
+                item.ProductId,
+                item.VariantId
+            }).IsUnique();
         }
     }
 }

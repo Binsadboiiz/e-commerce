@@ -4,9 +4,9 @@ import styles from './ProductSkeleton.module.css';
  * Skeleton placeholder cho product card grid.
  * @param {number} [count=8] - Số lượng card skeleton để render
  */
-export default function ProductSkeleton({ count = 8 }) {
+export default function ProductSkeleton({ count = 8, wrapperClass }) {
     return (
-        <div className={styles.grid}>
+        <div className={wrapperClass || styles.grid}>
             {Array.from({ length: count }).map((_, index) => (
                 <div key={index} className={styles.card}>
                     <div className={styles.image} />

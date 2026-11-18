@@ -1,0 +1,238 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.topBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.titleArea {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.heading {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+}
+
+.badgeCount {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 9999px;
+    background-color: #eff6ff;
+    color: #2563eb;
+    border: 1px solid #dbeafe;
+}
+
+.badgeLimitReached {
+    background-color: #fef2f2;
+    color: #dc2626;
+    border-color: #fecaca;
+}
+
+.btnAdd {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #ffffff;
+    background-color: #2563eb;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.btnAdd:hover:not(:disabled) {
+    background-color: #1d4ed8;
+}
+
+.btnAdd:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.limitWarning {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background-color: #fffbeb;
+    border: 1px solid #fef3c7;
+    border-radius: 0.5rem;
+    color: #92400e;
+    font-size: 0.875rem;
+}
+
+.addressList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.card {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1.25rem;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    transition: all 0.2s ease;
+}
+
+.card:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.cardDefault {
+    border-color: #93c5fd;
+    background-color: #f8fafc;
+}
+
+.infoSection {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.nameRow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.fullName {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.divider {
+    color: #d1d5db;
+}
+
+.phone {
+    font-size: 0.875rem;
+    color: #4b5563;
+}
+
+.defaultBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 0.375rem;
+    background-color: #dcfce7;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+
+.addressText {
+    font-size: 0.875rem;
+    color: #4b5563;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.actionsSection {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btnAction {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #374151;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.btnAction:hover {
+    background-color: #f3f4f6;
+    color: #111827;
+}
+
+.btnActionDanger {
+    color: #dc2626;
+    border-color: #fecaca;
+}
+
+.btnActionDanger:hover {
+    background-color: #fef2f2;
+    color: #b91c1c;
+    border-color: #f87171;
+}
+
+.btnSetDefault {
+    color: #2563eb;
+    border-color: #bfdbfe;
+}
+
+.btnSetDefault:hover {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+}
+
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+    text-align: center;
+    background-color: #f9fafb;
+    border: 2px dashed #e5e7eb;
+    border-radius: 0.75rem;
+    color: #6b7280;
+}
+
+.emptyIcon {
+    color: #9ca3af;
+    margin-bottom: 0.75rem;
+}
+
+.emptyTitle {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.25rem;
+}
+
+.emptyDesc {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-bottom: 1.25rem;
+}

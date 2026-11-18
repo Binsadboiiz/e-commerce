@@ -1,0 +1,101 @@
+/* ==========================================================================
+   SELLER DESIGN SYSTEM — TOKENS
+   Centralized CSS custom properties scoped to Seller Center.
+   ========================================================================== */
+
+:root {
+    /* Brand & Primary */
+    --seller-primary: #2563eb;
+    --seller-primary-hover: #1d4ed8;
+    --seller-primary-active: #1e40af;
+    --seller-primary-light: #eff6ff;
+    --seller-primary-border: #bfdbfe;
+
+    /* Neutrals / Surfaces */
+    --seller-bg: #f8fafc;
+    --seller-surface: #ffffff;
+    --seller-surface-subtle: #f1f5f9;
+    --seller-surface-muted: #f8fafc;
+
+    /* Borders */
+    --seller-border: #e2e8f0;
+    --seller-border-hover: #cbd5e1;
+    --seller-border-focus: #2563eb;
+
+    /* Text Colors */
+    --seller-text-main: #0f172a;
+    --seller-text-secondary: #475569;
+    --seller-text-muted: #94a3b8;
+    --seller-text-white: #ffffff;
+
+    /* Semantic - Success */
+    --seller-success: #10b981;
+    --seller-success-bg: #ecfdf5;
+    --seller-success-text: #065f46;
+    --seller-success-border: #a7f3d0;
+
+    /* Semantic - Warning */
+    --seller-warning: #f59e0b;
+    --seller-warning-bg: #fffbeb;
+    --seller-warning-text: #92400e;
+    --seller-warning-border: #fde68a;
+
+    /* Semantic - Danger */
+    --seller-danger: #ef4444;
+    --seller-danger-hover: #dc2626;
+    --seller-danger-bg: #fef2f2;
+    --seller-danger-text: #991b1b;
+    --seller-danger-border: #fecaca;
+
+    /* Semantic - Info */
+    --seller-info: #3b82f6;
+    --seller-info-bg: #eff6ff;
+    --seller-info-text: #1e40af;
+    --seller-info-border: #bfdbfe;
+
+    /* Typography */
+    --seller-font: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --seller-font-size-xs: 12px;
+    --seller-font-size-sm: 13px;
+    --seller-font-size-base: 14px;
+    --seller-font-size-md: 15px;
+    --seller-font-size-lg: 18px;
+    --seller-font-size-xl: 20px;
+    --seller-font-size-2xl: 24px;
+    --seller-font-size-3xl: 28px;
+
+    /* Spacing Scale */
+    --seller-space-1: 4px;
+    --seller-space-2: 8px;
+    --seller-space-3: 12px;
+    --seller-space-4: 16px;
+    --seller-space-5: 20px;
+    --seller-space-6: 24px;
+    --seller-space-8: 32px;
+    --seller-space-10: 40px;
+
+    /* Border Radii */
+    --seller-radius-sm: 6px;
+    --seller-radius-md: 8px;
+    --seller-radius-lg: 10px;
+    --seller-radius-xl: 12px;
+    --seller-radius-2xl: 16px;
+    --seller-radius-full: 9999px;
+
+    /* Elevation & Shadows */
+    --seller-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --seller-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.07), 0 1px 2px rgba(0, 0, 0, 0.04);
+    --seller-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+    --seller-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+    --seller-shadow-modal: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+    /* Form Controls Measurements */
+    --seller-input-height: 40px;
+    --seller-input-height-sm: 34px;
+    --seller-button-height: 40px;
+    --seller-button-height-sm: 32px;
+
+    /* Transition Speeds */
+    --seller-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --seller-transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}

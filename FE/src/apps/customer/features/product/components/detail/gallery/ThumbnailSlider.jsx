@@ -8,6 +8,7 @@ export default function ThumbnailSlider({ images, activeImageIndex, onChangeImag
                     <img
                         key={img.imageId}
                         src={img.imageUrl}
+                        alt={`Thumbnail ${index + 1}`}
                         className={`${styles.thumb} 
                             ${index === activeImageIndex ? styles.active : ""}`}
                         onClick={() => onChangeImageIndex(index)}

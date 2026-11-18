@@ -1,4 +1,4 @@
-﻿namespace BE.Models.DTOs.Products
+namespace BE.Models.DTOs.Products
 {
     public class ProductVariantDto
     {
@@ -11,6 +11,9 @@
         public string SKU { get; set; } = string.Empty;
 
         public bool IsAvailable { get; set; }
+
+        public string? ImageUrl { get; set; }
+        public string? VariantName { get; set; }
 
         public List<long> ImageIds { get; set; } = new();
 

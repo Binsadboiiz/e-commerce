@@ -1,6 +1,6 @@
 using BE.Middlewares;
 using BE.Models.DTOs;
-using BE.Services.Interface;
+using BE.Services.Interface.Order;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
@@ -51,6 +51,7 @@ namespace BE.Controllers.Checkout
         }
 
         [HttpPost("place-order")]
+        [EnableRateLimiting("PlaceOrder")]
         public async Task<IActionResult> PlaceCartOrder([FromBody] CheckoutPlaceOrderRequest request)
         {
             var userId = UserClaimsHelper.GetUserId(User);
@@ -67,6 +68,7 @@ namespace BE.Controllers.Checkout
         }
 
         [HttpPost("buy-now/place-order")]
+        [EnableRateLimiting("PlaceOrder")]
         public async Task<IActionResult> PlaceBuyNow([FromBody] BuyNowRequest request)
         {
             var userId = UserClaimsHelper.GetUserId(User);

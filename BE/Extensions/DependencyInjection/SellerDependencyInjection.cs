@@ -1,5 +1,3 @@
-using BE.Repositories.Implementations;
-using BE.Repositories.Interfaces;
 using BE.Repositories.Implementations.Seller;
 using BE.Repositories.Interfaces.Seller;
 using BE.Services.Implementation.Seller;

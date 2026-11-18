@@ -48,10 +48,10 @@
    Selected option — solid dark fill
    ================================================================ */
 .selected {
-    background: #111827;
+    background: var(--color-primary);
     color: #ffffff;
-    border: 1.5px solid #111827;
-    box-shadow: 0 2px 8px rgba(17, 24, 39, 0.2);
+    border: 1.5px solid var(--color-primary);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
 }
 
 /* ================================================================

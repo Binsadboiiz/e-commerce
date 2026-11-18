@@ -1,6 +1,7 @@
 import styles from "./MainImageSlider.module.css";
 import { useEffect, useRef } from "react";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa";
+import OptimizedImage from '@/shared/components/ui/OptimizedImage';
 
 export default function MainImageSlider({ images, activeImageIndex, onChangeImageIndex }) {
     // REFS
@@ -119,13 +120,19 @@ export default function MainImageSlider({ images, activeImageIndex, onChangeImag
                 onTouchStart={(e) => handleMouseDown(e.touches[0])}
                 onTouchEnd={(e) => handleMouseUp(e.changedTouches[0])}
             >
-                {images.map((img) => (
+                {images.map((img, index) => (
                     <div key={img.imageId} className={styles.slide}>
-                        <img
+                        <OptimizedImage
                             src={img.imageUrl}
                             className={styles.image}
                             draggable={false}
                             alt=""
+                            priority={index === 0}
+                            widths={[320, 480, 640, 800]}
+                            sizes="(max-width: 480px) 320px, (max-width: 768px) 480px, 800px"
+                            crop="limit"
+                            width={800}
+                            height={800}
                         />
                     </div>
                 ))}

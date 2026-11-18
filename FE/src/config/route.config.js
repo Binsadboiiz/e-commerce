@@ -5,6 +5,7 @@ export const ROUTES = {
     PRODUCT_DETAIL: "/products/:slug",
     SHOP: "/shops/:id",
 
+    // Customer
     CART: "/cart",
     CHECKOUT: "/checkout",
     MY_ORDERS: "/my-orders",
@@ -19,6 +20,7 @@ export const ROUTES = {
     // Admin
     ADMIN_DASHBOARD: "/admin/dashboard",
     ADMIN_SELLER_APPLICATIONS: "/admin/seller-applications",
+    ADMIN_REDIRECTS: "/admin/redirects",
     ADMIN_SETTINGS: "/admin/settings",
 
     // Seller
@@ -26,5 +28,7 @@ export const ROUTES = {
     SELLER_PRODUCTS: "/seller/products",
     SELLER_VOUCHERS: "/seller/vouchers",
     SELLER_ORDERS: "/seller/orders",
+    SELLER_ADDRESS: "/seller/address",
     SELLER_REGISTRATION: "/seller/registration",
+    SELLER_SETUP_SHOP: "/seller/setup-shop",
 };

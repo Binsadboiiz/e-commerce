@@ -46,7 +46,10 @@ export const CartProvider = ({ children }) => {
             return;
         }
 
-        const validIds = new Set(cart.shopGroups.flatMap(group => group.items.map(item => item.cartItemId)));
+        const validIds = new Set(cart.shopGroups
+            .flatMap(group => group.items)
+            .filter(canCheckoutItem)
+            .map(item => item.cartItemId));
 
         // Keep selection state in sync after checkout/removal refreshes the cart.
         setSelectedItems(prev => {
@@ -103,7 +106,12 @@ export const CartProvider = ({ children }) => {
     };
 
     // ── Selection logic ──
+    const isItemAvailable = (item) => Number(item?.stock) > 0 && Number(item?.quantity) <= Number(item?.stock);
+
     const toggleSelectItem = (cartItemId) => {
+        const item = cart?.shopGroups?.flatMap(group => group.items).find(candidate => candidate.cartItemId === cartItemId);
+        if (!isItemAvailable(item)) return;
+
         setSelectedItems(prev => {
             const next = new Set(prev);
             if (next.has(cartItemId)) {
@@ -121,7 +129,8 @@ export const CartProvider = ({ children }) => {
         const shopGroup = cart.shopGroups?.find(g => g.shopId === shopId);
         if (!shopGroup) return;
 
-        const shopItemIds = shopGroup.items.map(i => i.cartItemId);
+        const shopItemIds = shopGroup.items.filter(isItemAvailable).map(i => i.cartItemId);
+        if (shopItemIds.length === 0) return;
         const allSelected = shopItemIds.every(id => selectedItems.has(id));
 
         setSelectedItems(prev => {
@@ -137,7 +146,8 @@ export const CartProvider = ({ children }) => {
     const toggleSelectAll = () => {
         if (!cart) return;
 
-        const allIds = cart.shopGroups?.flatMap(g => g.items.map(i => i.cartItemId)) || [];
+        const allIds = cart.shopGroups?.flatMap(g => g.items.filter(isItemAvailable).map(i => i.cartItemId)) || [];
+        if (allIds.length === 0) return;
         const allSelected = allIds.length > 0 && allIds.every(id => selectedItems.has(id));
 
         if (allSelected) {
@@ -152,14 +162,15 @@ export const CartProvider = ({ children }) => {
     const isShopAllSelected = (shopId) => {
         if (!cart) return false;
         const shopGroup = cart.shopGroups?.find(g => g.shopId === shopId);
-        if (!shopGroup || shopGroup.items.length === 0) return false;
-        return shopGroup.items.every(i => selectedItems.has(i.cartItemId));
+        const availableItems = shopGroup?.items.filter(isItemAvailable) || [];
+        if (availableItems.length === 0) return false;
+        return availableItems.every(i => selectedItems.has(i.cartItemId));
     };
 
     const isAllSelected = () => {
         if (!cart) return false;
-        const allIds = cart.shopGroups?.flatMap(g => g.items.map(i => i.cartItemId)) || [];
-        return allIds.length > 0 && allIds.every(id => selectedItems.has(id));
+        const allItems = cart.shopGroups?.flatMap(g => g.items).filter(isItemAvailable) || [];
+        return allItems.length > 0 && allItems.every(item => selectedItems.has(item.cartItemId));
     };
 
     // ── Computed values ──
@@ -169,7 +180,7 @@ export const CartProvider = ({ children }) => {
         if (!cart) return 0;
         return cart.shopGroups
             ?.flatMap(g => g.items)
-            .filter(i => selectedItems.has(i.cartItemId))
+            .filter(i => selectedItems.has(i.cartItemId) && isItemAvailable(i))
             .reduce((sum, i) => sum + i.subTotal, 0) || 0;
     };
 
@@ -193,6 +204,7 @@ export const CartProvider = ({ children }) => {
             toggleSelectShop,
             toggleSelectAll,
             isItemSelected,
+            isItemAvailable,
             isShopAllSelected,
             isAllSelected,
         }}>
@@ -200,5 +212,9 @@ export const CartProvider = ({ children }) => {
         </CartContext.Provider>
     );
 };
+
+function canCheckoutItem(item) {
+    return Number(item?.stock) > 0 && Number(item?.quantity) <= Number(item?.stock);
+}
 
 export default CartContext;

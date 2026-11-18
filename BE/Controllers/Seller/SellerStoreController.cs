@@ -10,10 +10,10 @@ using Microsoft.AspNetCore.RateLimiting;
 namespace BE.Controllers.Seller
 {
     /// <summary>
-    /// Controller for seller store management operations (view and update store profile).
+    /// Controller for seller store management operations (view, update, and initial onboarding setup).
     /// Secured with Seller role authorization and GeneralPolicy Rate Limiting.
     /// </summary>
-    [Authorize(Roles = "Seller,SELLER,seller")]
+    [Authorize(Roles = "Seller,SELLER,seller,Customer,CUSTOMER,customer")]
     [EnableRateLimiting("GeneralPolicy")]
     [ApiController]
     [Route("api/seller/store")]
@@ -24,6 +24,33 @@ namespace BE.Controllers.Seller
         public SellerStoreController(IStoreService storeService)
         {
             _storeService = storeService;
+        }
+
+        /// <summary>
+        /// Checks if seller has initialized a shop and returns pre-filled onboarding details.
+        /// </summary>
+        [HttpGet("status")]
+        public async Task<IActionResult> GetShopStatus()
+        {
+            string userId = UserClaimsHelper.GetUserId(User);
+            var result = await _storeService.GetShopStatusAsync(userId);
+            return Ok(ApiResponse<SellerShopStatusDto>.SuccessResponse(result));
+        }
+
+        /// <summary>
+        /// Creates initial Shop record during seller first-time onboarding.
+        /// </summary>
+        [HttpPost("setup")]
+        public async Task<IActionResult> SetupShop([FromBody] SetupShopRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ApiResponse<object>.FailureResponse("Validation failed for request payload."));
+            }
+
+            string userId = UserClaimsHelper.GetUserId(User);
+            var result = await _storeService.SetupShopAsync(userId, request);
+            return Ok(ApiResponse<StoreDetailResponse>.SuccessResponse(result, "Cửa hàng đã được mở thành công!"));
         }
 
         /// <summary>
@@ -55,6 +82,33 @@ namespace BE.Controllers.Seller
             var result = await _storeService.UpdateMyStoreProfileAsync(userId, request);
 
             return Ok(ApiResponse<StoreDetailResponse>.SuccessResponse(result, "Store profile updated successfully."));
+        }
+
+        /// <summary>
+        /// Retrieves warehouse/pickup address for current seller.
+        /// </summary>
+        [HttpGet("address")]
+        public async Task<IActionResult> GetWarehouseAddress()
+        {
+            string userId = UserClaimsHelper.GetUserId(User);
+            var result = await _storeService.GetSellerAddressAsync(userId);
+            return Ok(ApiResponse<SellerAddressDto?>.SuccessResponse(result));
+        }
+
+        /// <summary>
+        /// Updates warehouse/pickup address for current seller.
+        /// </summary>
+        [HttpPut("address")]
+        public async Task<IActionResult> UpdateWarehouseAddress([FromBody] SellerAddressDto request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ApiResponse<object>.FailureResponse("Validation failed for address payload."));
+            }
+
+            string userId = UserClaimsHelper.GetUserId(User);
+            var result = await _storeService.UpdateSellerAddressAsync(userId, request);
+            return Ok(ApiResponse<SellerAddressDto>.SuccessResponse(result, "Warehouse address updated successfully!"));
         }
     }
 }

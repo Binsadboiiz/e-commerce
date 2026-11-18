@@ -14,7 +14,8 @@ import {
     BarChart3,
     Settings,
     LogOut,
-    Tag
+    Tag,
+    MapPin
 } from "lucide-react";
 
 /* primary navigation (admin) */
@@ -105,6 +106,12 @@ export const SELLER_NAV = [
         label: "Orders",
         icon: <ShoppingCart size={18} />,
         path: "/seller/orders",
+    },
+    {
+        key: "seller-address",
+        label: "Địa chỉ kho hàng",
+        icon: <MapPin size={18} />,
+        path: "/seller/address",
     },
     {
         key: "seller-analytics",

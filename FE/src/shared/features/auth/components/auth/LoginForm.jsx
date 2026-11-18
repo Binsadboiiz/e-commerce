@@ -8,8 +8,10 @@ import styles from "./LoginForm.module.css";
 import { notify } from '../../../../utils/Notify.js';
 import { ROUTES } from "@/config/route.config.js";
 import { ROLES } from "@/shared/constants/roles";
+import { useLanguage } from "@/shared/context/LanguageContext";
 
 export default function LoginForm() {
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const { setUser } = useAuth();
   const [form, setForm] = useState({ email: "", password: "" });
@@ -23,7 +25,7 @@ export default function LoginForm() {
       setLoading(true);
       const res = await loginApi(form);
       setUser(res.data);
-      notify.success("Login Successfully");
+      notify.success(t('auth.loginSuccess'));
       
       const role = res.data?.role;
       if (role === ROLES.SELLER || role?.toLowerCase() === "seller") {
@@ -36,7 +38,7 @@ export default function LoginForm() {
         navigate(ROUTES.HOME);
       }
     } catch (err) {
-      notify.error("Login failed");
+      notify.error(t('common.error'));
       console.log(err.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
@@ -46,27 +48,27 @@ export default function LoginForm() {
   return (
     <div className={styles.wrapper}>
       <div className={styles.header}>
-        <h2 className={styles.title}>Login</h2>
+        <h2 className={styles.title}>{t('auth.login')}</h2>
         <div className={styles.subtitle}>
-          New here?{" "}
+          {t('auth.dontHaveAccount')}{" "}
           <Link to={ROUTES.REGISTER} className={styles.link}>
-            Create an account
+            {t('auth.register')}
           </Link>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className={styles.form}>
         <AuthInput
-          label="Identity / Email"
+          label={t('auth.email')}
           type="email"
-          placeholder="EMAIL@EXAMPLE.COM"
+          placeholder="email@example.com"
           value={form.email}
           onChange={handleChange}
           name="email"
         />
 
         <AuthInput
-          label="Password"
+          label={t('auth.password')}
           type="password"
           placeholder="••••••••"
           value={form.password}
@@ -76,10 +78,10 @@ export default function LoginForm() {
 
         <div className={styles.submitArea}>
           <Button disabled={loading} type="submit">
-            <span>{loading ? "Verifying..." : "Sign In →"}</span>
+            <span>{loading ? t('common.loading') : `${t('auth.login')} →`}</span>
           </Button>
         </div>
-        <Link to={ROUTES.HOME} className={styles.backToHomeLink}>Back to Home</Link>
+        <Link to={ROUTES.HOME} className={styles.backToHomeLink}>{t('common.back')}</Link>
       </form>
     </div>
   );

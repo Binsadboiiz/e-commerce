@@ -2,9 +2,10 @@ import styles from "./filters.module.css";
 import { useState, useEffect } from "react";
 import { productsService } from "@/apps/customer/features/product/services/productService";
 import { parseQuery } from "../utils/parseQuery";
+import { useLanguage } from "@/shared/context/LanguageContext";
 
 export default function CategoryFilter({ searchParams, setSearchParams }) {
-
+    const { t } = useLanguage();
     const [categories, setCategories] = useState([]);
 
     useEffect(() => {
@@ -46,7 +47,7 @@ export default function CategoryFilter({ searchParams, setSearchParams }) {
 
     return (
         <div className={styles.section}>
-            <p className={styles.label}>Category</p>
+            <p className={styles.label}>{t('product.categories')}</p>
 
             {categories.map(category => {
                 const idStr = String(category.id);

@@ -1,153 +1,339 @@
-# QUY ĐỊNH THIẾT KẾ GIAO DIỆN HỆ THỐNG (UI/UX DESIGN GUIDELINES)
-**Dự án:** E-Commerce Enterprise System  
-**Phiên bản:** 2.0  
-**Cập nhật lần cuối:** 2026-10-06  
+**Project:** PolarisX — E-Commerce Enterprise System  
+**Scope:** Entire Client/Customer Frontend  
+**Design Specification:** `UI_DESIGN_GUIDELINES`  
+**Task Type:** UI/UX Standardization and Consistency Refactoring  
+**Priority:** High
 
----
+## 1. Project Context
 
-## 1. TRIẾT LÝ THIẾT KẾ (DESIGN PHILOSOPHY)
+PolarisX is an e-commerce platform with multiple frontend subsystems. This task applies only to the Client/Customer frontend.
 
-Hệ thống giao diện của **E-Commerce Enterprise** được xây dựng dựa trên 5 nguyên tắc cốt lõi:
-1. **Tính Đồng Nhất (Consistency):** Toàn bộ các phân hệ (Customer, Seller, Admin, Auth) tuân thủ chung một bộ Design Tokens, màu sắc, khoảng cách và quy chuẩn button.
-2. **Trải Nghiệm Chuyển Đổi Cao (Conversion-Driven):** Các thành phần kêu gọi hành động (CTA) được làm nổi bật, có thị giác rõ ràng, phản hồi tương tác tức thì.
-3. **Hiện Đại & Tinh Tế (Clean & Modern):** Loại bỏ chi tiết rườm rà, tập trung vào khoảng trắng (whitespace), typographic hierarchy và viền bo mềm mại.
-4. **Tiêu Chuẩn Đã Truy Cập (Accessibility - WCAG 2.1 AA):** Độ tương phản màu sắc cao, trạng thái focus-visible rõ ràng cho bàn phím, nhãn aria-label hỗ trợ trình đọc màn hình.
-5. **Tối Ưu Chuẩn SEO & Performance:** Cấu trúc HTML Semantic, lazy-loading hình ảnh, không gây giật lag giao diện (CLS = 0).
+Before modifying code, read and follow `UI_DESIGN_GUIDELINES` as the authoritative design specification. The specification defines the required brand colors, typography, design tokens, component styles, accessibility standards, and responsive behavior.
 
----
+Do not create a separate design system or introduce visual conventions that conflict with the specification.
 
-## 2. HỆ THỐNG MÀU SẮC & DESIGN TOKENS
+## 2. Objectives
 
-Hệ thống sử dụng các biến CSS Root (`:root`) định nghĩa sẵn trong `src/styles/global.css`:
+Standardize the entire Client/Customer frontend so every page follows one consistent PolarisX design system.
 
-### 2.1. Màu Thương Hiệu (Brand Colors)
-| Biến CSS | Mã Color | Ứng Dụng |
-| :--- | :--- | :--- |
-| `--color-primary` | `#ee4d2d` | Màu chủ đạo, Primary Buttons, Active Tabs, Highlights |
-| `--color-primary-hover` | `#d73211` | Trạng thái Hover của Primary CTA |
-| `--color-primary-active` | `#b8280c` | Trạng thái Press/Click của Primary CTA |
-| `--color-primary-light` | `#fff2ef` | Background cho Badge primary, Highlight box, Item selected |
-| `--color-secondary` | `#0f172a` | Nút phụ, Header/Sidebar dark, Slate text |
+The work must:
+- Unify brand colors and neutral colors across all customer-facing pages.
+- Standardize buttons, cards, badges, icons, forms, tables, modals, dropdowns, tabs, pagination, notifications, and other shared UI elements.
+- Apply Inter as the only intended font family throughout the client interface.
+- Eliminate inconsistent component styling and duplicated CSS where safe.
+- Reuse existing shared components and design tokens.
+- Ensure consistent interaction states, accessibility, and responsive behavior.
+- Preserve all existing business logic and application functionality.
 
-### 2.2. Thang Màu Trung Tính (Neutral Slate Scale)
-- **Slate 50 (`#f8fafc`):** Background toàn trang (`--bg-page`).
-- **Slate 100 (`#f1f5f9`):** Background card hover, input disabled, table header.
-- **Slate 200 (`#e2e8f0`):** Viền đường kẻ phân cách (`--border-color`).
-- **Slate 500 (`#64748b`):** Văn bản phụ, subtitle, icon muted.
-- **Slate 800 (`#1e293b`):** Tiêu đề bài viết, văn bản chính (`--text-main`).
-- **White (`#ffffff`):** Card background, modal content.
+The result must look like one coherent product rather than a collection of independently styled pages.
 
-### 2.3. Màu Trạng Thái (Status Colors)
-- **Success (`#10b981`):** Hoàn thành, Đã giao, Approve, Active badge.
-- **Warning (`#f59e0b`):** Chờ xử lý, Cảnh báo, Pending status.
-- **Danger (`#ef4444`):** Xóa, Từ chối, Lỗi validation, Hủy đơn.
-- **Info (`#06b6d4`):** Thông tin phụ, Đang vận chuyển (In-transit).
+## 3. Phase 1 — Codebase Audit
 
----
+Inspect the actual Client/Customer frontend structure before making changes.
 
-## 3. QUY ĐỊNH HỆ THỐNG NÚT BẤM (BUTTON SYSTEM STANDARDS)
+Identify:
+- Customer-facing pages and routes.
+- Shared layouts, headers, navigation, footers, and sidebars.
+- Shared UI components and supported component variants.
+- Global CSS, CSS modules, component styles, and utility classes.
+- Existing design tokens in `src/styles/global.css`.
+- Existing Button, Card, Badge, Input, Modal, and Icon implementations.
+- Hardcoded colors, font declarations, border radii, shadows, and spacing values.
+- Duplicate components that implement the same visual function.
+- Inconsistent hover, active, focus, disabled, and loading states.
 
-Button là thành phần tương tác quan trọng nhất trên hệ thống. Tất cả nút bấm phải sử dụng class chuẩn `.btn` hoặc Reusable Component `<Button />` từ `@/shared/components/ui/Button`.
+Use the real project structure and naming conventions. Do not assume file locations without inspecting the repository.
 
-### 3.1. Phân Loại Nút (Button Variants)
+After the audit, continue into implementation. Do not stop after producing an analysis or plan.
 
-| Biến thể (Variant) | Class CSS | Mục Đích Sử Dụng |
-| :--- | :--- | :--- |
-| **Primary** | `.btn-primary` | Hành động chính quan trọng nhất trên màn hình (Thanh toán, Đặt hàng, Lưu sản phẩm, Đăng nhập). |
-| **Secondary** | `.btn-secondary` | Hành động phụ có độ ưu tiên cao thứ hai (Tìm kiếm, Lọc, Xuất báo cáo). |
-| **Outline** | `.btn-outline` | Hành động Hủy, Quay lại, Xem chi tiết, Đóng modal. |
-| **Outline Primary** | `.btn-outline-primary` | Hành động phụ mang tính nhận diện thương hiệu (Thêm vào giỏ hàng, Lưu nháp). |
-| **Danger** | `.btn-danger` | Hành động nguy hiểm không thể hoàn tác (Xóa sản phẩm, Từ chối đơn đăng ký, Hủy đơn). |
-| **Success** | `.btn-success` | Hành động phê duyệt, xác nhận (Phê duyệt Seller, Phê duyệt thanh toán). |
-| **Ghost** | `.btn-ghost` | Nút không viền dùng cho thao tác bảng dữ liệu (Sửa/Xóa icon). |
-| **Link** | `.btn-link` | Nút dạng văn bản liên kết. |
+## 4. Phase 2 — Global Design Token Standardization
 
-### 3.2. Kích Thước Nút (Button Sizes)
-- **Extra Small (`.btn-xs`):** Height `28px`, Font `12px` – Dùng cho tag thao tác nhỏ trong table.
-- **Small (`.btn-sm`):** Height `34px`, Font `13px` – Dùng cho button trong bảng dữ liệu, filter bar.
-- **Medium (`.btn-md` - Default):** Height `40px`, Font `14px` – Kích thước tiêu chuẩn cho form.
-- **Large (`.btn-lg`):** Height `46px`, Font `16px` – Dùng cho CTA chính, Thanh toán, Mua ngay.
-- **Extra Large (`.btn-xl`):** Height `52px`, Font `18px` – Dùng cho Landing Page banner CTA.
+Use `UI_DESIGN_GUIDELINES` as the source of truth.
 
-### 3.3. Quy Định Trạng Thái & Hiệu Ứng Nút (States & Interactions)
-1. **Hover Effect:** Nút nâng nhẹ (`translateY(-1px)`), tăng độ đậm bóng đổ (`shadow-md`).
-2. **Active Press Effect:** Nút lún nhẹ (`translateY(1px) scale(0.985)`).
-3. **Focus Ring:** Khi bấm Tab bằng bàn phím, xuất hiện viền mờ `box-shadow: 0 0 0 3px var(--color-primary-focus)`.
-4. **Disabled:** Giảm opacity xuống `55%`, khóa con trỏ `cursor: not-allowed`, tắt hiệu ứng hover/click.
-5. **Loading (`isLoading`):** Hiển thị Icon Spinner quay nhẹ, tự động disabled nút để tránh duplicate click.
+Inspect and update the existing tokens in `src/styles/global.css`, preserving the project's established architecture.
 
-### 3.4. Ví Dụ Sử Dụng Component `<Button />` (React)
-```jsx
-import Button from '@/shared/components/ui/Button';
-import { Plus, Trash2 } from 'lucide-react';
+### 4.1. Brand Colors
 
-// Nút Tạo Mới
-<Button variant="primary" size="md" icon={<Plus size={18} />} onClick={handleCreate}>
-  Thêm Sản Phẩm
-</Button>
+| Token | Value | Intended Usage |
+|---|---|---|
+| `--color-primary` | `#2563EB` | Primary CTA, active states, links |
+| `--color-primary-hover` | `#3B82F6` | Primary hover |
+| `--color-primary-active` | `#1D4ED8` | Primary pressed state |
+| `--color-primary-light` | `#DBEAFE` | Selected backgrounds and highlights |
+| `--color-primary-focus` | `rgba(37, 99, 235, 0.25)` | Keyboard focus ring |
+| `--color-secondary` | `#0F172A` | Navy brand identity and secondary actions |
+| `--color-secondary-hover` | `#1E293B` | Secondary hover |
 
-// Nút Xóa Đang Loading
-<Button variant="danger" size="md" isLoading={isDeleting} icon={<Trash2 size={18} />} onClick={handleDelete}>
-  Xóa Sản Phẩm
-</Button>
+Remove legacy orange-red branding, including `#EE4D2D`, from brand-level components within the task scope.
 
-// Nút Hủy
-<Button variant="outline" onClick={handleClose}>
-  Hủy Bỏ
-</Button>
+Do not indiscriminately replace every red value. Red must remain available for destructive actions and validation errors.
+
+### 4.2. Neutral Colors
+
+| Token | Value |
+|---|---|
+| `--bg-page` | `#F8FAFC` |
+| `--bg-surface` | `#FFFFFF` |
+| `--bg-muted` | `#F1F5F9` |
+| `--border-color` | `#E2E8F0` |
+| `--text-muted` | `#64748B` |
+| `--text-main` | `#1E293B` |
+| `--color-white` | `#FFFFFF` |
+
+### 4.3. Status Colors
+
+| Status Token | Value |
+|---|---|
+| `--color-success` | `#10B981` |
+| `--color-warning` | `#F59E0B` |
+| `--color-danger` | `#EF4444` |
+| `--color-info` | `#06B6D4` |
+
+Maintain semantic color usage across order status, payment status, shipping status, product availability, notifications, and validation messages.
+
+### Design Token Rules
+
+- Reuse existing CSS variables wherever possible.
+- Avoid duplicate or conflicting token definitions.
+- Replace hardcoded values with shared tokens when appropriate.
+- Do not introduce new brand colors without a clear requirement.
+- Do not change colors that carry meaningful business semantics.
+- Keep status colors separate from general brand interactions.
+
+## 5. Phase 3 — Typography Standardization
+
+Use **Inter as the only intended font family** throughout the Client/Customer frontend.
+
+Inspect the current font-loading implementation before making changes. Ensure Inter is loaded correctly, then apply the global font token consistently across navigation, headings, body text, buttons, forms, tables, badges, dialogs, and dynamically rendered UI.
+
+Remove unnecessary component-level font declarations that conflict with the global standard. Avoid duplicate font imports and unnecessary font weights.
+
+Reference configuration:
+
+```css
+:root {
+  --font-family-base: 'Inter', sans-serif;
+}
+
+html,
+body,
+#root {
+  font-family: var(--font-family-base);
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
 ```
 
----
+Use the existing font assets or established font-loading strategy when available. A CSS declaration alone is insufficient if the font itself is not loaded.
 
-## 4. QUY ĐỊNH FORM & INPUT CONTROL
+Maintain a consistent typography hierarchy for page headings, section headings, body text, labels, buttons, tables, and helper text. Do not redesign page layouts solely to change typography.
 
-1. **Cấu trúc Form Group (`.form-group`):**
-   - Bao gồm `.form-label` (Font 14px, Bold 600, màu Slate 700).
-   - Input/Select/Textarea (`.form-input`, `.form-select`, `.form-textarea`).
-   - Thông báo lỗi (`.form-error`) đặt ngay bên dưới input khi bị validate sai.
-2. **Trạng Thái Focus:** Khi user click/focus vào input, viền đổi sang màu Primary và có viền sáng mờ nhẹ (`box-shadow: 0 0 0 3px var(--color-primary-focus)`).
-3. **Trạng Thái Lỗi (`.is-invalid`):** Viền chuyển sang màu đỏ Danger (`#ef4444`).
+## 6. Phase 4 — Button Standardization
 
----
+Audit every button on every customer-facing page. Standardize buttons through the existing reusable Button component and its supported variants.
 
-## 5. QUY ĐỊNH COMPONENT HỆ THỐNG (CARDS, BADGES, TABLES, MODALS)
+Required variants:
+- `primary`
+- `secondary`
+- `outline`
+- `outline-primary`
+- `danger`
+- `success`
+- `ghost`
+- `link`
 
-### 5.1. Card System (`.card`)
-- Background trắng, viền `#e2e8f0`, bo góc `12px` (`--radius-lg`), bóng mờ nhẹ `var(--shadow-sm)`.
-- Class `.card-hover` giúp card nổi nhẹ lên khi di chuột vào (dùng cho danh sách sản phẩm).
+Required default sizes:
+- `xs`: 28px high
+- `sm`: 34px high
+- `md`: 40px high
+- `lg`: 46px high
+- `xl`: 52px high
 
-### 5.2. Badges & Tag Trạng Thái (`.badge`)
-- Dạng viên thuốc bo tròn (`border-radius: 9999px`), chữ Bold 600, font 12px.
-- Đặt màu tương ứng trạng thái:
-  - `Active / Delivered / Approved`: `.badge-success` (Nền xanh nhạt, chữ xanh đậm).
-  - `Pending / Preparing`: `.badge-warning` (Nền vàng nhạt, chữ nâu vàng).
-  - `Cancelled / Rejected / Deleted`: `.badge-danger` (Nền đỏ nhạt, chữ đỏ).
+Standardize default, hover, active/pressed, focus-visible, disabled, and loading states.
 
-### 5.3. Table System (`.table-container`)
-- Thẻ bọc ngoài có `overflow-x: auto` tránh vỡ giao diện trên di động.
-- Header `<th>` nền Slate 50, chữ Slate 700, Font 600, border bottom.
-- Row `<tr>` có hiệu ứng hover đổi màu mờ nhẹ (`.table-hover`).
+Use Blue for primary actions, Navy for appropriate secondary actions, and semantic colors for destructive or confirmation actions. Keep button heights, typography, padding, border radius, and icon spacing consistent.
 
-### 5.4. Modal & Dialog System (`.modal-backdrop`, `.modal-content`)
-- Backdrop đen mờ `rgba(15, 23, 42, 0.6)` có hiệu ứng làm mờ nền `backdrop-filter: blur(4px)`.
-- Nội dung Modal bo góc `16px`, có animation nẩy nhẹ từ dưới lên (`slideUp`).
+Preserve existing click handlers, navigation targets, form submission, loading behavior, and disabled conditions. Do not change the Button component API unless a compatibility issue has been demonstrated.
 
----
+Do not mechanically convert every clickable element into a button. Preserve the semantic distinction between buttons and links.
 
-## 6. QUY ĐỊNH SEO, ACCESSIBILITY & PERFORMANCE
+## 7. Phase 5 — Cards, Badges, and Surface Components
 
-1. **Dynamic Page Title (SEO):** Mỗi trang phải khai báo `<SEOHead title="..." description="..." />` riêng biệt. Không được dùng tiêu đề cố định.
-2. **Heading Hierarchy (On-Page SEO):**
-   - Mỗi trang chỉ chứa duy nhất **1 thẻ `<h1>`**.
-   - Các thẻ `<h2>`, `<h3>` tổ chức theo thứ tự cấp bậc logic.
-3. **Image Alt Text:** Tất cả thẻ `<img>` phải có thuộc tính `alt` mô tả nội dung ảnh (Vd: `alt="Hình ảnh sản phẩm Áo sơ mi"`).
-4. **Semantic Tags:** Sử dụng đúng thẻ `<header>`, `<nav>`, `<main>`, `<article>`, `<section>`, `<footer>`.
-5. **Button Accessibility:** Các nút chỉ có Icon (không có chữ) bắt buộc phải có thuộc tính `aria-label` hoặc `title`.
+### 7.1. Cards
 
----
+Standardize background, border, border radius, shadow, padding, typography, and hover behavior.
 
-## 7. QUY ĐỊNH RESPONSIVE (BREAKPOINTS)
+Default specifications:
+- Background: `#FFFFFF`
+- Border: `#E2E8F0`
+- Border radius: 12px
+- Shadow: existing `--shadow-sm` token
 
-- **Mobile (< 640px):** Button chuyển thành kích thước chuẩn full-width nếu cần thiết, form chuyển thành 1 cột.
-- **Tablet (640px - 1024px):** Grid 2 cột hoặc 3 cột.
-- **Desktop (> 1024px):** Grid 4-5 cột, container giới hạn max-width `1280px` căn giữa.
+Apply consistently to product cards, category cards, account panels, order summaries, checkout panels, and other equivalent components. Do not force identical dimensions when content and layout requirements differ.
+
+### 7.2. Badges
+
+Standardize pill-shaped borders, font size and weight, padding, status backgrounds, foreground colors, and alignment.
+
+Status mapping:
+- Active, Delivered, Approved: Success
+- Pending, Preparing: Warning
+- Cancelled, Rejected, Deleted: Danger
+- In-transit: Info
+
+Ensure the same status uses the same visual treatment across all pages. Do not change underlying status values or business logic.
+
+### 7.3. Other Surface Components
+
+Standardize dropdowns, popovers, tooltips, dividers, empty states, loading skeletons, notifications, toast messages, pagination, tabs, and breadcrumbs.
+
+Use shared tokens and a consistent visual hierarchy without forcing unrelated components into identical layouts.
+
+## 8. Phase 6 — Icon Standardization
+
+Audit all icons throughout the Client/Customer frontend.
+
+Use the project's existing icon library, preferably its current Lucide implementation where already established. Maintain consistent icon sizing, stroke weight, alignment, spacing, and color tokens.
+
+Default size conventions:
+- Small inline icons: 14–16px
+- Standard action icons: 18–20px
+- Prominent navigation icons: 20–24px
+
+These sizes are defaults, not absolute constraints. Follow existing component requirements when a different size is necessary.
+
+Icon requirements:
+- Use brand, neutral, and semantic status tokens for icon colors.
+- Align icons correctly with Inter text.
+- Provide accessible names for icon-only buttons.
+- Provide appropriate hover and focus feedback for interactive icons.
+- Avoid mixing unrelated icon libraries or inconsistent icon styles.
+- Preserve the meaning and function of existing icons.
+
+Do not replace icons solely for aesthetic preference if doing so would reduce clarity or change their meaning.
+
+## 9. Phase 7 — Forms, Inputs, Tables, and Modals
+
+### Forms and Inputs
+
+Standardize labels, helper text, input heights, padding, borders, radius, focus rings, validation messages, disabled states, and read-only states.
+
+Preserve validation rules, data binding, field names, and submission logic.
+
+### Tables
+
+Standardize header backgrounds, typography, row borders, hover states, cell spacing, action buttons, status badges, empty states, and loading states.
+
+Maintain horizontal scrolling on small screens. Do not remove existing columns, actions, filters, sorting, or pagination.
+
+### Modals and Dialogs
+
+Standardize:
+- Backdrop: `rgba(15, 23, 42, 0.6)`
+- Optional blur: `blur(4px)`
+- Content background: `#FFFFFF`
+- Border radius: 16px
+- Header, body, footer, and action spacing
+- Typography and button variants
+
+Preserve modal triggers, form submission, dismissal behavior, keyboard interactions, and focus management.
+
+## 10. Phase 8 — Page-by-Page Standardization
+
+Inspect and standardize every customer-facing route, not only the homepage or shared layout.
+
+Include all applicable pages and features found in the actual project, such as:
+- Home and landing pages
+- Product listing and category pages
+- Product detail
+- Search results and filtering
+- Cart
+- Checkout and payment
+- Order history and order detail
+- User profile and account settings
+- Address management
+- Client authentication and registration pages
+- Wishlist and reviews
+- Notifications, empty states, loading states, and error states
+
+This list is illustrative. The actual route inventory determines the final scope.
+
+For each page, identify shared components, apply consistent brand colors and typography, standardize buttons/cards/badges/icons, align spacing and surfaces, verify loading/error/empty/success states, preserve page-specific functionality, and inspect responsive behavior.
+
+Do not leave secondary routes unstandardized simply because the primary pages look consistent.
+
+## 11. Phase 9 — Responsive and Accessibility Validation
+
+Validate the updated interface at these breakpoints:
+
+| Device | Width |
+|---|---|
+| Mobile | Below 640px |
+| Tablet | 640–1024px |
+| Desktop | Above 1024px |
+
+Ensure forms adapt to narrow screens, buttons use full width when appropriate, tables scroll horizontally when required, grids adapt to available width, navigation remains usable, and modals fit within the viewport.
+
+Prevent unintended horizontal overflow. Keep keyboard focus visible, provide accessible names for icon-only controls, meet applicable contrast requirements, and respect reduced-motion preferences.
+
+Do not change responsive layouts unnecessarily if they already satisfy the specification.
+
+## 12. Phase 10 — CSS Cleanup and Component Reuse
+
+After standardization:
+- Remove redundant CSS declarations introduced by legacy styling.
+- Consolidate duplicate visual rules when safe.
+- Reuse existing shared components.
+- Replace repeated hardcoded values with established tokens.
+- Remove conflicting font-family declarations where appropriate.
+- Avoid broad selectors that unintentionally affect unrelated components.
+- Avoid new dependencies without a clear technical need.
+- Keep changes limited to the Client/Customer scope.
+
+Do not perform a broad architectural refactor. Do not delete a CSS class or component until all usages and dependencies have been checked. Do not change business logic as part of style cleanup.
+
+## 13. Implementation Constraints
+
+Unless explicitly authorized, do not:
+- Change business logic.
+- Change API contracts or add endpoints.
+- Change routing or authentication flows.
+- Modify database schemas.
+- Remove existing functionality.
+- Replace working shared components with duplicated implementations.
+- Introduce another intended font family.
+- Introduce orange-red as the default brand color.
+- Rewrite entire pages unnecessarily.
+- Modify Seller or Admin interfaces outside the requested Client/Customer scope.
+
+You must inspect before modifying, reuse existing components, follow `UI_DESIGN_GUIDELINES`, preserve existing behavior, keep changes focused, and report incomplete coverage or technical blockers honestly.
+
+## 14. Validation and Reporting
+
+After implementation, inspect the updated pages and components for consistent colors, typography, component states, responsive behavior, accessibility, import errors, CSS conflicts, and font loading.
+
+Run relevant lint, build, and tests when available. Report only checks that were actually executed and describe their real results.
+
+Provide a final implementation report containing:
+1. Pages and components inspected.
+2. Files modified, added, or removed.
+3. Design tokens and components standardized.
+4. Customer routes completed and any routes not covered.
+5. Areas reviewed for functional regressions.
+6. Actual lint, build, test, and responsive-check results.
+7. Remaining issues, blockers, or follow-up work.
+
+Do not claim the task is fully complete if significant routes remain unaudited or unstandardized.
+
+## Final Execution Instruction
+
+Read `UI_DESIGN_GUIDELINES` first. Audit the entire Client/Customer frontend, then implement the standardization systematically across shared components and individual pages.
+
+The goal is a unified PolarisX interface using Navy–Blue branding, Inter typography, consistent component styling, accessible interactions, and responsive layouts while preserving all existing application functionality.
+
+**Execute the task end-to-end. Do not stop after analysis or planning.**

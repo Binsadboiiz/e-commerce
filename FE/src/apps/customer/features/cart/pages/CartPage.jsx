@@ -2,12 +2,15 @@ import { useCart } from '../hooks/useCart';
 import CartShopGroup from "../components/CartShopGroup";
 import CartFooter from "../components/CartFooter";
 import EmptyCart from "../components/EmptyCart";
-import { FiShoppingCart } from 'react-icons/fi';
+import { RotateCw } from 'lucide-react';
 import SEOHead from '@/shared/components/SEOHead';
 import styles from './CartPage.module.css';
+import skeletonStyles from '@/shared/components/ui/Skeleton.module.css';
+import { useLanguage } from '@/shared/context/LanguageContext';
 
 export default function CartPage() {
-    const { cart, loading } = useCart();
+    const { t } = useLanguage();
+    const { cart, loading, fetchCart } = useCart();
 
     const hasItems = cart?.shopGroups?.length > 0;
 
@@ -20,21 +23,32 @@ export default function CartPage() {
     }
 
     return (
-        <div className={styles.page}>
+        <div className="customerPage">
             <SEOHead 
-                title="Giỏ Hàng Của Bạn" 
+                title={t('cart.shoppingCart')} 
                 description="Xem lại các sản phẩm trong giỏ hàng, cập nhật số lượng và chuẩn bị thanh toán an toàn, nhanh chóng."
             />
-            <div className={styles.container}>
-                <div className={styles.header}>
-                    <FiShoppingCart className="text-primary" size={26} />
-                    <h1 className={styles.heading}>Shopping Cart</h1>
-                    {hasItems && (
-                        <span className="text-sm text-text-secondary ml-1">
-                            ({cart.totalItems} products)
-                        </span>
-                    )}
-                </div>
+            <div className="customerContainer">
+                <header className="customerHeader">
+                    <div className="customerTitleSection">
+                        <h1 className="customerPageTitle">
+                            <span>{t('cart.shoppingCart')}</span>
+                            {hasItems && (
+                                <span className="text-sm font-normal text-slate-500 ml-1">
+                                    ({cart.totalItems})
+                                </span>
+                            )}
+                        </h1>
+                    </div>
+                    <button
+                        type="button"
+                        onClick={fetchCart}
+                        className="customerBtnTextAction"
+                    >
+                        <RotateCw size={14} className={loading ? "animate-spin" : ""} />
+                        <span>{t('orders.refresh') || 'Làm mới'}</span>
+                    </button>
+                </header>
 
                 {hasItems ? (
                     <>
@@ -42,10 +56,9 @@ export default function CartPage() {
                         <div className={styles.tableHeader}>
                             <div className="w-[18px] flex-shrink-0"></div>
                             <div className="w-20 flex-shrink-0"></div>
-                            <div className="flex-1 text-sm text-text-secondary font-semibold">Product</div>
-                            <div className="w-28 text-center text-sm text-text-secondary font-semibold flex-shrink-0">Unit Price</div>
-                            <div className="w-[88px] text-center text-sm text-text-secondary font-semibold flex-shrink-0">Quantity</div>
-                            <div className="w-28 text-right text-sm text-text-secondary font-semibold flex-shrink-0">Total</div>
+                            <div className="flex-1 text-sm text-text-secondary font-semibold">{t('cart.shopGroup')} / {t('cart.actions')}</div>
+                            <div className="w-[88px] text-center text-sm text-text-secondary font-semibold flex-shrink-0">{t('cart.quantity')}</div>
+                            <div className="w-28 text-right text-sm text-text-secondary font-semibold flex-shrink-0">{t('cart.subtotal')}</div>
                             <div className="w-10 flex-shrink-0"></div>
                         </div>
 
@@ -70,32 +83,32 @@ export default function CartPage() {
 // ── Loading Skeleton ──
 function CartSkeleton() {
     return (
-        <div className="space-y-3 animate-pulse">
+        <div className="space-y-3">
             {/* Header skeleton */}
             <div className="flex items-center gap-3 mb-6">
-                <div className="w-6 h-6 bg-gray-200 rounded" />
-                <div className="w-32 h-7 bg-gray-200 rounded" />
+                <div className={`w-6 h-6 rounded ${skeletonStyles.skeleton}`} />
+                <div className={`w-32 h-7 rounded ${skeletonStyles.skeleton}`} />
             </div>
 
             {/* Table header */}
-            <div className="h-12 bg-gray-200 rounded-lg" />
+            <div className={`h-12 ${skeletonStyles.skeleton}`} />
 
             {/* Shop groups */}
             {[1, 2].map(i => (
-                <div key={i} className="bg-white rounded-lg overflow-hidden border border-gray-100">
-                    <div className="h-12 bg-gray-100 border-b border-gray-100" />
+                <div key={i} className="border-b border-gray-200">
+                    <div className={`h-12 border-b border-gray-100 ${skeletonStyles.skeleton}`} />
                     {[1, 2].map(j => (
                         <div key={j} className="flex items-center gap-4 px-5 py-4 border-b border-gray-50">
-                            <div className="w-[18px] h-[18px] bg-gray-200 rounded" />
-                            <div className="w-20 h-20 bg-gray-200 rounded-lg" />
+                            <div className={`w-[18px] h-[18px] rounded ${skeletonStyles.skeleton}`} />
+                            <div className={`w-20 h-20 rounded-lg ${skeletonStyles.skeleton}`} />
                             <div className="flex-1 space-y-2">
-                                <div className="w-3/4 h-4 bg-gray-200 rounded" />
-                                <div className="w-1/4 h-3 bg-gray-200 rounded" />
+                                <div className={`w-3/4 h-4 rounded ${skeletonStyles.skeleton}`} />
+                                <div className={`w-1/4 h-3 rounded ${skeletonStyles.skeleton}`} />
                             </div>
-                            <div className="w-16 h-4 bg-gray-200 rounded" />
-                            <div className="w-20 h-8 bg-gray-200 rounded" />
-                            <div className="w-16 h-4 bg-gray-200 rounded" />
-                            <div className="w-8 h-8 bg-gray-200 rounded" />
+                            <div className={`w-16 h-4 rounded ${skeletonStyles.skeleton}`} />
+                            <div className={`w-20 h-8 rounded ${skeletonStyles.skeleton}`} />
+                            <div className={`w-16 h-4 rounded ${skeletonStyles.skeleton}`} />
+                            <div className={`w-8 h-8 rounded ${skeletonStyles.skeleton}`} />
                         </div>
                     ))}
                 </div>

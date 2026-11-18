@@ -1,7 +1,7 @@
 import { useAuth } from "./useAuth";
 
 // FLAG TẠM THỜI TẮT CHECK ROLE ĐỂ TEST GIAO DIỆN (Đổi thành false khi muốn bật lại)
-const DISABLE_ROLE_CHECK = true;
+const DISABLE_ROLE_CHECK = false;
 
 export const useRole = () => {
     const { user } = useAuth(); // Lấy thông tin user hiện tại từ context

@@ -1,6 +1,7 @@
 using BE.Models.DTOs;
 using BE.Models.DTOs.Products.ProductDetail;
 using BE.Models.DTOs.Products.ProductFilter;
+using BE.Models.DTOs.Search;
 using BE.Services.Interface.Product;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,10 +20,26 @@ namespace BE.Controllers.Product
     public class ProductController : ControllerBase
     {
         private readonly IProductQueryService _productQueryService;
+        private readonly ISearchSuggestionService _searchSuggestionService;
 
-        public ProductController(IProductQueryService productQueryService)
+        public ProductController(
+            IProductQueryService productQueryService,
+            ISearchSuggestionService searchSuggestionService)
         {
             _productQueryService = productQueryService;
+            _searchSuggestionService = searchSuggestionService;
+        }
+
+        [HttpGet("suggestions")]
+        public async Task<IActionResult> GetSuggestions([FromQuery] string? q, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrWhiteSpace(q) || q.Trim().Length < 1)
+            {
+                return Ok(ApiResponse<SearchSuggestionDto>.SuccessResponse(new SearchSuggestionDto()));
+            }
+
+            var result = await _searchSuggestionService.GetSearchSuggestionAsync(q, cancellationToken);
+            return Ok(ApiResponse<SearchSuggestionDto>.SuccessResponse(result));
         }
 
         [HttpGet("by-id/{id:long}")]

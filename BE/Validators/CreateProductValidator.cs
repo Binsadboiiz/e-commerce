@@ -1,4 +1,4 @@
-﻿using BE.Models.DTOs;
+using BE.Models.DTOs;
 
 namespace BE.Validators
 {
@@ -30,16 +30,54 @@ namespace BE.Validators
             }
             else
             {
-                foreach (var variant in request.Variants)
+                var seenSkus = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                var seenAttributeKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+                for (int i = 0; i < request.Variants.Count; i++)
                 {
+                    var variant = request.Variants[i];
+
                     if (variant.Price <= 0)
                     {
-                        errors.Add("Variant price must be greater than 0.");
+                        errors.Add($"Variant #{i + 1} price must be greater than 0.");
                     }
 
                     if (variant.InitialStock < 0)
                     {
-                        errors.Add("Initial stock cannot be negative.");
+                        errors.Add($"Variant #{i + 1} initial stock cannot be negative.");
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(variant.Sku))
+                    {
+                        var trimmedSku = variant.Sku.Trim();
+                        if (seenSkus.Contains(trimmedSku))
+                        {
+                            errors.Add($"Duplicate SKU '{trimmedSku}' found in variant #{i + 1}.");
+                        }
+                        else
+                        {
+                            seenSkus.Add(trimmedSku);
+                        }
+                    }
+
+                    if (variant.Attributes != null && variant.Attributes.Any())
+                    {
+                        var attrKey = string.Join("|", variant.Attributes
+                            .Where(a => !string.IsNullOrWhiteSpace(a.Value))
+                            .OrderBy(a => a.AttributeName ?? "")
+                            .Select(a => $"{a.AttributeName?.Trim().ToLowerInvariant()}:{a.Value?.Trim().ToLowerInvariant()}"));
+
+                        if (!string.IsNullOrEmpty(attrKey))
+                        {
+                            if (seenAttributeKeys.Contains(attrKey))
+                            {
+                                errors.Add($"Duplicate attribute combination found in variant #{i + 1}.");
+                            }
+                            else
+                            {
+                                seenAttributeKeys.Add(attrKey);
+                            }
+                        }
                     }
                 }
             }

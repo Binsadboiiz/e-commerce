@@ -1,4 +1,4 @@
-﻿namespace BE.Models.DTOs
+namespace BE.Models.DTOs
 {
     public class ProductVariantResponse
     {

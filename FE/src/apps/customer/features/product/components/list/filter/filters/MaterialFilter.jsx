@@ -2,8 +2,10 @@ import styles from "./filters.module.css";
 import { useState, useEffect } from "react";
 import { productsService } from "@/apps/customer/features/product/services/productService";
 import { parseQuery } from "../utils/parseQuery";
+import { useLanguage } from "@/shared/context/LanguageContext";
 
 export default function MaterialFilter({ data = [], searchParams, setSearchParams }) {
+    const { t } = useLanguage();
 
     const [materials, setMaterials] = useState([]);
 
@@ -43,7 +45,7 @@ export default function MaterialFilter({ data = [], searchParams, setSearchParam
 
     return (
         <div className={styles.section}>
-            <p className={styles.label}>Material</p>
+            <p className={styles.label}>{t('product.material')}</p>
 
             {materials.map(material => {
                 const idStr = String(material.id);

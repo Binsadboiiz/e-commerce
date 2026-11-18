@@ -37,13 +37,12 @@ export default function Sidebar({ isCollapsed, onToggle }) {
         } else if (key === "logout") {
             try {
                 await logoutApi();
-                notify.success("Logged out successfully");
-                setUser(null);
-                navigate(ROUTES.LOGIN);
             } catch (error) {
-                console.error("Logout failed:", error);
-                const message = error.response?.data?.message || "Logout failed";
-                notify.error(message);
+                console.warn("Logout API error:", error);
+            } finally {
+                setUser(null);
+                notify.success("Logged out successfully");
+                navigate(ROUTES.LOGIN);
             }
         }
     };

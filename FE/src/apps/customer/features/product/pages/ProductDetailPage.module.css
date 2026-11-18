@@ -120,9 +120,9 @@
     display: inline-flex;
     align-items: center;
     padding: 10px 24px;
-    background: #111827;
+    background: var(--color-primary, #2563eb);
     color: #ffffff;
-    border-radius: 999px;
+    border-radius: var(--radius-md, 8px);
     font-size: 14px;
     font-weight: 600;
     text-decoration: none;
@@ -130,7 +130,7 @@
 }
 
 .notFoundLink:hover {
-    background: #1f2937;
+    background: var(--color-primary-active, #1d4ed8);
 }
 
 /* ================================================================

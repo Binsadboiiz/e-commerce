@@ -2,26 +2,28 @@ import { Link } from 'react-router-dom';
 import { IoChevronForward } from 'react-icons/io5';
 import styles from './Breadcrumb.module.css';
 import { ROUTES } from '@/config/route.config';
+import { useLanguage } from '@/shared/context/LanguageContext';
 
 /**
  * Breadcrumb navigation for Product Detail.
  * Renders: Home > Products > {category} > {productName}
  */
 export default function Breadcrumb({ categoryName, productName }) {
+    const { t } = useLanguage();
     return (
         <nav className={styles.nav} aria-label="Breadcrumb">
             <ol className={styles.list}>
 
                 <li className={styles.item}>
                     <Link to={ROUTES.HOME} className={styles.link}>
-                        Home
+                        {t('productDetail.home') || 'Home'}
                     </Link>
                     <IoChevronForward className={styles.sep} aria-hidden="true" />
                 </li>
 
                 <li className={styles.item}>
                     <Link to={ROUTES.PRODUCTS_LIST} className={styles.link}>
-                        Products
+                        {t('productDetail.products') || 'Products'}
                     </Link>
                     <IoChevronForward className={styles.sep} aria-hidden="true" />
                 </li>

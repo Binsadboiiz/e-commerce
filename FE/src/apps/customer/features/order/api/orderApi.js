@@ -1,11 +1,11 @@
 import axiosClient from "@/shared/features/auth/api/axiosClient";
 
 const orderApi = {
-    getOrders(userId) {
-        return axiosClient.get(`/order-tracking/${userId}/my-orders`);
+    getOrders() {
+        return axiosClient.get(`/order-tracking/my-orders`);
     },
-    getOrderTracking(orderId, userId) {
-        return axiosClient.get(`/order-tracking/Order:${orderId}/${userId}`);
+    getOrderTracking(orderId) {
+        return axiosClient.get(`/order-tracking/Order:${orderId}`);
     },
 };
 

@@ -1,6 +1,8 @@
 import styles from "./filters.module.css";
+import { useLanguage } from "@/shared/context/LanguageContext";
 
 export default function PriceFilter({ searchParams, setSearchParams }) {
+    const { t } = useLanguage();
 
     const handlePriceChange = (type, value) => {
         const newParams = new URLSearchParams(searchParams);
@@ -16,12 +18,12 @@ export default function PriceFilter({ searchParams, setSearchParams }) {
 
     return (
         <div className={styles.section}>
-            <span className={styles.label}>Price</span>
+            <span className={styles.label}>{t('product.priceRange')}</span>
 
             <div className={styles.priceInputsContainer}>
                 <input
                     type="number"
-                    placeholder="$ Min"
+                    placeholder={t('product.minPricePlaceholder') || "$ Min"}
                     className={styles.priceInput}
                     value={searchParams.get("minPrice") || ""}
                     onChange={(e) => handlePriceChange("minPrice", e.target.value)}
@@ -29,7 +31,7 @@ export default function PriceFilter({ searchParams, setSearchParams }) {
                 <span className={styles.priceSeparator}>-</span>
                 <input
                     type="number"
-                    placeholder="$ Max"
+                    placeholder={t('product.maxPricePlaceholder') || "$ Max"}
                     className={styles.priceInput}
                     value={searchParams.get("maxPrice") || ""}
                     onChange={(e) => handlePriceChange("maxPrice", e.target.value)}

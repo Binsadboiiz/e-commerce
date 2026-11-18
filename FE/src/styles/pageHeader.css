@@ -1,0 +1,129 @@
+/* ── Standardized Customer Layout, Header & Spacing System ── */
+
+:root {
+  --customer-max-w: 1280px;
+  --customer-page-px: 24px;
+  --customer-page-py: 32px;
+  --customer-gap-section: 24px;
+  --customer-card-radius: 16px;
+  --customer-card-padding: 24px;
+}
+
+.customerPage {
+  min-height: 80vh;
+  background-color: var(--bg-page, #f8fafc);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--customer-page-py) var(--customer-page-px) 60px;
+  width: 100%;
+}
+
+.customerContainer {
+  width: 100%;
+  max-width: var(--customer-max-w);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--customer-gap-section);
+}
+
+.customerHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+}
+
+.customerTitleSection {
+  text-align: left;
+  flex: 1;
+}
+
+/* Page title synchronized with "Sản Phẩm Nổi Bật" section title (20px, font-weight 600) */
+.customerPageTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-main, #0f172a);
+  line-height: 1.3;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.customerPageSubtitle {
+  margin-top: 6px;
+  font-size: 14px;
+  color: var(--text-muted, #64748b);
+  line-height: 1.5;
+}
+
+/* Reusable Standardized Card Container */
+.customerCard {
+  background-color: #ffffff;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: var(--customer-card-radius);
+  padding: var(--customer-card-padding);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.customerCard:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08);
+}
+
+/* Reusable Standard Primary Button */
+.customerBtnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: var(--color-primary, #2563eb);
+  color: #ffffff !important;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  box-shadow: 0 1px 2px rgba(37, 99, 235, 0.15);
+}
+
+.customerBtnPrimary:hover:not(:disabled) {
+  background-color: var(--color-primary-active, #1d4ed8);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.customerBtnPrimary:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.customerBtnPrimary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Reusable Text Action Button (Borderless, like Delete/Refresh) */
+.customerBtnTextAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  padding: 4px 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted, #64748b);
+  cursor: pointer;
+  transition: color 0.15s ease;
+  text-decoration: none;
+}
+
+.customerBtnTextAction:hover {
+  color: var(--color-primary, #2563eb);
+}

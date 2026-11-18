@@ -7,6 +7,8 @@ import { ROUTES } from "@/config/route.config";
 import Button from "@/shared/components/ui/Button";
 import SEOHead from "@/shared/components/SEOHead";
 import "./CheckoutPage.css";
+import { notify } from "@/shared/utils/Notify";
+import AddressModal from "@/apps/customer/features/address/components/AddressModal";
 
 const currency = new Intl.NumberFormat("vi-VN", {
     style: "currency",
@@ -22,6 +24,7 @@ export default function CheckoutPage() {
     const [paymentMethods, setPaymentMethods] = useState([]);
     const [selectedAddressId, setSelectedAddressId] = useState(null);
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("cod");
+    const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
     const [preview, setPreview] = useState(null);
     const [loading, setLoading] = useState(true);
     const [previewLoading, setPreviewLoading] = useState(false);
@@ -230,7 +233,8 @@ export default function CheckoutPage() {
                 await fetchCart();
             }
 
-            window.alert(`Order placed successfully. Order ID: ${orderResult?.orderId}`);
+            // window.alert(`Order placed successfully. Order ID: ${orderResult?.orderId}`);
+            notify.success("Order placed successfully!")
             navigate(ROUTES.ORDER_TRACKING.replace(":orderId", String(orderResult?.orderId)));
         } catch (err) {
             setError(err.message || "Failed to place order.");
@@ -272,7 +276,7 @@ export default function CheckoutPage() {
                     </div>
                 )}
 
-                <section className="checkout-card">
+                <section className="checkout-card checkout-address-section">
                     <div className="checkout-address-layout">
                         <div className="checkout-section-header">
                             <div className="checkout-icon-badge">
@@ -303,17 +307,29 @@ export default function CheckoutPage() {
                                 onChange={(event) => setSelectedAddressId(Number(event.target.value))}
                                 className="checkout-select"
                             >
-                                <option value="" disabled>Select address</option>
+                                <option value="" disabled>Chọn địa chỉ nhận hàng</option>
                                 {addresses.map(address => (
                                     <option key={address.id} value={address.id}>
-                                        {address.fullName} - {address.city}
+                                        {address.fullName} - {address.city} {address.isDefault ? "(Mặc định)" : ""}
                                     </option>
                                 ))}
                             </select>
+
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="md"
+                                className="checkout-address-add-button"
+                                onClick={() => setIsAddressModalOpen(true)}
+                            >
+                                + Thêm mới
+                            </Button>
                         </div>
                     </div>
                 </section>
 
+                <div className="checkout-content-grid">
+                    <div className="checkout-products-column">
                 <section className="checkout-card">
                     <div className="checkout-block-heading">
                         <div className="checkout-icon-badge checkout-icon-badge-dark">
@@ -425,66 +441,70 @@ export default function CheckoutPage() {
                     </div>
                 </section>
 
-                <section className="checkout-card">
-                    <div className="checkout-bottom-grid">
-                        <div className="checkout-payment-panel">
-                            <h2 className="checkout-section-title">Payment Method</h2>
-                            <div className="checkout-method-grid">
-                                {paymentMethods.map(method => {
-                                    const isActive = selectedPaymentMethod === method.code;
-                                    const isDisabled = !method.isEnabled;
+                    </div>
 
-                                    return (
-                                        <button
-                                            key={method.code}
-                                            type="button"
-                                            disabled={isDisabled}
-                                            onClick={() => setSelectedPaymentMethod(method.code)}
-                                            className={[
-                                                "checkout-method-button",
-                                                isActive ? "checkout-method-button-active" : "",
-                                                isDisabled ? "checkout-method-button-disabled" : ""
-                                            ].join(" ").trim()}
-                                        >
-                                            {method.label}
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                            <p className="checkout-payment-note">
-                                Only COD is enabled right now. Other payment methods remain visible for future expansion.
-                            </p>
+                    <div className="checkout-payment-column">
+                <section className="checkout-card checkout-payment-section">
+                    <div className="checkout-payment-panel">
+                        <h2 className="checkout-section-title">Payment Method</h2>
+                        <div className="checkout-method-grid">
+                            {paymentMethods.map(method => {
+                                const isActive = selectedPaymentMethod === method.code;
+                                const isDisabled = !method.isEnabled;
+
+                                return (
+                                    <button
+                                        key={method.code}
+                                        type="button"
+                                        disabled={isDisabled}
+                                        onClick={() => setSelectedPaymentMethod(method.code)}
+                                        className={[
+                                            "checkout-method-button",
+                                            isActive ? "checkout-method-button-active" : "",
+                                            isDisabled ? "checkout-method-button-disabled" : ""
+                                        ].join(" ").trim()}
+                                    >
+                                        {method.label}
+                                    </button>
+                                );
+                            })}
                         </div>
-
-                        <div className="checkout-summary-panel">
-                            <div className="checkout-summary-rows">
-                                <SummaryRow label="Merchandise Subtotal" value={preview?.merchandiseSubtotal} />
-                                <SummaryRow label="Shipping Fee" value={preview?.shippingFee} />
-                                <SummaryRow label="Discount" value={-(preview?.discountAmount ?? 0)} highlight="checkout-success-text" />
-                                <div className="checkout-summary-total">
-                                    <SummaryRow
-                                        label="Total Payment"
-                                        value={preview?.finalAmount}
-                                        emphasis
-                                        highlight="checkout-total-text"
-                                    />
-                                </div>
-                            </div>
-
-                            <Button
-                                type="button"
-                                variant="primary"
-                                size="lg"
-                                fullWidth
-                                onClick={handlePlaceOrder}
-                                isLoading={placingOrder}
-                                disabled={!preview || previewLoading || !selectedAddress}
-                            >
-                                Place Order
-                            </Button>
-                        </div>
+                        <p className="checkout-payment-note">
+                            Only COD is enabled right now. Other payment methods remain visible for future expansion.
+                        </p>
                     </div>
                 </section>
+
+                <aside className="checkout-summary-panel">
+                        <div className="checkout-summary-rows">
+                            <SummaryRow label="Merchandise Subtotal" value={preview?.merchandiseSubtotal} />
+                            <SummaryRow label="Shipping Fee" value={preview?.shippingFee} />
+                            <SummaryRow label="Discount" value={-(preview?.discountAmount ?? 0)} highlight="checkout-success-text" />
+                            <div className="checkout-summary-total">
+                                <SummaryRow
+                                    label="Total Payment"
+                                    value={preview?.finalAmount}
+                                    emphasis
+                                    highlight="checkout-total-text"
+                                />
+                            </div>
+                        </div>
+
+                        <Button
+                            type="button"
+                            variant="primary"
+                            size="md"
+                            fullWidth
+                            className="checkout-place-order"
+                            onClick={handlePlaceOrder}
+                            isLoading={placingOrder}
+                            disabled={!preview || previewLoading || !selectedAddress}
+                        >
+                            Place Order
+                        </Button>
+                </aside>
+                    </div>
+                </div>
             </div>
 
             {showVoucherModal && (
@@ -590,6 +610,26 @@ export default function CheckoutPage() {
                     </div>
                 </div>
             )}
+
+            {/* Address Modal for adding address during checkout */}
+            <AddressModal
+                isOpen={isAddressModalOpen}
+                onClose={() => setIsAddressModalOpen(false)}
+                onSuccess={async (newAddr) => {
+                    try {
+                        const res = await checkoutApi.getAddresses();
+                        const list = res?.data || [];
+                        setAddresses(list);
+                        if (newAddr?.id) {
+                            setSelectedAddressId(newAddr.id);
+                        } else if (list.length > 0) {
+                            setSelectedAddressId(list[0].id);
+                        }
+                    } catch (e) {
+                        console.error("Refresh addresses error:", e);
+                    }
+                }}
+            />
         </div>
     );
 }

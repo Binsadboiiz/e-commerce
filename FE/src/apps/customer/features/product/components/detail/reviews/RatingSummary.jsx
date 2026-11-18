@@ -1,7 +1,9 @@
 import styles from "./RatingSummary.module.css";
 import StarRating from "./components/StarRating";
+import { useLanguage } from '@/shared/context/LanguageContext';
 
 export default function RatingSummary({ data }) {
+    const { t } = useLanguage();
 
     return (
         <div className={styles.summary}>
@@ -15,7 +17,7 @@ export default function RatingSummary({ data }) {
             </div>
 
             <div className={styles.total}>
-                {data.totalReviews} reviews
+                {data.totalReviews} {t('productDetail.reviewsCount') || 'reviews'}
             </div>
 
         </div>

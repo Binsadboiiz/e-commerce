@@ -1,30 +1,62 @@
+import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
-import { User, Mail, Shield, Camera, CalendarDays } from "lucide-react";
+import { User, Mail, Shield, Camera, CalendarDays, MapPin } from "lucide-react";
 import SEOHead from "@/shared/components/SEOHead";
 import styles from "./ProfilePage.module.css";
+import { useLanguage } from "@/shared/context/LanguageContext";
+import ProfileSkeleton from "../components/ProfileSkeleton";
+import CustomerAddressManager from "@/apps/customer/features/address/components/CustomerAddressManager";
 
 export default function ProfilePage() {
+    const { t } = useLanguage();
     const { user } = useAuth();
+    const [activeTab, setActiveTab] = useState("profile"); // 'profile' | 'addresses'
 
     if (!user) {
-        return null; // The ProtectedRoute handles the redirect if not logged in
+        return <ProfileSkeleton />;
     }
 
     return (
         <div className={styles.page}>
             <SEOHead 
-                title="Thông Tin Tài Khoản" 
+                title={t('profile.myProfile')} 
                 description="Quản lý hồ sơ thông tin cá nhân, vai trò tài khoản và bảo mật tại E-Commerce Enterprise."
             />
             <div className={styles.container}>
                 <div className={styles.titleSection}>
-                    <h2 className={styles.title}>My Profile</h2>
-                    <p className={styles.subtitle}>Manage your account information and preferences</p>
+                    <h2 className={styles.title}>{t('profile.myProfile')}</h2>
+                    <p className={styles.subtitle}>{t('profile.profileSubtitle')}</p>
+                </div>
+
+                {/* Tab Navigation */}
+                <div className={styles.tabsNav}>
+                    <button
+                        type="button"
+                        className={`${styles.tabButton} ${activeTab === "profile" ? styles.tabButtonActive : ""}`}
+                        onClick={() => setActiveTab("profile")}
+                    >
+                        <User size={16} />
+                        <span>Hồ sơ tài khoản</span>
+                    </button>
+                    <button
+                        type="button"
+                        className={`${styles.tabButton} ${activeTab === "addresses" ? styles.tabButtonActive : ""}`}
+                        onClick={() => setActiveTab("addresses")}
+                    >
+                        <MapPin size={16} />
+                        <span>Sổ địa chỉ nhận hàng</span>
+                    </button>
                 </div>
                 
                 <div className={styles.card}>
-                    <div className={styles.banner}></div>
-                    <div className={styles.profileContent}>
+                    {activeTab === "addresses" ? (
+                        <div className={styles.addressWrapper}>
+                            <CustomerAddressManager />
+                        </div>
+                    ) : (
+                        <>
+                            <div className={styles.banner}></div>
+                            <div className={styles.profileContent}>
                         <div className={styles.avatarWrapper}>
                             <div className={styles.avatarContainer}>
                                 <div className={styles.avatar}>
@@ -56,7 +88,7 @@ export default function ProfilePage() {
                                     <Mail size={24} />
                                 </div>
                                 <div className={styles.infoBody}>
-                                    <p className={styles.infoLabel}>Email Address</p>
+                                    <p className={styles.infoLabel}>{t('profile.emailAddress')}</p>
                                     <p className={styles.infoValue}>{user.email || "No email provided"}</p>
                                 </div>
                             </div>
@@ -66,7 +98,7 @@ export default function ProfilePage() {
                                     <User size={24} />
                                 </div>
                                 <div className={styles.infoBody}>
-                                    <p className={styles.infoLabel}>Full Name</p>
+                                    <p className={styles.infoLabel}>{t('profile.fullName')}</p>
                                     <p className={styles.infoValue}>{user.fullName || "Not set"}</p>
                                 </div>
                             </div>
@@ -76,18 +108,20 @@ export default function ProfilePage() {
                                     <CalendarDays size={24} />
                                 </div>
                                 <div className={styles.infoBody}>
-                                    <p className={styles.infoLabel}>Member Status</p>
-                                    <p className={styles.infoValue}>Active User</p>
+                                    <p className={styles.infoLabel}>{t('profile.memberStatus')}</p>
+                                    <p className={styles.infoValue}>{t('profile.activeUser')}</p>
                                 </div>
                             </div>
                         </div>
 
                         <div className={styles.footerSection}>
                             <button className={styles.buttonPrimary}>
-                                Edit Profile
+                                {t('profile.editProfile')}
                             </button>
                         </div>
                     </div>
+                </>
+            )}
                 </div>
             </div>
         </div>

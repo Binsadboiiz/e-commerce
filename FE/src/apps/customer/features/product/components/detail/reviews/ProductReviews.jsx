@@ -8,8 +8,10 @@ import ReviewPagination from './ReviewPagination';
 import ReviewSkeleton from './ReviewSkeleton';
 
 import useProductReviews from '../../../hooks/useProductReviews';
+import { useLanguage } from '@/shared/context/LanguageContext';
 
 export default function ProductReviews({ productId, shopName }) {
+    const { t } = useLanguage();
 
     const {
         data,
@@ -28,7 +30,7 @@ export default function ProductReviews({ productId, shopName }) {
 
             {/* Section heading with review count */}
             <h2 className={styles.heading}>
-                Customer Reviews
+                {t('productDetail.customerReviews') || 'Customer Reviews'}
                 <span className={styles.count}>({data.totalReviews})</span>
             </h2>
 

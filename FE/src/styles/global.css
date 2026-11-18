@@ -3,12 +3,15 @@
    ========================================================================== */
 
 :root {
+  /* ── Typography ── */
+  --font-family-base: 'Inter', sans-serif;
+
   /* ── Brand Colors ── */
-  --color-primary: #ee4d2d;
-  --color-primary-hover: #d73211;
-  --color-primary-active: #b8280c;
-  --color-primary-light: #fff2ef;
-  --color-primary-focus: rgba(238, 77, 45, 0.25);
+  --color-primary: #2563EB;
+  --color-primary-hover: #3B82F6;
+  --color-primary-active: #1D4ED8;
+  --color-primary-light: #DBEAFE;
+  --color-primary-focus: rgba(37, 99, 235, 0.25);
 
   --color-secondary: #0f172a;
   --color-secondary-hover: #1e293b;
@@ -80,6 +83,12 @@
 }
 
 /* ── Typography & Selection ── */
+html,
+body,
+#root {
+  font-family: var(--font-family-base);
+}
+
 ::selection {
   background-color: var(--color-primary-light);
   color: var(--color-primary-hover);
@@ -155,12 +164,12 @@
   background-color: var(--color-primary);
   color: #ffffff;
   border-color: var(--color-primary);
-  box-shadow: 0 2px 4px rgba(238, 77, 45, 0.2);
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
 }
 .btn-primary:hover:not(:disabled) {
   background-color: var(--color-primary-hover);
   border-color: var(--color-primary-hover);
-  box-shadow: 0 4px 8px rgba(238, 77, 45, 0.3);
+  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
   color: #ffffff;
 }
 .btn-primary:active:not(:disabled) {

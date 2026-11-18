@@ -4,8 +4,10 @@ import { useCart } from '../hooks/useCart';
 import { ROUTES } from '@/config/route.config';
 import styles from '../pages/CartPage.module.css';
 import formatPrice from '@/apps/customer/features/product/utils/formatPrice';
+import { useLanguage } from '@/shared/context/LanguageContext';
 
 export default function CartFooter() {
+    const { t } = useLanguage();
     const navigate = useNavigate();
     const {
         cart,
@@ -23,7 +25,7 @@ export default function CartFooter() {
     return (
         <div className={styles.footerSticky}>
             {/* Left: Select All & Delete */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-6">
                 {/* Select All Checkbox */}
                 <label className={styles.checkboxContainer}>
                     <input
@@ -39,8 +41,8 @@ export default function CartFooter() {
                             </svg>
                         )}
                     </div>
-                    <span className="text-sm text-text-primary ml-2">
-                        Select All ({totalItems})
+                    <span className="text-sm font-medium text-slate-800">
+                        {t('cart.selectAll')} ({totalItems})
                     </span>
                 </label>
 
@@ -48,25 +50,24 @@ export default function CartFooter() {
                 {selectedCount > 0 && (
                     <button
                         onClick={clearCart}
-                        className="flex items-center gap-1.5 text-sm text-text-secondary
-                                   hover:text-danger transition-colors"
+                        className="flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-rose-600 transition-colors"
                     >
-                        <FiTrash2 size={14} />
-                        Delete
+                        <FiTrash2 size={15} />
+                        <span>{t('cart.deleteAll')}</span>
                     </button>
                 )}
             </div>
 
             {/* Right: Total & Checkout */}
-            <div className="flex items-center gap-6">
+            <div className={`${styles.footerActions} flex items-center gap-6`}>
                 {/* Total Price */}
-                <div className="text-right">
-                    <div className="text-sm text-text-secondary">
-                        Total amount ({selectedCount} items):
-                    </div>
-                    <div className="text-xl font-bold text-text-price">
+                <div className={styles.totalAmount}>
+                    <span className={styles.totalAmountLabel}>
+                        {t('cart.totalAmount')} ({selectedCount}):
+                    </span>
+                    <span className={styles.totalAmountValue}>
                         {formatPrice(total)}
-                    </div>
+                    </span>
                 </div>
 
                 {/* Checkout Button */}
@@ -75,7 +76,7 @@ export default function CartFooter() {
                     disabled={selectedCount === 0}
                     className={styles.buttonPrimary}
                 >
-                    Checkout
+                    {t('cart.checkout')}
                 </button>
             </div>
         </div>

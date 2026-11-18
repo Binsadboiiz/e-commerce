@@ -1,0 +1,191 @@
+.container {
+    font-family: var(--font-family-base, 'Inter', sans-serif);
+    max-width: 900px;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 1.5rem auto 3rem;
+    padding: 0 1rem;
+    animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Hero Banner Header ── */
+.heroSection {
+    text-align: center;
+    margin-bottom: 2.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.heroBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.375rem 0.875rem;
+    background-color: var(--color-primary-light, #dbeafe);
+    color: var(--color-primary-hover, #1d4ed8);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    border-radius: var(--radius-full, 9999px);
+    margin-bottom: 0.75rem;
+    border: 1px solid rgba(37, 99, 235, 0.15);
+}
+
+.title {
+    font-size: 1.875rem;
+    font-weight: 800;
+    color: var(--color-slate-900, #0f172a);
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -0.02em;
+}
+
+.subtitle {
+    font-size: 0.9375rem;
+    color: var(--color-slate-600, #475569);
+    margin: 0 0 1.25rem 0;
+    max-width: 580px;
+    line-height: 1.5;
+}
+
+.stepProgressBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.875rem;
+    background-color: var(--color-slate-100, #f1f5f9);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: var(--radius-full, 9999px);
+    font-size: 0.8125rem;
+    color: var(--color-slate-600, #475569);
+}
+
+.stepTitleHighlight {
+    color: var(--color-primary, #2563eb);
+    font-weight: 700;
+}
+
+/* ── Main Card Wrapper (Flat layout without outer border box) ── */
+.card {
+    background: transparent;
+    border: none;
+    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
+    box-shadow: none;
+}
+
+/* ── Loading Spinner ── */
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 320px;
+}
+
+.spinner {
+    width: 44px;
+    height: 44px;
+    border: 3px solid var(--color-primary-light, #dbeafe);
+    border-top-color: var(--color-primary, #2563eb);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loadingText {
+    margin-top: 1.25rem;
+    color: var(--color-slate-600, #475569);
+    font-weight: 600;
+    font-size: 0.9375rem;
+}
+
+@media (max-width: 640px) {
+    .container {
+        padding: 0 0.75rem;
+        margin: 1rem auto 2rem;
+    }
+    .heroSection {
+        margin-bottom: 1.5rem;
+    }
+    .title {
+        font-size: 1.5rem;
+    }
+    .subtitle {
+        font-size: 0.875rem;
+    }
+    .card {
+        padding: 1.25rem;
+        border-radius: var(--radius-lg, 12px);
+    }
+}
+
+/* ── Admin Restricted State (Flat Section, No Card) ── */
+.adminNoticeContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 5rem 1rem;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    max-width: 480px;
+    margin: 1rem auto;
+}
+
+.adminNoticeIcon {
+    color: var(--color-slate-400, #94a3b8);
+    margin-bottom: 1.25rem;
+}
+
+.adminNoticeTitle {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-slate-900, #0f172a);
+    margin: 0 0 1.5rem 0;
+    line-height: 1.4;
+}
+
+.adminNoticeActions {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.adminBtnPrimary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.625rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: var(--color-primary, #2563eb);
+    border: 1px solid var(--color-primary, #2563eb);
+    border-radius: var(--radius-md, 8px);
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.adminBtnPrimary:hover {
+    background-color: var(--color-primary-hover, #1d4ed8);
+}
+

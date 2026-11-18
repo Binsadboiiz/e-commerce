@@ -1,4 +1,4 @@
-﻿namespace BE.Constants.Seller
+namespace BE.Constants.Seller
 {
     public class SellerDocumentTypeConstants
     {

@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { SlidersHorizontal } from 'lucide-react';
 import styles from './ProductList.module.css';
 
 import { useSearchParams } from 'react-router-dom';
@@ -11,10 +13,12 @@ import SidebarFilter from "../components/list/filter/SidebarFilter";
 import SortBar from "../components/list/sort/SortBar";
 import Pagination from "../components/list/pagination/Pagination";
 import SEOHead from "@/shared/components/SEOHead";
+import { useLanguage } from "@/shared/context/LanguageContext";
 
 export default function ProductList() {
-
+    const { t } = useLanguage();
     const [searchParams, setSearchParams] = useSearchParams();
+    const [showFilter, setShowFilter] = useState(false);
 
     const page = Number(searchParams.get("page") || 1);
     const pageSize = Number(searchParams.get("pageSize") || 20);
@@ -32,6 +36,11 @@ export default function ProductList() {
 
         categoryIds: searchParams
             .getAll("categoryIds")
+            .map(Number)
+            .filter(Boolean),
+
+        brandIds: searchParams
+            .getAll("brandIds")
             .map(Number)
             .filter(Boolean),
 
@@ -62,15 +71,33 @@ export default function ProductList() {
 
     const searchQuery = searchParams.get("q") || "";
 
+    const itemListJsonLd = Array.isArray(products) && products.length > 0 ? {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "numberOfItems": products.length,
+        "itemListElement": products.map((prod, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "name": prod.name,
+            "url": `${window.location.origin}/products/${prod.slug || prod.productId}`
+        }))
+    } : null;
+
     return (
         <div className={styles.container}>
             <SEOHead 
                 title={searchQuery ? `Tìm kiếm: "${searchQuery}"` : "Danh Sách Sản Phẩm Tất Cả Nổi Bật"} 
-                description="Khám phá bộ sưu tập sản phẩm đa dạng, chất lượng cao với giá cực tốt tại E-Commerce Enterprise."
+                description="Khám phá bộ sưu tập sản phẩm đa dạng, chất lượng cao với giá cực tốt tại PolarisX Mall."
+                isReady={!loading}
+                statusCode={200}
+                jsonLd={itemListJsonLd}
             />
 
             {/* SIDEBAR */}
-            <div className={styles.sidebar}>
+            <button type="button" className={styles.filterToggle} onClick={() => setShowFilter(v => !v)} aria-expanded={showFilter}>
+                <SlidersHorizontal size={16} /> {t('product.filter')}
+            </button>
+            <div className={`${styles.sidebar} ${showFilter ? styles.sidebarOpen : ''}`}>
                 <SidebarFilter filterMeta={meta} />
             </div>
 
@@ -112,7 +139,7 @@ export default function ProductList() {
                 {/* EMPTY */}
                 {!loading && !error && (!products || products.length === 0) && (
                     <p className={styles.empty}>
-                        No products found
+                        {t('product.noProductsFound')}
                     </p>
                 )}
 

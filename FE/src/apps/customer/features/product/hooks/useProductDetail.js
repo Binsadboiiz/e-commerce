@@ -39,7 +39,7 @@ export default function useProductDetail(slug) {
                 }
             })
             .catch((err) => {
-                
+
                 setProduct(null);
             })
             .finally(() => {

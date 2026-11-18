@@ -1,4 +1,4 @@
-﻿namespace BE.Models.DTOs.Reviews
+namespace BE.Models.DTOs.Reviews
 {
     public class ReviewImageDto
     {

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e40af" />
+      <stop offset="50%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#60a5fa" />
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bg)" rx="16" />
+  <circle cx="700" cy="80" r="140" fill="#ffffff" opacity="0.08" />
+  <circle cx="650" cy="320" r="180" fill="#ffffff" opacity="0.05" />
+  <text x="60" y="140" font-family="Inter, -apple-system, sans-serif" font-weight="800" font-size="44" fill="#ffffff">SIÊU SALE CÔNG NGHỆ</text>
+  <text x="60" y="200" font-family="Inter, -apple-system, sans-serif" font-weight="500" font-size="22" fill="#e0e7ff">Giảm đến 50% cho Laptop, Điện thoại &amp; Phụ kiện</text>
+  <rect x="60" y="240" width="180" height="50" rx="25" fill="#f59e0b" />
+  <text x="150" y="272" font-family="Inter, -apple-system, sans-serif" font-weight="700" font-size="18" fill="#ffffff" text-anchor="middle">MUA NGAY</text>
+</svg>

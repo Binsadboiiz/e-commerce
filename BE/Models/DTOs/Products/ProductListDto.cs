@@ -16,11 +16,14 @@ namespace BE.Models.DTOs
         public int Stock { get; set; }
 
         public string? ImageUrl { get; set; }
+        public List<string> ImageUrls { get; set; } = new List<string>();
 
         public float RatingAvg { get; set; }
 
         public long? RatingCount { get; set; }
 
+        public long CategoryId { get; set; }
+        public long BrandId { get; set; }
         public string? CategoryName { get; set; }
         public string? BrandName { get; set; }
 

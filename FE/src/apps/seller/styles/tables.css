@@ -1,0 +1,113 @@
+/* ==========================================================================
+   SELLER DESIGN SYSTEM — TABLES
+   Standard table layout, header, rows, zebra striping, hover & pagination.
+   ========================================================================== */
+
+.seller-table-container {
+    width: 100%;
+    overflow-x: auto;
+    background: var(--seller-surface);
+    border: 1px solid var(--seller-border);
+    border-radius: var(--seller-radius-xl);
+    box-shadow: var(--seller-shadow-xs);
+}
+
+.seller-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-family: var(--seller-font);
+    font-size: var(--seller-font-size-sm);
+}
+
+.seller-table thead {
+    background: var(--seller-surface-muted);
+    border-bottom: 1px solid var(--seller-border);
+}
+
+.seller-table th {
+    padding: 12px 16px;
+    font-size: var(--seller-font-size-xs);
+    font-weight: 600;
+    color: var(--seller-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+
+.seller-table td {
+    padding: 14px 16px;
+    color: var(--seller-text-main);
+    border-bottom: 1px solid var(--seller-border);
+    vertical-align: middle;
+}
+
+.seller-table tbody tr {
+    transition: background-color var(--seller-transition-fast);
+}
+
+.seller-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.seller-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Pagination */
+.seller-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--seller-space-4) var(--seller-space-5);
+    background: var(--seller-surface);
+    border-top: 1px solid var(--seller-border);
+    font-size: var(--seller-font-size-sm);
+    color: var(--seller-text-secondary);
+    flex-wrap: wrap;
+    gap: var(--seller-space-3);
+}
+
+.seller-pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--seller-space-2);
+}
+
+.seller-pagination-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 34px;
+    padding: 0 10px;
+    border-radius: var(--seller-radius-md);
+    border: 1px solid var(--seller-border);
+    background: var(--seller-surface);
+    color: var(--seller-text-main);
+    font-size: var(--seller-font-size-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--seller-transition-fast);
+}
+
+.seller-pagination-btn:hover:not(:disabled) {
+    background: var(--seller-surface-subtle);
+    border-color: var(--seller-border-hover);
+}
+
+.seller-pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.seller-pagination-btn-active {
+    background: var(--seller-primary);
+    color: var(--seller-text-white);
+    border-color: var(--seller-primary);
+}
+
+.seller-pagination-btn-active:hover:not(:disabled) {
+    background: var(--seller-primary-hover);
+    border-color: var(--seller-primary-hover);
+}

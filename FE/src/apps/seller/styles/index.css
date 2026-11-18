@@ -1,0 +1,13 @@
+/* ==========================================================================
+   SELLER DESIGN SYSTEM — ENTRY POINT
+   Aggregates tokens, layout, forms, buttons, tables, badges, modals, utilities.
+   ========================================================================== */
+
+@import "./tokens.css";
+@import "./layout.css";
+@import "./buttons.css";
+@import "./forms.css";
+@import "./tables.css";
+@import "./badges.css";
+@import "./modals.css";
+@import "./utilities.css";

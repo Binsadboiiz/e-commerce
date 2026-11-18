@@ -3,14 +3,15 @@ using BE.Middlewares;
 using BE.Models.DTOs.Seller;
 using BE.Models.DTOs.Seller.Shared;
 using BE.Models.Entities;
-using BE.Repositories.Interfaces;
+using BE.Repositories.Interfaces.Seller;
 using BE.Services.Interface.Seller;
 using BE.Validators;
 
 namespace BE.Services.Implementation.Seller
 {
     /// <summary>
-    /// Handles seller registration workflow.
+    /// Service implementation for managing the Seller Onboarding Registration workflow.
+    /// Handles registration creation, step-by-step profile updates, document validation, and final submission for admin review.
     /// </summary>
     public class SellerRegistrationService : ISellerRegistrationService
     {
@@ -21,8 +22,12 @@ namespace BE.Services.Implementation.Seller
             _repository = repository;
         }
 
+        /// <summary>
+        /// Retrieves the current seller registration profile, status, sub-table details, and onboarding progress.
+        /// </summary>
         public async Task<SellerRegistrationDto?> GetRegistrationAsync(string userId)
         {
+            // Step 1: Fetch the core seller account profile
             var seller = await _repository.GetByUserIdAsync(userId);
 
             if (seller == null)
@@ -36,9 +41,11 @@ namespace BE.Services.Implementation.Seller
 
             var documents = await _repository.GetDocumentsAsync(seller.SellerId);
 
+            var hasShop = await _repository.HasShopAsync(userId);
+
             return new SellerRegistrationDto
             {
-                Summary = MapSummary(seller),
+                Summary = MapSummary(seller, hasShop),
                 Address = MapAddress(address),
                 Bank = MapBank(bank),
                 Business = MapBusiness(business),
@@ -52,7 +59,10 @@ namespace BE.Services.Implementation.Seller
             };
         }
 
-        //CREATE
+        // --- CREATE REGISTRATION ---
+        /// <summary>
+        /// Initializes a new seller registration profile in DRAFT status.
+        /// </summary>
         public async Task CreateRegistrationAsync(string userId, CreateSellerRegistrationRequest request)
         {
             SellerValidator.ValidateCreate(request);
@@ -78,7 +88,9 @@ namespace BE.Services.Implementation.Seller
                 UserId = userId,
                 SellerTypeId = sellerType.SellerTypeId,
                 SellerStatusId = draftStatus.SellerStatusId,
-                MaxShopLimit = 1
+                MaxShopLimit = 1,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             };
 
             await _repository.AddSellerAsync(seller);
@@ -86,7 +98,10 @@ namespace BE.Services.Implementation.Seller
             await _repository.SaveChangesAsync();
         }
 
-        //UPDATE
+        // --- UPDATE REGISTRATION STEPS ---
+        /// <summary>
+        /// Updates the seller's registration steps (Address, Bank, Business details) incrementally during onboarding.
+        /// </summary>
         public async Task UpdateRegistrationAsync(string userId, UpdateSellerRegistrationRequest request)
         {
             SellerValidator.ValidateUpdate(request);
@@ -191,7 +206,11 @@ namespace BE.Services.Implementation.Seller
             await _repository.SaveChangesAsync();
         }
 
-        //SUBMIT
+        // --- SUBMIT REGISTRATION FOR ADMIN REVIEW ---
+        /// <summary>
+        /// Submits the completed seller registration application for administrator review.
+        /// Validates mandatory inputs and changes status from DRAFT or REJECTED to PENDING.
+        /// </summary>
         public async Task SubmitRegistrationAsync(string userId)
         {
             var seller = await _repository.GetByUserIdAsync(userId);
@@ -233,12 +252,14 @@ namespace BE.Services.Implementation.Seller
                 throw new AppException("Pending status is not configured.");
 
             seller.SellerStatusId = pendingStatus.SellerStatusId;
+            seller.RejectionReason = null;
+            seller.UpdatedAt = DateTime.UtcNow;
 
             await _repository.SaveChangesAsync();
         }
 
         // Mapping
-        private SellerSummaryDto MapSummary(SellerAccount seller)
+        private SellerSummaryDto MapSummary(SellerAccount seller, bool hasShop = false)
         {
             return new SellerSummaryDto
             {
@@ -247,7 +268,9 @@ namespace BE.Services.Implementation.Seller
                 SellerTypeCode = seller.SellerType.Code,
                 SellerStatusId = seller.SellerStatusId,
                 SellerStatusCode = seller.SellerStatus.Code,
-                MaxShopLimit = seller.MaxShopLimit
+                MaxShopLimit = seller.MaxShopLimit,
+                HasShop = hasShop,
+                RejectionReason = seller.RejectionReason
             };
         }
 

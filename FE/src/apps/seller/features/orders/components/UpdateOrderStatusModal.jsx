@@ -1,8 +1,16 @@
 import { useState, useEffect } from "react";
-import { X, RefreshCw, MapPin, FileText } from "lucide-react";
+import { MapPin, FileText } from "lucide-react";
 import { sellerOrderApi } from "../api/sellerOrderApi";
 import { notify } from "@/shared/utils/Notify";
-import Button from "@/shared/components/ui/Button";
+import {
+    SellerModal,
+    SellerButton,
+    SellerFormField,
+    SellerSelect,
+    SellerInput,
+    SellerTextarea,
+    SellerBadge
+} from "@/apps/seller/components/common";
 
 const STATUS_TRANSITIONS = {
     pending: [
@@ -54,7 +62,6 @@ export default function UpdateOrderStatusModal({ order, isOpen, onClose, onSucce
 
     useEffect(() => {
         if (isOpen && order) {
-            // Default to first valid transition option if available
             if (allowedOptions.length > 0) {
                 setStatus(allowedOptions[0].value);
             } else {
@@ -70,7 +77,7 @@ export default function UpdateOrderStatusModal({ order, isOpen, onClose, onSucce
     const isTerminal = currentStatus === "delivered" || currentStatus === "cancelled";
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        if (e) e.preventDefault();
         if (!status) {
             notify.error("Please select a target status.");
             return;
@@ -97,96 +104,88 @@ export default function UpdateOrderStatusModal({ order, isOpen, onClose, onSucce
     };
 
     return (
-        <div className="modal-backdrop" onClick={onClose}>
-            <div className="modal-content-card update-status-modal" onClick={(e) => e.stopPropagation()}>
-                <div className="modal-header">
-                    <div>
-                        <h2>Update Order Status #{order.orderId}</h2>
-                        <p className="order-modal-sub">
-                            Current Status: <span className="current-status-tag">{currentStatus}</span>
-                        </p>
+        <SellerModal
+            isOpen={isOpen}
+            onClose={onClose}
+            title={`Update Order Status #${order.orderId}`}
+            subtitle={
+                <span style={{ display: "inline-flex", alignItems: "center", gap: "6px", marginTop: "4px" }}>
+                    Current Status: <SellerBadge variant={currentStatus === "delivered" ? "success" : currentStatus === "cancelled" ? "danger" : "warning"} dot>{currentStatus}</SellerBadge>
+                </span>
+            }
+            size="md"
+            footer={
+                <>
+                    <SellerButton variant="outline" onClick={onClose} disabled={loading}>
+                        Cancel
+                    </SellerButton>
+                    {!isTerminal && (
+                        <SellerButton variant="primary" onClick={handleSubmit} loading={loading}>
+                            Confirm Update
+                        </SellerButton>
+                    )}
+                </>
+            }
+        >
+            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                {isTerminal ? (
+                    <div style={{
+                        padding: "16px",
+                        borderRadius: "8px",
+                        background: "var(--seller-bg, #f8fafc)",
+                        border: "1px solid var(--seller-border, #e2e8f0)",
+                        color: "var(--seller-text-muted, #64748b)",
+                        fontSize: "14px"
+                    }}>
+                        This order is in a final state (<strong>{currentStatus}</strong>) and cannot be updated further.
                     </div>
-                    <button className="close-modal-btn" onClick={onClose} title="Close">
-                        <X size={20} />
-                    </button>
-                </div>
+                ) : (
+                    <>
+                        <SellerFormField
+                            label="Next Status"
+                            required
+                            helper="Only valid workflow transitions are displayed."
+                        >
+                            <SellerSelect
+                                value={status}
+                                onChange={(e) => setStatus(e.target.value)}
+                                required
+                            >
+                                {allowedOptions.length > 0 ? (
+                                    allowedOptions.map((opt) => (
+                                        <option key={opt.value} value={opt.value}>
+                                            {opt.label}
+                                        </option>
+                                    ))
+                                ) : (
+                                    ALL_STATUS_OPTIONS.map((opt) => (
+                                        <option key={opt.value} value={opt.value}>
+                                            {opt.label}
+                                        </option>
+                                    ))
+                                )}
+                            </SellerSelect>
+                        </SellerFormField>
 
-                <form onSubmit={handleSubmit} className="status-update-form">
-                    <div className="form-grid single-col">
-                        {isTerminal ? (
-                            <div className="terminal-notice">
-                                <p>This order is in a final state (<strong>{currentStatus}</strong>) and cannot be updated further.</p>
-                            </div>
-                        ) : (
-                            <>
-                                <div className="form-field">
-                                    <label htmlFor="targetStatus">Next Status <span className="req">*</span></label>
-                                    <select
-                                        id="targetStatus"
-                                        value={status}
-                                        onChange={(e) => setStatus(e.target.value)}
-                                        required
-                                    >
-                                        {allowedOptions.length > 0 ? (
-                                            allowedOptions.map((opt) => (
-                                                <option key={opt.value} value={opt.value}>
-                                                    {opt.label}
-                                                </option>
-                                            ))
-                                        ) : (
-                                            ALL_STATUS_OPTIONS.map((opt) => (
-                                                <option key={opt.value} value={opt.value}>
-                                                    {opt.label}
-                                                </option>
-                                            ))
-                                        )}
-                                    </select>
-                                    <small className="help-text">
-                                        Only valid workflow transitions are displayed above.
-                                    </small>
-                                </div>
+                        <SellerFormField label="Location (Optional)">
+                            <SellerInput
+                                placeholder="e.g. Warehouse Hanoi, Sorting Facility"
+                                value={location}
+                                onChange={(e) => setLocation(e.target.value)}
+                            />
+                        </SellerFormField>
 
-                                <div className="form-field">
-                                    <label htmlFor="location">
-                                        <MapPin size={14} className="field-icon" /> Location (Optional)
-                                    </label>
-                                    <input
-                                        type="text"
-                                        id="location"
-                                        placeholder="e.g. Warehouse Hanoi, Sorting Facility"
-                                        value={location}
-                                        onChange={(e) => setLocation(e.target.value)}
-                                    />
-                                </div>
-
-                                <div className="form-field">
-                                    <label htmlFor="description">
-                                        <FileText size={14} className="field-icon" /> Note / Description (Optional)
-                                    </label>
-                                    <textarea
-                                        id="description"
-                                        rows={3}
-                                        placeholder="e.g. Package packed and handed over to courier"
-                                        value={description}
-                                        onChange={(e) => setDescription(e.target.value)}
-                                    />
-                                </div>
-                            </>
-                        )}
-                    </div>
-
-                    <div className="modal-actions">
-                        <Button type="button" variant="outline" onClick={onClose} disabled={loading}>
-                            Cancel
-                        </Button>
-                        {!isTerminal && (
-                            <Button type="submit" variant="primary" isLoading={loading}>
-                                Confirm Update
-                            </Button>
-                        )}
-                    </div>
-                </form>
-            </div>
-        </div>
+                        <SellerFormField label="Note / Description (Optional)">
+                            <SellerTextarea
+                                rows={3}
+                                placeholder="e.g. Package packed and handed over to courier"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                            />
+                        </SellerFormField>
+                    </>
+                )}
+            </form>
+        </SellerModal>
     );
 }

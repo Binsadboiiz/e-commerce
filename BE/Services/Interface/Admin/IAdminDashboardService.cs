@@ -1,15 +1,14 @@
+using System.Threading.Tasks;
 using BE.Models.DTOs.Admin.Dashboard;
-using BE.Models.DTOs.Seller;
 
 namespace BE.Services.Interface.Admin
 {
+    /// <summary>
+    /// Service interface for core Admin Dashboard analytics and system overview metrics.
+    /// </summary>
     public interface IAdminDashboardService
     {
         Task<AdminDashboardDto> GetDashboardAsync(string id);
         Task<AdminDashboardOverviewDto> GetOverviewAsync();
-        Task<List<AdminSellerApplicationDto>> GetSellerApplicationsAsync();
-        Task<SellerRegistrationDto?> GetSellerApplicationDetailAsync(string sellerId);
-        Task<bool> ApproveSellerApplicationAsync(string id);
-        Task<bool> RejectSellerApplicationAsync(string id);
     }
 }

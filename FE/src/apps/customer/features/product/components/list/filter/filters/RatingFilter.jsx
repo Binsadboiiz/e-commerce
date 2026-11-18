@@ -1,8 +1,9 @@
 import styles from "./filters.module.css";
 import { IoStar } from "react-icons/io5";
+import { useLanguage } from "@/shared/context/LanguageContext";
 
 export default function RatingFilter({ data = [], searchParams, setSearchParams }) {
-
+    const { t } = useLanguage();
     const selected = Number(searchParams.get("minRating")) || null;
 
     const handleSelect = (value) => {
@@ -17,10 +18,12 @@ export default function RatingFilter({ data = [], searchParams, setSearchParams 
         setSearchParams(params);
     };
 
+    const andUpLabel = t('product.andUp') || "& up";
+
     const ratings = data
         .map(r => ({
             value: r.star,
-            label: r.star === 5 ? "" : "& up"
+            label: r.star === 5 ? "" : andUpLabel
         }))
         .sort((a, b) => b.value - a.value);
 
@@ -28,15 +31,15 @@ export default function RatingFilter({ data = [], searchParams, setSearchParams 
         ? ratings
         : [
             { value: 5, label: "" },
-            { value: 4, label: "& up" },
-            { value: 3, label: "& up" },
-            { value: 2, label: "& up" },
-            { value: 1, label: "& up" },
+            { value: 4, label: andUpLabel },
+            { value: 3, label: andUpLabel },
+            { value: 2, label: andUpLabel },
+            { value: 1, label: andUpLabel },
         ];
 
     return (
         <div className={styles.section}>
-            <p className={styles.label}>Rating</p>
+            <p className={styles.label}>{t('product.rating')}</p>
 
             {displayRatings.map((r) => (
                 <label key={r.value} className={styles.option}>

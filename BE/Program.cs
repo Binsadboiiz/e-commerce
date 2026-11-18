@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.ResponseCompression;
+using System.IO.Compression;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +27,31 @@ builder.Services.AddReviewModule();
 builder.Services.AddSellerModule();
 builder.Services.AddAdminModule();
 
+// ── Response Compression (Brotli & Gzip) to minimize API latency & payload size ──
+builder.Services.AddResponseCompression(options =>
+{
+    options.EnableForHttps = true;
+    options.Providers.Add<BrotliCompressionProvider>();
+    options.Providers.Add<GzipCompressionProvider>();
+    options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]
+    {
+        "application/json",
+        "application/problem+json"
+    });
+});
+builder.Services.Configure<BrotliCompressionProviderOptions>(options =>
+{
+    options.Level = CompressionLevel.Fastest;
+});
+builder.Services.Configure<GzipCompressionProviderOptions>(options =>
+{
+    options.Level = CompressionLevel.Fastest;
+});
+
+// ── SEO & Prerender.io Dynamic Rendering Services ──
+builder.Services.AddMemoryCache();
+builder.Services.AddHttpClient("PrerenderClient");
+builder.Services.Configure<PrerenderOptions>(builder.Configuration.GetSection(PrerenderOptions.SectionName));
 
 // ── JWT Authentication ──
 builder.Services.AddJwtAuthentication(builder.Configuration);
@@ -34,7 +61,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:5173", "https://localhost:5173")
+        policy.WithOrigins("http://localhost:5173", "https://localhost:5173", "http://localhost:4173", "https://localhost:4173")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -58,15 +85,15 @@ builder.Services.AddRateLimiter(options =>
         }, cancellationToken: cancellationToken);
     };
 
-    // 1. Auth Policy: Strict limit of 5 requests per minute per IP (for login & register endpoints)
+    // 1. Auth Policy: Strict limit of 10 requests per minute per IP (for login & register endpoints)
     options.AddPolicy("AuthPolicy", httpContext => 
         RateLimitPartition.GetFixedWindowLimiter(
             partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
             factory: _ => new FixedWindowRateLimiterOptions
             {
-                PermitLimit = 5,
+                PermitLimit = 10,
                 Window = TimeSpan.FromMinutes(1),
-                QueueLimit = 0,
+                QueueLimit = 1,
                 AutoReplenishment = true
             }
         ));
@@ -96,6 +123,19 @@ builder.Services.AddRateLimiter(options =>
                 AutoReplenishment = true
             }
         ));
+
+        // 4. Place order Policy: Limit of 5 place order request per minute per IP
+        options.AddPolicy("PlaceOrder", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknow",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 30,
+                Window = TimeSpan.FromMinutes(1),
+                QueueLimit = 1,
+                AutoReplenishment = true
+            }
+        ));
 });
 
 
@@ -111,9 +151,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ExceptionMiddleware>();
+app.UseMiddleware<RedirectMiddleware>();
+app.UseMiddleware<PrerenderMiddleware>();
 
 // CORS must be executed before Authentication & Authorization
 app.UseCors("AllowFrontend");
+
+// Response compression must run before HttpsRedirection / returning payloads
+app.UseResponseCompression();
 
 app.UseHttpsRedirection();
 

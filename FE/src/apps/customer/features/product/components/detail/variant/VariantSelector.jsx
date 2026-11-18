@@ -9,9 +9,9 @@ export default function VariantSelector({
         <div className={styles.wrapper}>
             {attributes.map((attribute) => (
                 <div key={attribute.attributeId}>
-                    <h3 className={styles.title}>
+                    <h2 className={styles.title}>
                         {attribute.attributeName}
-                    </h3>
+                    </h2>
                     <div className={styles.options}>
                         {attribute.attributeValues.map((value) => {
                             const isSelected = selectedAttributes[attribute.attributeId] === value.valueId;

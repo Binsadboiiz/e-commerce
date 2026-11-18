@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
+using BE.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace BE.Utils
 {
@@ -21,6 +23,26 @@ namespace BE.Utils
             slug = Regex.Replace(slug, @"\-{2,}", "-");
 
             return slug.Trim('-');
+        }
+
+        public static async Task<string> GenerateUniqueSlugAsync(IQueryable<Product> query, string baseName)
+        {
+            var baseSlug = GenerateSlug(baseName);
+            if (string.IsNullOrWhiteSpace(baseSlug))
+            {
+                baseSlug = "product";
+            }
+
+            var slug = baseSlug;
+            var index = 1;
+
+            while (await query.AnyAsync(p => p.Slug == slug))
+            {
+                slug = $"{baseSlug}-{index}";
+                index++;
+            }
+
+            return slug;
         }
     }
 }

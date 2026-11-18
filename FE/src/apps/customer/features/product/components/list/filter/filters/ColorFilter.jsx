@@ -2,8 +2,10 @@ import styles from "./filters.module.css";
 import { useState, useEffect } from "react";
 import { productsService } from "@/apps/customer/features/product/services/productService";
 import { parseQuery } from "../utils/parseQuery";
+import { useLanguage } from "@/shared/context/LanguageContext";
 
 export default function ColorFilter({ data = [], searchParams, setSearchParams }) {
+    const { t } = useLanguage();
 
     const [colors, setColors] = useState([]);
 
@@ -43,7 +45,7 @@ export default function ColorFilter({ data = [], searchParams, setSearchParams }
 
     return (
         <div className={styles.section}>
-            <p className={styles.label}>Color</p>
+            <p className={styles.label}>{t('product.color')}</p>
 
             <div className={styles.colorList}>
                 {colors.map(color => {

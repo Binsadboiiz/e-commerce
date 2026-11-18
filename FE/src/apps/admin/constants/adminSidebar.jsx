@@ -2,6 +2,7 @@ import React from 'react';
 import {
     LayoutDashboard,
     ClipboardList,
+    ArrowRightLeft,
     Settings,
     LogOut
 } from 'lucide-react';
@@ -20,6 +21,12 @@ export const ADMIN_NAV = [
         label: "Seller Applications",
         icon: <ClipboardList size={18} />,
         path: ROUTES.ADMIN_SELLER_APPLICATIONS
+    },
+    {
+        key: "redirects",
+        label: "Redirect Engine (301/302)",
+        icon: <ArrowRightLeft size={18} />,
+        path: ROUTES.ADMIN_REDIRECTS
     }
 ];
 

@@ -21,7 +21,7 @@
     font-size: 14px;
     font-weight: 500;
     color: #fff;
-    background: #ee4d2d;
+    background: var(--color-primary);
     padding: 4px 8px;
     border-radius: 4px;
 }
@@ -93,4 +93,11 @@
     height: 100%;
     border-radius: 999px;
     background: linear-gradient(90deg, #ffb300, #ff5722);
+}
+
+@media (max-width: 900px) {
+    .flashSaleList { grid-auto-columns: calc((100% - 2 * 12px) / 3); gap: 12px; }
+}
+@media (max-width: 560px) {
+    .flashSaleList { grid-auto-columns: 42%; }
 }

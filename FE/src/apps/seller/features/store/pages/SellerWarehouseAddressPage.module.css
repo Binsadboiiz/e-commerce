@@ -1,0 +1,28 @@
+/* ── Warehouse Address Page Specific Styles ── */
+
+.sectionBlock {
+    display: flex;
+    flex-direction: column;
+    gap: var(--seller-space-4, 16px);
+}
+
+.sectionTitle {
+    font-size: var(--seller-font-size-md, 16px);
+    font-weight: 600;
+    color: var(--seller-text-main, #1e293b);
+    border-bottom: 1px solid var(--seller-border, #f1f5f9);
+    padding-bottom: var(--seller-space-2, 10px);
+    margin: 0;
+}
+
+.gridTwoCols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--seller-space-4, 16px);
+}
+
+@media (max-width: 640px) {
+    .gridTwoCols {
+        grid-template-columns: 1fr;
+    }
+}

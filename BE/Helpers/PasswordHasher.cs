@@ -1,4 +1,4 @@
-﻿namespace BE.Helpers
+namespace BE.Helpers
 {
     public class PasswordHasher
     {

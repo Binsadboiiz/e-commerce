@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BE.Models.DTOs.Products.ProductDetail
 {
@@ -21,6 +21,10 @@ namespace BE.Models.DTOs.Products.ProductDetail
 
         public string? BrandName { get; set; }
         public string? CategoryName { get; set; }
+
+        public long CategoryId { get; set; }
+        public long BrandId { get; set; }
+        public string Status { get; set; } = string.Empty;
 
         public bool HasVariants { get; set; }
 

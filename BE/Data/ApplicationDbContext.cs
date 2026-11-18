@@ -14,6 +14,7 @@ namespace BE.Data
         //Product
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductVariant> ProductVariants { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
 
         //Product Attribute
         public DbSet<AttributeType> AttributeTypes { get; set; }
@@ -70,6 +71,9 @@ namespace BE.Data
         public DbSet<SellerBusiness> SellerBusinesses { get; set; }
         public DbSet<SellerDocument> SellerDocuments { get; set; }
         public DbSet<SellerDocumentType> SellerDocumentTypes { get; set; }
+
+        //RedirectRule
+        public DbSet<RedirectRule> RedirectRules { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

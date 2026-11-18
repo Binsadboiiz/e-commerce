@@ -145,19 +145,19 @@
 .qtyBox {
     width: 120px;
     height: 48px;
-    border-radius: 999px;
+    border-radius: var(--radius-md, 8px);
 }
 
 .btnPrimary {
     flex: 1;
     height: 48px;
-    border-radius: 999px;
+    border-radius: var(--radius-md, 8px);
 }
 
 .btnSecondary {
     flex: 1;
     height: 48px;
-    border-radius: 999px;
+    border-radius: var(--radius-md, 8px);
 }
 
 /* ================================================================
