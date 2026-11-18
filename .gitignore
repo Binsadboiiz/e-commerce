@@ -31,6 +31,11 @@ yarn-error.log*
 .env
 BE/.env
 FE/.env
+.vscode
+.vs
+.idea
+/BE/bin
+/BE/obj/
 
 # vercel
 .vercel
