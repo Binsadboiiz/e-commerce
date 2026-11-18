@@ -1,11 +1,25 @@
 /# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
+.vs
+.vscode
 /node_modules
 /.pnp
 .pnp.js
 FE/node_modules
 BE/node_modules
+.idea/
+*.iml
+#.net
+**/bin/
+**/obj/
+**/appsettings.Development.json
+BE/bin/
+BE/obj/
+BE/Properties/launchSettings.json
+BE/appsettings.Development.json
+**/appsettings.json
+
 
 # testing
 /coverage
@@ -31,11 +45,6 @@ yarn-error.log*
 .env
 BE/.env
 FE/.env
-.vscode
-.vs
-.idea
-/BE/bin
-/BE/obj/
 
 # vercel
 .vercel
@@ -43,3 +52,6 @@ FE/.env
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local database seed data
+database/seed_data_dev.sql
