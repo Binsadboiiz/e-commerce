@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using BE.Constants;
 using BE.Middlewares;
+using BE.Models.DTOs;
 using BE.Models.DTOs.Seller;
 using BE.Models.Entities;
 using BE.Repositories.Interfaces.Seller;
+using BE.Services.Interface.Inventory;
 using BE.Services.Interface.Seller;
 using BE.Validators;
 
@@ -15,10 +17,12 @@ namespace BE.Services.Implementation.Seller
     public class SellerOrderService : ISellerOrderService
     {
         private readonly ISellerOrderRepository _repository;
+        private readonly IInventoryService _inventoryService;
 
-        public SellerOrderService(ISellerOrderRepository repository)
+        public SellerOrderService(ISellerOrderRepository repository, IInventoryService inventoryService)
         {
             _repository = repository;
+            _inventoryService = inventoryService;
         }
 
         public async Task<(List<SellerOrderListDto> Items, int Total)> GetOrdersAsync(
@@ -101,6 +105,10 @@ namespace BE.Services.Implementation.Seller
             // 1. Validate the basic request payload
             SellerOrderValidator.ValidateUpdateStatusRequest(request);
 
+            // Stock restore runs via ExecuteUpdate (immediate SQL), so it must share a transaction with SaveChanges.
+            // Disposing without commit rolls back on any exception.
+            await using var tx = await _repository.BeginTransactionAsync();
+
             // 2. Fetch the shop IDs belonging to the seller
             var shopIds = await _repository.GetSellerShopIdsAsync(userId);
             if (shopIds == null || !shopIds.Any())
@@ -144,6 +152,7 @@ namespace BE.Services.Implementation.Seller
 
             // 6. Update the items' status and record which shops had items updated
             var updatedShopIds = new HashSet<long>();
+            var cancelledItems = new List<OrderItem>();
             foreach (var item in sellerItems)
             {
                 var currentItemStatus = string.IsNullOrWhiteSpace(item.SellerStatus)
@@ -154,6 +163,7 @@ namespace BE.Services.Implementation.Seller
                 {
                     item.SellerStatus = targetStatus;
                     updatedShopIds.Add(item.ShopId);
+                    if (targetStatus == TrackingStatus.Cancelled) cancelledItems.Add(item);
                 }
             }
 
@@ -178,8 +188,17 @@ namespace BE.Services.Implementation.Seller
             // 8. Recalculate and update the overall order status
             UpdateOverallOrderStatus(order);
 
-            // 9. Save changes
+            // 9. Return stock of newly cancelled items (already-cancelled items were skipped in step 6)
+            if (cancelledItems.Count > 0)
+            {
+                await _inventoryService.RestoreStockAsync(cancelledItems
+                    .Where(i => i.VariantId.HasValue)
+                    .Select(i => new InventoryDeductionRequest { VariantId = i.VariantId!.Value, Quantity = i.Quantity }));
+            }
+
+            // 10. Save changes
             await _repository.SaveChangesAsync();
+            await tx.CommitAsync();
         }
 
         private string ResolveItemsStatus(List<OrderItem> items)
@@ -242,6 +261,13 @@ namespace BE.Services.Implementation.Seller
                         UpdatedBy = "system",
                         CreatedAt = DateTime.UtcNow
                     });
+
+                    // Whole order cancelled: give back the voucher usage (runs once, guarded by the status check above)
+                    foreach (var ov in order.OrderVouchers ?? new List<OrderVoucher>())
+                    {
+                        if (ov.Voucher != null && ov.Voucher.UsageCount > 0)
+                            ov.Voucher.UsageCount--;
+                    }
                 }
                 return;
             }

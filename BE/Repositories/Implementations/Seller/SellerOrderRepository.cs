@@ -2,6 +2,7 @@ using BE.Data;
 using BE.Models.Entities;
 using BE.Repositories.Interfaces.Seller;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BE.Repositories.Implementations.Seller
 {
@@ -83,6 +84,8 @@ namespace BE.Repositories.Implementations.Seller
                 .Include(order => order.OrderItems)
                 .Include(order => order.OrderTrackings)
                 .Include(order => order.ShippingDetail)
+                .Include(order => order.OrderVouchers)
+                    .ThenInclude(ov => ov.Voucher)
                 .FirstOrDefaultAsync(order => order.OrderId == orderId &&
                     order.OrderItems.Any(item => shopIds.Contains(item.ShopId)));
         }
@@ -117,5 +120,8 @@ namespace BE.Repositories.Implementations.Seller
         {
             await _context.SaveChangesAsync();
         }
+
+        public Task<IDbContextTransaction> BeginTransactionAsync()
+            => _context.Database.BeginTransactionAsync();
     }
 }

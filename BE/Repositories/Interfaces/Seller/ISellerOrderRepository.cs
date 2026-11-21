@@ -1,4 +1,5 @@
 using BE.Models.Entities;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BE.Repositories.Interfaces.Seller
 {
@@ -13,5 +14,6 @@ namespace BE.Repositories.Interfaces.Seller
         Task<List<OrderTracking>> GetOrderTrackingAsync(long orderId, List<long> shopIds);
         Task AddTrackingAsync(OrderTracking tracking);
         Task SaveChangesAsync();
+        Task<IDbContextTransaction> BeginTransactionAsync();
     }
 }

@@ -6,5 +6,6 @@ namespace BE.Services.Interface.Inventory
     {
         Task<int> GetAvailableStockAsync(long productId, long variantId);
         Task DeductStockAsync(IEnumerable<InventoryDeductionRequest> requests);
+        Task RestoreStockAsync(IEnumerable<InventoryDeductionRequest> requests);
     }
 }

@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using BE.Constants;
 using BE.Data;
 using BE.Middlewares;
@@ -107,7 +108,12 @@ namespace BE.Services.Implementation.Inventories
                 }
             }
 
-            foreach (var productId in productIdsByVariant.Values.Distinct())
+            await SyncProductStatusAsync(productIdsByVariant.Values.Distinct());
+        }
+
+        private async Task SyncProductStatusAsync(IEnumerable<long> productIds)
+        {
+            foreach (var productId in productIds)
             {
                 var totalAvailableStock = await _context.Inventories
                     .Where(inventory => inventory.ProductVariant.ProductId == productId)
@@ -139,6 +145,40 @@ namespace BE.Services.Implementation.Inventories
                             .SetProperty(product => product.UpdatedAt, now));
                 }
             }
+        }
+
+        public async Task RestoreStockAsync(IEnumerable<InventoryDeductionRequest> requests)
+        {
+            var grouped = requests
+                .Where(r => r.VariantId > 0 && r.Quantity > 0)
+                .GroupBy(r => r.VariantId)
+                .Select(g => new { VariantId = g.Key, Quantity = g.Sum(r => r.Quantity) })
+                .ToList();
+            if (grouped.Count == 0) return;
+
+            var now = DateTime.UtcNow;
+            foreach (var r in grouped)
+            {
+                var variantId = r.VariantId;
+                var quantity = r.Quantity;
+                var affected = await _context.Inventories
+                    .Where(i => i.ProductVariantId == variantId)
+                    .ExecuteUpdateAsync(u => u
+                        .SetProperty(i => i.AvailableStock, i => i.AvailableStock + quantity)
+                        .SetProperty(i => i.SoldStock, i => i.SoldStock - quantity)
+                        .SetProperty(i => i.UpdatedAt, now));
+
+                if (affected != 1)
+                    throw new AppException($"Inventory not found for variant {variantId}.", 409);
+            }
+
+            var variantIds = grouped.Select(r => r.VariantId).ToList();
+            var productIds = await _context.ProductVariants
+                .Where(v => variantIds.Contains(v.VariantId))
+                .Select(v => v.ProductId)
+                .Distinct()
+                .ToListAsync();
+            await SyncProductStatusAsync(productIds);
         }
     }
 }
