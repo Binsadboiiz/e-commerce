@@ -47,7 +47,7 @@
 
 .banner {
     height: 160px;
-    background: linear-gradient(135deg, #111827 0%, #1e293b 65%, #ee4d2d 100%);
+    background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-hover) 55%, var(--color-primary) 100%);
 }
 
 .profileContent {
@@ -183,7 +183,7 @@
     padding: 14px;
     background-color: #ffffff;
     border-radius: 12px;
-    color: #ee4d2d;
+    color: var(--color-primary);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     border: 1px solid #f1f5f9;
     flex-shrink: 0;

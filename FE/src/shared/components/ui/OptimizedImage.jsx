@@ -31,7 +31,7 @@ export default function OptimizedImage({
             alt={alt}
             className={className}
             loading={priority ? 'eager' : 'lazy'}
-            fetchPriority={priority ? 'high' : 'auto'}
+            fetchpriority={priority ? 'high' : 'auto'}
             width={width}
             height={height}
             {...props}

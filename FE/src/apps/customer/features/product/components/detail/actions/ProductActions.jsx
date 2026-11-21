@@ -1,5 +1,7 @@
 import { IoCartOutline } from "react-icons/io5";
 import styles from "./ProductActions.module.css";
+import Button from "@/shared/components/ui/Button";
+import { flyDot } from "@/shared/utils/flyDot";
 import { useLanguage } from '@/shared/context/LanguageContext';
 
 export default function ProductActions({
@@ -76,24 +78,26 @@ export default function ProductActions({
                 </button>
             </div>
 
-            <button
-                type="button"
-                className={styles.addCartBtn}
+            <Button
+                variant="outline-primary"
+                size="lg"
+                className={styles.cta}
                 disabled={isOutOfStock}
-                onClick={onAddToCart}
+                onClick={(e) => { flyDot(e.currentTarget); onAddToCart?.(e); }}
+                icon={<IoCartOutline size={18} />}
+                data-add-to-cart
             >
-                <IoCartOutline />
                 {isOutOfStock ? (t('productDetail.outOfStock') || "Out of Stock") : (t('productDetail.addToCart') || "Add to Cart")}
-            </button>
+            </Button>
 
-            <button
-                type="button"
-                className={styles.buyBtn}
+            <Button
+                size="lg"
+                className={styles.cta}
                 disabled={isOutOfStock}
                 onClick={onBuyNow}
             >
                 {t('productDetail.buyNow') || "Buy Now"}
-            </button>
+            </Button>
         </div>
     );
 }

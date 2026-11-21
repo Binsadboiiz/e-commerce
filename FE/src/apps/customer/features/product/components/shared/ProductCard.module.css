@@ -209,3 +209,18 @@
 }
 
 .productCard:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(15, 23, 42, 0.1); border-color: #bfdbfe; }
+
+/* Stage 2: navy price, amber promo tag (navy text), dot on hover */
+.currentPrice { color: var(--color-secondary); font-family: var(--font-family-display); }
+.discountBadge { background: var(--color-accent); color: var(--color-secondary); border-radius: 0 var(--radius-md) 0 var(--radius-md); top: 0; right: 0; padding: 4px 8px; }
+.topBadge { top: 0; left: 0; border-radius: var(--radius-md) 0 var(--radius-md) 0; }
+.productCard { border-radius: var(--radius-lg); box-shadow: var(--shadow-xs); }
+.priceRow::before {
+  content: '';
+  width: 6px; height: 6px; margin-right: 8px; border-radius: 50%;
+  background: var(--color-primary);
+  opacity: 0; transform: scale(0.4);
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+.productCard:hover .priceRow::before { opacity: 1; transform: scale(1); }
+@media (max-width: 480px) { .discountBadge, .topBadge { top: 0; } .topBadge { left: 0; } .discountBadge { right: 0; } }

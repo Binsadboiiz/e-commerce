@@ -129,28 +129,32 @@ function Header() {
                     {/* Right User & Cart Actions */}
                     <div className={styles.actionsSection}>
                         {/* Cart Widget */}
-                        <div
+                        <button
+                            type="button"
                             className={styles.cartWidget}
                             onClick={() => navigate(ROUTES.CART)}
-                            role="button"
                             aria-label="Shopping Cart"
+                            data-cart-target
                         >
-                            <div className={styles.cartIconWrapper}>
+                            <span className={styles.cartIconWrapper}>
                                 <FiShoppingCart size={22} />
                                 {cartCount > 0 && (
                                     <span className={styles.cartBadge}>
                                         {cartCount > 99 ? '99+' : cartCount}
                                     </span>
                                 )}
-                            </div>
-                        </div>
+                            </span>
+                        </button>
 
                         {/* User Profile Widget */}
                         {user ? (
                             <div className={styles.userDropdownWrapper}>
-                                <div
+                                <button
+                                    type="button"
                                     className={styles.userInfo}
                                     onClick={() => setShowDropdown(!showDropdown)}
+                                    aria-expanded={showDropdown}
+                                    aria-haspopup="menu"
                                 >
                                     {user.avatar ? (
                                         <img
@@ -159,13 +163,13 @@ function Header() {
                                             className={styles.userAvatar}
                                         />
                                     ) : (
-                                        <div className={styles.userAvatarFallback}>
+                                        <span className={styles.userAvatarFallback}>
                                             <FiUser size={16} />
-                                        </div>
+                                        </span>
                                     )}
                                     <span className={styles.userName}>{user.fullName}</span>
                                     <FiChevronDown size={14} className={styles.chevron} />
-                                </div>
+                                </button>
 
                                 {showDropdown && (
                                     <div className={styles.dropdownMenu}>

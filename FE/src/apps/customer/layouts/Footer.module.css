@@ -207,3 +207,11 @@
 }
 
 
+
+
+/* Stage 2: slanted bar before column titles (the cut), navy base */
+.colTitle { display: flex; align-items: center; gap: 10px; font-family: var(--font-family-display); }
+.colTitle::before { content: ''; width: 6px; height: 1em; background: var(--color-secondary); transform: skewX(-30deg); }
+.bottomBar { background: var(--color-secondary); color: var(--color-slate-300); }
+.bottomBar .copyright, .bottomBar strong { color: var(--color-white); }
+.highlightX { color: #93c5fd; }

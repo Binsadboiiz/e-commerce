@@ -112,6 +112,10 @@ namespace BE.Services.Implementation.Products
                     : (p.DiscountPrice ?? p.Price)
             });
 
+            // Out-of-stock products are hidden by the storefront, so exclude them here;
+            // otherwise a page of N items renders fewer cards and total/pagination are wrong.
+            projected = projected.Where(x => x.AvailableStock > 0);
+
             // SORT
             projected = filter.SortBy switch
             {

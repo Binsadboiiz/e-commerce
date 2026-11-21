@@ -5,6 +5,7 @@
 :root {
   /* ── Typography ── */
   --font-family-base: 'Inter', sans-serif;
+  --font-family-display: 'Be Vietnam Pro', 'Inter', sans-serif;
 
   /* ── Brand Colors ── */
   --color-primary: #2563EB;
@@ -12,6 +13,11 @@
   --color-primary-active: #1D4ED8;
   --color-primary-light: #DBEAFE;
   --color-primary-focus: rgba(37, 99, 235, 0.25);
+
+  /* Accent: promo only (flash sale, discount tag). Use as a fill with navy text, never as text on white. */
+  --color-accent: #f59e0b;
+  --color-accent-hover: #d97706;
+  --color-accent-light: #fffbeb;
 
   --color-secondary: #0f172a;
   --color-secondary-hover: #1e293b;
@@ -50,10 +56,13 @@
 
   /* ── Background & Text Tokens ── */
   --bg-page: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-muted: #f1f5f9;
+  --color-white: #ffffff;
   --bg-card: #ffffff;
   --bg-subtle: #f1f5f9;
 
-  --text-main: #0f172a;
+  --text-main: #1e293b;
   --text-muted: #64748b;
   --text-light: #94a3b8;
 
@@ -590,4 +599,56 @@ body,
 
 .animate-spin {
   animation: animateSpin 0.8s linear infinite;
+}
+
+/* ── Shared base: Inter everywhere, focus ring, reduced motion ── */
+button, input, select, textarea { font-family: inherit; }
+
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Display type (customer app only) ── */
+.customer-shell :is(h1, h2, h3) {
+  font-family: var(--font-family-display);
+  letter-spacing: -0.02em;
+}
+
+/* ── Brand motif: the dot and the cut (45deg slant) ── */
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-family-display);
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+}
+.section-title::before {
+  content: '';
+  width: 8px;
+  height: 1.1em;
+  background: var(--color-secondary);
+  transform: skewX(-30deg);
+  flex-shrink: 0;
 }

@@ -103,6 +103,7 @@ export default function ProductList() {
 
             {/* CONTENT */}
             <div className={styles.content}>
+                <h1 className="sr-only">{searchQuery ? `Tìm kiếm: ${searchQuery}` : "Danh sách sản phẩm"}</h1>
 
                 <SortBar
                     searchParams={searchParams}

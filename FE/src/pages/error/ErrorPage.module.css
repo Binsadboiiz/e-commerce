@@ -5,7 +5,6 @@
     justify-content: center;
     background-color: #f3f4f6;
     padding: 24px;
-    font-family: 'Inter', -apple-system, sans-serif;
 }
 
 .card {
@@ -185,3 +184,8 @@
         width: 100%;
     }
 }
+
+/* Stage 5: cut-corner tile instead of circular badge */
+.iconWrapper, .iconWrapperSuccess { border-radius: 0; clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 0 100%); }
+.iconWrapper { background-color: var(--color-danger-light); color: var(--color-danger); }
+.title { font-family: var(--font-family-display); }

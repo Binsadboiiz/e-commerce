@@ -10,6 +10,7 @@ import { ROUTES } from '@/config/route.config'
 import PageSkeleton from '@/shared/components/ui/PageSkeleton'
 
 const ErrorPage = lazy(() => import('../pages/error/ErrorPage'))
+const NotFound = lazy(() => import('../pages/error/NotFound'))
 const RegisterPage = lazy(() => import("@/shared/features/auth/pages/RegisterPage"))
 const LoginPage = lazy(() => import("@/shared/features/auth/pages/LoginPage"))
 
@@ -33,7 +34,7 @@ export default function StandaloneRoutes() {
             } />
             <Route path="*" element={
                 <Suspense fallback={<PageSkeleton />}>
-                    <ErrorPage />
+                    <NotFound />
                 </Suspense>
             } />
         </>

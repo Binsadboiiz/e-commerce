@@ -1,339 +1,219 @@
-**Project:** PolarisX — E-Commerce Enterprise System  
-**Scope:** Entire Client/Customer Frontend  
-**Design Specification:** `UI_DESIGN_GUIDELINES`  
-**Task Type:** UI/UX Standardization and Consistency Refactoring  
-**Priority:** High
+# PolarisX Mall — UI Design Guidelines (Customer app)
 
-## 1. Project Context
+**Scope:** Client/Customer frontend only (`FE/src/apps/customer`, shared auth pages, shared UI). Seller and Admin are out of scope.
+**Process source:** `docs/PROMPT_DESIGN.md`. This file is the single source of truth for the visual system. If code and this file disagree, fix the code or update this file in the same change.
+**Status:** Stage 1 (system definition) approved. Later stages are listed in section 12.
 
-PolarisX is an e-commerce platform with multiple frontend subsystems. This task applies only to the Client/Customer frontend.
+---
 
-Before modifying code, read and follow `UI_DESIGN_GUIDELINES` as the authoritative design specification. The specification defines the required brand colors, typography, design tokens, component styles, accessibility standards, and responsive behavior.
+## 1. Brand brief
 
-Do not create a separate design system or introduce visual conventions that conflict with the specification.
+| | |
+|---|---|
+| Brand | PolarisX Mall |
+| What it is | A Vietnamese online marketplace where shoppers buy from many verified shops. |
+| Audience | Vietnamese shoppers on phones first (360px+), also desktop. They compare price, trust and delivery speed. |
+| Core idea | **One Pole Star.** Like the North Star, each screen has one point that guides the eye. Everything else stays calm. |
+| Personality | Precise, clear, trustworthy. Never loud. |
+| Language | Vietnamese (all type must render full diacritics). English is secondary (`locales/en.json`). |
+| Stack | React 18, Vite, CSS Modules, Tailwind 4 (tokens via `@theme`), lucide-react. |
 
-## 2. Objectives
+Open items to confirm with the owner: reference sites, real product photography, real shop/brand content.
 
-Standardize the entire Client/Customer frontend so every page follows one consistent PolarisX design system.
+## 2. Logo and visual motif
 
-The work must:
-- Unify brand colors and neutral colors across all customer-facing pages.
-- Standardize buttons, cards, badges, icons, forms, tables, modals, dropdowns, tabs, pagination, notifications, and other shared UI elements.
-- Apply Inter as the only intended font family throughout the client interface.
-- Eliminate inconsistent component styling and duplicated CSS where safe.
-- Reuse existing shared components and design tokens.
-- Ensure consistent interaction states, accessibility, and responsive behavior.
-- Preserve all existing business logic and application functionality.
+The logo (`public/logo.png`) is a `>` made of two slanted bars, split in the middle, with one blue dot beside the gap, plus the wordmark with a blue **X**.
 
-The result must look like one coherent product rather than a collection of independently styled pages.
+The system reuses two shapes only:
 
-## 3. Phase 1 — Codebase Audit
+1. **The cut.** A 45° slanted edge, taken from the bars of the `>`.
+   - Banner and hero image corners are clipped at 45°.
+   - Section dividers are a short slanted bar, not a full-width line.
+   - Section headings carry a small slanted bar before the text.
+2. **The dot.** One solid circle, taken from the logo.
+   - Marks the one active or important thing: selected variant, unread count, cart count, price-drop marker, current step.
+   - Never more than one dot-style highlight competing in the same area.
 
-Inspect the actual Client/Customer frontend structure before making changes.
+Do not add other decorative shapes (blobs, spheres, particles, random gradients).
 
-Identify:
-- Customer-facing pages and routes.
-- Shared layouts, headers, navigation, footers, and sidebars.
-- Shared UI components and supported component variants.
-- Global CSS, CSS modules, component styles, and utility classes.
-- Existing design tokens in `src/styles/global.css`.
-- Existing Button, Card, Badge, Input, Modal, and Icon implementations.
-- Hardcoded colors, font declarations, border radii, shadows, and spacing values.
-- Duplicate components that implement the same visual function.
-- Inconsistent hover, active, focus, disabled, and loading states.
+## 3. Color
 
-Use the real project structure and naming conventions. Do not assume file locations without inspecting the repository.
+Neutral base, one dominant brand color, one rare accent. No other decorative colors.
 
-After the audit, continue into implementation. Do not stop after producing an analysis or plan.
-
-## 4. Phase 2 — Global Design Token Standardization
-
-Use `UI_DESIGN_GUIDELINES` as the source of truth.
-
-Inspect and update the existing tokens in `src/styles/global.css`, preserving the project's established architecture.
-
-### 4.1. Brand Colors
-
-| Token | Value | Intended Usage |
+### Brand
+| Token | Value | Use |
 |---|---|---|
-| `--color-primary` | `#2563EB` | Primary CTA, active states, links |
-| `--color-primary-hover` | `#3B82F6` | Primary hover |
-| `--color-primary-active` | `#1D4ED8` | Primary pressed state |
-| `--color-primary-light` | `#DBEAFE` | Selected backgrounds and highlights |
-| `--color-primary-focus` | `rgba(37, 99, 235, 0.25)` | Keyboard focus ring |
-| `--color-secondary` | `#0F172A` | Navy brand identity and secondary actions |
-| `--color-secondary-hover` | `#1E293B` | Secondary hover |
+| `--color-primary` | `#2563EB` | Primary CTA, links, active states, the dot |
+| `--color-primary-hover` | `#3B82F6` | Hover |
+| `--color-primary-active` | `#1D4ED8` | Pressed |
+| `--color-primary-light` | `#DBEAFE` | Selected backgrounds |
+| `--color-primary-focus` | `rgba(37,99,235,.25)` | Focus ring |
+| `--color-secondary` | `#0F172A` | Navy: brand identity, headings, secondary actions |
+| `--color-secondary-hover` | `#1E293B` | Navy hover |
 
-Remove legacy orange-red branding, including `#EE4D2D`, from brand-level components within the task scope.
+### Accent (rare)
+| Token | Value | Use |
+|---|---|---|
+| `--color-accent` | `#F59E0B` | Flash sale, discount tag, promo strip. Nothing else. |
+| `--color-accent-hover` | `#D97706` | Hover on accent fills |
+| `--color-accent-light` | `#FFFBEB` | Promo backgrounds |
 
-Do not indiscriminately replace every red value. Red must remain available for destructive actions and validation errors.
+Rules:
+- Use accent as a **fill with navy text** (contrast about 8:1). Never use accent as text on white (fails WCAG AA).
+- At most one accent element per viewport area. If everything is amber, nothing is.
+- Accent is not a status color. "Pending" still uses `--color-warning` (same hue, different job: status vs promo). Do not mix them in one component.
+- Regular prices are **navy**, not red. The discount tag is the only amber/discount element on a card.
 
-### 4.2. Neutral Colors
-
+### Neutrals
 | Token | Value |
 |---|---|
 | `--bg-page` | `#F8FAFC` |
 | `--bg-surface` | `#FFFFFF` |
 | `--bg-muted` | `#F1F5F9` |
 | `--border-color` | `#E2E8F0` |
-| `--text-muted` | `#64748B` |
 | `--text-main` | `#1E293B` |
+| `--text-muted` | `#64748B` |
 | `--color-white` | `#FFFFFF` |
 
-### 4.3. Status Colors
+### Status (semantic only)
+`--color-success #10B981`, `--color-warning #F59E0B`, `--color-danger #EF4444`, `--color-info #06B6D4`.
+Red is for errors and destructive actions only. Orange-red `#EE4D2D` is retired.
 
-| Status Token | Value |
+| Status | Color |
 |---|---|
-| `--color-success` | `#10B981` |
-| `--color-warning` | `#F59E0B` |
-| `--color-danger` | `#EF4444` |
-| `--color-info` | `#06B6D4` |
+| Active, Delivered, Approved | success |
+| Pending, Preparing | warning |
+| In transit | info |
+| Cancelled, Rejected, Deleted | danger |
 
-Maintain semantic color usage across order status, payment status, shipping status, product availability, notifications, and validation messages.
+### Banned
+No purple, pink or indigo gradients. No gradient-filled headline text. No glassmorphism.
 
-### Design Token Rules
+## 4. Typography
 
-- Reuse existing CSS variables wherever possible.
-- Avoid duplicate or conflicting token definitions.
-- Replace hardcoded values with shared tokens when appropriate.
-- Do not introduce new brand colors without a clear requirement.
-- Do not change colors that carry meaningful business semantics.
-- Keep status colors separate from general brand interactions.
+Two families, loaded in `index.html` (one Google Fonts request):
 
-## 5. Phase 3 — Typography Standardization
+| Role | Family | Weights | Token |
+|---|---|---|---|
+| Display (h1–h3, hero, section titles, prices on detail page) | **Be Vietnam Pro** | 600, 700, 800 | `--font-family-display` |
+| Body, UI, forms, tables, buttons | **Inter** | 400, 500, 600, 700 | `--font-family-base` |
 
-Use **Inter as the only intended font family** throughout the Client/Customer frontend.
+Why Be Vietnam Pro: it is drawn for Vietnamese diacritics, and its geometric shapes match the logo wordmark.
 
-Inspect the current font-loading implementation before making changes. Ensure Inter is loaded correctly, then apply the global font token consistently across navigation, headings, body text, buttons, forms, tables, badges, dialogs, and dynamically rendered UI.
+Scale (contrast is the point: big display vs small supporting text):
 
-Remove unnecessary component-level font declarations that conflict with the global standard. Avoid duplicate font imports and unnecessary font weights.
+| Use | Size / line-height | Family, weight |
+|---|---|---|
+| Hero | 40–56px / 1.05, -0.03em | Display 800 |
+| Page title (h1) | 28–32px / 1.15 | Display 700 |
+| Section title (h2) | 20–24px / 1.2 | Display 700 |
+| Card title | 14–15px / 1.4 | Inter 500–600 |
+| Body | 14–16px / 1.6 | Inter 400 |
+| Label, helper | 12–13px / 1.4 | Inter 500–600 |
 
-Reference configuration:
+Rules:
+- `button, input, select, textarea { font-family: inherit }`.
+- Headings use display type only inside the customer app (`.customer-shell`). Admin and Seller keep Inter.
+- Inputs are at least 16px on mobile so iOS does not zoom on focus.
+- No component declares its own `font-family`. Use the tokens.
 
-```css
-:root {
-  --font-family-base: 'Inter', sans-serif;
-}
+## 5. Spacing, radius, elevation, motion
 
-html,
-body,
-#root {
-  font-family: var(--font-family-base);
-}
+- **Spacing:** 4px base. Page gutter 12px (mobile), 16px (tablet), 24px (desktop). Max content width 1280px.
+- **Radius:** `--radius-sm 6`, `--radius-md 8`, `--radius-lg 12` (cards), `--radius-xl 16` (modals). Pills (`9999px`) only for badges, chips and sort tabs.
+- **Elevation:** use `--shadow-xs/sm/md` tokens. Cards rest on a border plus `--shadow-xs`; only hover or overlays get more. Do not put a large soft shadow on everything.
+- **Easing:** `cubic-bezier(0.22, 1, 0.36, 1)` for entrances and the signature move; `--transition-fast/normal` for state changes. No default `ease`.
+- **Durations:** 150ms state change, 250ms reveal, 600ms signature move.
+- **Reduced motion:** all animation must stop under `prefers-reduced-motion: reduce` (already enforced in `global.css`).
 
-button,
-input,
-select,
-textarea {
-  font-family: inherit;
-}
-```
+## 6. Signature moment: the dot flies to the cart
 
-Use the existing font assets or established font-loading strategy when available. A CSS declaration alone is insufficient if the font itself is not loaded.
+When a shopper presses "Thêm vào giỏ", a blue dot (the logo dot) leaves the button, arcs to the cart icon in the header, and the cart count then updates and nudges once.
 
-Maintain a consistent typography hierarchy for page headings, section headings, body text, labels, buttons, tables, and helper text. Do not redesign page layouts solely to change typography.
+- One interaction only. It is the main place the dot moves.
+- Duration 600ms, easing above. Falls back to the count nudge alone under reduced motion.
+- Must not delay or block the add-to-cart request.
 
-## 6. Phase 4 — Button Standardization
+Supporting motion stays small: card lift on hover (2–3px), focus rings, skeleton shimmer.
 
-Audit every button on every customer-facing page. Standardize buttons through the existing reusable Button component and its supported variants.
+## 7. Components
 
-Required variants:
-- `primary`
-- `secondary`
-- `outline`
-- `outline-primary`
-- `danger`
-- `success`
-- `ghost`
-- `link`
+Reuse existing shared components. Do not create a second implementation.
 
-Required default sizes:
-- `xs`: 28px high
-- `sm`: 34px high
-- `md`: 40px high
-- `lg`: 46px high
-- `xl`: 52px high
+### Buttons (`shared/components/ui/Button.jsx`)
+Variants: `primary`, `secondary`, `outline`, `outline-primary`, `danger`, `success`, `ghost`, `link` (plus `warning`).
+Sizes: `xs 28`, `sm 34`, `md 40`, `lg 46`, `xl 52` px high.
+States: default, hover, pressed, `:focus-visible` (3px `--color-primary-focus` ring), disabled, loading.
+Primary is blue. Navy is for secondary actions. Raw `<button>` elements with their own CSS are legacy: migrate them when touching that file.
+Do not turn links into buttons. Navigation stays `<Link>`.
 
-Standardize default, hover, active/pressed, focus-visible, disabled, and loading states.
+### Cards
+White surface, 1px `--border-color`, radius 12px, `--shadow-xs`. Product card: image first, brand tag, 2-line title, rating, navy price, optional discount tag. Do not force equal sizes where content differs; vary hierarchy and size in editorial areas (hero, category entry points).
 
-Use Blue for primary actions, Navy for appropriate secondary actions, and semantic colors for destructive or confirmation actions. Keep button heights, typography, padding, border radius, and icon spacing consistent.
+### Badges
+Pill, 11–12px, weight 600, tinted background with matching dark text, status mapping from section 3. The same status looks the same on every page.
 
-Preserve existing click handlers, navigation targets, form submission, loading behavior, and disabled conditions. Do not change the Button component API unless a compatibility issue has been demonstrated.
+### Inputs and forms
+48px high on mobile, 40–44px on desktop. 1px border, radius 12px, focus = blue border + 4px focus ring. Label above the field (13px, 600). Errors in `--color-danger` with text, not color alone.
 
-Do not mechanically convert every clickable element into a button. Preserve the semantic distinction between buttons and links.
+### Modals and dropdowns
+Backdrop `rgba(15,23,42,.6)` with optional 4px blur. White surface, radius 16px. Keep focus inside; Esc closes.
 
-## 7. Phase 5 — Cards, Badges, and Surface Components
+### Tables (account, orders)
+Muted header row, 1px row borders, hover `--bg-muted`, horizontal scroll under 640px. Keep all columns and actions.
 
-### 7.1. Cards
+### Icons
+lucide-react only. 14–16px inline, 18–20px actions, 20–24px navigation. Stroke width consistent. Never emoji as icons. Icon-only controls need `aria-label`.
 
-Standardize background, border, border radius, shadow, padding, typography, and hover behavior.
+### States
+Every list or page has designed loading (skeleton), empty (icon + one sentence + action) and error states, plus a styled 404.
 
-Default specifications:
-- Background: `#FFFFFF`
-- Border: `#E2E8F0`
-- Border radius: 12px
-- Shadow: existing `--shadow-sm` token
+## 8. Layout principles
 
-Apply consistently to product cards, category cards, account panels, order summaries, checkout panels, and other equivalent components. Do not force identical dimensions when content and layout requirements differ.
+- Calm and aligned by default; break the grid in a few chosen places (hero, one editorial band).
+- Home sections must not repeat the same structure back to back. Alternate: hero with slanted-cut image, a horizontal rail, an editorial category band, a product grid, a promo strip.
+- Avoid: centered hero with two buttons as the only pattern, and three identical cards with circular icon badges.
+- Product grid: 2 columns at 360px, 3 at 768px, 4 at 1100px, 5 at 1400px.
 
-### 7.2. Badges
+## 9. Content
 
-Standardize pill-shaped borders, font size and weight, padding, status backgrounds, foreground colors, and alignment.
+- Real, specific Vietnamese copy. No stock phrases ("unlock", "elevate", "seamless", "all-in-one", "cutting-edge" and their Vietnamese equivalents).
+- No lorem ipsum, fake reviews, invented statistics or fake brand logos.
+- Placeholder images are marked as placeholders (currently `picsum.photos` in seed data) and replaced with real product photos.
 
-Status mapping:
-- Active, Delivered, Approved: Success
-- Pending, Preparing: Warning
-- Cancelled, Rejected, Deleted: Danger
-- In-transit: Info
-
-Ensure the same status uses the same visual treatment across all pages. Do not change underlying status values or business logic.
-
-### 7.3. Other Surface Components
-
-Standardize dropdowns, popovers, tooltips, dividers, empty states, loading skeletons, notifications, toast messages, pagination, tabs, and breadcrumbs.
-
-Use shared tokens and a consistent visual hierarchy without forcing unrelated components into identical layouts.
-
-## 8. Phase 6 — Icon Standardization
-
-Audit all icons throughout the Client/Customer frontend.
-
-Use the project's existing icon library, preferably its current Lucide implementation where already established. Maintain consistent icon sizing, stroke weight, alignment, spacing, and color tokens.
-
-Default size conventions:
-- Small inline icons: 14–16px
-- Standard action icons: 18–20px
-- Prominent navigation icons: 20–24px
-
-These sizes are defaults, not absolute constraints. Follow existing component requirements when a different size is necessary.
-
-Icon requirements:
-- Use brand, neutral, and semantic status tokens for icon colors.
-- Align icons correctly with Inter text.
-- Provide accessible names for icon-only buttons.
-- Provide appropriate hover and focus feedback for interactive icons.
-- Avoid mixing unrelated icon libraries or inconsistent icon styles.
-- Preserve the meaning and function of existing icons.
-
-Do not replace icons solely for aesthetic preference if doing so would reduce clarity or change their meaning.
-
-## 9. Phase 7 — Forms, Inputs, Tables, and Modals
-
-### Forms and Inputs
-
-Standardize labels, helper text, input heights, padding, borders, radius, focus rings, validation messages, disabled states, and read-only states.
-
-Preserve validation rules, data binding, field names, and submission logic.
-
-### Tables
-
-Standardize header backgrounds, typography, row borders, hover states, cell spacing, action buttons, status badges, empty states, and loading states.
-
-Maintain horizontal scrolling on small screens. Do not remove existing columns, actions, filters, sorting, or pagination.
-
-### Modals and Dialogs
-
-Standardize:
-- Backdrop: `rgba(15, 23, 42, 0.6)`
-- Optional blur: `blur(4px)`
-- Content background: `#FFFFFF`
-- Border radius: 16px
-- Header, body, footer, and action spacing
-- Typography and button variants
-
-Preserve modal triggers, form submission, dismissal behavior, keyboard interactions, and focus management.
-
-## 10. Phase 8 — Page-by-Page Standardization
-
-Inspect and standardize every customer-facing route, not only the homepage or shared layout.
-
-Include all applicable pages and features found in the actual project, such as:
-- Home and landing pages
-- Product listing and category pages
-- Product detail
-- Search results and filtering
-- Cart
-- Checkout and payment
-- Order history and order detail
-- User profile and account settings
-- Address management
-- Client authentication and registration pages
-- Wishlist and reviews
-- Notifications, empty states, loading states, and error states
-
-This list is illustrative. The actual route inventory determines the final scope.
-
-For each page, identify shared components, apply consistent brand colors and typography, standardize buttons/cards/badges/icons, align spacing and surfaces, verify loading/error/empty/success states, preserve page-specific functionality, and inspect responsive behavior.
-
-Do not leave secondary routes unstandardized simply because the primary pages look consistent.
-
-## 11. Phase 9 — Responsive and Accessibility Validation
-
-Validate the updated interface at these breakpoints:
-
-| Device | Width |
-|---|---|
-| Mobile | Below 640px |
-| Tablet | 640–1024px |
-| Desktop | Above 1024px |
-
-Ensure forms adapt to narrow screens, buttons use full width when appropriate, tables scroll horizontally when required, grids adapt to available width, navigation remains usable, and modals fit within the viewport.
-
-Prevent unintended horizontal overflow. Keep keyboard focus visible, provide accessible names for icon-only controls, meet applicable contrast requirements, and respect reduced-motion preferences.
-
-Do not change responsive layouts unnecessarily if they already satisfy the specification.
-
-## 12. Phase 10 — CSS Cleanup and Component Reuse
-
-After standardization:
-- Remove redundant CSS declarations introduced by legacy styling.
-- Consolidate duplicate visual rules when safe.
-- Reuse existing shared components.
-- Replace repeated hardcoded values with established tokens.
-- Remove conflicting font-family declarations where appropriate.
-- Avoid broad selectors that unintentionally affect unrelated components.
-- Avoid new dependencies without a clear technical need.
-- Keep changes limited to the Client/Customer scope.
-
-Do not perform a broad architectural refactor. Do not delete a CSS class or component until all usages and dependencies have been checked. Do not change business logic as part of style cleanup.
-
-## 13. Implementation Constraints
-
-Unless explicitly authorized, do not:
-- Change business logic.
-- Change API contracts or add endpoints.
-- Change routing or authentication flows.
-- Modify database schemas.
-- Remove existing functionality.
-- Replace working shared components with duplicated implementations.
-- Introduce another intended font family.
-- Introduce orange-red as the default brand color.
-- Rewrite entire pages unnecessarily.
-- Modify Seller or Admin interfaces outside the requested Client/Customer scope.
-
-You must inspect before modifying, reuse existing components, follow `UI_DESIGN_GUIDELINES`, preserve existing behavior, keep changes focused, and report incomplete coverage or technical blockers honestly.
-
-## 14. Validation and Reporting
-
-After implementation, inspect the updated pages and components for consistent colors, typography, component states, responsive behavior, accessibility, import errors, CSS conflicts, and font loading.
-
-Run relevant lint, build, and tests when available. Report only checks that were actually executed and describe their real results.
-
-Provide a final implementation report containing:
-1. Pages and components inspected.
-2. Files modified, added, or removed.
-3. Design tokens and components standardized.
-4. Customer routes completed and any routes not covered.
-5. Areas reviewed for functional regressions.
-6. Actual lint, build, test, and responsive-check results.
-7. Remaining issues, blockers, or follow-up work.
-
-Do not claim the task is fully complete if significant routes remain unaudited or unstandardized.
-
-## Final Execution Instruction
-
-Read `UI_DESIGN_GUIDELINES` first. Audit the entire Client/Customer frontend, then implement the standardization systematically across shared components and individual pages.
-
-The goal is a unified PolarisX interface using Navy–Blue branding, Inter typography, consistent component styling, accessible interactions, and responsive layouts while preserving all existing application functionality.
-
-**Execute the task end-to-end. Do not stop after analysis or planning.**
+## 10. Accessibility and performance
+
+- WCAG AA contrast. Amber is never text on white.
+- Visible focus on every interactive element (global `:focus-visible` rule exists).
+- Semantic HTML, keyboard reachable, accessible names on icon-only controls.
+- Responsive from 360px. No horizontal page scroll. Breakpoints: mobile < 640, tablet 640–1024, desktop > 1024.
+- Target Core Web Vitals in the green: reserve image space (`width`/`height` or `aspect-ratio`), lazy-load below the fold, keep font weights to the ones listed in section 4.
+
+## 11. Implementation rules
+
+- Tokens live in `src/styles/global.css` (`:root`). Do not redefine them per component. Tailwind `@theme` in `index.css` mirrors only what Tailwind needs.
+- Prefer tokens over hardcoded hex. Do not add new brand colors.
+- Do not change business logic, API contracts, routing or auth flows.
+- Do not delete a CSS class or component before checking all usages.
+- Do not touch Seller or Admin UI.
+
+## 12. Rollout stages (pause for review after each)
+
+1. **System** (done): this document, display font, accent and display tokens, `customer-shell` scope.
+2. **Layout and content** (done): header, footer, home composition, product card, `.dot` and `.section-title` motif classes in `global.css`.
+3. **Type and color pass** (done for detail, cart, checkout titles; raw-button migration partial: add-to-cart, buy now, cart checkout): display type, navy prices, amber promo tag.
+4. **Motion** (done): cart-dot signature moment in `shared/utils/flyDot.js`, hooked to the add-to-cart button; skipped under reduced motion.
+5. **Quality** (done): 404 and empty states use the cut tile and dot; overflow, alt text, control names and heading checks run at 360, 768, 1024, 1440px.
+
+After each stage: self-critique against `docs/PROMPT_DESIGN.md` Part 2 and Part 3, and fix anything that still looks generic before review.
+
+## 13. Reviewer checklist
+
+- [ ] Only Be Vietnam Pro and Inter are loaded; diacritics render correctly.
+- [ ] Every screen has one clear focal point.
+- [ ] The cut and the dot are the only decorative motifs.
+- [ ] Amber appears only on promo elements, never as text on white.
+- [ ] No orange-red brand color, no purple/pink/indigo.
+- [ ] Prices are navy; red appears only for errors/destructive actions.
+- [ ] No horizontal scroll at 360px.
+- [ ] Reduced motion respected.

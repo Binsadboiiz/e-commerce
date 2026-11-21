@@ -92,7 +92,7 @@
 .flashSaleProgressFill {
     height: 100%;
     border-radius: 999px;
-    background: linear-gradient(90deg, #ffb300, #ff5722);
+    background: linear-gradient(90deg, var(--color-primary-hover), var(--color-primary-active));
 }
 
 @media (max-width: 900px) {

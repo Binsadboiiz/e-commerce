@@ -127,3 +127,14 @@
 .customerBtnTextAction:hover {
   color: var(--color-primary, #2563eb);
 }
+
+/* Stage 3: slanted bar before page and section titles (the cut) */
+.customerPageTitle { gap: 12px; letter-spacing: -0.02em; }
+.customerPageTitle::before {
+  content: '';
+  width: 8px;
+  height: 1.1em;
+  background: var(--color-secondary);
+  transform: skewX(-30deg);
+  flex-shrink: 0;
+}

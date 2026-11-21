@@ -89,7 +89,7 @@
     position: absolute;
     top: 8px;
     left: 8px;
-    background: var(--pd-color-accent, #e11d48);
+    background: var(--pd-color-accent, var(--color-danger-hover));
     color: #ffffff;
     font-size: 11px;
     font-weight: 700;
@@ -134,7 +134,7 @@
 }
 
 .salePrice {
-    color: var(--pd-color-accent, #e11d48);
+    color: var(--pd-color-accent, var(--color-danger-hover));
 }
 
 .originalPrice {
@@ -157,3 +157,7 @@
     }
 
 }
+
+/* Stage 3: navy price, amber promo tag */
+.price, .salePrice { color: var(--color-secondary); }
+.badge { background: var(--color-accent); color: var(--color-secondary); }

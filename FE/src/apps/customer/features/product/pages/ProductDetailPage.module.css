@@ -20,7 +20,7 @@
         0 4px 16px rgba(0, 0, 0, 0.04);
     --pd-section-padding: 32px;
 
-    --pd-color-accent: #e11d48;
+    --pd-color-accent: var(--color-accent);
     --pd-color-border: #ebebeb;
     --pd-color-bg-page: #f7f8fa;
     --pd-color-text-primary: #111827;

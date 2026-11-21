@@ -468,3 +468,11 @@
     padding: 0.15rem;
   }
 }
+
+/* Stage 2: buttons keep the old look; wordmark uses display type; cart count is the dot */
+.cartWidget, .userInfo { font: inherit; color: inherit; }
+.userInfo { background: transparent; }
+.brandNamePrimary, .brandNameHighlight, .brandNameSub { font-family: var(--font-family-display); }
+.brandNameSub { color: var(--color-secondary); }
+.cartBadge { background: var(--color-primary); border: 2px solid #fff; min-width: 20px; text-align: center; box-shadow: none; }
+.topBar { background-color: var(--color-secondary); }

@@ -1,18 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '@/config/route.config';
+import Button from '@/shared/components/ui/Button';
 
 /**
- * Standardized Shared Empty State Component
+ * Shared empty state: cut-corner icon tile, display title, one clear action.
  *
- * @param {Object} props
  * @param {React.ReactNode} [props.icon] - Icon node (e.g. <FiShoppingCart size={36} />)
- * @param {string} props.title - Main empty state title (20px, font-semibold)
- * @param {string} [props.description] - Description text (14px, leading-relaxed)
- * @param {string} [props.actionText] - Primary CTA button label
- * @param {string} [props.actionLink] - Target link for primary CTA
- * @param {Function} [props.onAction] - Custom click handler for CTA
- * @param {string} [props.className] - Additional wrapper CSS classes
+ * @param {string} props.title
+ * @param {string} [props.description]
+ * @param {string} [props.actionText] - Primary CTA label
+ * @param {string} [props.actionLink] - Target for the CTA (default: product list)
+ * @param {Function} [props.onAction] - Click handler instead of a link
+ * @param {string} [props.className]
  */
 export default function EmptyState({
     icon,
@@ -25,44 +25,33 @@ export default function EmptyState({
 }) {
     return (
         <div className={`flex flex-col items-center justify-center text-center py-16 px-4 min-h-[360px] ${className}`}>
-            {/* Circular Icon Badge Container (80px, circular, soft blue background) */}
             {icon && (
-                <div className="w-20 h-20 rounded-full bg-blue-50/90 text-primary flex items-center justify-center mb-5 border border-blue-100/70 shadow-sm flex-shrink-0">
+                <div
+                    className="w-20 h-20 bg-[var(--color-primary-light)] text-[var(--color-secondary)] flex items-center justify-center mb-6 flex-shrink-0"
+                    style={{ clipPath: 'polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%)' }}
+                    aria-hidden="true"
+                >
                     {icon}
                 </div>
             )}
 
-            {/* Empty State Heading */}
             {title && (
-                <h2 className="text-xl font-semibold text-slate-900 mb-2 tracking-tight">
+                <h2 className="text-xl text-slate-900 mb-2" style={{ fontWeight: 700, letterSpacing: '-0.02em' }}>
                     {title}
                 </h2>
             )}
 
-            {/* Empty State Description */}
             {description && (
                 <p className="text-slate-500 text-sm max-w-md mb-6 leading-relaxed">
                     {description}
                 </p>
             )}
 
-            {/* Primary CTA Button */}
             {actionText && (
                 onAction ? (
-                    <button
-                        type="button"
-                        onClick={onAction}
-                        className="customerBtnPrimary"
-                    >
-                        <span>{actionText}</span>
-                    </button>
+                    <Button onClick={onAction}>{actionText}</Button>
                 ) : (
-                    <Link
-                        to={actionLink}
-                        className="customerBtnPrimary"
-                    >
-                        <span>{actionText}</span>
-                    </Link>
+                    <Link to={actionLink}><Button>{actionText}</Button></Link>
                 )
             )}
         </div>

@@ -40,7 +40,7 @@
     left: 8px;
     z-index: 2;
 
-    background: #ff5722;
+    background: var(--color-danger);
     color: #fff;
     font-size: 12px;
     font-weight: 600;

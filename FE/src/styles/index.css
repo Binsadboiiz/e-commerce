@@ -13,7 +13,7 @@
   --color-bg-header: #0F172A;
   --color-text-primary: #1E293B;
   --color-text-secondary: #64748B;
-  --color-text-price: var(--pd-color-accent, #e11d48);
+  --color-text-price: var(--pd-color-accent, var(--color-danger-hover));
   --color-border: #E2E8F0;
   --color-border-light: #F1F5F9;
   --color-success: #10B981;

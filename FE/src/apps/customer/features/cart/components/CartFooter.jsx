@@ -5,6 +5,7 @@ import { ROUTES } from '@/config/route.config';
 import styles from '../pages/CartPage.module.css';
 import formatPrice from '@/apps/customer/features/product/utils/formatPrice';
 import { useLanguage } from '@/shared/context/LanguageContext';
+import Button from '@/shared/components/ui/Button';
 
 export default function CartFooter() {
     const { t } = useLanguage();
@@ -71,13 +72,13 @@ export default function CartFooter() {
                 </div>
 
                 {/* Checkout Button */}
-                <button
+                <Button
+                    size="lg"
                     onClick={() => navigate(ROUTES.CHECKOUT, { state: { mode: 'cart' } })}
                     disabled={selectedCount === 0}
-                    className={styles.buttonPrimary}
                 >
                     {t('cart.checkout')}
-                </button>
+                </Button>
             </div>
         </div>
     );

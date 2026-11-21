@@ -171,7 +171,7 @@
 }
 
 .totalAmountValue {
-    color: #e11d48;
+    color: var(--color-danger-hover);
     font-size: 20px;
     font-weight: 700;
 }
@@ -418,3 +418,7 @@
         justify-self: end;
     }
 }
+
+/* Stage 3 */
+.totalAmountValue { color: var(--color-secondary); font-family: var(--font-family-display); }
+.heading { font-family: var(--font-family-display); }
