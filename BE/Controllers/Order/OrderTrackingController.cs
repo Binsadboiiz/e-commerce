@@ -45,16 +45,5 @@ namespace BE.Controllers.Order
             var data = await _service.GetOrderTrackingAsync(orderId, userId);
             return Ok(ApiResponse<OrderTrackingResponse>.SuccessResponse(data));
         }
-        
-        /// <summary>
-        /// Updates tracking status for an order.
-        /// </summary>
-        [Authorize(Roles = RoleConstants.Seller)]
-        [HttpPut("Order:{orderId}/status")]
-        public async Task<IActionResult> UpdateStatus(long orderId, UpdateTrackingStatusRequest request)
-        {
-            await _service.UpdateOrderStatusAsync(orderId, request);
-            return Ok(ApiResponse.SuccessResponse("Status updated successfully."));
-        }
     }
 }

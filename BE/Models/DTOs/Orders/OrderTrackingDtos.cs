@@ -75,13 +75,4 @@ namespace BE.Models.DTOs
         public DateTime OrderDate { get; set; }
         public DateTime? EstimatedDeliveryDate { get; set; }
     }
-
-    // ── Request body to update order status (shop / admin) ──
-    public class UpdateTrackingStatusRequest
-    {
-        public string Status { get; set; }
-        public string? Location { get; set; }
-        public string? Description { get; set; }
-        public string? UpdatedBy { get; set; }
-    }
 }

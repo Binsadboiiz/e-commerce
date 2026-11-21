@@ -5,10 +5,6 @@ import axiosClient from "@/shared/features/auth/api/axiosClient";
  */
 const SELLER_DASHBOARD_URL = "/seller/dashboard";
 
-/**
- * URL path for updating order/shipment status.
- */
-const ORDER_TRACKING_URL = "/order-tracking";
 
 /**
  * API client service for Seller Dashboard data operations.
@@ -32,12 +28,6 @@ export const sellerDashboardApi = {
      * @returns {Promise<any>} Response indicating success or failure.
      */
     async updateOrderStatus(orderId, status, location = "Shop Warehouse", description = "Status updated by shop merchant.") {
-        const payload = {
-            status,
-            location,
-            description,
-            updatedBy: "seller"
-        };
-        return axiosClient.put(`${ORDER_TRACKING_URL}/Order:${orderId}/status`, payload);
+        return axiosClient.put(`/seller/orders/${orderId}/status`, {status, location, description});
     }
 };

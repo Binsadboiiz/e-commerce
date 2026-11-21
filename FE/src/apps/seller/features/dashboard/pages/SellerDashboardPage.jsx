@@ -144,23 +144,23 @@ export const SellerDashboard = () => {
     };
 
     /**
-     * Calls the backend service to transition an order's status to 'shipping'.
+     * Calls the backend service to transition an order's status to 'confirm'.
      */
     const handleShipOrder = async (orderId) => {
         const rawId = orderId.replace("ORD-", "");
         const loadingToast = toast.loading(`Confirming fulfillment for order ${orderId}...`);
         try {
-            const res = await sellerDashboardApi.updateOrderStatus(rawId, "shipping", "Merchant Warehouse", "Fulfillment confirmed by merchant. Shipped.");
+            const res = await sellerDashboardApi.updateOrderStatus(rawId, "confirmed", "Merchant Warehouse", "Fulfillment confirmed by merchant. Shipped.");
             toast.dismiss(loadingToast);
             if (res && res.success) {
-                toast.success(`Order ${orderId} has been successfully shipped!`);
+                toast.success(`Order ${orderId} has been successfully confirm!`);
                 fetchDashboardData(false);
             } else {
                 toast.error(res.message || "Failed to ship order.");
             }
         } catch (error) {
             toast.dismiss(loadingToast);
-            console.error("Fulfillment shipping error:", error);
+            console.error("Fulfillment confirm error:", error);
             toast.error(error.response?.data?.message || "Could not update order status.");
         }
     };
@@ -184,28 +184,6 @@ export const SellerDashboard = () => {
             toast.dismiss(loadingToast);
             console.error("Cancellation error:", error);
             toast.error(error.response?.data?.message || "Could not cancel order.");
-        }
-    };
-
-    /**
-     * Calls the backend service to mark a shipping order as completed.
-     */
-    const handleCompleteOrder = async (orderId) => {
-        const rawId = orderId.replace("ORD-", "");
-        const loadingToast = toast.loading(`Marking order ${orderId} as completed...`);
-        try {
-            const res = await sellerDashboardApi.updateOrderStatus(rawId, "completed", "Customer Destination", "Package delivered and order finalized.");
-            toast.dismiss(loadingToast);
-            if (res && res.success) {
-                toast.success(`Order ${orderId} is finalized and marked as completed.`);
-                fetchDashboardData(false);
-            } else {
-                toast.error(res.message || "Failed to complete order.");
-            }
-        } catch (error) {
-            toast.dismiss(loadingToast);
-            console.error("Finalization error:", error);
-            toast.error(error.response?.data?.message || "Could not update order status.");
         }
     };
 
@@ -617,16 +595,6 @@ export const SellerDashboard = () => {
                                                             <XCircle size={16} />
                                                         </button>
                                                     </>
-                                                )}
-                                                {order.status === "shipping" && (
-                                                    <button 
-                                                        className={styles.actionBtn} 
-                                                        title="Mark as Completed"
-                                                        style={{ color: "#10b981" }}
-                                                        onClick={() => handleCompleteOrder(order.id)}
-                                                    >
-                                                        <CheckCircle size={16} />
-                                                    </button>
                                                 )}
                                             </div>
                                         </td>
