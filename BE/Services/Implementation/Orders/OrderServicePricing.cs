@@ -1,4 +1,5 @@
 using BE.Data;
+using BE.Helpers;
 using BE.Middlewares;
 using BE.Models.DTOs;
 using BE.Models.Entities;
@@ -185,12 +186,7 @@ namespace BE.Services.Implementation.Orders
         }
 
         private decimal GetUnitPrice(Product product, ProductVariant? variant)
-        {
-            var productPrice = product.DiscountPrice ?? product.Price;
-            var finalPrice = variant?.Price ?? productPrice;
-
-            return finalPrice;
-        }
+            => PriceHelper.GetUnitPrice(product, variant);
 
         private void ValidateStock(Product product, ProductVariant? variant, int quantity)
         {

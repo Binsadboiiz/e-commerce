@@ -5,6 +5,7 @@ using BE.Middlewares;
 using BE.Services.Interface.Cart;
 using BE.Services.Interface.Inventory;
 using Microsoft.EntityFrameworkCore;
+using BE.Helpers;
 
 namespace BE.Services.Implementation.Carts
 {
@@ -205,9 +206,8 @@ namespace BE.Services.Implementation.Carts
                     {
 
                         // Use variant price if available, otherwise fallback to product price
-                        decimal basePrice = ci.Variant?.Price ?? ci.Product.Price;
-                        decimal? discountPrice = ci.Product.DiscountPrice;
-                        decimal effectivePrice = discountPrice ?? basePrice;
+                        decimal unitPrice = PriceHelper.GetUnitPrice(ci.Product, ci.Variant);
+                        decimal listPrice = ci.Variant?.Price ?? ci.Product.Price;
 
                         // Stock từ Inventory
                         var availableStock = ci.Variant?.Inventory != null
@@ -230,11 +230,11 @@ namespace BE.Services.Implementation.Carts
                             ProductId = ci.ProductId,
                             ProductName = ci.Product.Name,
                             ProductImage = ci.Product.Image,
-                            Price = basePrice,
-                            DiscountPrice = discountPrice,
+                            Price = listPrice,
+                            DiscountPrice = unitPrice < listPrice ? unitPrice : null,
                             Quantity = ci.Quantity,
                             Stock = availableStock,
-                            SubTotal = effectivePrice * ci.Quantity,
+                            SubTotal = unitPrice * ci.Quantity,
                             VariantId = ci.VariantId,
                             VariantName = variantName,
                             VariantValue = variantValue
